@@ -48,6 +48,6 @@ class rgams:
 		if ans != -1:
 			while self.ser.inWaiting() > 0: # while there's something in the buffer...
 				ans = ans + self.ser.read() # read each byte
-	
-		# return the result:
-		return ans
+	    
+		# remove newline characters at the end and return the result:
+		return ans.rstrip('\r\n')
