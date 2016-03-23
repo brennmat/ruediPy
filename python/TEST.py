@@ -15,8 +15,8 @@ print 'Turned off filement: current = ' + MS.param_IO('FL?') + ' mA'
 
 # change valve positions:
 VALVE.setpos(1)
-print (VALVE.getpos())
+print 'Valve position is ' + (VALVE.getpos())
 VALVE.setpos(2)
-print (VALVE.getpos())
+print 'Valve position is ' + (VALVE.getpos())
 VALVE.setpos(3)
-print (VALVE.getpos())
+print 'Valve position is ' + (VALVE.getpos())
