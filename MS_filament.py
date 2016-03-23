@@ -11,21 +11,13 @@
 # OUTPUT:
 # filament current (mA)
 
+from sys import argv
 import time
 import serial
-from sys import argv
+import MS_tools
 
 # configure and open the serial connections (SRS RGA: 28'800 baud, 8 data bits, no parity, 2 stop bits)
-ser = serial.Serial(
-    port     = '/dev/ttyUSB4',
-    baudrate = 28800,
-    parity   = serial.PARITY_NONE,
-    stopbits = serial.STOPBITS_TWO,
-    bytesize = serial.EIGHTBITS,
-    timeout  = 5.0
-)
-ser.flushInput() 	# make sure input is empty
-ser.flushOutput() 	# make sure output is empty
+ser = MS_tools.serialport ('/dev/ttyUSB4')
 
 # format FL command for filament control:
 cmd = 'FL' + argv[1]
