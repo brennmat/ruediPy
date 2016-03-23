@@ -1,17 +1,29 @@
 from classes.rgams			import rgams
 from classes.selectorvalve	import selectorvalve
 
-# initialize instrument:
-MS     = rgams('/dev/ttyUSB4') 	 # init RGA / MS
-VALVE  = selectorvalve('/dev/ttyUSB3') 	 # init VICI selector valve
+# initialize instrument objects:
+MS     = rgams('/dev/ttyUSB4') 	 			# init RGA / MS
+VALVE  = selectorvalve('/dev/ttyUSB3')		# init VICI selector valve
 
-# turn filament on (to default current):
-MS.param_IO('FL*')
-print 'Turned on filement: current = ' + MS.param_IO('FL?') + ' mA'
+print 'MS has electron multiplier: ' + MS.hasMultiplier()
+print 'MS max m/z range: ' + MS.mzMax()
 
-# turn filament off:
-MS.param_IO('FL0')
-print 'Turned off filement: current = ' + MS.param_IO('FL?') + ' mA'
+MS.setElectronEnergy(60)
+print 'Ionizer electron energy: ' + MS.getElectronEnergy() + ' eV'
+
+print 'Set ion beam to Faraday detector...'
+MS.setDetector('F')
+
+MS.filamentOn() # turn on with default current
+print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
+MS.setFilamentCurrent(0.8)
+print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
+
+print 'Scanning... '
+print MS.scan(20,40,15)
+
+MS.filamentOff()
+print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
 
 # change valve positions:
 VALVE.setpos(1)
