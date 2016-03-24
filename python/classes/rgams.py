@@ -4,6 +4,7 @@ import serial
 import time
 import warnings
 import struct
+import numpy
 
 class rgams:
 
@@ -178,7 +179,7 @@ class rgams:
 		self.ser.write('SC1\r\n')
 		
 		# read back result from RGA:
-		ans = [] # init empty list
+		Y = [] # init empty list
 		k = 0
 		nb = 0 # number of bytes read
 		u = ''
@@ -207,15 +208,17 @@ class rgams:
 				if nb == 4: # all four bytes for next value read, parse data
 					u = struct.unpack('<i',u)[0] # unpack 4-byte data value
 					u = u * 1E-16 # divide by 1E-16 to convert to Amperes
-					ans.append(u) # append value to list 'ans'
+					Y.append(u) # append value to list 'ans'
 					
 					# prepare for next value:
 					k = k + 1
 					u = ''
 					nb = 0
 		
+		M = numpy.linspace(low, high, N)
+		unit = 'A'
+
 		warnings.warn('SCANNING NEEDS MORE TESTING!!!')
 			
-		return ans
-			
+		return M,Y,unit
 		
