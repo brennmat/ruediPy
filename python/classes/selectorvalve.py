@@ -2,6 +2,7 @@
 
 import serial
 import time
+from classes.misc	import misc
 
 class selectorvalve:
 	def __init__(self,P):
@@ -22,6 +23,11 @@ class selectorvalve:
 		
 		self.ser = ser;
 		
+	def warning(self,msg):
+		# warn about issues related to operation of the valve
+		# msg: warning message
+		misc.warnmessage ('VICI VALVE',msg)
+
 	def setpos(self,val):
 		# set valve position
 		# val: position
@@ -45,17 +51,23 @@ class selectorvalve:
 				t = t + dt
 				if t > 5: # give up waiting
 					doWait = 0
-					ans = -1
+					self.warning('could not determine valve position (no response from valve)')
+					ans = '-1'
 			else:
 				doWait = 0
 				ans = ''
 		
 		# read back result:
-		if ans != -1:
+		if (ans != '-1'):
 			while self.ser.inWaiting() > 0: # while there's something in the buffer...
 				ans = ans + self.ser.read() # read each byte
 	    	ans = ans.split('=')[1] # split answer in the form 'Position is  = 1'
 	    	ans = ans.strip() # strip away whitespace
 	    	
+	    # check result:
+		if not ans.isdigit():
+			self.warning('could not determine valve position (position = ' + ans + ')')
+			ans = '-1'
+
 		# return the result:
 		return ans

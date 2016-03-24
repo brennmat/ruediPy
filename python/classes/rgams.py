@@ -2,9 +2,10 @@
 
 import serial
 import time
-import warnings
 import struct
 import numpy
+from classes.misc	import misc
+
 
 class rgams:
 
@@ -25,7 +26,12 @@ class rgams:
 		ser.flushOutput() 	# make sure output is empty
 		
 		self.ser = ser
-		
+	
+	def warning(self,msg):
+		# warn about issues related to operation of MS
+		# msg: warning message
+		misc.warnmessage ('SRS RGA',msg)
+	
 	def param_IO(self,cmd,ansreq):
 		# set / read value of an operational parameter
 		# cmd: command string that is sent to RGA (see RGA manual for commands and syntax)
@@ -49,6 +55,7 @@ class rgams:
 					t = t + dt
 					if t > 5: # give up waiting
 						doWait = 0
+						self.warning('could not determine parameter value or status (no response from RGA)')
 						ans = -1
 				else:
 					doWait = 0
@@ -56,7 +63,7 @@ class rgams:
 		
 			# read back result:
 			if ans == -1:
-				warnings.warn('Execution of ' + cmd + ' did not produce a result (or took too long)!')
+				self.warning('Execution of ' + cmd + ' did not produce a result (or took too long)!')
 			else:
 				while self.ser.inWaiting() > 0: # while there's something in the buffer...
 					ans = ans + self.ser.read() # read each byte
@@ -102,9 +109,7 @@ class rgams:
 
 	def filamentOff(self):
 		# turn off filament (set current to zero)
-				
-		# send command to serial port:
-		self.param_IO('FL0',1)
+		self.setFilamentCurrent(0)
 
 	def hasMultiplier(self):
 		# check if MS has electron multiplier installed
@@ -133,9 +138,9 @@ class rgams:
 			if self.hasMultiplier():
 				self.param_IO('HV*',1)
 			else:
-				warnings.warn ('RGA has no electron multiplier installed!')
+				self.warning ('RGA has no electron multiplier installed!')
 		else:
-			warnings.warn ('Unknown detector ' + det)
+			self.warning ('Unknown detector ' + det)
 				
 	
 	def scan(self,low,high,step):
@@ -151,19 +156,19 @@ class rgams:
 		high = int(high)
 		step = int(step)
 		if step < 10:
-			warnings.warn ('Scan step must be 10 or higher! Using step = 10...')
+			self.warning ('Scan step must be 10 or higher! Using step = 10...')
 			step = 10
 		if step > 25:
-			warnings.warn ('Scan step must be 25 or less! Using step = 25...')
+			self.warning ('Scan step must be 25 or less! Using step = 25...')
 			step = 25
 		if low < 0:
-			warnings.warn ('Scan must start at m/z=0 or higher! Starting at m/z=0...')
+			self.warning ('Scan must start at m/z=0 or higher! Starting at m/z=0...')
 			low = 0
 		if high > self.mzMax():
-			warnings.warn ('Scan must end at m/z=' + self.mzMax() + ' or lower! Ending at m/z= ' + self.mzMax + '...')
+			self.warning ('Scan must end at m/z=' + self.mzMax() + ' or lower! Ending at m/z= ' + self.mzMax + '...')
 			low = self.mzMax()
 		if low >= high:
-			warnings.warn ('Scan m/z value at start must be lower than at end. Swapping values...')
+			self.warning ('Scan m/z value at start must be lower than at end. Swapping values...')
 			x = low;
 			low = high;
 			high = x;
@@ -200,7 +205,7 @@ class rgams:
 					
 			# read back result:
 			if doWait == -1:
-				warnings.warn('RGA did not produce scan result (or took too long)!')
+				self.warning('RGA did not produce scan result (or took too long)!')
 			else:
 				# read byte and append to u:
 				u = u + self.ser.read()
@@ -215,10 +220,16 @@ class rgams:
 					u = ''
 					nb = 0
 		
+		# flush the remaining data from the serial port buffer (total pressure measurement):
+		time.sleep(0.5) # wait a little to get all the data into the buffer
+		self.ser.flushInput() 	# make sure input is empty
+		self.ser.flushOutput() 	# make sure output is empty
+
+		
 		M = numpy.linspace(low, high, N)
 		unit = 'A'
 
-		warnings.warn('SCANNING NEEDS MORE TESTING!!!')
+		self.warning('SCANNING MAY NEED MORE TESTING!!!')
 			
 		return M,Y,unit
 		

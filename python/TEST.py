@@ -3,8 +3,16 @@ from classes.selectorvalve	import selectorvalve
 import matplotlib.pyplot as plt
 
 # initialize instrument objects:
-MS     = rgams('/dev/ttyUSB4') 	 			# init RGA / MS
 VALVE  = selectorvalve('/dev/ttyUSB3')		# init VICI selector valve
+MS     = rgams('/dev/ttyUSB4') 	 			# init RGA / MS
+
+# change valve positions:
+VALVE.setpos(1)
+print 'Valve position is ' + (VALVE.getpos())
+VALVE.setpos(2)
+print 'Valve position is ' + (VALVE.getpos())
+VALVE.setpos(3)
+print 'Valve position is ' + (VALVE.getpos())
 
 # print some MS information:
 print 'MS has electron multiplier: ' + MS.hasMultiplier()
@@ -33,11 +41,3 @@ plt.plot(m,s)
 plt.xlabel('m/z')
 plt.ylabel('Ion current (' + unit +')')
 plt.show()
-
-# change valve positions:
-VALVE.setpos(1)
-print 'Valve position is ' + (VALVE.getpos())
-VALVE.setpos(2)
-print 'Valve position is ' + (VALVE.getpos())
-VALVE.setpos(3)
-print 'Valve position is ' + (VALVE.getpos())
