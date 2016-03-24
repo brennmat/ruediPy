@@ -20,7 +20,7 @@ class rgams:
 			parity   = serial.PARITY_NONE,
 			stopbits = serial.STOPBITS_TWO,
 			bytesize = serial.EIGHTBITS,
-			timeout  = 5.0
+			timeout  = 10.0
 		)
 		ser.flushInput() 	# make sure input is empty
 		ser.flushOutput() 	# make sure output is empty
@@ -53,9 +53,9 @@ class rgams:
 				if self.ser.inWaiting() == 0: # wait
 					time.sleep(dt)
 					t = t + dt
-					if t > 5: # give up waiting
+					if t > 10: # give up waiting
 						doWait = 0
-						self.warning('could not determine parameter value or status (no response from RGA)')
+						self.warning('could not determine parameter value or status (no response from RGA, command: ' + cmd + ')')
 						ans = -1
 				else:
 					doWait = 0
@@ -126,6 +126,7 @@ class rgams:
 			self.param_IO('MF' + x,0) # set back to previous MF value
 		return self._mzmax
 
+
 	def setDetector(self,det):
 		# tell RGA to direct the ion beam to the Faraday or electron Multiplier detector (SEM/CDEM)
 		# det = 'F' --> Faraday
@@ -141,7 +142,110 @@ class rgams:
 				self.warning ('RGA has no electron multiplier installed!')
 		else:
 			self.warning ('Unknown detector ' + det)
+
+
+	def getNoiseFloor(self):
+		# get noise floor (NF) parameter for RGA measurements
+		# (noise floor controls gate time, i.e., noise vs. measurement speed)
+		if hasattr(self, '_noisefloor') == 0: # never asked for noisefloor before
+			self._noisefloor = self.param_IO('NF?',1) # get current NF value
+			
+		return self._noisefloor
+		
+
+	def setNoiseFloor(self,NF):
+		# set noise floor (NF) parameter for RGA measurements
+		# (noise floor controls gate time, i.e., noise vs. measurement speed)
+		# NF: noise floor parameter value, 0...7 (integer)
+		
+		NF = int(NF) # make sure NF is an integer value
+		if NF > 7:
+			self.warning ('NF parameter must be 7 or less. Using NF = 7...')
+			NF = 7
+		elif NF < 0:
+			self.warning ('NF parameter must be 0 or higher. Using NF = 0...')
+			NF = 0
+		
+		if NF != self.getNoiseFloor(): # only change NF setting if necessary
+			self.param_IO('NF' + str(NF),0)
+			self._noisefloor = NF # remember current NF value
+		
+	
+	def setGateTime(self,gate):
+		# set NF (noise floor) parameter according to desired gate time (choose best-match NF value)
+		# experiment gave the following gate times vs NF parameter values:
+		#	NF	gate (seconds)
+		#	0	2.4	  
+		#	1	1.21	  
+		#	2	0.48	  
+		#	3	0.25	  
+		#	4	0.163 
+		#	5	0.060 
+		#	6	0.043 
+		#	7	0.025 
+		
+		gt = numpy.array([ 2.4 , 1.21 , 0.48 , 0.25 , 0.163 , 0.060 , 0.043 , 0.025 ])
+		NF  = (numpy.abs(gt-gate)).argmin() # index to closest gate time
+		if gate > gt.max():
+			self.warning('gate time cannot be more than ' + str(gt.max()) +'s! Using gate = ' + str(gt.max()) +'s...')
+		elif gate < gt.min():
+			self.warning('gate time cannot be less than ' + str(gt.min()) +'s! Using gate = ' + str(gt.min()) +'s...')
+			
+		self.setNoiseFloor(NF)
+		
+
+	def peak(self,mz,gate,f):
+		# single mass reading
+		# mz: m/z value (integer)
+		# gate: gate time (seconds)
+		# f: file object for writing data
+		#
+		# NOTE FROM THE SRS RGA MANUAL:
+		# Single mass measurements are commonly performed in sets
+		# where several different masses are monitored sequencially
+		# and in a merry-go-round fashion.
+		# For best accuracy of results, it is best to perform the consecutive
+		# mass measurements in a set with the same type of detector
+		# and at the same noise floor (NF) setting.
+		# Fixed detector settings eliminate settling time problems
+		# in the electrometer and in the CDEM's HV power supply.
 				
+		# check for range of input values:
+		mz = int(mz)
+		
+		if mz < 1:
+			self.warning ('mz value must be positive! Skipping peak measurement...')
+			val = '-1'
+			unit = '(none)'
+			
+		elif mz > self.mzMax:
+			self.warning ('mz value must be ' + self.mzMax + ' or less! Skipping peak measurement...')
+			val = '-1'
+			unit = '(none)'
+			
+		else: # proceed with measurement
+						
+			# configure RGA (gate time):
+			#u = str(gate)
+			#self.setNoiseFloor(gate)
+			self.setGateTime(gate)
+			
+			# send command to RGA:
+			self.ser.write('MR' + str(mz) + '\r\n')
+			
+			# read back data:
+			u = self.ser.read()
+			u = u + self.ser.read()
+			u = u + self.ser.read()
+			u = u + self.ser.read()
+			
+			# parse result:
+			u = struct.unpack('<i',u)[0] # unpack 4-byte data value
+			val = u * 1E-16 # divide by 1E-16 to convert to Amperes
+			unit = 'A'
+
+		return val,unit
+
 	
 	def scan(self,low,high,step):
 		# analog scan
@@ -198,7 +302,7 @@ class rgams:
 				if self.ser.inWaiting() == 0: # wait
 					time.sleep(dt)
 					t = t + dt
-					if t > 5: # give up waiting
+					if t > 10: # give up waiting
 						doWait = -1
 				else:
 					doWait = 0

@@ -2,6 +2,9 @@ from classes.rgams		import rgams
 from classes.selectorvalve	import selectorvalve
 import matplotlib.pyplot as plt
 
+from datetime import datetime
+
+
 # initialize instrument objects:
 VALVE  = selectorvalve('/dev/ttyUSB3')		# init VICI selector valve
 MS     = rgams('/dev/ttyUSB4') 	 			# init RGA / MS
@@ -25,12 +28,18 @@ print 'Set ion beam to Faraday detector...'
 MS.setDetector('F')
 MS.filamentOn() # turn on with default current
 print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
-MS.setFilamentCurrent(0.8)
-print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
 
 # get scan data:
 print 'Scanning... '
+MS.setGateTime(0.3) # set gate time for each reading
 m,s,unit = MS.scan(38,42,15)
+
+print 'Single mass measurements...'
+k = 0
+while k < 50:
+	peak,unit = MS.peak(40,0.1,'somefile')
+	print ( 'Peak value: ' + str(peak) + ' ' + unit )
+	k = k + 1
 
 # turn off filament:
 MS.filamentOff()

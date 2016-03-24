@@ -7,7 +7,7 @@ class misc:
 	@staticmethod
 	def datetimenow():
 		# return date-time string
-		ans = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()) + '(GMT)'
+		ans = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()) + ' (GMT)'
 		return ans
 	
 	@staticmethod
