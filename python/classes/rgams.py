@@ -9,6 +9,10 @@ from classes.misc	import misc
 
 class rgams:
 
+	
+	########################################################################################################
+	
+
 	def __init__(self,P):
 		# Initialize mass spectrometer (SRS RGA), configure serial port connection
 		# P: device name of the serial port, e.g. P = '/dev/ttyUSB4'
@@ -26,12 +30,20 @@ class rgams:
 		ser.flushOutput() 	# make sure output is empty
 		
 		self.ser = ser
+
 	
+	########################################################################################################
+	
+
 	def warning(self,msg):
 		# warn about issues related to operation of MS
 		# msg: warning message
 		misc.warnmessage ('SRS RGA',msg)
+
 	
+	########################################################################################################
+	
+
 	def param_IO(self,cmd,ansreq):
 		# set / read value of an operational parameter
 		# cmd: command string that is sent to RGA (see RGA manual for commands and syntax)
@@ -72,13 +84,20 @@ class rgams:
 			# return the result:
 			return ans
 			
-		
+	
+	########################################################################################################
+	
+
 	def setElectronEnergy(self,val):
 		# set electron energy of the ionizer
 		# val: electron energy in eV
 				
 		# send command to serial port:
 		self.param_IO('EE' + str(val),1)
+
+	
+	########################################################################################################
+	
 
 	def getElectronEnergy(self):
 		# get electron energy of the ionizer (in eV)
@@ -87,6 +106,10 @@ class rgams:
 		ans = self.param_IO('EE?',1)
 		return ans
 
+	
+	########################################################################################################
+	
+
 	def setFilamentCurrent(self,val):
 		# set filament current
 		# val: current in mA
@@ -94,12 +117,20 @@ class rgams:
 		# send command to serial port:
 		self.param_IO('FL' + str(val),1)
 
+	
+	########################################################################################################
+	
+
 	def getFilamentCurrent(self):
 		# get filament current (in eV)
 				
 		# send command to serial port:
 		ans = self.param_IO('FL?',1)
 		return ans
+
+	
+	########################################################################################################
+	
 
 	def filamentOn(self):
 		# turn on filament current at default value
@@ -111,11 +142,19 @@ class rgams:
 		# turn off filament (set current to zero)
 		self.setFilamentCurrent(0)
 
+	
+	########################################################################################################
+	
+
 	def hasMultiplier(self):
 		# check if MS has electron multiplier installed
 		if hasattr(self, '_hasmulti') == 0: # never asked for multiplier before
 			self._hasmulti = self.param_IO('MO?',1) # remember for next time
 		return self._hasmulti
+
+	
+	########################################################################################################
+	
 
 	def mzMax(self):
 		# determine highest mz value available from MS
@@ -126,6 +165,9 @@ class rgams:
 			self.param_IO('MF' + x,0) # set back to previous MF value
 		return self._mzmax
 
+	
+	########################################################################################################
+	
 
 	def setDetector(self,det):
 		# tell RGA to direct the ion beam to the Faraday or electron Multiplier detector (SEM/CDEM)
@@ -143,6 +185,9 @@ class rgams:
 		else:
 			self.warning ('Unknown detector ' + det)
 
+	
+	########################################################################################################
+	
 
 	def getNoiseFloor(self):
 		# get noise floor (NF) parameter for RGA measurements
@@ -151,7 +196,11 @@ class rgams:
 			self._noisefloor = self.param_IO('NF?',1) # get current NF value
 			
 		return self._noisefloor
-		
+
+	
+	########################################################################################################
+	
+
 
 	def setNoiseFloor(self,NF):
 		# set noise floor (NF) parameter for RGA measurements
@@ -168,12 +217,29 @@ class rgams:
 		
 		if NF != self.getNoiseFloor(): # only change NF setting if necessary
 			self.param_IO('NF' + str(NF),0)
-			self._noisefloor = NF # remember current NF value
-		
+			self._noisefloor = NF # remember new NF value
+
 	
+	########################################################################################################
+	
+
 	def setGateTime(self,gate):
 		# set NF (noise floor) parameter according to desired gate time (choose best-match NF value)
-		# experiment gave the following gate times vs NF parameter values:
+		#
+		# NOTE (1):
+		# FROM THE SRS RGA MANUAL:
+		# Single mass measurements are commonly performed in sets
+		# where several different masses are monitored sequencially
+		# and in a merry-go-round fashion.
+		# For best accuracy of results, it is best to perform the consecutive
+		# mass measurements in a set with the same type of detector
+		# and at the same noise floor (NF) setting.
+		# Fixed detector settings eliminate settling time problems
+		# in the electrometer and in the CDEM's HV power supply.
+		#
+		# NOTE (2):
+		# Experiment gave the following gate times vs NF parameter values:
+		#
 		#	NF	gate (seconds)
 		#	0	2.4	  
 		#	1	1.21	  
@@ -192,13 +258,16 @@ class rgams:
 			self.warning('gate time cannot be less than ' + str(gt.min()) +'s! Using gate = ' + str(gt.min()) +'s...')
 			
 		self.setNoiseFloor(NF)
-		
+
+	
+	########################################################################################################
+	
 
 	def peak(self,mz,gate,f):
 		# single mass reading
 		# mz: m/z value (integer)
 		# gate: gate time (seconds)
-		# f: file object for writing data
+		# f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
 		#
 		# NOTE FROM THE SRS RGA MANUAL:
 		# Single mass measurements are commonly performed in sets
@@ -209,7 +278,7 @@ class rgams:
 		# and at the same noise floor (NF) setting.
 		# Fixed detector settings eliminate settling time problems
 		# in the electrometer and in the CDEM's HV power supply.
-				
+		
 		# check for range of input values:
 		mz = int(mz)
 		
@@ -226,12 +295,13 @@ class rgams:
 		else: # proceed with measurement
 						
 			# configure RGA (gate time):
-			#u = str(gate)
-			#self.setNoiseFloor(gate)
 			self.setGateTime(gate)
 			
 			# send command to RGA:
 			self.ser.write('MR' + str(mz) + '\r\n')
+			
+			# get timestamp
+			t = misc.nowUNIX()
 			
 			# read back data:
 			u = self.ser.read()
@@ -243,9 +313,15 @@ class rgams:
 			u = struct.unpack('<i',u)[0] # unpack 4-byte data value
 			val = u * 1E-16 # divide by 1E-16 to convert to Amperes
 			unit = 'A'
+						
+		if not ( f == 'nofile' ):
+			f.writePeak(mz,val,unit,gate,t):
 
 		return val,unit
 
+	
+	########################################################################################################
+	
 	
 	def scan(self,low,high,step):
 		# analog scan
@@ -329,7 +405,6 @@ class rgams:
 		self.ser.flushInput() 	# make sure input is empty
 		self.ser.flushOutput() 	# make sure output is empty
 
-		
 		M = numpy.linspace(low, high, N)
 		unit = 'A'
 

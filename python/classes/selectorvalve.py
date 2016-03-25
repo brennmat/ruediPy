@@ -5,6 +5,11 @@ import time
 from classes.misc	import misc
 
 class selectorvalve:
+
+	
+	########################################################################################################
+	
+
 	def __init__(self,P):
 		# Initialize valve (VICI), configure serial port connection
 		# P: device name of the serial port, e.g. P = '/dev/ttyUSB3'
@@ -22,11 +27,19 @@ class selectorvalve:
 		ser.flushOutput() 	# make sure output is empty
 		
 		self.ser = ser;
-		
+
+	
+	########################################################################################################
+	
+
 	def warning(self,msg):
 		# warn about issues related to operation of the valve
 		# msg: warning message
 		misc.warnmessage ('VICI VALVE',msg)
+
+	
+	########################################################################################################
+	
 
 	def setpos(self,val):
 		# set valve position
@@ -34,7 +47,11 @@ class selectorvalve:
 		
 		# send command to serial port:
 		self.ser.write('GO' + str(val) + '\r\n')
-		
+
+	
+	########################################################################################################
+	
+
 	def getpos(self):
 		# get valve position
 		
