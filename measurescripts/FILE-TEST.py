@@ -5,6 +5,7 @@
 from classes.datafile	import datafile
 from classes.misc		import misc
 import random
+import time
 
 # initialize instrument objects:
 DATAFILE  = datafile('~/ruedi/data') # init object for data files
@@ -13,7 +14,8 @@ k = 0
 while k < 10:
 	DATAFILE.next() # start a new data file
 	j = 0
-	while j < 100:
+	while j < 10:
+		time.sleep(0.2)
 		DATAFILE.writePeak(40,random.random(),'A',0.135,misc.nowUNIX())
 		j = j+1	
 	k = k + 1
