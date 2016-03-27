@@ -14,8 +14,15 @@ class datafile:
 	
 
 	def __init__(self,pth):
-		# Initialize datafile object
-		# pth: directory path where datafiles are stored (string)
+		"""
+		Initialize DATAFILE object
+		
+		INPUT:
+		pth: directory path where datafiles are stored (string)
+		
+		OUTPUT:
+		dafafile object
+		"""
 		
 		# remove trailing whitespace (just in case):
 		pth = pth.strip()
@@ -39,8 +46,16 @@ class datafile:
 	
 
 	def warning(self,msg):
-		# warn about issues related to DATAFILE object
-		# msg: warning message
+		"""
+		Warn about issues related to DATAFILE object
+		
+		INPUT:
+		msg: warning message (string)
+		
+		OUTPUT:
+		(none)
+		"""
+		
 		misc.warnmessage ('DATAFILE',msg)
 	
 	
@@ -48,7 +63,16 @@ class datafile:
 	
 	
 	def basepath(self):
-			# return the base path where datafile are stored
+			"""
+			Return the base path where datafiles are stored
+			
+			INPUT:
+			(none)
+			
+			OUTPUT:
+			Datafile base path (string)
+			"""
+			
 			return self._basepath
 	
 	
@@ -56,7 +80,16 @@ class datafile:
 		
 		
 	def fid(self):
-		# return the file ID / object of the current file
+		"""
+		Return the file ID / object of the current file
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		File object
+		"""
+		
 		return self._fid
 	
 	
@@ -64,7 +97,15 @@ class datafile:
 	
 	
 	def name(self):
-		# return the name the current file (or empty string if not datafile has been created)
+		"""
+		Return the name the current file (or empty string if not datafile has been created)
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		File name (string)
+		"""
 		
 		# check if file / fid has been created as a file object:
 		if hasattr(self.fid, 'name'):
@@ -78,7 +119,17 @@ class datafile:
 	
 	
 	def close(self):
-		# check if file / fid has been created as a file object:
+		"""
+		Close the currently open data file (if any)
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		#Check if file / fid has been created as a file object:
 		if hasattr(self.fid, 'close'):
 			# close current data file
 			try:
@@ -91,8 +142,15 @@ class datafile:
 
 		
 	def next(self,typ=''):
-		# close current data file (if it's still open) and start a new file
-		# typ (optional): string that will be appended to the file name (useful to indicate 'type' of mesurement data, e.g. typ = 'SAMPLE', typ = 'S', typ = 'BLANK', typ = 'B', typ = 'CAL', typ = 'C', etc.). The string can be anything. If omitted or typ = '', nothing will be appended to the file name
+		"""
+		Close then current data file (if it's still open) and start a new file.
+		
+		INPUT:
+		typ (optional): string that will be appended to the file name. This may be useful to indicate 'type' of mesurement data, e.g. typ = 'SAMPLE', typ = 'S', typ = 'BLANK', typ = 'B', typ = 'CAL', typ = 'C', etc.). The string can be anything. If omitted or typ = '', nothing will be appended to the file name
+		
+		OUTPUT:
+		(none)
+		"""
 
 		# close the current datafile (if it exists and is still open)
 		self.close()
@@ -123,18 +181,26 @@ class datafile:
 			return # exit
 
 	   	self.writeComment('RUEDI data file created ' + misc.nowString() )
-		self.writeComment('First column: UNIX epoch time (seconds after Jan 01 1970 UTC)')
-		self.writeComment('Second column: data type identifier')
+		self.writeComment('Column-1: UNIX epoch time (seconds after Jan 01 1970 UTC)')
+		self.writeComment('Column-2: data type identifier')
+		self.writeComment('Column-3: data or information (format depends to data type)')
 
 
 	########################################################################################################
 
 	
 	def writeln(self,identifier,data,timestmp = misc.nowUNIX()):
-		# write a text line to the data file. The line starts with the timestamp, followed by the string.
-		# identifier: data type identifier (string)
-		# data: data / info string
-		# timestmp: timestamp of the data line in unix time / epoch format (seconds after Jan 01 1970 UTC)
+		"""
+		Write a text line to the data file (format: TIMESTAMP IDENTIFIER: DATA or INFO)
+		
+		INPUT:
+		identifier: data type identifier (string)
+		data: data / info string
+		timestmp: timestamp of the data in unix time (see misc.nowUNIX)
+		
+		OUTPUT:
+		(none)
+		"""
 		
 		S = identifier + ': ' + data
 		
@@ -155,7 +221,16 @@ class datafile:
 
 	
 	def writeComment(self,cmt):
-		# write COMMENT line to the data file.
+		"""
+		Write COMMENT line to the data file.
+		
+		INPUT:
+		cmt: comment string
+		
+		OUTPUT:
+		(none)
+		"""
+		
 		# cmt: comment line
 		self.writeln( 'COMMENT' , cmt , misc.nowUNIX() )
 		
@@ -163,12 +238,19 @@ class datafile:
 	########################################################################################################
 
 	
-	def writePeak(self,mz,peak,unit,gate,timestmp):
-		# write PEAK data line to the data file.
-		# mz: mz value
-		# peak: peak value
-		# unit: unit of peak value (string)
-		# timestmp: timestamp of the peak measurement (see datafile.writeln)
+	def writePeak(self,mz,intensity,unit,gate,timestmp):
+		"""
+		Write PEAK data line to the data file.
 		
-		s = 'mz=' + str(mz) + ', value=' + str(peak) + ' ' + unit + ', gate=' + str(gate) + ' s'
+		INPUT:
+		mz: mz value (integer)
+		intensity: peak intensity value (float)
+		unit: unit of peak intensity value (string)
+		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; gate=' + str(gate) + ' s'
 		self.writeln('PEAK',s,timestmp)
