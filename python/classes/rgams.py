@@ -35,6 +35,23 @@ class rgams:
 	########################################################################################################
 	
 
+	def label(self):
+		"""
+		Return label / name of the RGAMS object
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		label: label / name (string)
+		"""
+		
+		return 'RGAMS'
+
+	
+	########################################################################################################
+	
+
 	def warning(self,msg):
 		# warn about issues related to operation of MS
 		# msg: warning message
@@ -315,7 +332,7 @@ class rgams:
 			unit = 'A'
 						
 		if not ( f == 'nofile' ):
-			f.writePeak(mz,val,unit,gate,t):
+			f.writePeak(self.label(),mz,val,unit,gate,t)
 
 		return val,unit
 

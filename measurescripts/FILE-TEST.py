@@ -15,8 +15,8 @@ while k < 10:
 	DATAFILE.next() # start a new data file
 	j = 0
 	while j < 10:
-		time.sleep(0.2)
-		DATAFILE.writePeak(40,random.random(),'A',0.135,misc.nowUNIX())
+		# time.sleep(0.2)
+		DATAFILE.writePeak('FILE-TEST',40,random.random(),'A',0.135,misc.nowUNIX())
 		j = j+1	
 	k = k + 1
 	

@@ -32,6 +32,22 @@ class selectorvalve:
 	########################################################################################################
 	
 
+	def label(self):
+		"""
+		Return label / name of the SELECTORVALVE object
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		label: label / name (string)
+		"""
+		
+		return 'SELECTORVALVE'
+
+	
+	
+
 	def warning(self,msg):
 		# warn about issues related to operation of the valve
 		# msg: warning message
@@ -41,12 +57,23 @@ class selectorvalve:
 	########################################################################################################
 	
 
-	def setpos(self,val):
-		# set valve position
-		# val: position
+	def setpos(self,val,f):
+		''' Set valve position
+
+		INPUT:
+		val: new valve position (integer)
+		f: datafile object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
+
+		OUTPUT:
+		(none)
+		'''
 		
 		# send command to serial port:
 		self.ser.write('GO' + str(val) + '\r\n')
+		
+		# write to datafile
+		if not f == 'nofile':
+			f.writeValvePos(self.label(),val,misc.nowUNIX())
 
 	
 	########################################################################################################

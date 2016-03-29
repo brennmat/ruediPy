@@ -45,6 +45,23 @@ class datafile:
 	########################################################################################################
 	
 
+	def label(self):
+		"""
+		Return label / name of the DATAFILE object
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		label: label / name (string)
+		"""
+		
+		return 'DATAFILE'
+
+	
+	########################################################################################################
+	
+
 	def warning(self,msg):
 		"""
 		Warn about issues related to DATAFILE object
@@ -189,11 +206,12 @@ class datafile:
 	########################################################################################################
 
 	
-	def writeln(self,identifier,data,timestmp = misc.nowUNIX()):
+	def writeln(self,caller,identifier,data,timestmp):
 		"""
-		Write a text line to the data file (format: TIMESTAMP IDENTIFIER: DATA or INFO)
+		Write a text line to the data file (format: TIMESTAMP CALLER: IDENTIFIER DATA)
 		
 		INPUT:
+		caller: name/label of calling object, i.e. the "data origin" (string)
 		identifier: data type identifier (string)
 		data: data / info string
 		timestmp: timestamp of the data in unix time (see misc.nowUNIX)
@@ -202,14 +220,14 @@ class datafile:
 		(none)
 		"""
 		
-		S = identifier + ': ' + data
+		S = caller + ': ' + identifier + ' ' + data
 		
 		# make sure the string contains no newlines and line breaks:
 		S = S.replace('\n', '').replace('\r', '')
 				
 		# format line:
 		S = str(timestmp) + ' ' + S + '\n'
-		
+
 		# write to file:
 		try:
 			self.fid.write(S)
@@ -232,17 +250,18 @@ class datafile:
 		"""
 		
 		# cmt: comment line
-		self.writeln( 'COMMENT' , cmt , misc.nowUNIX() )
+		self.writeln( self.label(), 'COMMENT' , cmt , misc.nowUNIX() )
 		
 	
 	########################################################################################################
 
 	
-	def writePeak(self,mz,intensity,unit,gate,timestmp):
+	def writePeak(self,caller,mz,intensity,unit,gate,timestmp):
 		"""
 		Write PEAK data line to the data file.
 		
 		INPUT:
+		caller: caller label / name (string)
 		mz: mz value (integer)
 		intensity: peak intensity value (float)
 		unit: unit of peak intensity value (string)
@@ -253,4 +272,24 @@ class datafile:
 		"""
 		
 		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; gate=' + str(gate) + ' s'
-		self.writeln('PEAK',s,timestmp)
+		self.writeln(caller, 'PEAK',s,timestmp)
+
+
+	########################################################################################################
+
+	
+	def writeValvePos(self,caller,position,timestmp):
+		"""
+		Write multi-port valve position data line to the data file.
+		
+		INPUT:
+		caller: caller label / name (string)
+		position: valve position (integer)
+		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		s = 'position=' + str(position)
+		self.writeln(caller, 'NEWPOSITION',s,timestmp)

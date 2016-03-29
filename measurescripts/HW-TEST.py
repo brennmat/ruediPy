@@ -4,21 +4,25 @@
 
 from classes.rgams		import rgams
 from classes.selectorvalve	import selectorvalve
+from classes.datafile	import datafile
 import matplotlib.pyplot as plt
 
 from datetime import datetime
 
 
 # initialize instrument objects:
-VALVE  = selectorvalve('/dev/ttyUSB3')		# init VICI selector valve
-MS     = rgams('/dev/ttyUSB4') 	 			# init RGA / MS
+VALVE     = selectorvalve('/dev/ttyUSB3')		# init VICI selector valve
+MS        = rgams('/dev/ttyUSB4') 	 			# init RGA / MS
+DATAFILE  = datafile('~/ruedi/data') # init object for data files
+
+DATAFILE.next() # start a new data file
 
 # change valve positions:
-VALVE.setpos(1)
+VALVE.setpos(1,DATAFILE)
 print 'Valve position is ' + (VALVE.getpos())
-VALVE.setpos(2)
+VALVE.setpos(2,DATAFILE)
 print 'Valve position is ' + (VALVE.getpos())
-VALVE.setpos(3)
+VALVE.setpos(3,DATAFILE)
 print 'Valve position is ' + (VALVE.getpos())
 
 # print some MS information:
@@ -41,7 +45,7 @@ m,s,unit = MS.scan(38,42,15)
 print 'Single mass measurements...'
 k = 0
 while k < 50:
-	peak,unit = MS.peak(40,0.1,'somefile')
+	peak,unit = MS.peak(40,0.1,DATAFILE)
 	print ( 'Peak value: ' + str(peak) + ' ' + unit )
 	k = k + 1
 
