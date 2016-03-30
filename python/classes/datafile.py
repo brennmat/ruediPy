@@ -197,10 +197,7 @@ class datafile:
 			self.warning ('could not open new file (' + n + '): ' + str(e))
 			return # exit
 
-	   	self.writeComment('RUEDI data file created ' + misc.nowString() )
-		self.writeComment('Column-1: UNIX epoch time (seconds after Jan 01 1970 UTC)')
-		self.writeComment('Column-2: data type identifier')
-		self.writeComment('Column-3: data or information (format depends to data type)')
+	   	self.writeComment(self.label(),'RUEDI data file created ' + misc.nowString() + '. Column-1: UNIX epoch time (seconds after Jan 01 1970 UTC), Column-2: data origin identifier, Column-3: data type identifier, Column-4: data or information (format depends to data type)')
 
 
 	########################################################################################################
@@ -208,7 +205,7 @@ class datafile:
 	
 	def writeln(self,caller,identifier,data,timestmp):
 		"""
-		Write a text line to the data file (format: TIMESTAMP CALLER: IDENTIFIER DATA)
+		Write a text line to the data file (format: TIMESTAMP CALLER IDENTIFIER: DATA). CALLER and IDENTIFIER should not contain spaces or similar white space (will be removed before writing to file).
 		
 		INPUT:
 		caller: name/label of calling object, i.e. the "data origin" (string)
@@ -220,7 +217,11 @@ class datafile:
 		(none)
 		"""
 		
-		S = caller + ': ' + identifier + ' ' + data
+		# remove whitespace / spaces:
+		caller 		= caller.replace(' ','')
+		identifier	= identifier.replace(' ','')
+		
+		S = caller + ' ' + identifier + ': ' + data
 		
 		# make sure the string contains no newlines and line breaks:
 		S = S.replace('\n', '').replace('\r', '')
@@ -230,7 +231,8 @@ class datafile:
 
 		# write to file:
 		try:
-			self.fid.write(S)
+			self.fid.write(S)	# write line to data file
+			self.fid.flush()	# make sure data gets written to file now, don't wait for flushing file buffer
 		except IOError, e:
 			self.warning ('could not write to file ' + self.fid.name + ': ' + e)
 
@@ -238,11 +240,12 @@ class datafile:
 	########################################################################################################
 
 	
-	def writeComment(self,cmt):
+	def writeComment(self,caller,cmt):
 		"""
 		Write COMMENT line to the data file.
 		
 		INPUT:
+		caller: caller label / name (string)
 		cmt: comment string
 		
 		OUTPUT:
@@ -250,13 +253,13 @@ class datafile:
 		"""
 		
 		# cmt: comment line
-		self.writeln( self.label(), 'COMMENT' , cmt , misc.nowUNIX() )
+		self.writeln( caller, 'COMMENT' , cmt , misc.nowUNIX() )
 		
 	
 	########################################################################################################
 
 	
-	def writePeak(self,caller,mz,intensity,unit,gate,timestmp):
+	def writePeak(self,caller,mz,intensity,unit,det,gate,timestmp):
 		"""
 		Write PEAK data line to the data file.
 		
@@ -265,14 +268,73 @@ class datafile:
 		mz: mz value (integer)
 		intensity: peak intensity value (float)
 		unit: unit of peak intensity value (string)
+		det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier
+		gate: gate time (float)
 		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
 		
 		OUTPUT:
 		(none)
 		"""
 		
-		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; gate=' + str(gate) + ' s'
+		det = det.replace(' ','');
+		
+		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det + ' ; gate=' + str(gate) + ' s'
 		self.writeln(caller, 'PEAK',s,timestmp)
+
+
+	########################################################################################################
+
+	
+	def writeZero(self,caller,mz,mz_offset,intensity,unit,det,gate,timestmp):
+		"""
+		Write ZERO data line to the data file.
+		
+		INPUT:
+		caller: caller label / name (string)
+		mz: mz value (integer)
+		mz_offset: mz offset value (integer)
+		intensity: zero intensity value (float)
+		unit: unit of peak intensity value (string)
+		det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier
+		gate: gate time (float)
+		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		det = det.replace(' ','');
+		if mz_offset > 0:
+			offset = '+'+str(mz_offset)
+		else:
+			offset = str(mz_offset)
+		
+		s = 'mz=' + str(mz) + ' ; mz-offset=' + offset + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det + ' ; gate=' + str(gate) + ' s'
+		self.writeln(caller, 'ZERO',s,timestmp)
+
+
+	########################################################################################################
+
+	
+	def writeScan(self,caller,mz,intensity,unit,det,gate,timestmp):
+		"""
+		Write PEAK data line to the data file.
+		
+		INPUT:
+		caller: caller label / name (string)
+		mz: mz values (floats)
+		intensity: intensity values (floats)
+		unit: unit of intensity values (string)
+		det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier
+		gate: gate time (float)
+		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + '; detector=' + det + ' ; gate=' + str(gate) + ' s'
+		self.writeln(caller, 'SCAN',s,timestmp)
 
 
 	########################################################################################################

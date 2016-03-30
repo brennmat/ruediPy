@@ -10,9 +10,17 @@ class selectorvalve:
 	########################################################################################################
 	
 
-	def __init__(self,P):
-		# Initialize valve (VICI), configure serial port connection
-		# P: device name of the serial port, e.g. P = '/dev/ttyUSB3'
+	def __init__(self,label,P):
+		'''
+		Initialize SELECTORVALVE object (VICI valve), configure serial port connection
+		
+		INPUT:
+		label: label / name of the SELECTORVALVE object (string)
+		P: device name of the serial port, e.g. P = '/dev/ttyUSB3'
+		
+		OUTPUT:
+		(none)
+		'''
 	
 		# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
 		ser = serial.Serial(
@@ -27,6 +35,8 @@ class selectorvalve:
 		ser.flushOutput() 	# make sure output is empty
 		
 		self.ser = ser;
+
+		self._label = label
 
 	
 	########################################################################################################
@@ -43,7 +53,7 @@ class selectorvalve:
 		label: label / name (string)
 		"""
 		
-		return 'SELECTORVALVE'
+		return self._label
 
 	
 	
@@ -68,8 +78,11 @@ class selectorvalve:
 		(none)
 		'''
 		
-		# send command to serial port:
-		self.ser.write('GO' + str(val) + '\r\n')
+		val = int(val)
+		curpos = self.getpos()
+		if not curpos == val: # check if valve is already at desired position
+			# send command to serial port:
+			self.ser.write('GO' + str(val) + '\r\n')
 		
 		# write to datafile
 		if not f == 'nofile':
@@ -82,6 +95,10 @@ class selectorvalve:
 	def getpos(self):
 		# get valve position
 		
+		# make sure serial port buffer is empty:
+		self.ser.flushInput() 	# make sure input is empty
+		self.ser.flushOutput() 	# make sure output is empty
+
 		# send command to serial port:
 		self.ser.write('CP\r\n')
 		
@@ -114,4 +131,4 @@ class selectorvalve:
 			ans = '-1'
 
 		# return the result:
-		return ans
+		return int(ans)

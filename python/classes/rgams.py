@@ -13,10 +13,15 @@ class rgams:
 	########################################################################################################
 	
 
-	def __init__(self,P):
-		# Initialize mass spectrometer (SRS RGA), configure serial port connection
-		# P: device name of the serial port, e.g. P = '/dev/ttyUSB4'
-	
+	def __init__(self,label,P):
+		'''
+		Initialize mass spectrometer (SRS RGA), configure serial port connection
+		
+		INPUT:
+		label: label / name of the RGAMS object (string)
+		P: device name of the serial port, e.g. P = '/dev/ttyUSB4'
+		'''
+		
 		# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
 		ser = serial.Serial(
 			port     = P,
@@ -30,6 +35,8 @@ class rgams:
 		ser.flushOutput() 	# make sure output is empty
 		
 		self.ser = ser
+		
+		self._label = label
 
 	
 	########################################################################################################
@@ -46,7 +53,7 @@ class rgams:
 		label: label / name (string)
 		"""
 		
-		return 'RGAMS'
+		return self._label
 
 	
 	########################################################################################################
@@ -62,16 +69,26 @@ class rgams:
 	
 
 	def param_IO(self,cmd,ansreq):
-		# set / read value of an operational parameter
-		# cmd: command string that is sent to RGA (see RGA manual for commands and syntax)
-		# ansreq: answer from RGA expected?
-		#	ansreq = 1: answer expected, check for answer
-		#	ansreq = 0: no answer expected, don't check for answer
-		# result: answer code from RGA
+		'''
+		Set / read parameter value of the SRS RGA
+
+		INPUT:
+		cmd: command string that is sent to RGA (see RGA manual for commands and syntax)
+		ansreq: answer from RGA expected?
+			ansreq = 1: answer expected, check for answer
+			ansreq = 0: no answer expected, don't check for answer
 		
+		OUTPUT:
+		result: answer from RGA
+		'''
+	
+		# check if serial buffer (input) is empty (just in case, will be useful to catch errors):
+		if self.ser.inWaiting() > 0:
+			self.warning('**** DEBUGGING INFO: serial buffer not empty before executing command = ' + cmd + ' ans = ' + ans)
+
 		# send command to serial port:
 		self.ser.write(cmd + '\r\n')
-	
+		
 		if ansreq:
 
 			# wait for response
@@ -101,6 +118,10 @@ class rgams:
 			# return the result:
 			return ans
 			
+		else: # check if serial buffer is empty (will be useful to catch errors):
+			if self.ser.inWaiting() > 0:
+				self.warning('**** DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd + ' ans = ' + ans)
+			
 	
 	########################################################################################################
 	
@@ -108,7 +129,7 @@ class rgams:
 	def setElectronEnergy(self,val):
 		# set electron energy of the ionizer
 		# val: electron energy in eV
-				
+		
 		# send command to serial port:
 		self.param_IO('EE' + str(val),1)
 
@@ -206,6 +227,33 @@ class rgams:
 	########################################################################################################
 	
 
+	def getDetector(self):
+		'''
+		Return current detector (Faraday or electron Multiplier)
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		det: detecor (string), det='F' for Faraday or det='M' for electron Multiplier
+		'''
+		
+		if not self.hasMultiplier(): # there is no Multiplier installed
+			det = 'F'
+		else:
+			hv = self.param_IO('HV?',1) # send command to serial port
+			hv = float(hv)
+			if hv == 0:
+				det = 'F'
+			else:
+				det = 'M'
+		
+		return det
+
+	
+	########################################################################################################
+	
+
 	def getNoiseFloor(self):
 		# get noise floor (NF) parameter for RGA measurements
 		# (noise floor controls gate time, i.e., noise vs. measurement speed)
@@ -281,20 +329,28 @@ class rgams:
 	
 
 	def peak(self,mz,gate,f):
-		# single mass reading
-		# mz: m/z value (integer)
-		# gate: gate time (seconds)
-		# f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
-		#
-		# NOTE FROM THE SRS RGA MANUAL:
-		# Single mass measurements are commonly performed in sets
-		# where several different masses are monitored sequencially
-		# and in a merry-go-round fashion.
-		# For best accuracy of results, it is best to perform the consecutive
-		# mass measurements in a set with the same type of detector
-		# and at the same noise floor (NF) setting.
-		# Fixed detector settings eliminate settling time problems
-		# in the electrometer and in the CDEM's HV power supply.
+		'''
+		Read out detector signal at single mass (m/z value).
+		
+		INPUT:
+		mz: m/z value (integer)
+		gate: gate time (seconds)
+		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
+		
+		OUTPUT:
+		val: signal intensity (float)
+		unit: unit (string)
+		
+		NOTE FROM THE SRS RGA MANUAL:
+		Single mass measurements are commonly performed in sets
+		where several different masses are monitored sequencially
+		and in a merry-go-round fashion.
+		For best accuracy of results, it is best to perform the consecutive
+		mass measurements in a set with the same type of detector
+		and at the same noise floor (NF) setting.
+		Fixed detector settings eliminate settling time problems
+		in the electrometer and in the CDEM's HV power supply.
+		'''
 		
 		# check for range of input values:
 		mz = int(mz)
@@ -328,11 +384,82 @@ class rgams:
 			
 			# parse result:
 			u = struct.unpack('<i',u)[0] # unpack 4-byte data value
-			val = u * 1E-16 # divide by 1E-16 to convert to Amperes
+			val = u * 1E-16 # multiply by 1E-16 to convert to Amperes
 			unit = 'A'
 						
 		if not ( f == 'nofile' ):
-			f.writePeak(self.label(),mz,val,unit,gate,t)
+			f.writePeak(self.label(),mz,val,unit,self.getDetector(),gate,t)
+
+		return val,unit
+		
+		
+	########################################################################################################
+	
+
+	def zero(self,mz,mz_offset,gate,f):
+		'''
+		Read out detector signal at single mass with relative offset to given m/z value (this is useful to determine the baseline near a peak at a given m/z value), see rgams.peak())
+		The detector signal is read at mz+mz_offset
+		
+		INPUT:
+		mz: m/z value (integer)
+		mz_offset: offset relative m/z value (integer).
+		gate: gate time (seconds)
+		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
+		
+		OUTPUT:
+		val: signal intensity (float)
+		unit: unit (string)
+		
+		NOTE FROM THE SRS RGA MANUAL:
+		Single mass measurements are commonly performed in sets
+		where several different masses are monitored sequencially
+		and in a merry-go-round fashion.
+		For best accuracy of results, it is best to perform the consecutive
+		mass measurements in a set with the same type of detector
+		and at the same noise floor (NF) setting.
+		Fixed detector settings eliminate settling time problems
+		in the electrometer and in the CDEM's HV power supply.
+		'''
+		
+		# check for range of input values:
+		mz = int(mz)
+		mz_offset = int (mz_offset)
+		
+		if mz+mz_offset < 1:
+			self.warning ('mz+mz_offset must be positive! Skipping zero measurement...')
+			val = '-1'
+			unit = '(none)'
+			
+		elif mz+mz_offset > self.mzMax:
+			self.warning ('mz+mz_offset value must be ' + self.mzMax + ' or less! Skipping zero measurement...')
+			val = '-1'
+			unit = '(none)'
+			
+		else: # proceed with measurement
+						
+			# configure RGA (gate time):
+			self.setGateTime(gate)
+			
+			# send command to RGA:
+			self.ser.write('MR' + str(mz+mz_offset) + '\r\n')
+			
+			# get timestamp
+			t = misc.nowUNIX()
+			
+			# read back data:
+			u = self.ser.read()
+			u = u + self.ser.read()
+			u = u + self.ser.read()
+			u = u + self.ser.read()
+			
+			# parse result:
+			u = struct.unpack('<i',u)[0] # unpack 4-byte data value
+			val = u * 1E-16 # multiply by 1E-16 to convert to Amperes
+			unit = 'A'
+						
+		if not ( f == 'nofile' ):
+			f.writeZero(self.label(),mz,mz_offset,val,unit,self.getDetector(),gate,t)
 
 		return val,unit
 
@@ -340,14 +467,24 @@ class rgams:
 	########################################################################################################
 	
 	
-	def scan(self,low,high,step):
-		# analog scan
-		# low: low m/z value
-		# high: high m/z value
-		# step: scan resolution (number of mass increment steps per amu)
-		# 	step = integer number --> use given number (high number equals small mass increments between steps)
-		# 	step = '*' use default value (step = 10)
+	def scan(self,low,high,step,gate,f):
+		'''
+		Analog scan
 		
+		INPUT:
+		low: low m/z value
+		high: high m/z value
+		step: scan resolution (number of mass increment steps per amu)
+		   step = integer number --> use given number (high number equals small mass increments between steps)
+		   step = '*' use default value (step = 10)
+		gate: gate time (seconds)
+		   
+		OUTPUT:
+		M: mass values (mz, in amu)
+		Y: signal intensity values (float)
+		unit: unit of Y (string)
+		'''
+	
 		# check for range of input values:
 		low = int(low)
 		high = int(high)
@@ -370,6 +507,9 @@ class rgams:
 			low = high;
 			high = x;
 		
+		# configure RGA (gate time):
+		self.setGateTime(gate)
+
 		# configure scan:
 		self.param_IO('MI' + str(low),0) # low end mz value
 		self.param_IO('MF' + str(high),0) # high end mz value
@@ -379,13 +519,16 @@ class rgams:
 		
 		# start the scan:
 		self.ser.write('SC1\r\n')
+
+		# get time stamp before scan
+		t1 = misc.nowUNIX()
 		
 		# read back result from RGA:
 		Y = [] # init empty list
 		k = 0
 		nb = 0 # number of bytes read
 		u = ''
-		while ( k < N ): # read data points
+		while ( k < N+1 ): # read data points. Note: after scanning, the RGA also measures the total pressure and returns this as an extra data point, giving N+1 data points in total. All N+1 data points need to be read in order to empty the data buffer.
 			
 			# wait for data in buffer:
 			t = 0
@@ -404,28 +547,42 @@ class rgams:
 			if doWait == -1:
 				self.warning('RGA did not produce scan result (or took too long)!')
 			else:
-				# read byte and append to u:
-				u = u + self.ser.read()
-				nb = nb + 1
+				u = u + self.ser.read() # read next byte
+				nb = nb + 1 # increase byte-number counter
 				if nb == 4: # all four bytes for next value read, parse data
-					u = struct.unpack('<i',u)[0] # unpack 4-byte data value
-					u = u * 1E-16 # divide by 1E-16 to convert to Amperes
-					Y.append(u) # append value to list 'ans'
-					
+					if k < N: # if this was not the final data point (total pressure)
+						u = struct.unpack('<i',u)[0] # unpack 4-byte data value
+						u = u * 1E-16 # divide by 1E-16 to convert to Amperes
+						Y.append(u) # append value to list 'ans'
+			
 					# prepare for next value:
 					k = k + 1
 					u = ''
 					nb = 0
 		
+		# get time stamp after scan
+		t2 = misc.nowUNIX()
+		
 		# flush the remaining data from the serial port buffer (total pressure measurement):
-		time.sleep(0.5) # wait a little to get all the data into the buffer
-		self.ser.flushInput() 	# make sure input is empty
-		self.ser.flushOutput() 	# make sure output is empty
+		#time.sleep(0.5) # wait a little to get all the data into the buffer
+		#self.ser.flushInput() 	# make sure input is empty
+		#self.ser.flushOutput() 	# make sure output is empty
 
-		M = numpy.linspace(low, high, N)
+		# determine scan mz values:	
+		low = float(low)
+		high = float(high)
+		M = [low + x*(high-low)/N for x in range(N)]
 		unit = 'A'
 
 		self.warning('SCANNING MAY NEED MORE TESTING!!!')
+		
+		# determine "mean" timestamp
+		t = (t1 + t2) / 2.0
+
+		# write to data file:
+		if not ( f == 'nofile' ):
+			det = self.getDetector()
+			print det
+			f.writeScan(self.label(),M,Y,unit,det,gate,t)
 			
 		return M,Y,unit
-		
