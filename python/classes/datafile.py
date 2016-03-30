@@ -49,13 +49,15 @@ class datafile:
 
 	def __init__(self,pth):
 		"""
+		obj = datafile.__init__(self,pth)
+		
 		Initialize DATAFILE object
 		
 		INPUT:
 		pth: directory path where datafiles are stored (string)
 		
 		OUTPUT:
-		dafafile object
+		obj: dafafile object
 		"""
 		
 		# remove trailing whitespace (just in case):
@@ -81,13 +83,15 @@ class datafile:
 
 	def label(self):
 		"""
+		lab = datafile.label()
+		
 		Return label / name of the DATAFILE object
 		
 		INPUT:
 		(none)
 		
 		OUTPUT:
-		label: label / name (string)
+		lab: label / name (string)
 		"""
 		
 		return 'DATAFILE'
@@ -98,6 +102,8 @@ class datafile:
 
 	def warning(self,msg):
 		"""
+		datafile.warning(msg)
+		
 		Warn about issues related to DATAFILE object
 		
 		INPUT:
@@ -115,13 +121,15 @@ class datafile:
 	
 	def basepath(self):
 			"""
+			pat = datafile.basepath()
+			
 			Return the base path where datafiles are stored
 			
 			INPUT:
 			(none)
 			
 			OUTPUT:
-			Datafile base path (string)
+			pat: datafile base path (string)
 			"""
 			
 			return self._basepath
@@ -132,13 +140,15 @@ class datafile:
 		
 	def fid(self):
 		"""
+		f = datafile.fid()
+		
 		Return the file ID / object of the current file
 		
 		INPUT:
 		(none)
 		
 		OUTPUT:
-		File object
+		f: datafile object
 		"""
 		
 		return self._fid
@@ -149,13 +159,15 @@ class datafile:
 	
 	def name(self):
 		"""
+		n = datafile.name()
+		
 		Return the name the current file (or empty string if not datafile has been created)
 		
 		INPUT:
 		(none)
 		
 		OUTPUT:
-		File name (string)
+		n: ile name (string)
 		"""
 		
 		# check if file / fid has been created as a file object:
@@ -171,6 +183,8 @@ class datafile:
 	
 	def close(self):
 		"""
+		datafile.close()
+		
 		Close the currently open data file (if any)
 		
 		INPUT:
@@ -194,6 +208,8 @@ class datafile:
 		
 	def next(self,typ=''):
 		"""
+		datafile.next()
+		
 		Close then current data file (if it's still open) and start a new file.
 		
 		INPUT:
@@ -239,6 +255,8 @@ class datafile:
 	
 	def writeln(self,caller,identifier,data,timestmp):
 		"""
+		datafile.writeln(caller,identifier,data,timestmp)
+		
 		Write a text line to the data file (format: TIMESTAMP CALLER IDENTIFIER: DATA). CALLER and IDENTIFIER should not contain spaces or similar white space (will be removed before writing to file).
 		
 		INPUT:
@@ -276,10 +294,12 @@ class datafile:
 	
 	def writeComment(self,caller,cmt):
 		"""
+		datafile.writeComment(caller,cmt)
+		
 		Write COMMENT line to the data file.
 		
 		INPUT:
-		caller: caller label / name (string)
+		caller: label / name of the calling object (string)
 		cmt: comment string
 		
 		OUTPUT:
@@ -295,10 +315,12 @@ class datafile:
 	
 	def writePeak(self,caller,mz,intensity,unit,det,gate,timestmp):
 		"""
+		datafile.writePeak(caller,mz,intensity,unit,det,gate,timestmp)
+		
 		Write PEAK data line to the data file.
 		
 		INPUT:
-		caller: caller label / name (string)
+		caller: label / name of the calling object (string)
 		mz: mz value (integer)
 		intensity: peak intensity value (float)
 		unit: unit of peak intensity value (string)
@@ -321,12 +343,14 @@ class datafile:
 	
 	def writeZero(self,caller,mz,mz_offset,intensity,unit,det,gate,timestmp):
 		"""
+		datafile.writeZero(caller,mz,mz_offset,intensity,unit,det,gate,timestmp)
+		
 		Write ZERO data line to the data file.
 		
 		INPUT:
 		caller: caller label / name (string)
 		mz: mz value (integer)
-		mz_offset: mz offset value (integer)
+		mz_offset: mz offset value (integer, positive offset corresponds to higher mz value)
 		intensity: zero intensity value (float)
 		unit: unit of peak intensity value (string)
 		det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier
@@ -352,10 +376,12 @@ class datafile:
 	
 	def writeScan(self,caller,mz,intensity,unit,det,gate,timestmp):
 		"""
+		datafile.writeScan(caller,mz,intensity,unit,det,gate,timestmp)
+		
 		Write PEAK data line to the data file.
 		
 		INPUT:
-		caller: caller label / name (string)
+		caller: label / name of the calling object (string)
 		mz: mz values (floats)
 		intensity: intensity values (floats)
 		unit: unit of intensity values (string)
@@ -376,10 +402,12 @@ class datafile:
 	
 	def writeValvePos(self,caller,position,timestmp):
 		"""
+		datafile.writeValvePos(caller,position,timestmp)
+		
 		Write multi-port valve position data line to the data file.
 		
 		INPUT:
-		caller: caller label / name (string)
+		caller: label / name of the calling object (string)
 		position: valve position (integer)
 		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
 		

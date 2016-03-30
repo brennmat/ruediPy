@@ -50,11 +50,16 @@ class rgams:
 
 	def __init__(self,label,P):
 		'''
-		Initialize mass spectrometer (SRS RGA), configure serial port connection
+		rgams.__init__(label,P)
+		
+		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
 		INPUT:
 		label: label / name of the RGAMS object (string)
-		P: device name of the serial port, e.g. P = '/dev/ttyUSB4'
+		P: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
+		
+		OUTPUT:
+		(none)
 		'''
 		
 		# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
@@ -79,13 +84,15 @@ class rgams:
 
 	def label(self):
 		"""
-		Return label / name of the RGAMS object
+		l = rgams.label()
+		
+		Return label / name of the RGAMS object.
 		
 		INPUT:
 		(none)
 		
 		OUTPUT:
-		label: label / name (string)
+		l: label / name (string)
 		"""
 		
 		return self._label
@@ -95,9 +102,19 @@ class rgams:
 	
 
 	def warning(self,msg):
-		# warn about issues related to operation of MS
-		# msg: warning message
-		misc.warnmessage ('SRS RGA',msg)
+		'''
+		rgams.warning(msg)
+		
+		Issue warning about issues related to operation of MS.
+		
+		INPUT:
+		msg: warning message (string)
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		misc.warnmessage (self.label(),msg)
 
 	
 	########################################################################################################
@@ -105,16 +122,18 @@ class rgams:
 
 	def param_IO(self,cmd,ansreq):
 		'''
-		Set / read parameter value of the SRS RGA
+		ans = rgams.param_IO(cmd,ansreq)
+		
+		Set / read parameter value of the SRS RGA.
 
 		INPUT:
 		cmd: command string that is sent to RGA (see RGA manual for commands and syntax)
-		ansreq: answer from RGA expected?
+		ansreq: flag indicating if answer from RGA is expected:
 			ansreq = 1: answer expected, check for answer
 			ansreq = 0: no answer expected, don't check for answer
 		
 		OUTPUT:
-		result: answer from RGA
+		ans: answer / result returned from RGA
 		'''
 	
 		# check if serial buffer (input) is empty (just in case, will be useful to catch errors):
@@ -162,8 +181,17 @@ class rgams:
 	
 
 	def setElectronEnergy(self,val):
-		# set electron energy of the ionizer
-		# val: electron energy in eV
+		'''
+		rgams.setElectronEnergy(val)
+		
+		Set electron energy of the ionizer.
+		
+		INPUT:
+		val: electron energy in eV
+		
+		OUTPUT:
+		(none)
+		'''
 		
 		# send command to serial port:
 		self.param_IO('EE' + str(val),1)
@@ -173,8 +201,18 @@ class rgams:
 	
 
 	def getElectronEnergy(self):
-		# get electron energy of the ionizer (in eV)
-				
+		'''
+		val = rgams.getElectronEnergy()
+		
+		Return electron energy of the ionizer (in eV).
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: electron energy in eV
+		'''
+		
 		# send command to serial port:
 		ans = self.param_IO('EE?',1)
 		return ans
@@ -184,9 +222,18 @@ class rgams:
 	
 
 	def setFilamentCurrent(self,val):
-		# set filament current
-		# val: current in mA
-				
+		'''
+		rgams.setFilamentCurrent(val)
+		
+		Set filament current.
+		
+		INPUT:
+		val: current in mA
+		
+		OUTPUT:
+		(none)
+		'''
+			
 		# send command to serial port:
 		self.param_IO('FL' + str(val),1)
 
@@ -195,7 +242,17 @@ class rgams:
 	
 
 	def getFilamentCurrent(self):
-		# get filament current (in eV)
+		'''
+		val = rgams.getFilamentCurrent()
+		
+		Return filament current (in mA)
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: filament current in mA
+		'''
 				
 		# send command to serial port:
 		ans = self.param_IO('FL?',1)
@@ -206,7 +263,17 @@ class rgams:
 	
 
 	def filamentOn(self):
-		# turn on filament current at default value
+		'''
+		rgams.filamenOn()
+		
+		Turn on filament current at default current value.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
 				
 		# send command to serial port:
 		self.param_IO('FL*',1)
@@ -264,13 +331,17 @@ class rgams:
 
 	def getDetector(self):
 		'''
+		det = rgams.getDetector()
+		
 		Return current detector (Faraday or electron Multiplier)
 		
 		INPUT:
 		(none)
 		
 		OUTPUT:
-		det: detecor (string), det='F' for Faraday or det='M' for electron Multiplier
+		det: detecor (string):
+			det='F' for Faraday
+			det='M' for electron Multiplier
 		'''
 		
 		if not self.hasMultiplier(): # there is no Multiplier installed

@@ -44,7 +44,18 @@ class misc:
 
 	@staticmethod
 	def nowString():
-		# return string with current date and time
+		'''
+		dt = misc.nowString()
+
+		Return string with current date and time
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		dt: date-time (string) in YYYY-MM-DD hh:mm:ss format
+		'''
+		
 		return time.strftime("%Y-%m-%d %H:%M:%S")
 
 	
@@ -53,7 +64,18 @@ class misc:
 
 	@staticmethod
 	def nowUNIX():
-		# return date/time as UNIX time / epoch (seconds after Jan 01 1970 UTC)
+		'''
+		dt = misc.nowUNIX()
+		
+		Return date/time as UNIX time / epoch (seconds after Jan 01 1970 UTC)
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		dt: date-time (UNIX / epoch time)
+		'''
+		
 		return time.time()
 
 	
@@ -62,9 +84,19 @@ class misc:
 
 	@staticmethod
 	def warnmessage(unit,msg):
-		# print a warning message
-		# unit: name of part/unit of the instrument, e.g. unit = 'RGA'
-		# msg: warning message
+		'''
+		misc.warnmessage(caller,msg)
+		
+		Print a warning message
+		
+		INPUT:
+		caller: caller label / name of the calling object (string)
+		msg: warning message
+		
+		OUTPUT:
+		(none)
+		'''
+		
 		M = '***** WARNING from ' + unit + ' at ' + misc.nowString() + ': ' + msg
 		print (M)
 		
