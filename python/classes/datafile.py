@@ -354,4 +354,4 @@ class datafile:
 		"""
 		
 		s = 'position=' + str(position)
-		self.writeln(caller, 'NEWPOSITION',s,timestmp)
+		self.writeln(caller, 'POSITION',s,timestmp)
