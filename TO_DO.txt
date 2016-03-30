@@ -1,0 +1,14 @@
+*** query error bytes / status bytes after executing RGA commands
+start with 'ER?’ (page 6-62, codes on page 6-69) and then use the other error/status queries to get detailed error information (pages 6-60/61, codes on pages 6-70/71).
+
+*** implement init/reset SRS RGA using IN2 command (page 6-31 of manual)
+
+*** make USB/serial adapter labels in /dev/tty*** permanent
+
+*** implement the CA command for the SRS-RGA (page 6-38) to ‘calibrate’ for effects of (small) temperature changes on the baseline/zero and peak-center positions.
+Description: Calibrate All.
+Echo: STATUS Error Byte.
+
+Readjust the zero of the ion detector under the present detector settings, and correct the internal scan parameters against small temperature fluctuations to assure that the correct RF voltages (i.e. as specified by the last Peak Tuning procedure) are programmed on the QMF rods as a funtion of mass.
+
+In order to readjust the zero of its ion detector, the RGA measures the output of its electrometer in the absence of input ion current and under the present detector settings (i.e. noise floor and detector type). The current value obtained is stored in internal memory as an offset correction factor that is automatically used by the firmware to correct all ion currents measured (i.e. including those from single mass and total pressure measurements) under the same detector settings.
