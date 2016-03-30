@@ -1,8 +1,6 @@
 # Code for the VICI selector valve class
 # 
-#
-# Copyright 2016, Matthias Brennwald (brennmat@gmail.com) and Yama Tomonaga
-# 
+# DISCLAIMER:
 # This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
 # 
 # ruediPy is free software: you can redistribute it and/or modify
@@ -33,6 +31,8 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Copyright 2016, Matthias Brennwald (brennmat@gmail.com) and Yama Tomonaga
 
 import serial
 import time
