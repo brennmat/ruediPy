@@ -56,7 +56,7 @@ MS    = rgams('RGA-MS','/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-por
 VALVE = selectorvalve('INLETSELECTVALVE','/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2304832-if00-port0')
 
 
-DATAFILE  = datafile('~/ruedi/data') 						# init object for data files
+DATAFILE  = datafile('~/data') 						# init object for data files
 
 DATAFILE.next() # start a new data file
 
