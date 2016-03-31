@@ -42,10 +42,15 @@
 from classes.rgams		import rgams
 from classes.selectorvalve	import selectorvalve
 from classes.datafile	import datafile
+from subprocess import call
+
+# For RPi: call main class to suppress Xwindows backend
+import matplotlib
+matplotlib.use('Agg')
+
 import matplotlib.pyplot as plt
 
 from datetime import datetime
-
 
 # initialize instrument objects:
 #VALVE     = selectorvalve('INLETSELECTVALVE','/dev/ttyUSB3')	# init VICI selector valve
@@ -69,6 +74,7 @@ VALVE.setpos(3,DATAFILE)
 print 'Valve position is ' + str(VALVE.getpos())
 
 # print some MS information:
+# YT: script hangs sometimes at this point -> increase timeout in rgams?
 print 'MS has electron multiplier: ' + MS.hasMultiplier()
 print 'MS max m/z range: ' + MS.mzMax()
 
@@ -96,7 +102,10 @@ plt.xlabel('m/z')
 plt.ylabel('Ion current (' + unit +')')
 print 'Close plot window to continue...'
 # plt.ion() # turn on interactive mode (so Python does not stop until plot window is closed)
-plt.show()
+#plt.show()
+plt.savefig('scan.png')
+# Display figure on PiTFT screen
+call(["sudo","fbi -T 2 -d /dev/fb1 -noverbose -a scan.prg"])
 
 print 'Single mass measurements at mz = 40...'
 k = 0
