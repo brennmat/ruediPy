@@ -1,21 +1,19 @@
-function X = rP_read_datafile (file,dict)
+function X = rP_read_datafile (file)
 
-% function X = rP_read_datafile (file,dict)
+% function X = rP_read_datafile (file)
 % 
-% Read and parse data in ruediPy datafiles.
-% (work in progress!)
+% Read and parse data in ruediPy datafiles (work in progress!).
+%
+% Datafile lines are formatted as follows:
+%   EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...
+% where:
+% 	EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC)
+%	DATASOURCE: data origin (with optional LABEL of origin object)
+%	TYPE: type of data
+%	DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.
 % 
 % INPUT:
 % file: file name. Either the full path to the file must be specified or the file name only. If only the filename is given, then the first file in the search path matching this file name is used. If file contains a wildcard, all files matching the pattern are loaded.
-% dict: cellstring with names / types of objects with non-standard labels / names (e.g., the SELECTORVALVE and SRSRGA objects):
-%		format:  dict ={ LABEL-NAME-1 OBJECT-TYPE-1 ; LABEL-NAME-2 , OBJECT-TYPE-2 ; ... }
-%
-%		known object types:
-%		- 'SRSRGA' (may have custom object label)
-%		- 'SELECTORVALVE' (may have custom object label)
-%		- 'DATAFILE' (generic / does not allow custom object label) 
-%
-%		example: dict ={ 'RGA-MS' , 'SRSRGA' ; 'INLETSELECTOR' , 'SELECTORVALVE' }		
 % 
 % OUPUT:
 % X: struct object with data from file. Stuct fields correspond to OBJECT and TYPE keys found in the data file.
@@ -65,7 +63,7 @@ function X = rP_read_datafile (file,dict)
 files = glob (tilde_expand(file)); % cell string containing all file names matching 'file'
 if length(files) > 1 % more than one file, so loop through all files
     for i = 1:length(files)
-        u = rP_read_datafile (files{i},dict);
+        u = rP_read_datafile (files{i});
         if ~isempty(u) % only append if loading data file was successful
             X{i} = u;
         else
@@ -82,17 +80,8 @@ if fid == -1 % could not get read access to file, issue error:
 	error (sprintf('ruediPy_read_datafile: could not get read access to file %s (%s)',file,msg))
 	
 else % read file line by line:
-
-	if ~exist('dict','var')
-		dict = {};
-	end
-	if isempty (dict)
-		warning ('rP_read_datafile: not dictionary for object-labels and object-types given. Assuming generic names/types...')
-		dict = { '' '' }; % add empty label - type pair so the code below works well
-	end
-
 	disp (sprintf('rP_read_datafile: reading file %s...',file)); fflush (stdout);
-	t = [];	OBJKEY = TYPEKEY = DATA = {};
+	t = [];	OBJ = LABEL = TYPE = DATA = {};
 	line = fgetl (fid); k = 1;
 	while line != -1
 		% parse line (format: "TIMESTAMP OBJECT-KEY TYPE-KEY: ...DATA...")
@@ -101,8 +90,19 @@ else % read file line by line:
 		% get TIME, OBJECT, and TYPE parts:
 		time_keys = strsplit (l{1},' ');
 		t = [ t ; str2num(time_keys{1}) ]; % append time value
-		OBJKEY{k}  = time_keys{2}; % label of the ruediPy object that sent the data to the data file
-		TYPEKEY{k} = time_keys{3}; % type of data
+		
+		% DATASOURCE[LABEL]:
+		u = strsplit (time_keys{2},'[');
+		if length(u) == 1 % there was no LABEL part
+			OBJ{k}   = strtrim (time_keys{2});
+			LABEL{k} = OBJ{k};
+		else
+			OBJ{k}   = strtrim (u{1});
+			LABEL{k} = strtrim (strrep(u{2},']',''));
+		end	
+		
+		% data TYPE:
+		TYPE{k}  = time_keys{3}; % type of data
 		
 		% get DATA part:
 		DATA{k} = l{2};
@@ -117,51 +117,49 @@ else % read file line by line:
 		error (sprintf('ruediPy_read_datafile: could not close file %s',file))
 	end % ans = fclose(...)
 	
+	
 	% parse file data into struct object, parse data for each object type
 	X.file = file;
 	
-	O  = unique (OBJKEY);
+	O  = unique (OBJ);
 	NO = length (O); % number of object types in the data file
 			
 	for i = 1:NO % get data for each of the requested object types
-		j = find (strcmp(OBJKEY,O{i})); % find index to lines with object-label = O{i}
-		% parse lines j, which have object-label = O{i} and object-type = dict{i,2}
+		j = find (strcmp(OBJ,O{i})); % find index to lines with object-type = O{i}
     	
-    	% Determine generic object type:
-    	k = strcmp ({dict{:,1}},O{i}); % check if O{i} matches any of the non-standard / non-fixed object types
-    	if any(k) % 'translate' custom object label to generic object type
-    		OTYPE = dict{k,2};
-    	else      % no 'translation' needed (or at least assume so, as there is n
-    		OTYPE = O{i};
-    	end
-    	
-    	% try to assure Octave compatible field names:
-    	O{i} = strrep (O{i},'--','_');
-    	O{i} = strrep (O{i},'-','_');
-    	O{i} = strrep (O{i},'*','_');
-    	O{i} = strrep (O{i},'/','_');
+    	% try to assure Octave compatible label names:
+    	LABEL = strrep (LABEL,'--','_');
+    	LABEL = strrep (LABEL,'-','_');
+    	LABEL = strrep (LABEL,'*','_');
+    	LABEL = strrep (LABEL,'/','_');
     	
     	% disp (sprintf('*** DEBUG INFO: parsing object-label=%s *** object-type=%s...',O{i},OTYPE))
     	
-    	switch toupper(OTYPE)
+    	L = unique (LABEL(j)); % list of labels available for the objects of type OBJ(j)
+    	for k = 1:length(L)
+    		l = find ( index(LABEL(j),L(k)) );
     		
-    		case 'DATAFILE'
-    			u = __parse_DATAFILE (TYPEKEY(j),DATA(j),t(j));
-    			X = setfield (X,O{i},u); % add DATAFILE data
-    		
-    		case 'SRSRGA'
-    			u = __parse_SRSRGA (TYPEKEY(j),DATA(j),t(j));
-    			X = setfield (X,O{i},u); % add SRSRGA data
-    		
-    		case 'SELECTORVALVE'
-    			u = __parse_SELECTORVALVE (TYPEKEY(j),DATA(j),t(j));
-    			X = setfield (X,O{i},u); % add SELECTORVALVE data
-    		
-			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    		otherwise
-    			warning (sprintf('rP_read_datafile: Unknown object type %s, skipping...',OTYPE))
-    		
-    	end % switch
+			switch toupper(O{i})
+				
+				case 'DATAFILE'
+					
+					u = __parse_DATAFILE (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
+				
+				case 'SRSRGA'
+					u = __parse_SRSRGA (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					X = setfield (X,L{k},u); % add SRSRGA[LABEL-k] data
+					
+				case 'SELECTORVALVE'
+					u = __parse_SELECTORVALVE (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					X = setfield (X,L{k},u); % add SELECTORVALVE[LABEL-k] data
+				
+				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+				otherwise
+					warning (sprintf('rP_read_datafile: Unknown object type %s, skipping...',OTYPE))
+				
+			end % switch
+		end % for k = ...			
 	end % for i = ...
 end % if / else
 end % function
