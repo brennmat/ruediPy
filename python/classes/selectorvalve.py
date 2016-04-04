@@ -44,7 +44,7 @@ class selectorvalve:
 	########################################################################################################
 	
 
-	def __init__(self,label,P):
+	def __init__(self,P,label = ''):
 		'''
 		Initialize SELECTORVALVE object (VICI valve), configure serial port connection
 		
@@ -69,6 +69,9 @@ class selectorvalve:
 		ser.flushOutput() 	# make sure output is empty
 		
 		self.ser = ser;
+
+		if label == ''
+			label = 'SELECTORVALVE'
 
 		self._label = label
 

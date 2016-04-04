@@ -53,12 +53,8 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 # initialize instrument objects:
-#VALVE     = selectorvalve('INLETSELECTVALVE','/dev/ttyUSB3')	# init VICI selector valve
-#MS        = rgams('RGA-MS','/dev/ttyUSB4') 	 				# init RGA / MS
-# User serial ports by ID on Raspberry Pi
-# Note: on Ubuntu the IDs were "pci-WuT[...]" --> check if this is a system-controlled difference
-MS    = rgams('RGA-MS','/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0')
-VALVE = selectorvalve('INLETSELECTVALVE','/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2304832-if00-port0')
+MS    = rgams('/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0')
+VALVE = selectorvalve('/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2304832-if00-port0')
 
 
 DATAFILE  = datafile('~/data') 						# init object for data files

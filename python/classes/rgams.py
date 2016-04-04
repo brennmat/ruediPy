@@ -48,7 +48,7 @@ class rgams:
 	########################################################################################################
 	
 
-	def __init__(self,label,P):
+	def __init__(self,P,label=''):
 		'''
 		rgams.__init__(label,P)
 		
@@ -76,6 +76,9 @@ class rgams:
 		
 		self.ser = ser
 		
+		if label == ''
+			label = 'SRSRGA'
+
 		self._label = label
 
 	
