@@ -1,5 +1,5 @@
 *** Configure Python path
-Python needs to know where to look for the RUEDI Python code. On Linux, you can tell Python to look in ~/ruedi/python/... by setting the PYTHONPATH environment variable. With the BASH shell, this is achieved by typing "export PYTHONPATH=~/ruedi/python" in the command line terminal. To avoid typing this command every time, it's much easier to just add the command to the ~/.bashrc file, so the command is executed every time you log in to the shell.
+Python needs to know where to look for the RUEDI Python code. On Linux, you can tell Python to look in ~/ruedi/python/... by setting the PYTHONPATH environment variable. With the BASH shell, this is achieved by typing "export PYTHONPATH=~/ruediPy/tests" in the command line terminal. To avoid typing this command every time, it's much easier to just add the command to the ~/.bashrc file, so the command is executed every time you log in to the shell.
 
 
 *** Accessing USB/Serial adapters using consistent device names

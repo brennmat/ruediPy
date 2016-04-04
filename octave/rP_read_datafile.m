@@ -142,7 +142,6 @@ else % read file line by line:
 			switch toupper(O{i})
 				
 				case 'DATAFILE'
-					
 					u = __parse_DATAFILE (TYPE(j(l)),DATA(j(l)),t(j(l)));
 					X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
 				
