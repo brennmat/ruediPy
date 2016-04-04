@@ -120,7 +120,7 @@ class selectorvalve:
 		
 		# write to datafile
 		if not f == 'nofile':
-			f.writeValvePos(self.label(),val,misc.nowUNIX())
+			f.writeValvePos('SELECTORVALVE',self.label(),val,misc.nowUNIX())
 
 	
 	########################################################################################################

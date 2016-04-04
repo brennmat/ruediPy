@@ -247,20 +247,24 @@ class datafile:
 			self.warning ('could not open new file (' + n + '): ' + str(e))
 			return # exit
 
-	   	self.writeComment(self.label(),'RUEDI data file created ' + misc.nowString() + '. Column-1: UNIX epoch time (seconds after Jan 01 1970 UTC), Column-2: data origin identifier, Column-3: data type identifier, Column-4: data or information (format depends to data type)')
+	   	self.writeComment(self.label(),'RUEDI data file created ' + misc.nowString() )
+	   	self.writeComment(self.label(),'Data format:')
+	   	self.writeComment(self.label(),'EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...')
+	   	self.writeComment(self.label(),'EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.')
 
 
 	########################################################################################################
 
 	
-	def writeln(self,caller,identifier,data,timestmp):
+	def writeln(self,caller,label,identifier,data,timestmp):
 		"""
 		datafile.writeln(caller,identifier,data,timestmp)
 		
-		Write a text line to the data file (format: TIMESTAMP CALLER IDENTIFIER: DATA). CALLER and IDENTIFIER should not contain spaces or similar white space (will be removed before writing to file).
+		Write a text line to the data file (format: TIMESTAMP CALLER[LABEL] IDENTIFIER: DATA). CALLER, LABEL, and IDENTIFIER should not contain spaces or similar white space (will be removed before writing to file). If LABEL == '' or LABEL == CALLER, the [LABEL] part is omitted.
 		
 		INPUT:
-		caller: name/label of calling object, i.e. the "data origin" (string)
+		caller: type of calling object, i.e. the "data origin" (string)
+		label: name/label of the calling object (string)
 		identifier: data type identifier (string)
 		data: data / info string
 		timestmp: timestamp of the data in unix time (see misc.nowUNIX)
@@ -271,8 +275,15 @@ class datafile:
 		
 		# remove whitespace / spaces:
 		caller 		= caller.replace(' ','')
+		label 		= label.replace(' ','')
 		identifier	= identifier.replace(' ','')
 		
+		# combine CALLER and LABEL part:
+		if not (label == caller)
+			if not (label == '')
+				caller = caller + '[' + label + ']'			
+		
+		# combine all fields:
 		S = caller + ' ' + identifier + ': ' + data
 		
 		# make sure the string contains no newlines and line breaks:
@@ -307,20 +318,21 @@ class datafile:
 		"""
 		
 		# cmt: comment line
-		self.writeln( caller, 'COMMENT' , cmt , misc.nowUNIX() )
+		self.writeln( caller, '' , 'COMMENT' , cmt , misc.nowUNIX() )
 		
 	
 	########################################################################################################
 
 	
-	def writePeak(self,caller,mz,intensity,unit,det,gate,timestmp):
+	def writePeak(self,caller,label,mz,intensity,unit,det,gate,timestmp):
 		"""
 		datafile.writePeak(caller,mz,intensity,unit,det,gate,timestmp)
 		
 		Write PEAK data line to the data file.
 		
 		INPUT:
-		caller: label / name of the calling object (string)
+		caller: type of calling object, i.e. the "data origin" (string)
+		label: name/label of the calling object (string)
 		mz: mz value (integer)
 		intensity: peak intensity value (float)
 		unit: unit of peak intensity value (string)
@@ -335,20 +347,21 @@ class datafile:
 		det = det.replace(' ','');
 		
 		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det + ' ; gate=' + str(gate) + ' s'
-		self.writeln(caller, 'PEAK',s,timestmp)
+		self.writeln(caller,label,'PEAK',s,timestmp)
 
 
 	########################################################################################################
 
 	
-	def writeZero(self,caller,mz,mz_offset,intensity,unit,det,gate,timestmp):
+	def writeZero(self,caller,label,mz,mz_offset,intensity,unit,det,gate,timestmp):
 		"""
 		datafile.writeZero(caller,mz,mz_offset,intensity,unit,det,gate,timestmp)
 		
 		Write ZERO data line to the data file.
 		
 		INPUT:
-		caller: caller label / name (string)
+		caller: type of calling object, i.e. the "data origin" (string)
+		label: name/label of the calling object (string)
 		mz: mz value (integer)
 		mz_offset: mz offset value (integer, positive offset corresponds to higher mz value)
 		intensity: zero intensity value (float)
@@ -368,20 +381,21 @@ class datafile:
 			offset = str(mz_offset)
 		
 		s = 'mz=' + str(mz) + ' ; mz-offset=' + offset + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det + ' ; gate=' + str(gate) + ' s'
-		self.writeln(caller, 'ZERO',s,timestmp)
+		self.writeln(caller,label,'ZERO',s,timestmp)
 
 
 	########################################################################################################
 
 	
-	def writeScan(self,caller,mz,intensity,unit,det,gate,timestmp):
+	def writeScan(self,caller,label,mz,intensity,unit,det,gate,timestmp):
 		"""
 		datafile.writeScan(caller,mz,intensity,unit,det,gate,timestmp)
 		
 		Write PEAK data line to the data file.
 		
 		INPUT:
-		caller: label / name of the calling object (string)
+		caller: type of calling object, i.e. the "data origin" (string)
+		label: name/label of the calling object (string)
 		mz: mz values (floats)
 		intensity: intensity values (floats)
 		unit: unit of intensity values (string)
@@ -394,20 +408,21 @@ class datafile:
 		"""
 		
 		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + '; detector=' + det + ' ; gate=' + str(gate) + ' s'
-		self.writeln(caller, 'SCAN',s,timestmp)
+		self.writeln(caller,label,'SCAN',s,timestmp)
 
 
 	########################################################################################################
 
 	
-	def writeValvePos(self,caller,position,timestmp):
+	def writeValvePos(self,caller,label,position,timestmp):
 		"""
 		datafile.writeValvePos(caller,position,timestmp)
 		
 		Write multi-port valve position data line to the data file.
 		
 		INPUT:
-		caller: label / name of the calling object (string)
+		caller: type of calling object, i.e. the "data origin" (string)
+		label: name/label of the calling object (string)
 		position: valve position (integer)
 		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
 		
@@ -416,4 +431,4 @@ class datafile:
 		"""
 		
 		s = 'position=' + str(position)
-		self.writeln(caller, 'POSITION',s,timestmp)
+		self.writeln(caller,label,'POSITION',s,timestmp)

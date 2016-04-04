@@ -494,7 +494,7 @@ class rgams:
 			unit = 'A'
 						
 		if not ( f == 'nofile' ):
-			f.writePeak(self.label(),mz,val,unit,self.getDetector(),gate,t)
+			f.writePeak('SRSRGA',self.label(),mz,val,unit,self.getDetector(),gate,t)
 
 		return val,unit
 		
@@ -565,7 +565,7 @@ class rgams:
 			unit = 'A'
 						
 		if not ( f == 'nofile' ):
-			f.writeZero(self.label(),mz,mz_offset,val,unit,self.getDetector(),gate,t)
+			f.writeZero('SRSRGA',self.label(),mz,mz_offset,val,unit,self.getDetector(),gate,t)
 
 		return val,unit
 
@@ -689,6 +689,6 @@ class rgams:
 		if not ( f == 'nofile' ):
 			det = self.getDetector()
 			print det
-			f.writeScan(self.label(),M,Y,unit,det,gate,t)
+			f.writeScan('SRSRGA',self.label(),M,Y,unit,det,gate,t)
 			
 		return M,Y,unit
