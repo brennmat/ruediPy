@@ -40,6 +40,7 @@ import time
 import struct
 import numpy
 from classes.misc	import misc
+from classes.plots	import plots
 
 
 class rgams:
@@ -434,14 +435,19 @@ class rgams:
 	########################################################################################################
 	
 
-	def peak(self,mz,gate,f):
+	def peak(self,mz,gate,f,p):
 		'''
+		val,unit = rgams.peak(mz,gate,f,p)
+		
 		Read out detector signal at single mass (m/z value).
 		
 		INPUT:
 		mz: m/z value (integer)
 		gate: gate time (seconds)
 		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
+		p: plots object or 'noplot':
+			if p is a PLOTS object, the scan data is plotted in the TREND plot
+			if p = 'noplot' (string), the trend data is not plotted
 		
 		OUTPUT:
 		val: signal intensity (float)
@@ -495,6 +501,10 @@ class rgams:
 						
 		if not ( f == 'nofile' ):
 			f.writePeak('SRSRGA',self.label(),mz,val,unit,self.getDetector(),gate,t)
+		
+		# plot scan:
+		if not ( p == 'noplot' ):
+			p.trend(t,mz,val,unit)
 
 		return val,unit
 		
@@ -504,6 +514,8 @@ class rgams:
 
 	def zero(self,mz,mz_offset,gate,f):
 		'''
+		val,unit = rgams.zero(mz,mz_offset,gate,f)
+		
 		Read out detector signal at single mass with relative offset to given m/z value (this is useful to determine the baseline near a peak at a given m/z value), see rgams.peak())
 		The detector signal is read at mz+mz_offset
 		
@@ -573,8 +585,10 @@ class rgams:
 	########################################################################################################
 	
 	
-	def scan(self,low,high,step,gate,f):
+	def scan(self,low,high,step,gate,f,p):
 		'''
+		M,Y,unit = rgams.scan(low,high,step,gate,f,p)
+		
 		Analog scan
 		
 		INPUT:
@@ -584,6 +598,12 @@ class rgams:
 		   step = integer number --> use given number (high number equals small mass increments between steps)
 		   step = '*' use default value (step = 10)
 		gate: gate time (seconds)
+		f: file object or 'nofile':
+			if f is a DATAFILE object, the scan data is written to the current data file
+			if f = 'nofile' (string), the scan data is not written to a datafile
+		p: plots object or 'noplot':
+			if p is a PLOTS object, the scan data is plotted in the SCAN plot
+			if p = 'noplot' (string), the scan data is not plotted
 		   
 		OUTPUT:
 		M: mass values (mz, in amu)
@@ -690,5 +710,9 @@ class rgams:
 			det = self.getDetector()
 			print det
 			f.writeScan('SRSRGA',self.label(),M,Y,unit,det,gate,t)
-			
+		
+		# plot scan:
+		if not ( p == 'noplot' ):
+			p.scan(M,Y,unit)
+		
 		return M,Y,unit

@@ -42,8 +42,9 @@
 from classes.rgams		import rgams
 from classes.selectorvalve	import selectorvalve
 from classes.datafile	import datafile
-import matplotlib.pyplot as plt
+from classes.plots	import plots
 
+import time
 from datetime import datetime
 
 
@@ -51,13 +52,13 @@ from datetime import datetime
 #MS    = rgams('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304837-if00-port0','RGA-MS')
 #VALVE = selectorvalve('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0','INLETSELECTOR')
 
-MS    = rgams('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2016234-if00-port0')
-VALVE = selectorvalve('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0')
-
+MS    = rgams('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2016234-if00-port0','MS_MINIRUEDI1')
+VALVE = selectorvalve('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0','INLETSELECTOR')
 
 DATAFILE  = datafile('~/ruedi_data') 						# init object for data files
-
 DATAFILE.next() # start a new data file
+
+PLOTS = plots(); # PLOTS object
 
 # change valve positions:
 VALVE.setpos(1,DATAFILE)
@@ -86,23 +87,21 @@ print 'Data output to ' + DATAFILE.name()
 # get scan data:
 print 'Scanning... '
 MS.setGateTime(0.3) # set gate time for each reading
-m,s,unit = MS.scan(38,42,15,0.5,DATAFILE)
+mz,intens,unit = MS.scan(38,42,15,0.5,DATAFILE,PLOTS)
 print '...done.'
 
-# plot scan data:
-plt.plot(m,s)
-plt.xlabel('m/z')
-plt.ylabel('Ion current (' + unit +')')
 print 'Close plot window to continue...'
 # plt.ion() # turn on interactive mode (so Python does not stop until plot window is closed)
-plt.show()
+# plt.show()
 
-print 'Single mass measurements at mz = 40...'
+print 'Single mass measurements at mz = 32, 36, and 40...'
 k = 0
-while k < 10:
-	peak,unit = MS.peak(40,0.2,DATAFILE)
+while k < 30:
+	peak,unit = MS.peak(32,0.1,DATAFILE,PLOTS)
+	peak,unit = MS.peak(36,0.1,DATAFILE,PLOTS)
+	peak,unit = MS.peak(40,0.1,DATAFILE,PLOTS)
 	k = k + 1
-	print str(k) + ' peak = ' + str(peak) + ' ' + unit
+	### print str(k) + ' mz = 40 peak: ' + str(peak) + ' ' + unit
 print '...done.'
 
 # turn off filament:
@@ -110,3 +109,6 @@ MS.filamentOff()
 print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
 
 print '...done.'
+
+print 'Waiting a while before exiting...'
+time.sleep(20)
