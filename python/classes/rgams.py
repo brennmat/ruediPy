@@ -48,15 +48,15 @@ class rgams:
 	########################################################################################################
 	
 
-	def __init__(self,P,label=''):
+	def __init__(self,P,label='SRSRGA'):
 		'''
 		rgams.__init__(label,P)
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
 		INPUT:
-		label: label / name of the RGAMS object (string)
 		P: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
+		label (optional): label / name of the RGAMS object (string). Default: label = 'SRSRGA'
 		
 		OUTPUT:
 		(none)
@@ -76,9 +76,6 @@ class rgams:
 		
 		self.ser = ser
 		
-		if label == ''
-			label = 'SRSRGA'
-
 		self._label = label
 
 	

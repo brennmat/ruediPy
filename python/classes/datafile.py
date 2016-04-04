@@ -279,8 +279,8 @@ class datafile:
 		identifier	= identifier.replace(' ','')
 		
 		# combine CALLER and LABEL part:
-		if not (label == caller)
-			if not (label == '')
+		if not (label == caller):
+			if not (label == ''):
 				caller = caller + '[' + label + ']'			
 		
 		# combine all fields:

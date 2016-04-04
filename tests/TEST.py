@@ -48,8 +48,11 @@ from datetime import datetime
 
 
 # initialize instrument objects:
-MS    = rgams('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304837-if00-port0','RGA-MS')
-VALVE = selectorvalve('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0','INLETSELECTOR')
+#MS    = rgams('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304837-if00-port0','RGA-MS')
+#VALVE = selectorvalve('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0','INLETSELECTOR')
+
+MS    = rgams('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2016234-if00-port0')
+VALVE = selectorvalve('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0')
 
 
 DATAFILE  = datafile('~/ruedi_data') 						# init object for data files
