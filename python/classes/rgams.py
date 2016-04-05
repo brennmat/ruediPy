@@ -504,7 +504,7 @@ class rgams:
 		
 		# plot scan:
 		if not ( p == 'noplot' ):
-			p.trend(t,mz,val,unit)
+			p.trend_add_data(t,mz,val)
 
 		return val,unit
 		

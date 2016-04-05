@@ -94,14 +94,18 @@ print 'Close plot window to continue...'
 # plt.ion() # turn on interactive mode (so Python does not stop until plot window is closed)
 # plt.show()
 
-print 'Single mass measurements at mz = 32, 36, and 40...'
+print 'Single mass measurements...'
 k = 0
-while k < 30:
-	peak,unit = MS.peak(32,0.1,DATAFILE,PLOTS)
-	peak,unit = MS.peak(36,0.1,DATAFILE,PLOTS)
-	peak,unit = MS.peak(40,0.1,DATAFILE,PLOTS)
-	k = k + 1
-	### print str(k) + ' mz = 40 peak: ' + str(peak) + ' ' + unit
+gate = 0.025
+mz = (28, 32, 36, 40)
+while k < 1000:
+	k = k+1
+	print 'Frame ' + str(k) + ':'
+	for m in mz:
+		peak,unit = MS.peak(m,gate,DATAFILE,PLOTS)
+		print '  mz=' + str(m) + ' peak=' + str(peak) + ' ' + unit
+	PLOTS.trend_update_plot()
+	
 print '...done.'
 
 # turn off filament:

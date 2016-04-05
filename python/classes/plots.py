@@ -34,12 +34,10 @@
 #
 # Copyright 2016, Matthias Brennwald (brennmat@gmail.com) and Yama Tomonaga
 
-### # import time
-### import os
-### from os.path 		import expanduser
-### 
-
+import time
 from classes.misc	import misc
+import matplotlib
+matplotlib.use('GTKAgg') # use this for faster plotting
 import matplotlib.pyplot as plt
 import numpy as numpy
 
@@ -49,44 +47,33 @@ class plots:
 	########################################################################################################
 	
 
-	def __init__(self):
+	def __init__(self,max_trend_points = 500):
 		'''
-		PLOTS.__init__()
+		PLOTS.__init__(max_trend_points = 500)
 		
 		Initialize PLOTS object.
 		
 		INPUT:
-		(none)
+		max_trend_points (optional): max. number of data points in the trend plot. Once this limit is reached, old data points will be removed from the plot. Default value: max_trend_points = 500
 		
 		OUTPUT:
 		(none)
 		'''
 		
+		# SCAN figure
 		self.scanfig = plt.figure()
 		plt.ion()
-		# plt.plot([1.6, 2.7])
-		plt.title('SCAN DATA')
-		plt.xlabel('m/z')
-		plt.ylabel('Intensity')
-		plt.hold(False)
 		plt.show()
-		plt.draw()
-
+		
+		# TREND figure:
 		self.trendfig = plt.figure()
 		plt.ion()
-		# plt.plot([1.6, 2.7])
-		plt.title('TREND DATA')
-		plt.xlabel('Time')
-		plt.ylabel('Intensity')
-		plt.hold(False)
-		plt.yscale('log')
 		plt.show()
-		plt.draw()
-		
+
 		self._trenddata_t = numpy.array([])
 		self._trenddata_mz = numpy.array([])
 		self._trenddata_intens = numpy.array([])
-
+		self._trenddata_max_len = max_trend_points
 
 		misc.warnmessage('PLOTS','Scan figure initialized!')
 
@@ -113,49 +100,78 @@ class plots:
 		plt.plot(mz,intens)
 		plt.xlabel('m/z')
 		plt.ylabel('Intensity (' + unit +')')
-		plt.show()
+		plt.title('SCAN DATA')
+
 		plt.draw()
-		
+		# plt.show()
 
 	########################################################################################################
 	
 
-	def trend(self,t,mz,intens,unit):
+	def trend_add_data(self,t,mz,intens):
 		"""
-		plots.trend(mz,intens,unit)
+		plots.trend_add_data(t,mz,intens)
 		
-		Plot trend data
+		Add data to trend plot (but don't update the trend plot)
 		
 		INPUT:
 		t: epoch time
 		mz: mz values (x-axis)
 		intens: intensity values (y-axis)
-		unit: intensity unit (string)
 		
 		OUTPUT:
 		(none)
 		"""
-		
+				
 		self._trenddata_t = numpy.append( self._trenddata_t , t )
 		self._trenddata_mz = numpy.append( self._trenddata_mz , mz )
 		self._trenddata_intens = numpy.append( self._trenddata_intens , intens )
-		#self._trenddata_mz.append( mz );
-		#self._trenddata_intens.append( intens );
+		
+		N = self._trenddata_max_len
+		if self._trenddata_t.shape[0] > N:
+			self._trenddata_t 		= self._trenddata_t[-N:]
+			self._trenddata_mz 		= self._trenddata_mz[-N:]
+			self._trenddata_intens	= self._trenddata_intens[-N:]
+
+
+	########################################################################################################
+	
+
+	def trend_update_plot(self):
+		"""
+		plots.trend_update_plot(t,mz,intens)
+		
+		Update the trend plot (e.g. after adding data)
+		NOTE: updating the plot may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		"""
 		
 		MZ = numpy.unique(self._trenddata_mz) # unique list of all mz values
 		
 		colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
 		
 		plt.figure(self.trendfig.number)
-		plt.hold(True)
 		c = 0
+		t0 = time.time()
+
+		plt.show(block=False)
+		
 		for mz in MZ:
 			k = numpy.where( self._trenddata_mz == mz )[0]
 			col = colors[c%7]
 			c = c+1
-			plt.plot(self._trenddata_t[k],self._trenddata_intens[k],col + 'o-')
+			plt.plot( self._trenddata_t[k] - t0 , self._trenddata_intens[k] , col + 'o-' )
+			plt.hold(True)
+
 		plt.hold(False)
-						
-		plt.ylabel('Intensity (' + unit +')')
-		plt.show()
+		plt.title('TREND DATA')
+		plt.xlabel('Time (s)')
+		plt.ylabel('Intensity')
+		plt.yscale('log')
 		plt.draw()
+		
