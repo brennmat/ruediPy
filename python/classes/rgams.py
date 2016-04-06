@@ -55,14 +55,14 @@ class rgams:
 	########################################################################################################
 	
 
-	def __init__( self , P , label='SRSRGA' , max_buffer_points = 500 ):
+	def __init__( self , serialport , label='SRSRGA' , max_buffer_points = 500 ):
 		'''
-		rgams.__init__( P , label='SRSRGA' , max_buffer_points = 500 )
+		rgams.__init__( serialport , label='SRSRGA' , max_buffer_points = 500 )
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
 		INPUT:
-		P: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
+		serialport: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
 		label (optional): label / name of the RGAMS object (string). Default: label = 'SRSRGA'
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 
@@ -72,7 +72,7 @@ class rgams:
 		
 		# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
 		ser = serial.Serial(
-			port     = P,
+			port     = serialport,
 			baudrate = 28800,
 			parity   = serial.PARITY_NONE,
 			stopbits = serial.STOPBITS_TWO,
@@ -91,6 +91,7 @@ class rgams:
 		self._peakbuffer_t = numpy.array([])
 		self._peakbuffer_mz = numpy.array([])
 		self._peakbuffer_intens = numpy.array([])
+		self._peakbuffer_det = ['x'] * 0 # empty list
 		self._peakbuffer_max_len = max_buffer_points
 		
 		# set up plotting environment
@@ -461,7 +462,7 @@ class rgams:
 	########################################################################################################
 	
 
-	def peakbuffer_add(self,t,mz,intens):
+	def peakbuffer_add(self,t,mz,intens,det):
 		"""
 		srsrga.peakbuffer_add(t,mz,intens)
 		
@@ -471,6 +472,7 @@ class rgams:
 		t: epoch time
 		mz: mz values (x-axis)
 		intens: intensity values (y-axis)
+		det: detector (char/string)
 		
 		OUTPUT:
 		(none)
@@ -479,12 +481,15 @@ class rgams:
 		self._peakbuffer_t = numpy.append( self._peakbuffer_t , t )
 		self._peakbuffer_mz = numpy.append( self._peakbuffer_mz , mz )
 		self._peakbuffer_intens = numpy.append( self._peakbuffer_intens , intens )
+		self._peakbuffer_det.append( det )
 		
 		N = self._peakbuffer_max_len
+		
 		if self._peakbuffer_t.shape[0] > N:
-			self._peakbuffera_t 		= self._peakbuffer_t[-N:]
+			self._peakbuffer_t 		= self._peakbuffer_t[-N:]
 			self._peakbuffer_mz 		= self._peakbuffer_mz[-N:]
 			self._peakbuffer_intens	    = self._peakbuffer_intens[-N:]
+			self._peakbuffer_det	    = self._peakbuffer_det[-N:]
 
 
 	########################################################################################################
@@ -550,12 +555,14 @@ class rgams:
 			u = struct.unpack('<i',u)[0] # unpack 4-byte data value
 			val = u * 1E-16 # multiply by 1E-16 to convert to Amperes
 			unit = 'A'
-						
+		
+		det = self.getDetector()
+		
 		if not ( f == 'nofile' ):
-			f.writePeak('SRSRGA',self.label(),mz,val,unit,self.getDetector(),gate,t)
+			f.writePeak('SRSRGA',self.label(),mz,val,unit,det,gate,t)
 		
 		# add data to peakbuffer
-		self.peakbuffer_add(t,mz,val)
+		self.peakbuffer_add(t,mz,val,det)
 
 		return val,unit
 		
@@ -747,8 +754,6 @@ class rgams:
 		high = float(high)
 		M = [low + x*(high-low)/N for x in range(N)]
 		unit = 'A'
-
-		self.warning('SCANNING MAY NEED MORE TESTING!!!')
 		
 		# determine "mean" timestamp
 		t = (t1 + t2) / 2.0
@@ -756,7 +761,7 @@ class rgams:
 		# write to data file:
 		if not ( f == 'nofile' ):
 			det = self.getDetector()
-			print det
+			# print det
 			f.writeScan('SRSRGA',self.label(),M,Y,unit,det,gate,t)
 				
 		return M,Y,unit
@@ -788,20 +793,27 @@ class rgams:
 			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
 			
 			plt.figure(self._peakbuffer_figure.number)
-			c = 0
+			n = 0
 			t0 = misc.nowUNIX()
-	
-			plt.show(block=False)
 			
+			plt.show(block=False)
+			leg = [''] * MZ.shape[0] # initialize empy legend entries			
+			t0 = misc.nowUNIX()
 			for mz in MZ:
 				k = numpy.where( self._peakbuffer_mz == mz )[0]
-				col = colors[c%7]
-				c = c+1
-				plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k] , col + 'o-' )
+				col = colors[n%7]
+				# plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/self._peakbuffer_intens[k[0]] , col + 'o-' )
+				plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k] , col + '.-' )
 				plt.hold(True)
-	
-			plt.hold(False)
-			plt.title('PEAK VALUES (' + self.label() + ')')
+				leg[n] = 'mz='+str(int(mz))
+				n = n+1
+					
+			plt.hold( False )
+			plt.legend( leg , loc=3 )
+			
+			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
+			
+			plt.title('PEAK VALUES (' + self.label() + ') at ' + t0)
 			plt.xlabel('Time (s)')
 			plt.ylabel('Intensity')
 			plt.yscale('log')
@@ -831,9 +843,10 @@ class rgams:
 		
 		else:
 			plt.figure(self._scan_figure.number)
-			plt.plot(mz,intens)
+			plt.plot( mz , intens , 'b.-' )
 			plt.xlabel('m/z')
 			plt.ylabel('Intensity (' + unit +')')
-			plt.title('SCAN (' + self.label() + ')')
+			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.nowUNIX()))
+			plt.title('SCAN (' + self.label() + ')' + ' at ' + t0)
 			plt.draw()
 

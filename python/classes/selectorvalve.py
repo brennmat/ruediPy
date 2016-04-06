@@ -43,13 +43,15 @@ class selectorvalve:
 	
 	########################################################################################################
 	
-
-	def __init__(self,P,label = 'SELECTORVALVE'):
+	
+	def __init__( self , serialport , label = 'SELECTORVALVE' ):
 		'''
+		selectorvalve.__init__( serialport , label = 'SELECTORVALVE' )
+		
 		Initialize SELECTORVALVE object (VICI valve), configure serial port connection
 		
 		INPUT:
-		P: device name of the serial port, e.g. P = '/dev/ttyUSB3'
+		serialport: device name of the serial port, e.g. P = '/dev/ttyUSB3'
 		label (optional): label / name of the SELECTORVALVE object (string). Default: label = 'SELECTORVALVE'
 		
 		OUTPUT:
@@ -58,7 +60,7 @@ class selectorvalve:
 	
 		# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
 		ser = serial.Serial(
-			port     = P,
+			port     = serialport,
 			baudrate = 9600,
 			parity   = serial.PARITY_NONE,
 			stopbits = serial.STOPBITS_ONE,

@@ -39,25 +39,25 @@
 # http://stackoverflow.com/questions/4580101/python-add-pythonpath-during-command-line-module-run
 # Example (bash): export PYTHONPATH=~/ruedi/python
 
-# import Python classes:
-from classes.rgams		import rgams
-from classes.selectorvalve	import selectorvalve
-from classes.datafile	import datafile
-
+# import general purpose Python classes:
 import time
 from datetime import datetime
 import os
-
 havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
 	import matplotlib
 	matplotlib.use('GTKAgg') # use this for faster plotting
 	import matplotlib.pyplot as plt
 
+# import ruediPy classes:
+from classes.rgams		import rgams
+from classes.selectorvalve	import selectorvalve
+from classes.datafile	import datafile
+
 # set up ruediPy objects:
-MS    = rgams('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2016234-if00-port0','MS_MINIRUEDI1')
-VALVE = selectorvalve('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0','INLETSELECTOR')
-DATAFILE  = datafile('~/ruedi_data') 						# init object for data files
+MS        = rgams( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI1', max_buffer_points = 1000 )
+VALVE     = selectorvalve( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0', label = 'INLETSELECTOR' )
+DATAFILE  = datafile( '~/ruedi_data' )
 
 # start data file:
 DATAFILE.next() # start a new data file
@@ -84,28 +84,40 @@ MS.filamentOn() # turn on with default current
 print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
 
 # scan Ar-40 peak:
-print 'Scanning... '
+print 'Preparing scan (waiting for air inflow)... '
+VALVE.setpos(3,DATAFILE)
+time.sleep(10)
+print 'Scanning...'
 MS.setGateTime(0.3) # set gate time for each reading
 mz,intens,unit = MS.scan(38,42,15,0.5,DATAFILE)
 MS.plot_scan (mz,intens,unit)
 print '...done.'
 
-print 'Close plot window to continue...'
-# plt.ion() # turn on interactive mode (so Python does not stop until plot window is closed)
-# plt.show()
-
+# series of sinlge mass measurements ('PEAK' readings):
 print 'Single mass measurements...'
-k = 0
 gate = 0.025
-mz = (28, 32, 36, 40)
-while k < 1000:
-	k = k+1
-	print 'Frame ' + str(k) + ':'
-	for m in mz:
-		peak,unit = MS.peak(m,gate,DATAFILE)
-		print '  mz=' + str(m) + ' peak=' + str(peak) + ' ' + unit
-	MS.plot_peakbuffer()
-	
+mz = (28, 32, 36, 40, 44)
+j = 0
+while j < 100:
+	pos = j%4 + 1 # valve position
+	VALVE.setpos(pos,DATAFILE) # set inlet valve position
+	print 'Valve position is ' + str(VALVE.getpos())
+	if pos == 4: # standard / air calibration
+		DATAFILE.next('C') # start a new data file, typ 'C' (calibration)
+	else: # sample	
+		DATAFILE.next('S') # start a new data file, typ 'S' (sample)
+
+	k = 0
+	while k < 100: # single peak readings
+		k = k+1
+		print 'Frame ' + str(k) + ':'
+		for m in mz:
+			peak,unit = MS.peak(m,gate,DATAFILE) # get PEAK value
+			print '  mz=' + str(m) + ' peak=' + str(peak) + ' ' + unit # show PEAK value on console
+		MS.plot_peakbuffer() # plot PEAK values in buffer (time trend)
+		
+	j = j+1
+		
 print '...done.'
 
 # turn off filament:
@@ -114,5 +126,5 @@ print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
 
 print '...done.'
 
-print 'Waiting a while before exiting...'
-time.sleep(20)
+# Wait to exit:
+input("Press ENTER to exit...")

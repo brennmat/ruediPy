@@ -247,11 +247,16 @@ class datafile:
 			self.warning ('could not open new file (' + n + '): ' + str(e))
 			return # exit
 
+		# write header with data format info:
 	   	self.writeComment(self.label(),'RUEDI data file created ' + misc.nowString() )
 	   	self.writeComment(self.label(),'Data format:')
 	   	self.writeComment(self.label(),'EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...')
 	   	self.writeComment(self.label(),'EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.')
-
+	   	
+	   	# write analysis type:
+	   	if typ == '':
+	   		typ = 'UNKNOWN'
+		self.write_analysis_type( self.label() , typ , misc.nowUNIX() )
 
 	########################################################################################################
 
@@ -321,6 +326,30 @@ class datafile:
 		self.writeln( caller, '' , 'COMMENT' , cmt , misc.nowUNIX() )
 		
 	
+	########################################################################################################
+
+	
+	def write_analysis_type( self , caller , typ , timestmp ):
+		"""
+		datafile.write_analysis_type( caller , typ , timestmp )
+		
+		Write ANALYSIS TYPE info line to the data file.
+		
+		INPUT:
+		caller: type of calling object, i.e. the "data origin" (string)
+		typ: analysis type (string / char)
+		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		typ = typ.replace(' ','');
+		
+		s = 'type=' + typ
+		self.writeln(caller,'','ANALYSISTYPE',s,timestmp)
+
+
 	########################################################################################################
 
 	
