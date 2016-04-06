@@ -39,26 +39,29 @@
 # http://stackoverflow.com/questions/4580101/python-add-pythonpath-during-command-line-module-run
 # Example (bash): export PYTHONPATH=~/ruedi/python
 
+# import Python classes:
 from classes.rgams		import rgams
 from classes.selectorvalve	import selectorvalve
 from classes.datafile	import datafile
-from classes.plots	import plots
 
 import time
 from datetime import datetime
+import os
 
+havedisplay = "DISPLAY" in os.environ
+if havedisplay: # prepare plotting environment
+	import matplotlib
+	matplotlib.use('GTKAgg') # use this for faster plotting
+	import matplotlib.pyplot as plt
 
-# initialize instrument objects:
-#MS    = rgams('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304837-if00-port0','RGA-MS')
-#VALVE = selectorvalve('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0','INLETSELECTOR')
-
+# set up ruediPy objects:
 MS    = rgams('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2016234-if00-port0','MS_MINIRUEDI1')
 VALVE = selectorvalve('/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0','INLETSELECTOR')
-
 DATAFILE  = datafile('~/ruedi_data') 						# init object for data files
-DATAFILE.next() # start a new data file
 
-PLOTS = plots(); # PLOTS object
+# start data file:
+DATAFILE.next() # start a new data file
+print 'Data output to ' + DATAFILE.name()
 
 # change valve positions:
 VALVE.setpos(1,DATAFILE)
@@ -75,19 +78,16 @@ print 'MS max m/z range: ' + MS.mzMax()
 # change MS configuraton:
 MS.setElectronEnergy(60)
 print 'Ionizer electron energy: ' + MS.getElectronEnergy() + ' eV'
-print 'Set ion beam to Faraday detector...'
 MS.setDetector('F')
-print MS.getDetector()
+print 'Set ion beam to Faraday detector: ' + MS.getDetector()
 MS.filamentOn() # turn on with default current
 print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
 
-print 'Data output to ' + DATAFILE.name()
-
-
-# get scan data:
+# scan Ar-40 peak:
 print 'Scanning... '
 MS.setGateTime(0.3) # set gate time for each reading
-mz,intens,unit = MS.scan(38,42,15,0.5,DATAFILE,PLOTS)
+mz,intens,unit = MS.scan(38,42,15,0.5,DATAFILE)
+MS.plot_scan (mz,intens,unit)
 print '...done.'
 
 print 'Close plot window to continue...'
@@ -102,9 +102,9 @@ while k < 1000:
 	k = k+1
 	print 'Frame ' + str(k) + ':'
 	for m in mz:
-		peak,unit = MS.peak(m,gate,DATAFILE,PLOTS)
+		peak,unit = MS.peak(m,gate,DATAFILE)
 		print '  mz=' + str(m) + ' peak=' + str(peak) + ' ' + unit
-	PLOTS.trend_update_plot()
+	MS.plot_peakbuffer()
 	
 print '...done.'
 

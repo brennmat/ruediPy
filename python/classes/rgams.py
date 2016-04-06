@@ -39,8 +39,14 @@ import serial
 import time
 import struct
 import numpy
+import os
 from classes.misc	import misc
-from classes.plots	import plots
+# from classes.plots	import plots
+havedisplay = "DISPLAY" in os.environ
+if havedisplay: # prepare plotting environment
+	import matplotlib
+	matplotlib.use('GTKAgg') # use this for faster plotting
+	import matplotlib.pyplot as plt
 
 
 class rgams:
@@ -49,16 +55,17 @@ class rgams:
 	########################################################################################################
 	
 
-	def __init__(self,P,label='SRSRGA'):
+	def __init__( self , P , label='SRSRGA' , max_buffer_points = 500 ):
 		'''
-		rgams.__init__(label,P)
+		rgams.__init__( P , label='SRSRGA' , max_buffer_points = 500 )
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
 		INPUT:
 		P: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
 		label (optional): label / name of the RGAMS object (string). Default: label = 'SRSRGA'
-		
+		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
+
 		OUTPUT:
 		(none)
 		'''
@@ -77,7 +84,26 @@ class rgams:
 		
 		self.ser = ser
 		
+		# object name label:
 		self._label = label
+		
+		# data buffer for PEAK values:
+		self._peakbuffer_t = numpy.array([])
+		self._peakbuffer_mz = numpy.array([])
+		self._peakbuffer_intens = numpy.array([])
+		self._peakbuffer_max_len = max_buffer_points
+		
+		# set up plotting environment
+		self._has_display = havedisplay
+		if self._has_display: # prepare plotting environment and figure
+			self._peakbuffer_figure = plt.figure()
+			plt.ion()
+			plt.draw()
+			plt.show()
+			self._scan_figure = plt.figure()
+			plt.ion()
+			plt.draw()
+			plt.show()
 
 	
 	########################################################################################################
@@ -435,9 +461,38 @@ class rgams:
 	########################################################################################################
 	
 
-	def peak(self,mz,gate,f,p):
+	def peakbuffer_add(self,t,mz,intens):
+		"""
+		srsrga.peakbuffer_add(t,mz,intens)
+		
+		Add data to PEAKS data buffer
+				
+		INPUT:
+		t: epoch time
+		mz: mz values (x-axis)
+		intens: intensity values (y-axis)
+		
+		OUTPUT:
+		(none)
+		"""
+				
+		self._peakbuffer_t = numpy.append( self._peakbuffer_t , t )
+		self._peakbuffer_mz = numpy.append( self._peakbuffer_mz , mz )
+		self._peakbuffer_intens = numpy.append( self._peakbuffer_intens , intens )
+		
+		N = self._peakbuffer_max_len
+		if self._peakbuffer_t.shape[0] > N:
+			self._peakbuffera_t 		= self._peakbuffer_t[-N:]
+			self._peakbuffer_mz 		= self._peakbuffer_mz[-N:]
+			self._peakbuffer_intens	    = self._peakbuffer_intens[-N:]
+
+
+	########################################################################################################
+
+
+	def peak(self,mz,gate,f):
 		'''
-		val,unit = rgams.peak(mz,gate,f,p)
+		val,unit = rgams.peak(mz,gate,f)
 		
 		Read out detector signal at single mass (m/z value).
 		
@@ -445,9 +500,6 @@ class rgams:
 		mz: m/z value (integer)
 		gate: gate time (seconds)
 		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
-		p: plots object or 'noplot':
-			if p is a PLOTS object, the scan data is plotted in the TREND plot
-			if p = 'noplot' (string), the trend data is not plotted
 		
 		OUTPUT:
 		val: signal intensity (float)
@@ -502,9 +554,8 @@ class rgams:
 		if not ( f == 'nofile' ):
 			f.writePeak('SRSRGA',self.label(),mz,val,unit,self.getDetector(),gate,t)
 		
-		# plot scan:
-		if not ( p == 'noplot' ):
-			p.trend_add_data(t,mz,val)
+		# add data to peakbuffer
+		self.peakbuffer_add(t,mz,val)
 
 		return val,unit
 		
@@ -585,7 +636,7 @@ class rgams:
 	########################################################################################################
 	
 	
-	def scan(self,low,high,step,gate,f,p):
+	def scan(self,low,high,step,gate,f):
 		'''
 		M,Y,unit = rgams.scan(low,high,step,gate,f,p)
 		
@@ -601,9 +652,6 @@ class rgams:
 		f: file object or 'nofile':
 			if f is a DATAFILE object, the scan data is written to the current data file
 			if f = 'nofile' (string), the scan data is not written to a datafile
-		p: plots object or 'noplot':
-			if p is a PLOTS object, the scan data is plotted in the SCAN plot
-			if p = 'noplot' (string), the scan data is not plotted
 		   
 		OUTPUT:
 		M: mass values (mz, in amu)
@@ -710,9 +758,82 @@ class rgams:
 			det = self.getDetector()
 			print det
 			f.writeScan('SRSRGA',self.label(),M,Y,unit,det,gate,t)
-		
-		# plot scan:
-		if not ( p == 'noplot' ):
-			p.scan(M,Y,unit)
-		
+				
 		return M,Y,unit
+
+	
+	########################################################################################################
+	
+	
+	def plot_peakbuffer(self):
+		"""
+		srsrga.plot_peakbuffer()
+		
+		Plot trend (or update plot) of values in PEAKs data buffer (e.g. after adding data)
+		NOTE: plotting may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		if not self._has_display:
+			self.warning('Plotting of peakbuffer trend not possible (no display system available).')
+		
+		else:
+			MZ = numpy.unique(self._peakbuffer_mz) # unique list of all mz values
+			
+			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
+			
+			plt.figure(self._peakbuffer_figure.number)
+			c = 0
+			t0 = misc.nowUNIX()
+	
+			plt.show(block=False)
+			
+			for mz in MZ:
+				k = numpy.where( self._peakbuffer_mz == mz )[0]
+				col = colors[c%7]
+				c = c+1
+				plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k] , col + 'o-' )
+				plt.hold(True)
+	
+			plt.hold(False)
+			plt.title('PEAK VALUES (' + self.label() + ')')
+			plt.xlabel('Time (s)')
+			plt.ylabel('Intensity')
+			plt.yscale('log')
+			plt.draw()
+
+	
+	########################################################################################################
+	
+	
+	def plot_scan(self,mz,intens,unit):
+		"""
+		srsrga.plot_scan(mz,intens,unit)
+		
+		Plot scan data
+		
+		INPUT:
+		mz: mz values (x-axis)
+		intens: intensity values (y-axis)
+		unit: intensity unit (string)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		if not self._has_display:
+			self.warning('Plotting of scan data not possible (no display system available).')
+		
+		else:
+			plt.figure(self._scan_figure.number)
+			plt.plot(mz,intens)
+			plt.xlabel('m/z')
+			plt.ylabel('Intensity (' + unit +')')
+			plt.title('SCAN (' + self.label() + ')')
+			plt.draw()
+
