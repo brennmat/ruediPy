@@ -114,7 +114,9 @@ while j < 100:
 		for m in mz:
 			peak,unit = MS.peak(m,gate,DATAFILE) # get PEAK value
 			print '  mz=' + str(m) + ' peak=' + str(peak) + ' ' + unit # show PEAK value on console
-		MS.plot_peakbuffer() # plot PEAK values in buffer (time trend)
+
+		if k%5 == 0: # update trend plot every 5th iteration
+			MS.plot_peakbuffer() # plot PEAK values in buffer (time trend)
 		
 	j = j+1
 		
