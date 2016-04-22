@@ -302,9 +302,9 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					l = find (index(u,'mz-offset') == 1);
 					if isempty(l)
 						warning ('rP_read_datafile: could not find ''mz-offset'' field in ZERO data of SRSRGA object data. Using mz = NA...')
-						p.mz = NA;
+						p.mz_offset = NA;
 					else
-						p.mz = str2num (strsplit(u{l},'='){2});
+						p.mz_offset = str2num (strsplit(u{l},'='){2});
 					end
 									
 					% intensity value:
