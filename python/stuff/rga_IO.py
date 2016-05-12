@@ -8,7 +8,7 @@ import serial
 import struct
 
 ser = serial.Serial(
-	port='/dev/ttyUSB0',
+	port='/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304837-if00-port0',
 	baudrate = 28800,
 	parity=serial.PARITY_NONE,
 	stopbits=serial.STOPBITS_ONE,

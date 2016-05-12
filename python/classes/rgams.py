@@ -802,7 +802,8 @@ class rgams:
 			for mz in MZ:
 				k = numpy.where( self._peakbuffer_mz == mz )[0]
 				col = colors[n%7]
-				# plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/self._peakbuffer_intens[k[0]] , col + 'o-' )
+				# intens0 = self._peakbuffer_intens[k[0]]
+				# plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + 'o-' )
 				plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k] , col + '.-' )
 				plt.hold(True)
 				leg[n] = 'mz='+str(int(mz))

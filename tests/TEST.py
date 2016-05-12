@@ -55,8 +55,17 @@ from classes.selectorvalve	import selectorvalve
 from classes.datafile	import datafile
 
 # set up ruediPy objects:
-MS        = rgams( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI1', max_buffer_points = 1000 )
-VALVE     = selectorvalve( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0', label = 'INLETSELECTOR' )
+# MS        = rgams( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI1', max_buffer_points = 1000 )
+# VALVE     = selectorvalve( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0', label = 'INLETSELECTOR' )
+
+
+
+
+
+MS        = rgams( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304837-if00-port0' , label = 'MS_MINIRUEDI1', max_buffer_points = 1000 )
+VALVE     = selectorvalve( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0', label = 'INLETSELECTOR' )
+
+
 DATAFILE  = datafile( '~/ruedi_data' )
 
 # start data file:
@@ -76,8 +85,8 @@ print 'MS has electron multiplier: ' + MS.hasMultiplier()
 print 'MS max m/z range: ' + MS.mzMax()
 
 # change MS configuraton:
-MS.setElectronEnergy(60)
-print 'Ionizer electron energy: ' + MS.getElectronEnergy() + ' eV'
+#MS.setElectronEnergy(60)
+#print 'Ionizer electron energy: ' + MS.getElectronEnergy() + ' eV'
 MS.setDetector('F')
 print 'Set ion beam to Faraday detector: ' + MS.getDetector()
 MS.filamentOn() # turn on with default current
@@ -96,9 +105,9 @@ print '...done.'
 # series of sinlge mass measurements ('PEAK' readings):
 print 'Single mass measurements...'
 gate = 0.025
-mz = (28, 32, 36, 40, 44)
+mz = (28, 32, 40, 44)
 j = 0
-while j < 100:
+while j < 100000:
 	pos = j%4 + 1 # valve position
 	VALVE.setpos(pos,DATAFILE) # set inlet valve position
 	print 'Valve position is ' + str(VALVE.getpos())
