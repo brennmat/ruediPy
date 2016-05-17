@@ -116,10 +116,14 @@ class pressuresensor_WIKA:
 		# send command to serial port:
 		self.ser.write('...')
 		
-		# read answer
-		while self.ser.inWaiting() > 0: # while there's something in the buffer...
-				ans = ans + self.ser.read() # read each byte
-
+		# read answer (4 bytes)
+		k = 0
+		while k < 4  # read each byte
+			ans = ans + self.ser.read()
+			k = k+1
+		
+		# convert IEEE754 float:
+		http://stackoverflow.com/questions/17053731/python-ieee754-from-bytearray
 	    	### ans = ans.split('=')[1] # split answer in the form 'Position is  = 1'
 	    	### ans = ans.strip() # strip away whitespace
 	    	
@@ -133,3 +137,4 @@ class pressuresensor_WIKA:
 
 		# return the result:
 		return float(ans)
+
