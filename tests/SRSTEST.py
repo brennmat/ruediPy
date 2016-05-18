@@ -51,25 +51,15 @@ if havedisplay: # prepare plotting environment
 
 # import ruediPy classes:
 from classes.rgams_SRS		import rgams_SRS
-from classes.selectorvalve_VICI	import selectorvalve_VICI
 from classes.datafile		import datafile
 
 # set up ruediPy objects:
-MS        = rgams_SRS ( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304837-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 1000 )
-VALVE     = selectorvalve_VICI ( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0', label = 'INLETSELECTOR' )
+MS        = rgams_SRS ( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304868-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 1000 )
 DATAFILE  = datafile ( '~/ruedi_data' )
 
 # start data file:
 DATAFILE.next() # start a new data file
 print 'Data output to ' + DATAFILE.name()
-
-# change valve positions:
-VALVE.setpos(1,DATAFILE)
-print 'Valve position is ' + str(VALVE.getpos())
-VALVE.setpos(2,DATAFILE)
-print 'Valve position is ' + str(VALVE.getpos())
-VALVE.setpos(3,DATAFILE)
-print 'Valve position is ' + str(VALVE.getpos())
 
 # print some MS information:
 print 'MS has electron multiplier: ' + MS.hasMultiplier()
@@ -77,16 +67,13 @@ print 'MS max m/z range: ' + MS.mzMax()
 
 # change MS configuraton:
 #MS.setElectronEnergy(60)
-#print 'Ionizer electron energy: ' + MS.getElectronEnergy() + ' eV'
+print 'Ionizer electron energy: ' + MS.getElectronEnergy() + ' eV'
 MS.setDetector('F')
 print 'Set ion beam to Faraday detector: ' + MS.getDetector()
 MS.filamentOn() # turn on with default current
 print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
 
 # scan Ar-40 peak:
-print 'Preparing scan (waiting for air inflow)... '
-VALVE.setpos(3,DATAFILE)
-time.sleep(10)
 print 'Scanning...'
 MS.setGateTime(0.3) # set gate time for each reading
 mz,intens,unit = MS.scan(38,42,15,0.5,DATAFILE)
@@ -99,14 +86,7 @@ gate = 0.025
 mz = (28, 32, 40, 44)
 j = 0
 while j < 100000:
-	pos = j%4 + 1 # valve position
-	VALVE.setpos(pos,DATAFILE) # set inlet valve position
-	print 'Valve position is ' + str(VALVE.getpos())
-	if pos == 4: # standard / air calibration
-		DATAFILE.next('C') # start a new data file, typ 'C' (calibration)
-	else: # sample	
-		DATAFILE.next('S') # start a new data file, typ 'S' (sample)
-
+	DATAFILE.next('S') # start a new data file, typ 'S' (sample)
 	k = 0
 	while k < 100: # single peak readings
 		k = k+1
