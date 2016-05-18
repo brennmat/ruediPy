@@ -36,6 +36,8 @@
 
 import serial
 import time
+import struct
+
 from classes.misc	import misc
 
 class pressuresensor_WIKA:
@@ -44,7 +46,7 @@ class pressuresensor_WIKA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' ):
+	def __init__( self , serialport , label = 'WIKA_PRESSURESENSOR' ):
 		'''
 		pressuresensor_WIKA.__init__( serialport , label = 'SELECTORVALVE' )
 		
@@ -70,19 +72,64 @@ class pressuresensor_WIKA:
 		ser.flushInput() 	# make sure input is empty
 		ser.flushOutput() 	# make sure output is empty
 		
-		self.ser = ser;
+		self.ser = ser
 
 		self._label = label
 
 		# configure pressure sensor for single pressure readings on request ("polling mode")
-		...
+		cmd = 'SO\xFF' # command string to set polling mode
+		cs = self.serial_checksum(cmd) # determine check sum
+		self.ser.write(cmd + chr(cs) + '\r') # send command with check sum to serial port
+		ans =  self.ser.read(5) # read out response to empty serial data buffer
+
+		# get serial number of pressure sensor
+		cmd = 'KN\x00' # command string to get serial number
+		cs = self.serial_checksum(cmd) # determine check sum
+		self.ser.write(cmd + chr(cs) + '\r') # send command with check sum to serial port
+		self.ser.read(1) # first byte (not used)
+		ans = self.ser.read(4) # four bytes of UNSIGNED32 number
+		self.ser.read(2) # 6th and 7th byte (not used)
+		self._serial_number = struct.unpack('<I',ans)[0] # convert to 4 bytes to integer
+		print ('Successfully configured WIKA pressure sensor with serial number ' + str(self._serial_number) )
 
 	
 	########################################################################################################
 	
 
+	def serial_checksum(self,cmd):
+		"""
+		cs = pressuresensor_WIKA.serial_checksum( cmd )
+
+		Return checksum used for serial port communication with WIKA pressure sensor.
+		
+		INPUT:
+		cmd: serial-port command string without checksum
+
+		OUTPUT:
+		cs: checksum byte
+		"""
+		
+		# sum of bytes:
+		k = 0
+		cs = 0
+
+		while k < len(cmd):
+			cs = cs + ord(cmd[k])
+			k = k + 1
+
+		# low byte:
+		cs = cs & 0xFF
+
+		# two's complement:
+		cs = ( cs ^ 0xFF ) + 1
+		
+		return cs
+
+
 	def label(self):
 		"""
+		label = pressuresensor_WIKA.label()
+
 		Return label / name of the PRESSURESENSOR object
 		
 		INPUT:
@@ -95,46 +142,75 @@ class pressuresensor_WIKA:
 		return self._label
 
 	
-	
-
-	def warning(self,msg):
-		# warn about issues related to operation of the pressure sensor
-		# msg: warning message
-		misc.warnmessage ('WIKA PRESSURE SENSOR',msg)
-
-	
 	########################################################################################################
 		
 
-	def read_pressure(self):
-		# read current pressure value (in hPa)
+	def pressure(self,f):
+		"""
+		press,unit = pressuresensor_WIKA.pressure(f)
 		
-		# make sure serial port buffer is empty:
-		self.ser.flushInput() 	# make sure input is empty
-		self.ser.flushOutput() 	# make sure output is empty
+		Read out current pressure value (in hPa).
+		
+		INPUT:
+		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
+		
+		OUTPUT:
+		press: pressure value in hPa (float)
+		"""	
 
-		# send command to serial port:
-		self.ser.write('...')
-		
-		# read answer (4 bytes)
-		k = 0
-		while k < 4  # read each byte
-			ans = ans + self.ser.read()
-			k = k+1
-		
-		# convert IEEE754 float:
-		http://stackoverflow.com/questions/17053731/python-ieee754-from-bytearray
-	    	### ans = ans.split('=')[1] # split answer in the form 'Position is  = 1'
-	    	### ans = ans.strip() # strip away whitespace
-	    	
-	    	# check result:
-		if not ans.isdigit():
-			self.warning('could not determine pressure value (pressure = ' + ans + ')')
-			ans = '-1'
-		
-		# convert value to hPa:
-		ans = ans * 10000;
+		cmd = 'PZ\x00' # command string to set polling mode
+		cs = self.serial_checksum(cmd) # determine check sum
+		self.ser.write(cmd + chr(cs) + '\r') # send command with check sum to serial port
+		ans = self.ser.read(1) # first byte (not used)
+		ans = self.ser.read(4) # four bytes of IEEE754 float number
+		p = struct.unpack('<f',ans)[0] # convert to 4 bytes to float
+		ans = self.ser.read(1) # unit
+		self.ser.read(2) # last two bytes (not used)
 
-		# return the result:
-		return float(ans)
+		# convert to hPa
+		if ans == '\xFF':
+			unit = 'bar'
+		elif ans == '\xFE':
+			unit = 'bar-rel.'
+		elif ans == '\x1F':
+			unit = 'Psi'
+		elif ans == '\x1E':
+			unit = 'Psi-rel.'
+		elif ans == '\xAF':
+			unit = 'MPa'
+		elif ans == '\xAE':
+			unit = 'MPa-rel.'
+		elif ans == '\xBF':
+			unit = 'kg/cm2'
+		elif ans == '\xBE':
+			unit = 'kg/cm2-rel.'
+		else:
+			self.warning('WIKA pressure sensor returned unknown pressure unit')
+		
+		if not ( f == 'nofile' ):
+			# get timestamp
+			t = misc.nowUNIX()
+			# f.write_pressure('WIKA_PRESSURESENSOR',self.label(),t)
+			self.warning('writing pressure value to data file is not yet implemented!')
+
+		return p,unit
+
+
+	########################################################################################################
+	
+
+	def warning(self,msg):
+		'''
+		pressuresensor_WIKA.warning(msg)
+		
+		Issue warning about issues related to operation of pressure sensor.
+		
+		INPUT:
+		msg: warning message (string)
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		misc.warnmessage (self.label(),msg)
 
