@@ -461,3 +461,27 @@ class datafile:
 		
 		s = 'position=' + str(position)
 		self.writeln(caller,label,'POSITION',s,timestmp)
+
+
+	########################################################################################################
+
+	
+	def write_pressure(self,caller,label,value,unit,timestmp):
+		"""
+		datafile.write_pressure(caller,label,value,unit,timestmp)
+				
+		Write PRESSURE data line to the data file.
+		
+		INPUT:
+		caller: type of calling object, i.e. the "data origin" (string)
+		label: name/label of the calling object (string)
+		value: pressure value (float)
+		unit: unit of peak intensity value (string)
+		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		
+		OUTPUT:
+		(none)
+		"""
+				
+		s = 'pressure=' + str(value) + ' ' + unit
+		self.writeln(caller,label,'PRESSURE',s,timestmp)
