@@ -483,5 +483,5 @@ class datafile:
 		(none)
 		"""
 				
-		s = 'pressure=' + str(value) + ' ' + unit
+		s = str(value) + ' ' + unit
 		self.writeln(caller,label,'PRESSURE',s,timestmp)

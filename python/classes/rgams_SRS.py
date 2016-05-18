@@ -49,7 +49,7 @@ if havedisplay: # prepare plotting environment
 	import matplotlib.pyplot as plt
 
 
-class rgams:
+class rgams_SRS:
 
 	
 	########################################################################################################
@@ -57,7 +57,7 @@ class rgams:
 
 	def __init__( self , serialport , label='SRSRGA' , max_buffer_points = 500 ):
 		'''
-		rgams.__init__( serialport , label='SRSRGA' , max_buffer_points = 500 )
+		rgams_SRS.__init__( serialport , label='SRSRGA' , max_buffer_points = 500 )
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
@@ -112,7 +112,7 @@ class rgams:
 
 	def label(self):
 		"""
-		l = rgams.label()
+		l = rgams_SRS.label()
 		
 		Return label / name of the RGAMS object.
 		
@@ -131,7 +131,7 @@ class rgams:
 
 	def warning(self,msg):
 		'''
-		rgams.warning(msg)
+		rgams_SRS.warning(msg)
 		
 		Issue warning about issues related to operation of MS.
 		
@@ -150,7 +150,7 @@ class rgams:
 
 	def param_IO(self,cmd,ansreq):
 		'''
-		ans = rgams.param_IO(cmd,ansreq)
+		ans = rgams_SRS.param_IO(cmd,ansreq)
 		
 		Set / read parameter value of the SRS RGA.
 
@@ -210,7 +210,7 @@ class rgams:
 
 	def setElectronEnergy(self,val):
 		'''
-		rgams.setElectronEnergy(val)
+		rgams_SRS.setElectronEnergy(val)
 		
 		Set electron energy of the ionizer.
 		
@@ -230,7 +230,7 @@ class rgams:
 
 	def getElectronEnergy(self):
 		'''
-		val = rgams.getElectronEnergy()
+		val = rgams_SRS.getElectronEnergy()
 		
 		Return electron energy of the ionizer (in eV).
 		
@@ -251,7 +251,7 @@ class rgams:
 
 	def setFilamentCurrent(self,val):
 		'''
-		rgams.setFilamentCurrent(val)
+		rgams_SRS.setFilamentCurrent(val)
 		
 		Set filament current.
 		
@@ -271,7 +271,7 @@ class rgams:
 
 	def getFilamentCurrent(self):
 		'''
-		val = rgams.getFilamentCurrent()
+		val = rgams_SRS.getFilamentCurrent()
 		
 		Return filament current (in mA)
 		
@@ -292,7 +292,7 @@ class rgams:
 
 	def filamentOn(self):
 		'''
-		rgams.filamenOn()
+		rgams_SRS.filamenOn()
 		
 		Turn on filament current at default current value.
 		
@@ -359,7 +359,7 @@ class rgams:
 
 	def getDetector(self):
 		'''
-		det = rgams.getDetector()
+		det = rgams_SRS.getDetector()
 		
 		Return current detector (Faraday or electron Multiplier)
 		
@@ -497,7 +497,7 @@ class rgams:
 
 	def peak(self,mz,gate,f):
 		'''
-		val,unit = rgams.peak(mz,gate,f)
+		val,unit = rgams_SRS.peak(mz,gate,f)
 		
 		Read out detector signal at single mass (m/z value).
 		
@@ -572,9 +572,9 @@ class rgams:
 
 	def zero(self,mz,mz_offset,gate,f):
 		'''
-		val,unit = rgams.zero(mz,mz_offset,gate,f)
+		val,unit = rgams_SRS.zero(mz,mz_offset,gate,f)
 		
-		Read out detector signal at single mass with relative offset to given m/z value (this is useful to determine the baseline near a peak at a given m/z value), see rgams.peak())
+		Read out detector signal at single mass with relative offset to given m/z value (this is useful to determine the baseline near a peak at a given m/z value), see rgams_SRS.peak())
 		The detector signal is read at mz+mz_offset
 		
 		INPUT:
@@ -645,7 +645,7 @@ class rgams:
 	
 	def scan(self,low,high,step,gate,f):
 		'''
-		M,Y,unit = rgams.scan(low,high,step,gate,f,p)
+		M,Y,unit = rgams_SRS.scan(low,high,step,gate,f,p)
 		
 		Analog scan
 		

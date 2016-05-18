@@ -50,23 +50,14 @@ if havedisplay: # prepare plotting environment
 	import matplotlib.pyplot as plt
 
 # import ruediPy classes:
-from classes.rgams		import rgams
-from classes.selectorvalve	import selectorvalve
-from classes.datafile	import datafile
+from classes.rgams_SRS		import rgams_SRS
+from classes.selectorvalve_VICI	import selectorvalve_VICI
+from classes.datafile		import datafile
 
 # set up ruediPy objects:
-# MS        = rgams( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI1', max_buffer_points = 1000 )
-# VALVE     = selectorvalve( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0', label = 'INLETSELECTOR' )
-
-
-
-
-
-MS        = rgams( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304837-if00-port0' , label = 'MS_MINIRUEDI1', max_buffer_points = 1000 )
-VALVE     = selectorvalve( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0', label = 'INLETSELECTOR' )
-
-
-DATAFILE  = datafile( '~/ruedi_data' )
+MS        = rgams_SRS ( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304837-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 1000 )
+VALVE     = selectorvalve_VICI ( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0', label = 'INLETSELECTOR' )
+DATAFILE  = datafile ( '~/ruedi_data' )
 
 # start data file:
 DATAFILE.next() # start a new data file

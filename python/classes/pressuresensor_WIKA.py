@@ -190,8 +190,8 @@ class pressuresensor_WIKA:
 		if not ( f == 'nofile' ):
 			# get timestamp
 			t = misc.nowUNIX()
-			# f.write_pressure('WIKA_PRESSURESENSOR',self.label(),t)
-			self.warning('writing pressure value to data file is not yet implemented!')
+			f.write_pressure('PRESSURESENSOR_WIKA',self.label(),p,unit,t)
+			# self.warning('writing pressure value to data file is not yet implemented!')
 
 		return p,unit
 

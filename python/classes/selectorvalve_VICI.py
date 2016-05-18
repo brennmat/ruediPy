@@ -38,7 +38,7 @@ import serial
 import time
 from classes.misc	import misc
 
-class selectorvalve:
+class selectorvalve_VICI:
 
 	
 	########################################################################################################
@@ -80,6 +80,8 @@ class selectorvalve:
 
 	def label(self):
 		"""
+		label = selectorvalve_VICI.label()
+
 		Return label / name of the SELECTORVALVE object
 		
 		INPUT:
@@ -104,7 +106,10 @@ class selectorvalve:
 	
 
 	def setpos(self,val,f):
-		''' Set valve position
+		'''
+		selectorvalve_VICI.setpos(val,f)
+
+		Set valve position
 
 		INPUT:
 		val: new valve position (integer)
@@ -122,14 +127,24 @@ class selectorvalve:
 		
 		# write to datafile
 		if not f == 'nofile':
-			f.writeValvePos('SELECTORVALVE',self.label(),val,misc.nowUNIX())
+			f.writeValvePos('SELECTORVALVE_VICI',self.label(),val,misc.nowUNIX())
 
 	
 	########################################################################################################
 	
 
 	def getpos(self):
-		# get valve position
+		'''
+		pos = selectorvalve_VICI.getpos()
+
+		Get valve position
+
+		INPUT:
+		(none)
+
+		OUTPUT:
+		pos: valve postion (integer)
+		'''
 		
 		# make sure serial port buffer is empty:
 		self.ser.flushInput() 	# make sure input is empty
