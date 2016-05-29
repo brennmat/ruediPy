@@ -208,9 +208,9 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def setElectronEnergy(self,val):
+	def set_electron_energy(self,val):
 		'''
-		rgams_SRS.setElectronEnergy(val)
+		rgams_SRS.set_electron_energy(val)
 		
 		Set electron energy of the ionizer.
 		
@@ -228,9 +228,9 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def getElectronEnergy(self):
+	def get_electron_energy(self):
 		'''
-		val = rgams_SRS.getElectronEnergy()
+		val = rgams_SRS.get_electron_energy()
 		
 		Return electron energy of the ionizer (in eV).
 		
@@ -249,9 +249,9 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def setFilamentCurrent(self,val):
+	def set_filament_current(self,val):
 		'''
-		rgams_SRS.setFilamentCurrent(val)
+		rgams_SRS.set_filament_current(val)
 		
 		Set filament current.
 		
@@ -269,9 +269,9 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def getFilamentCurrent(self):
+	def get_filament_current(self):
 		'''
-		val = rgams_SRS.getFilamentCurrent()
+		val = rgams_SRS.get_filament_current()
 		
 		Return filament current (in mA)
 		
@@ -290,7 +290,7 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def filamentOn(self):
+	def filament_on(self):
 		'''
 		rgams_SRS.filamenOn()
 		
@@ -306,16 +306,43 @@ class rgams_SRS:
 		# send command to serial port:
 		self.param_IO('FL*',1)
 
-	def filamentOff(self):
+	
+	########################################################################################################
+	
+
+	def filament_off(self):
+		'''
+		rgams_SRS.filament_off()
+		
+		Turn off filament current.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+		
 		# turn off filament (set current to zero)
-		self.setFilamentCurrent(0)
+		self.set_filament_current(0)
 
 	
 	########################################################################################################
 	
 
-	def hasMultiplier(self):
-		# check if MS has electron multiplier installed
+	def has_multiplier(self):
+		'''
+		val = rgams_SRS.has_multiplier()
+		
+		Check if MS has electron multiplier installed.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: result flag, val = 0 --> MS has no multiplier, val <> 0: MS has multiplier
+		'''
+
 		if hasattr(self, '_hasmulti') == 0: # never asked for multiplier before
 			self._hasmulti = self.param_IO('MO?',1) # remember for next time
 		return self._hasmulti
@@ -324,8 +351,19 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def mzMax(self):
-		# determine highest mz value available from MS
+	def mz_max(self):
+		'''
+		val = rgams_SRS.mz_max()
+		
+		Determine highest mz value supported by the MS.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: max. supported mz value 
+		'''
+
 		if hasattr(self, '_mzmax') == 0: # never asked for mzMax before
 			x = self.param_IO('MF?',1) # get current MF value
 			self.param_IO('MF*',0) # set MF to default value, which equals M_MAX
@@ -337,16 +375,26 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def setDetector(self,det):
-		# tell RGA to direct the ion beam to the Faraday or electron Multiplier detector (SEM/CDEM)
-		# det = 'F' --> Faraday
-		# det = 'M' --> Multiplier
-
+	def set_detector(self,det):
+		'''
+		rgams_SRS.set_detector()
+		
+		Set current detetector used by the MS (direct the ion beam to the Faraday or electron multiplier detector).
+		
+		INPUT:
+		det: detecor (string):
+			det='F' for Faraday
+			det='M' for electron multiplier
+		
+		OUTPUT:
+		(none)
+		'''
+		
 		# send command to serial port:		
 		if det == 'F':
 			self.param_IO('HV0',1)
 		elif det == 'M':
-			if self.hasMultiplier():
+			if self.has_multiplier():
 				self.param_IO('HV*',1)
 			else:
 				self.warning ('RGA has no electron multiplier installed!')
@@ -357,11 +405,11 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def getDetector(self):
+	def get_detector(self):
 		'''
-		det = rgams_SRS.getDetector()
+		det = rgams_SRS.get_detector()
 		
-		Return current detector (Faraday or electron Multiplier)
+		Return current detector (Faraday or electron multiplier)
 		
 		INPUT:
 		(none)
@@ -372,7 +420,7 @@ class rgams_SRS:
 			det='M' for electron Multiplier
 		'''
 		
-		if not self.hasMultiplier(): # there is no Multiplier installed
+		if not self.has_multiplier(): # there is no Multiplier installed
 			det = 'F'
 		else:
 			hv = self.param_IO('HV?',1) # send command to serial port
@@ -388,9 +436,19 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def getNoiseFloor(self):
-		# get noise floor (NF) parameter for RGA measurements
-		# (noise floor controls gate time, i.e., noise vs. measurement speed)
+	def get_noise_floor(self):
+		'''
+		val = rgams_SRS.get_noise_floor()
+		
+		Get noise floor (NF) parameter for RGA measurements (noise floor controls gate time, i.e., noise vs. measurement speed).
+				
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: NF noise floor parameter value, 0...7 (integer)
+		'''
+
 		if hasattr(self, '_noisefloor') == 0: # never asked for noisefloor before
 			self._noisefloor = self.param_IO('NF?',1) # get current NF value
 			
@@ -401,10 +459,18 @@ class rgams_SRS:
 	
 
 
-	def setNoiseFloor(self,NF):
-		# set noise floor (NF) parameter for RGA measurements
-		# (noise floor controls gate time, i.e., noise vs. measurement speed)
-		# NF: noise floor parameter value, 0...7 (integer)
+	def set_noise_floor(self,NF):
+		'''
+		val = rgams_SRS.set_noise_floor()
+		
+		Set noise floor (NF) parameter for RGA measurements (noise floor controls gate time, i.e., noise vs. measurement speed).
+				
+		INPUT:
+		NF: noise floor parameter value, 0...7 (integer)
+		
+		OUTPUT:
+		(none)
+		'''
 		
 		NF = int(NF) # make sure NF is an integer value
 		if NF > 7:
@@ -414,7 +480,7 @@ class rgams_SRS:
 			self.warning ('NF parameter must be 0 or higher. Using NF = 0...')
 			NF = 0
 		
-		if NF != self.getNoiseFloor(): # only change NF setting if necessary
+		if NF != self.get_noise_floor(): # only change NF setting if necessary
 			self.param_IO('NF' + str(NF),0)
 			self._noisefloor = NF # remember new NF value
 
@@ -422,32 +488,42 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def setGateTime(self,gate):
-		# set NF (noise floor) parameter according to desired gate time (choose best-match NF value)
-		#
-		# NOTE (1):
-		# FROM THE SRS RGA MANUAL:
-		# Single mass measurements are commonly performed in sets
-		# where several different masses are monitored sequencially
-		# and in a merry-go-round fashion.
-		# For best accuracy of results, it is best to perform the consecutive
-		# mass measurements in a set with the same type of detector
-		# and at the same noise floor (NF) setting.
-		# Fixed detector settings eliminate settling time problems
-		# in the electrometer and in the CDEM's HV power supply.
-		#
-		# NOTE (2):
-		# Experiment gave the following gate times vs NF parameter values:
-		#
-		#	NF	gate (seconds)
-		#	0	2.4	  
-		#	1	1.21	  
-		#	2	0.48	  
-		#	3	0.25	  
-		#	4	0.163 
-		#	5	0.060 
-		#	6	0.043 
-		#	7	0.025 
+	def set_gate_time(self,gate):
+		'''
+		val = rgams_SRS.set_gate_time()
+		
+		Set noi floor (NF) parameter for RGA measurements according to desired gate time (by choosing the best-match NF value).
+				
+		INPUT:
+		gate: gate time in (fractional) seconds
+		
+		OUTPUT:
+		(none)
+
+		NOTE (1):
+		FROM THE SRS RGA MANUAL:
+		Single mass measurements are commonly performed in sets
+		where several different masses are monitored sequencially
+		and in a merry-go-round fashion.
+		For best accuracy of results, it is best to perform the consecutive
+		mass measurements in a set with the same type of detector
+		and at the same noise floor (NF) setting.
+		Fixed detector settings eliminate settling time problems
+		in the electrometer and in the CDEM HV power supply.
+		
+		NOTE (2):
+		Experiment gave the following gate times vs NF parameter values:
+		
+		  NF	gate (seconds)
+		  0	2.4	  
+		  1	1.21	  
+		  2	0.48	  
+		  3	0.25	  
+		  4	0.163 
+		  5	0.060 
+		  6	0.043 
+		  7	0.025 
+		'''
 		
 		gt = numpy.array([ 2.4 , 1.21 , 0.48 , 0.25 , 0.163 , 0.060 , 0.043 , 0.025 ])
 		NF  = (numpy.abs(gt-gate)).argmin() # index to closest gate time
@@ -456,7 +532,7 @@ class rgams_SRS:
 		elif gate < gt.min():
 			self.warning('gate time cannot be less than ' + str(gt.min()) +'s! Using gate = ' + str(gt.min()) +'s...')
 			
-		self.setNoiseFloor(NF)
+		self.set_noise_floor(NF)
 
 	
 	########################################################################################################
@@ -537,7 +613,7 @@ class rgams_SRS:
 		else: # proceed with measurement
 						
 			# configure RGA (gate time):
-			self.setGateTime(gate)
+			self.set_gate_time(gate)
 			
 			# send command to RGA:
 			self.ser.write('MR' + str(mz) + '\r\n')
@@ -615,7 +691,7 @@ class rgams_SRS:
 		else: # proceed with measurement
 						
 			# configure RGA (gate time):
-			self.setGateTime(gate)
+			self.set_gate_time(gate)
 			
 			# send command to RGA:
 			self.ser.write('MR' + str(mz+mz_offset) + '\r\n')
@@ -689,7 +765,7 @@ class rgams_SRS:
 			high = x;
 		
 		# configure RGA (gate time):
-		self.setGateTime(gate)
+		self.set_gate_time(gate)
 
 		# configure scan:
 		self.param_IO('MI' + str(low),0) # low end mz value
@@ -771,7 +847,7 @@ class rgams_SRS:
 	
 	
 	def plot_peakbuffer(self):
-		"""
+		'''
 		srsrga.plot_peakbuffer()
 		
 		Plot trend (or update plot) of values in PEAKs data buffer (e.g. after adding data)
@@ -782,7 +858,7 @@ class rgams_SRS:
 		
 		OUTPUT:
 		(none)
-		"""
+		'''
 		
 		if not self._has_display:
 			self.warning('Plotting of peakbuffer trend not possible (no display system available).')
@@ -825,7 +901,7 @@ class rgams_SRS:
 	
 	
 	def plot_scan(self,mz,intens,unit):
-		"""
+		'''
 		srsrga.plot_scan(mz,intens,unit)
 		
 		Plot scan data
@@ -837,7 +913,7 @@ class rgams_SRS:
 		
 		OUTPUT:
 		(none)
-		"""
+		'''
 		
 		if not self._has_display:
 			self.warning('Plotting of scan data not possible (no display system available).')
