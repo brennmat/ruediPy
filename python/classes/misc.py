@@ -43,9 +43,9 @@ class misc:
 	
 
 	@staticmethod
-	def nowString():
+	def now_string():
 		'''
-		dt = misc.nowString()
+		dt = misc.now_string()
 
 		Return string with current date and time
 		
@@ -63,9 +63,9 @@ class misc:
 	
 
 	@staticmethod
-	def nowUNIX():
+	def now_UNIX():
 		'''
-		dt = misc.nowUNIX()
+		dt = misc.now_UNIX()
 		
 		Return date/time as UNIX time / epoch (seconds after Jan 01 1970 UTC)
 		
@@ -97,6 +97,6 @@ class misc:
 		(none)
 		'''
 		
-		M = '***** WARNING from ' + unit + ' at ' + misc.nowString() + ': ' + msg
+		M = '***** WARNING from ' + unit + ' at ' + misc.now_string() + ': ' + msg
 		print (M)
 		
