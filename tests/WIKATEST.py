@@ -52,6 +52,7 @@ DATAFILE	= datafile ( '~/ruedi_data' )
 DATAFILE.next() # start a new data file
 print 'Data output to ' + DATAFILE.name()
 
+# take pressure readings:
 while 1:
 	p,unit = PSENS.pressure(DATAFILE)
 	time.sleep (2)

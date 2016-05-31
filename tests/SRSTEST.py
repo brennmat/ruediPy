@@ -62,20 +62,20 @@ DATAFILE.next() # start a new data file
 print 'Data output to ' + DATAFILE.name()
 
 # print some MS information:
-print 'MS has electron multiplier: ' + MS.hasMultiplier()
-print 'MS max m/z range: ' + MS.mzMax()
+print 'MS has electron multiplier: ' + MS.has_multiplier()
+print 'MS max m/z range: ' + MS.mz_max()
 
 # change MS configuraton:
-#MS.setElectronEnergy(60)
-print 'Ionizer electron energy: ' + MS.getElectronEnergy() + ' eV'
-MS.setDetector('F')
-print 'Set ion beam to Faraday detector: ' + MS.getDetector()
-MS.filamentOn() # turn on with default current
-print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
+print 'Ionizer electron energy: ' + MS.get_electron_energy() + ' eV'
+MS.set_detector('F')
+print 'Set ion beam to Faraday detector: ' + MS.get_detector()
+MS.filament_on() # turn on with default current
+print 'Filament current: ' + MS.get_filament_current() + ' mA'
+#MS.set_electron_energy(60)  <-- uncomment this to change electon energy in ion source
 
 # scan Ar-40 peak:
 print 'Scanning...'
-MS.setGateTime(0.3) # set gate time for each reading
+MS.set_gate_time(0.3) # set gate time for each reading
 mz,intens,unit = MS.scan(38,42,15,0.5,DATAFILE)
 MS.plot_scan (mz,intens,unit)
 print '...done.'
@@ -85,7 +85,7 @@ print 'Single mass measurements...'
 gate = 0.025
 mz = (28, 32, 40, 44)
 j = 0
-while j < 100000:
+while j < 10:
 	DATAFILE.next('S') # start a new data file, typ 'S' (sample)
 	k = 0
 	while k < 100: # single peak readings
@@ -103,8 +103,8 @@ while j < 100000:
 print '...done.'
 
 # turn off filament:
-MS.filamentOff()
-print 'Filament current: ' + MS.getFilamentCurrent() + ' mA'
+MS.filament_off()
+print 'Filament current: ' + MS.get_filament_current() + ' mA'
 
 print '...done.'
 
