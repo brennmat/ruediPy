@@ -250,10 +250,10 @@ class datafile:
 			return # exit
 
 		# write header with data format info:
-	   	self.writeComment(self.label(),'RUEDI data file created ' + misc.nowString() )
-	   	self.writeComment(self.label(),'Data format:')
-	   	self.writeComment(self.label(),'EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...')
-	   	self.writeComment(self.label(),'EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.')
+	   	self.write_comment(self.label(),'RUEDI data file created ' + misc.nowString() )
+	   	self.write_comment(self.label(),'Data format:')
+	   	self.write_comment(self.label(),'EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...')
+	   	self.write_comment(self.label(),'EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.')
 	   	
 	   	# write analysis type:
 	   	if typ == '':
@@ -310,9 +310,9 @@ class datafile:
 	########################################################################################################
 
 	
-	def writeComment(self,caller,cmt):
+	def write_comment(self,caller,cmt):
 		"""
-		datafile.writeComment(caller,cmt)
+		datafile.write_comment(caller,cmt)
 		
 		Write COMMENT line to the data file.
 		
@@ -355,9 +355,9 @@ class datafile:
 	########################################################################################################
 
 	
-	def writePeak(self,caller,label,mz,intensity,unit,det,gate,timestmp):
+	def write_peak(self,caller,label,mz,intensity,unit,det,gate,timestmp):
 		"""
-		datafile.writePeak(caller,mz,intensity,unit,det,gate,timestmp)
+		datafile.write_peak(caller,mz,intensity,unit,det,gate,timestmp)
 		
 		Write PEAK data line to the data file.
 		
@@ -384,9 +384,9 @@ class datafile:
 	########################################################################################################
 
 	
-	def writeZero(self,caller,label,mz,mz_offset,intensity,unit,det,gate,timestmp):
+	def write_zero(self,caller,label,mz,mz_offset,intensity,unit,det,gate,timestmp):
 		"""
-		datafile.writeZero(caller,mz,mz_offset,intensity,unit,det,gate,timestmp)
+		datafile.write_zero(caller,mz,mz_offset,intensity,unit,det,gate,timestmp)
 		
 		Write ZERO data line to the data file.
 		
@@ -418,9 +418,9 @@ class datafile:
 	########################################################################################################
 
 	
-	def writeScan(self,caller,label,mz,intensity,unit,det,gate,timestmp):
+	def write_scan(self,caller,label,mz,intensity,unit,det,gate,timestmp):
 		"""
-		datafile.writeScan(caller,mz,intensity,unit,det,gate,timestmp)
+		datafile.write_scan(caller,mz,intensity,unit,det,gate,timestmp)
 		
 		Write PEAK data line to the data file.
 		
@@ -445,9 +445,9 @@ class datafile:
 	########################################################################################################
 
 	
-	def writeValvePos(self,caller,label,position,timestmp):
+	def write_valve_pos(self,caller,label,position,timestmp):
 		"""
-		datafile.writeValvePos(caller,position,timestmp)
+		datafile.write_valve_pos(caller,position,timestmp)
 		
 		Write multi-port valve position data line to the data file.
 		
