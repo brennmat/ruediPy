@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{a4paper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{hyperref} % for web addresses
+\usepackage{url} % for file paths
+
+\usepackage{mathptmx}
+
+\usepackage{parskip}
+
+\usepackage{natbib}
+\bibliographystyle{abbrvnat}
+%\setcitestyle{authoryear,open={((},close={))}}
+\setcitestyle{super}
+
+\newcommand{\ruediPy}{\texttt{ruediPy}}
+
+\newcommand{\work}[1]{{\Large\bf\ensuremath{\star}}\footnote{TO DO: #1}}
+
+\title{\ruediPy\ documentaion}
+\author{Matthias Brennwald}
+\date{Version \today}							% Activate to display a given date or no date
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\ruediPy\ is a collection of Python programs for instrument control and data acquisition using RUEDI instruments \citep{Brennwald:2016a}. \ruediPy\ also includes some GNU Octave (or Matlab) tools to load, process, and manipulate RUEDI data acquired with \ruediPy\ Python classes.\par
+
+\ruediPy\ is distributed as free software under the GNU General Public License (see LICENSE.txt).
+
+This document describes the \ruediPy\ software only. The RUEDI instrument is described in a separate document\citep{Brennwald:2016a}.
+
+
+\end{abstract}
+
+\section{Overview}
+\ruediPy\ is a collection of Python programs for instrument control and data acquisition using RUEDI instruments. \ruediPy\ also includes some GNU Octave (or Matlab) tools to load, process, and manipulate RUEDI data acquired with \ruediPy\ Python classes. The RUEDI instrument itself is described in a separate document\citep{Brennwald:2016a}.\par
+
+The Python classes for instrument control and data acquisition are designed to reflect the different hardware units of a RUEDI instrument, such as the mass spectrometer, selector valve, or probes for total gas pressure or temperature. These classes, combined with additional helper classes (e.g., for data file handling), allow writing simple Python scripts that perform user-defined procedures for a specific analysis task.\par
+
+The GNU Octave tools (m-files) are designed to work hand-in-hand with the data files produced by the data acquisition parts of the Python classes. \work{expand this: load raw data, process / calibrate data, etc.}
+
+\ruediPy\ is developed on Linux and Mac OS X systems, but should also work on any other system that run Python and GNU Octave.
+
+\section{Obtaining and installing \ruediPy}
+\ruediPy\ can be downloaded from \url{http://brennmat.github.io/ruediPy} either as a compressed archive file, or using Subversion or Git version control systems. \ruediPy\ can be installed to just about any directory on the computer that is used for instrument control -- but the user home directory  (\path{~/ruediPy}) may seem like a sensible choice, and that's what is assumed throughout the examples shown in this manual.
+
+\section{Python classes}
+The Python classes are used to control the various hardware units of the RUEDI instruments, to acquire measurement data, and to write these data to well-formatted and structured data files.\par
+
+Currently, the following classes are implemented:
+\begin{itemize}
+\item \texttt{rgams\_SRS.py}: control and data acquisition from the SRS mass spectrometer\item \texttt{selectorvalve\_VICI.py}: control of the VICI inlet valve
+\item \texttt{pressuresensor\_WIKA.py}: control and data acquisition from the WIKA pressure sensor
+\item \texttt{datafile.py}: data file handling
+\item \texttt{misc.py}: helper functions\end{itemize}
+
+
+The Python class files are located at \path{~/ruediPy/python/classes/}. To make sure Python knows where to find the \ruediPy\ Python classes, set your \texttt{PYTHONPATH} environment variable accordingly.\footnote{A convenient method to achieve this on Linux or similar UNIXy systems is to put the following line to the \texttt{.profile} file: 
+ \texttt{export PYTHONPATH=\path{~/ruediPy/python}}}
+
+These classes are continuously expanded and new classes are added to \ruediPy\ as required by new needs or developments of the RUEDI instruments. The various methods / functions included are documented in the class files. Due to the ongoing development of the code, it seems futile to keep an up-to-date copy of the methods / functions documentation in this manual. Please refer to the detailed documentation in the class files directly.
+
+\section{GNU Octave tools}
+\work{add content}
+
+\section{Examples}
+\work{add content}
+
+\bibliography{MB_Literatur}
+
+\end{document}  
