@@ -2,11 +2,11 @@
 
 import inspect
 
-from classes.rgams_SRS.py		      import rgams_SRS
-from classes.selectorvalve_VICI.py    import selectorvalve_VICI
-from classes.pressuresensor_WIKA.py   import pressuresensor_WIKA
-from classes.datafile			      import datafile
-from classes.misc.py			      import misc
+from classes.rgams_SRS		       import rgams_SRS
+from classes.selectorvalve_VICI    import selectorvalve_VICI
+from classes.pressuresensor_WIKA   import pressuresensor_WIKA
+from classes.datafile			   import datafile
+from classes.misc			       import misc
 
 CLASSES = [ rgams_SRS , selectorvalve_VICI , pressuresensor_WIKA , datafile , misc ]
 CLASSES = [ selectorvalve_VICI , pressuresensor_WIKA , datafile , misc ]
