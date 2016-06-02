@@ -42,7 +42,9 @@ from classes.misc	import misc
 
 
 class datafile:
-
+	"""
+	ruediPy class for handling of data files.
+	"""
 	
 	########################################################################################################
 	
