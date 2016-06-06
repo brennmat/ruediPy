@@ -41,6 +41,9 @@ import struct
 from classes.misc	import misc
 
 class pressuresensor_WIKA:
+	"""
+	ruediPy class for WIKA pressure sensor control.
+	"""
 
 	
 	########################################################################################################

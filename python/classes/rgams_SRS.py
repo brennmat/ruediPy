@@ -50,6 +50,9 @@ if havedisplay: # prepare plotting environment
 
 
 class rgams_SRS:
+	"""
+	ruediPy class for SRS RGA-MS control.
+	"""
 
 	
 	########################################################################################################

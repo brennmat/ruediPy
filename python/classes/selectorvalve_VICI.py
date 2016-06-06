@@ -39,7 +39,9 @@ import time
 from classes.misc	import misc
 
 class selectorvalve_VICI:
-
+	"""
+	ruediPy class for VICI valve control.
+	"""
 	
 	########################################################################################################
 	
