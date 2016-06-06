@@ -16,7 +16,7 @@ outfile = open('python_API.tex', 'w')
 outfile.write ( '%% THIS NEEDS THE underscore PACKAGE: \usepackage[strings]{underscore}\n\n' )
 
 for X in CLASSES:
-	outfile.write ( '\subsubsection{\\texttt{' + X.__name__ + '}}\n' )
+	outfile.write ( '\subsubsection{Class \\texttt{' + X.__name__ + '}}\n' )
 	P = inspect.getsourcefile(X)
 	outfile.write ( '\path{' + P[P.find('ruedi'):len(P)] + '}\par\n' )
 	doc = inspect.getdoc(X)
@@ -36,7 +36,7 @@ for X in CLASSES:
 			continue
 		if name == '__module__':
 			continue
-		outfile.write ( '\paragraph{\\texttt{' + name + '}}\n\n' )
+		outfile.write ( '\paragraph{Method \\texttt{' + name + '}}\n\\vspace{1ex}\n' )
 		exec ( 'doc = ' + X.__name__ + '.' + name + '.__doc__' )
 
 		if doc is None:
