@@ -21,6 +21,8 @@
 %\setcitestyle{authoryear,open={((},close={))}}
 \setcitestyle{super}
 
+\usepackage[strings]{underscore}
+
 \newcommand{\ruediPy}{\texttt{ruediPy}}
 
 \newcommand{\work}[1]{{\Large\bf\ensuremath{\star}}\footnote{TO DO: #1}}
@@ -60,16 +62,21 @@ The Python classes are used to control the various hardware units of the RUEDI i
 
 Currently, the following classes are implemented:
 \begin{itemize}
-\item \texttt{rgams\_SRS.py}: control and data acquisition from the SRS mass spectrometer\item \texttt{selectorvalve\_VICI.py}: control of the VICI inlet valve
+\item \texttt{rgams\_SRS.py}: control and data acquisition from the SRS mass spectrometer
+\item \texttt{selectorvalve\_VICI.py}: control of the VICI inlet valve
 \item \texttt{pressuresensor\_WIKA.py}: control and data acquisition from the WIKA pressure sensor
 \item \texttt{datafile.py}: data file handling
-\item \texttt{misc.py}: helper functions\end{itemize}
+\item \texttt{misc.py}: helper functions
+\end{itemize}
 
 
 The Python class files are located at \path{~/ruediPy/python/classes/}. To make sure Python knows where to find the \ruediPy\ Python classes, set your \texttt{PYTHONPATH} environment variable accordingly.\footnote{A convenient method to achieve this on Linux or similar UNIXy systems is to put the following line to the \texttt{.profile} file: 
  \texttt{export PYTHONPATH=\path{~/ruediPy/python}}}
 
 These classes are continuously expanded and new classes are added to \ruediPy\ as required by new needs or developments of the RUEDI instruments. The various methods / functions included are documented in the class files. Due to the ongoing development of the code, it seems futile to keep an up-to-date copy of the methods / functions documentation in this manual. Please refer to the detailed documentation in the class files directly.
+
+\subsection{Python classes reference}
+\input{python_API.tex}
 
 \section{GNU Octave tools}
 \work{add content}
