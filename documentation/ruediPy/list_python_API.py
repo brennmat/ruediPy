@@ -9,7 +9,6 @@ from classes.datafile			   import datafile
 from classes.misc			       import misc
 
 CLASSES = [ rgams_SRS , selectorvalve_VICI , pressuresensor_WIKA , datafile , misc ]
-CLASSES = [ selectorvalve_VICI , pressuresensor_WIKA , datafile , misc ]
 
 outfile = open('python_API.tex', 'w')
 
