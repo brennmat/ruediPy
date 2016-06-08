@@ -347,9 +347,8 @@ class datafile:
 		"""
 		
 		typ = typ.replace(' ','');
-		
-		s = 'type=' + typ
-		self.writeln(caller,'','ANALYSISTYPE',s,timestmp)
+
+		self.writeln(caller,'','ANALYSISTYPE',typ,timestmp)
 
 
 	########################################################################################################

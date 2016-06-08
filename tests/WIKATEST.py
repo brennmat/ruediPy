@@ -55,5 +55,5 @@ print 'Data output to ' + DATAFILE.name()
 # take pressure readings:
 while 1:
 	p,unit = PSENS.pressure(DATAFILE)
-	time.sleep (2)
+	# time.sleep (2)
 	print ( str(p) + ' ' + unit )

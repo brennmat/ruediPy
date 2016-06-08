@@ -58,15 +58,15 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def __init__( self , serialport , label='SRSRGA' , max_buffer_points = 500 ):
+	def __init__( self , serialport , label='MS' , max_buffer_points = 500 ):
 		'''
-		rgams_SRS.__init__( serialport , label='SRSRGA' , max_buffer_points = 500 )
+		rgams_SRS.__init__( serialport , label='MS' , max_buffer_points = 500 )
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
 		INPUT:
 		serialport: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
-		label (optional): label / name of the RGAMS object (string). Default: label = 'SRSRGA'
+		label (optional): label / name of the RGAMS object (string). Default: label = 'MS'
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 
 		OUTPUT:
@@ -543,7 +543,7 @@ class rgams_SRS:
 
 	def peakbuffer_add(self,t,mz,intens,det):
 		"""
-		srsrga.peakbuffer_add(t,mz,intens)
+		rgams_SRS.peakbuffer_add(t,mz,intens)
 		
 		Add data to PEAKS data buffer
 				
@@ -638,7 +638,7 @@ class rgams_SRS:
 		det = self.getDetector()
 		
 		if not ( f == 'nofile' ):
-			f.writePeak('SRSRGA',self.label(),mz,val,unit,det,gate,t)
+			f.writePeak('RGA_SRS',self.label(),mz,val,unit,det,gate,t)
 		
 		# add data to peakbuffer
 		self.peakbuffer_add(t,mz,val,det)
@@ -714,7 +714,7 @@ class rgams_SRS:
 			unit = 'A'
 						
 		if not ( f == 'nofile' ):
-			f.writeZero('SRSRGA',self.label(),mz,mz_offset,val,unit,self.getDetector(),gate,t)
+			f.writeZero('RGA_SRS',self.label(),mz,mz_offset,val,unit,self.getDetector(),gate,t)
 
 		return val,unit
 
@@ -841,7 +841,7 @@ class rgams_SRS:
 		if not ( f == 'nofile' ):
 			det = self.getDetector()
 			# print det
-			f.writeScan('SRSRGA',self.label(),M,Y,unit,det,gate,t)
+			f.writeScan('RGA_SRS',self.label(),M,Y,unit,det,gate,t)
 				
 		return M,Y,unit
 
@@ -851,7 +851,7 @@ class rgams_SRS:
 	
 	def plot_peakbuffer(self):
 		'''
-		srsrga.plot_peakbuffer()
+		rgams_SRS.plot_peakbuffer()
 		
 		Plot trend (or update plot) of values in PEAKs data buffer (e.g. after adding data)
 		NOTE: plotting may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.
@@ -905,7 +905,7 @@ class rgams_SRS:
 	
 	def plot_scan(self,mz,intens,unit):
 		'''
-		srsrga.plot_scan(mz,intens,unit)
+		rgams_SRS.plot_scan(mz,intens,unit)
 		
 		Plot scan data
 		

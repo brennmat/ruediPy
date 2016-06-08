@@ -13,5 +13,7 @@ CONNECTIONS
 - Maybe also see http://www.instructables.com/id/Quick-Digital-Thermometer-Using-Cheap-USB-to-TTL-C/step1/Hardware-connections-between-DS18B20-DS-and-USB-to/
 
 SOFTWARE
-- use digitemp on Linux
+- use digitemp on Linux; example:
+	>> digitemp_DS9097 -i -s /dev/ttyUSB3             <-- configure sensor (attached via /dev/ttyUSB3)
+	>>  digitemp_DS9097 -a -n 100 /dev/ttyUSB3        <-- get a bunch of temperature readings
 
