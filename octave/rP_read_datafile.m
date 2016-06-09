@@ -138,9 +138,9 @@ else % read file line by line:
     	L = unique (LABEL(j)); % list of labels available for the objects of type OBJ(j)
     	for k = 1:length(L)
     		l = find ( index(LABEL(j),L(k)) );
-    		
+    		    		
 			switch toupper(O{i})
-				
+								
 				case 'DATAFILE'
 					u = __parse_DATAFILE (TYPE(j(l)),DATA(j(l)),t(j(l)));
 					X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
@@ -149,13 +149,17 @@ else % read file line by line:
 					u = __parse_SRSRGA (TYPE(j(l)),DATA(j(l)),t(j(l)));
 					X = setfield (X,L{k},u); % add SRSRGA[LABEL-k] data
 					
-				case 'SELECTORVALVE'
+				case 'SELECTORVALVE_VICI'
 					u = __parse_SELECTORVALVE (TYPE(j(l)),DATA(j(l)),t(j(l)));
 					X = setfield (X,L{k},u); % add SELECTORVALVE[LABEL-k] data
 				
+				case 'TEMPERATURESENSOR_MAXIM'
+					u = __parse_TEMPERATURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					X = setfield (X,L{k},u); % add TEMPERATURESENSOR[LABEL-k] data
+				
 				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 				otherwise
-					warning (sprintf('rP_read_datafile: Unknown object type %s, skipping...',OTYPE))
+					warning (sprintf('rP_read_datafile: Unknown object type %s, skipping...',O{i}))
 				
 			end % switch
 		end % for k = ...			
@@ -192,6 +196,24 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 						X.COMMENT = p;
 					else
 						X.COMMENT = [ X.COMMENT p ];
+					end
+					
+				end % for k = ...
+
+			case 'ANALYSISTYPE'
+				for k = 1:length(TT)
+					
+					% timestamp:
+					p.epochtime = tt(k);
+					
+					% analysistype text:
+					p.type = strtrim (DD{k}); % remove leading and trailing whitespace
+
+					% append to ANALYSISTYPEs (although there should be only one):
+					if k == 1 % first iteration
+						X.ANALYSISTYPE = p;
+					else
+						X.ANALYSISTYPE = [ X.ANALYSISTYPE p ];
 					end
 					
 				end % for k = ...
@@ -432,7 +454,7 @@ function X = __parse_SELECTORVALVE (TYPE,DATA,t) % parse SELECTORVALVE object da
 		% parse line by line
 		switch toupper(T{i})
 			
-			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PEAK %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% POSITION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			case 'POSITION'
 				for k = 1:length(TT)
 					
@@ -440,17 +462,18 @@ function X = __parse_SELECTORVALVE (TYPE,DATA,t) % parse SELECTORVALVE object da
 					p.epochtime = tt(k);
 										
 					% split data line entries (there is currently only one single entry for SELECTORVALVE POSITION, but who knows if this might change in the future):
-					u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace from s
+					%%% u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace
 															
 					% position value:
-					l = find (index(u,'position') == 1);
-					if isempty(l)
-						warning ('rP_read_datafile: could not find ''position'' field in POSITION data of SELECTORVALVE object data. Using position = NA...')
-						p.position = NA;
-					else
-						p.position = str2num (strsplit(u{l},'='){2});
+					
+					u = strtrim (DD{k}); % remove leading and trailing whitespace
+					p.val = str2num (u);
+					
+					if ~( p.val >= 0 )
+						warning ('rP_read_datafile: could not parse value in POSITION data field of SELECTORVALVE object data. Using position = NA...')
+						p.val = NA;
 					end
-										
+																				
 					% append to POSITIONs:
 					if k == 1 % first iteration
 						X.POSITION = p;
@@ -463,6 +486,51 @@ function X = __parse_SELECTORVALVE (TYPE,DATA,t) % parse SELECTORVALVE object da
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			otherwise
 				warning (sprintf('rP_read_datafile: type = %s unknown for SELECTORVALVE object, skipping...',T{i}))
+
+		end % switch
+	end % for i = ...
+end % function
+
+
+
+function X = __parse_TEMPERATURESENSOR (TYPE,DATA,t) % parse TEMPERATURESENSOR object data
+	X = [];
+	T  = unique (TYPE);
+
+	for i = 1:length(T)
+		j = find (strcmp(TYPE,T{i})); % index to lines with type = T{i}
+		tt = t(j); TT = TYPE(j); DD = DATA(j);
+		
+		% parse line by line
+		switch toupper(T{i})
+			
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TEMPERATURE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			case 'TEMPERATURE'
+				for k = 1:length(TT)
+					
+					% timestamp:
+					p.epochtime = tt(k);
+										
+					% split data line entries:
+					u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace from s
+															
+					% temperature value + unit:
+					uu = strsplit(strtrim(DD{k}),' ');
+					p.val  = str2num (uu{1});
+					p.unit = strtrim(uu{2});
+		
+					% append to TEMPERATUREs:
+					if k == 1 % first iteration
+						X.TEMPERATURE = p;
+					else
+						X.TEMPERATURE = [ X.TEMPERATURE p ];
+					end
+													
+				end % for k = ...
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			otherwise
+				warning (sprintf('rP_read_datafile: type = %s unknown for TEMPERATURESENSOR object, skipping...',T{i}))
 
 		end % switch
 	end % for i = ...
