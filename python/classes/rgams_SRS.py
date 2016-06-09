@@ -367,7 +367,7 @@ class rgams_SRS:
 		val: max. supported mz value 
 		'''
 
-		if hasattr(self, '_mzmax') == 0: # never asked for mzMax before
+		if hasattr(self, '_mzmax') == 0: # never asked for mz_max before
 			x = self.param_IO('MF?',1) # get current MF value
 			self.param_IO('MF*',0) # set MF to default value, which equals M_MAX
 			self._mzmax = self.param_IO('MF?',1) # read back M_MAX value
@@ -608,8 +608,8 @@ class rgams_SRS:
 			val = '-1'
 			unit = '(none)'
 			
-		elif mz > self.mzMax:
-			self.warning ('mz value must be ' + self.mzMax + ' or less! Skipping peak measurement...')
+		elif mz > self.mz_max:
+			self.warning ('mz value must be ' + self.mz_max + ' or less! Skipping peak measurement...')
 			val = '-1'
 			unit = '(none)'
 			
@@ -635,10 +635,10 @@ class rgams_SRS:
 			val = u * 1E-16 # multiply by 1E-16 to convert to Amperes
 			unit = 'A'
 		
-		det = self.getDetector()
+		det = self.get_detector()
 		
 		if not ( f == 'nofile' ):
-			f.writePeak('RGA_SRS',self.label(),mz,val,unit,det,gate,t)
+			f.write_peak('RGA_SRS',self.label(),mz,val,unit,det,gate,t)
 		
 		# add data to peakbuffer
 		self.peakbuffer_add(t,mz,val,det)
@@ -686,8 +686,8 @@ class rgams_SRS:
 			val = '-1'
 			unit = '(none)'
 			
-		elif mz+mz_offset > self.mzMax:
-			self.warning ('mz+mz_offset value must be ' + self.mzMax + ' or less! Skipping zero measurement...')
+		elif mz+mz_offset > self.mz_max:
+			self.warning ('mz+mz_offset value must be ' + self.mz_max + ' or less! Skipping zero measurement...')
 			val = '-1'
 			unit = '(none)'
 			
@@ -714,7 +714,7 @@ class rgams_SRS:
 			unit = 'A'
 						
 		if not ( f == 'nofile' ):
-			f.writeZero('RGA_SRS',self.label(),mz,mz_offset,val,unit,self.getDetector(),gate,t)
+			f.write_zero('RGA_SRS',self.label(),mz,mz_offset,val,unit,self.get_detector(),gate,t)
 
 		return val,unit
 
@@ -758,9 +758,9 @@ class rgams_SRS:
 		if low < 0:
 			self.warning ('Scan must start at m/z=0 or higher! Starting at m/z=0...')
 			low = 0
-		if high > self.mzMax():
-			self.warning ('Scan must end at m/z=' + self.mzMax() + ' or lower! Ending at m/z= ' + self.mzMax + '...')
-			low = self.mzMax()
+		if high > self.mz_max():
+			self.warning ('Scan must end at m/z=' + self.mz_max() + ' or lower! Ending at m/z= ' + self.mz_max + '...')
+			low = self.mz_max()
 		if low >= high:
 			self.warning ('Scan m/z value at start must be lower than at end. Swapping values...')
 			x = low;
@@ -839,9 +839,9 @@ class rgams_SRS:
 
 		# write to data file:
 		if not ( f == 'nofile' ):
-			det = self.getDetector()
+			det = self.get_detector()
 			# print det
-			f.writeScan('RGA_SRS',self.label(),M,Y,unit,det,gate,t)
+			f.write_scan('RGA_SRS',self.label(),M,Y,unit,det,gate,t)
 				
 		return M,Y,unit
 
