@@ -93,7 +93,7 @@ class pressuresensor_WIKA:
 		ans = self.ser.read(4) # four bytes of UNSIGNED32 number
 		self.ser.read(2) # 6th and 7th byte (not used)
 		self._serial_number = struct.unpack('<I',ans)[0] # convert to 4 bytes to integer
-		print ('Successfully configured WIKA pressure sensor with serial number ' + str(self._serial_number) )
+		print ('Successfully configured WIKA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport )
 
 	
 	########################################################################################################

@@ -108,7 +108,9 @@ class rgams_SRS:
 			plt.ion()
 			plt.draw()
 			plt.show()
-
+		
+		print ('Successfully configured SRS RGA-MS on ' + serialport )
+		
 	
 	########################################################################################################
 	

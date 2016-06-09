@@ -58,7 +58,7 @@ MS        = rgams_SRS ( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT20
 DATAFILE  = datafile ( '~/ruedi_data' )
 
 # start data file:
-DATAFILE.next() # start a new data file
+DATAFILE.next('SAMPLE') # start a new data file with analysistype 'SAMPLE'
 print 'Data output to ' + DATAFILE.name()
 
 # print some MS information:
