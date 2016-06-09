@@ -145,7 +145,7 @@ else % read file line by line:
 					u = __parse_DATAFILE (TYPE(j(l)),DATA(j(l)),t(j(l)));
 					X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
 				
-				case 'SRSRGA'
+				case 'RGA_SRS'
 					u = __parse_SRSRGA (TYPE(j(l)),DATA(j(l)),t(j(l)));
 					X = setfield (X,L{k},u); % add SRSRGA[LABEL-k] data
 					
