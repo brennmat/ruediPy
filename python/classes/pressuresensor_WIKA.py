@@ -49,14 +49,14 @@ class pressuresensor_WIKA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'WIKA_PRESSURESENSOR' ):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' ):
 		'''
 		pressuresensor_WIKA.__init__( serialport , label = 'SELECTORVALVE' )
 		
 		Initialize PRESSURESENSOR object (WIKA), configure serial port connection
 		
 		INPUT:
-		serialport: device name of the serial port, e.g. P = '/dev/ttyUSB3'
+		serialport: device name of the serial port, e.g. serialport = '/dev/ttyUSB3'
 		label (optional): label / name of the PRESSURESENSOR object (string). Default: label = 'PRESSURESENSOR'
 		
 		OUTPUT:
@@ -152,13 +152,14 @@ class pressuresensor_WIKA:
 		"""
 		press,unit = pressuresensor_WIKA.pressure(f)
 		
-		Read out current pressure value (in hPa).
+		Read out current pressure value.
 		
 		INPUT:
 		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
 		
 		OUTPUT:
 		press: pressure value in hPa (float)
+		unit: unit of pressure value (string)
 		"""	
 
 		cmd = 'PZ\x00' # command string to set polling mode
@@ -170,7 +171,7 @@ class pressuresensor_WIKA:
 		ans = self.ser.read(1) # unit
 		self.ser.read(2) # last two bytes (not used)
 
-		# convert to hPa
+		# get unit:
 		if ans == '\xFF':
 			unit = 'bar'
 		elif ans == '\xFE':
@@ -192,7 +193,7 @@ class pressuresensor_WIKA:
 		
 		if not ( f == 'nofile' ):
 			# get timestamp
-			t = misc.nowUNIX()
+			t = misc.now_UNIX()
 			f.write_pressure('PRESSURESENSOR_WIKA',self.label(),p,unit,t)
 			# self.warning('writing pressure value to data file is not yet implemented!')
 

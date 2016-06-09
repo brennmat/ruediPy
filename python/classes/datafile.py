@@ -225,7 +225,7 @@ class datafile:
 		self.close()
 		
 		# determine file name for new file
-		n = misc.nowString()
+		n = misc.now_string()
 		n = n.replace(':','-')
 		n = n.replace(' ','_')
 		if not ( typ == '' ):
@@ -250,7 +250,7 @@ class datafile:
 			return # exit
 
 		# write header with data format info:
-	   	self.write_comment(self.label(),'RUEDI data file created ' + misc.nowString() )
+	   	self.write_comment(self.label(),'RUEDI data file created ' + misc.now_string() )
 	   	self.write_comment(self.label(),'Data format:')
 	   	self.write_comment(self.label(),'EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...')
 	   	self.write_comment(self.label(),'EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.')
@@ -258,7 +258,7 @@ class datafile:
 	   	# write analysis type:
 	   	if typ == '':
 	   		typ = 'UNKNOWN'
-		self.write_analysis_type( self.label() , typ , misc.nowUNIX() )
+		self.write_analysis_type( self.label() , typ , misc.now_UNIX() )
 
 	########################################################################################################
 
@@ -274,7 +274,7 @@ class datafile:
 		label: name/label of the calling object (string)
 		identifier: data type identifier (string)
 		data: data / info string
-		timestmp: timestamp of the data in unix time (see misc.nowUNIX)
+		timestmp: timestamp of the data in unix time (see misc.now_UNIX)
 		
 		OUTPUT:
 		(none)
@@ -325,7 +325,7 @@ class datafile:
 		"""
 		
 		# cmt: comment line
-		self.writeln( caller, '' , 'COMMENT' , cmt , misc.nowUNIX() )
+		self.writeln( caller, '' , 'COMMENT' , cmt , misc.now_UNIX() )
 		
 	
 	########################################################################################################
@@ -340,7 +340,7 @@ class datafile:
 		INPUT:
 		caller: type of calling object, i.e. the "data origin" (string)
 		typ: analysis type (string / char)
-		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		timestmp: timestamp of the peak measurement (see misc.now_UNIX)
 		
 		OUTPUT:
 		(none)
@@ -368,7 +368,7 @@ class datafile:
 		unit: unit of peak intensity value (string)
 		det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier
 		gate: gate time (float)
-		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		timestmp: timestamp of the peak measurement (see misc.now_UNIX)
 		
 		OUTPUT:
 		(none)
@@ -398,7 +398,7 @@ class datafile:
 		unit: unit of peak intensity value (string)
 		det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier
 		gate: gate time (float)
-		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		timestmp: timestamp of the peak measurement (see misc.now_UNIX)
 		
 		OUTPUT:
 		(none)
@@ -431,7 +431,7 @@ class datafile:
 		unit: unit of intensity values (string)
 		det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier
 		gate: gate time (float)
-		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		timestmp: timestamp of the peak measurement (see misc.now_UNIX)
 		
 		OUTPUT:
 		(none)
@@ -454,7 +454,7 @@ class datafile:
 		caller: type of calling object, i.e. the "data origin" (string)
 		label: name/label of the calling object (string)
 		position: valve position (integer)
-		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		timestmp: timestamp of the peak measurement (see misc.now_UNIX)
 		
 		OUTPUT:
 		(none)
@@ -478,7 +478,7 @@ class datafile:
 		label: name/label of the calling object (string)
 		value: pressure value (float)
 		unit: unit of peak intensity value (string)
-		timestmp: timestamp of the peak measurement (see misc.nowUNIX)
+		timestmp: timestamp of the pressure measurement (see misc.now_UNIX)
 		
 		OUTPUT:
 		(none)
@@ -486,3 +486,27 @@ class datafile:
 				
 		s = str(value) + ' ' + unit
 		self.writeln(caller,label,'PRESSURE',s,timestmp)
+
+
+	########################################################################################################
+
+	
+	def write_temperature(self,caller,label,value,unit,timestmp):
+		"""
+		datafile.write_temperature(caller,label,value,unit,timestmp)
+				
+		Write TEMPERATURE data line to the data file.
+		
+		INPUT:
+		caller: type of calling object, i.e. the "data origin" (string)
+		label: name/label of the calling object (string)
+		value: temperature value (float)
+		unit: unit of peak intensity value (string)
+		timestmp: timestamp of the temperature measurement (see misc.now_UNIX)
+		
+		OUTPUT:
+		(none)
+		"""
+				
+		s = str(value) + ' ' + unit
+		self.writeln(caller,label,'TEMPERATURE',s,timestmp)
