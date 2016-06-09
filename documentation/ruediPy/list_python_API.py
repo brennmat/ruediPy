@@ -8,7 +8,7 @@ from classes.pressuresensor_WIKA   import pressuresensor_WIKA
 from classes.datafile			   import datafile
 from classes.misc			       import misc
 
-CLASSES = [ rgams_SRS , selectorvalve_VICI , pressuresensor_WIKA , datafile , misc ]
+CLASSES = [ rgams_SRS , selectorvalve_VICI , pressuresensor_WIKA , temperaturesensor_MAXIM , datafile , misc ]
 
 outfile = open('python_API.tex', 'w')
 
