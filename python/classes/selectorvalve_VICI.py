@@ -129,7 +129,7 @@ class selectorvalve_VICI:
 		
 		# write to datafile
 		if not f == 'nofile':
-			f.writeValvePos('SELECTORVALVE_VICI',self.label(),val,misc.nowUNIX())
+			f.write_valve_pos('SELECTORVALVE_VICI',self.label(),val,misc.now_UNIX())
 
 	
 	########################################################################################################

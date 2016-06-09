@@ -622,7 +622,7 @@ class rgams_SRS:
 			self.ser.write('MR' + str(mz) + '\r\n')
 			
 			# get timestamp
-			t = misc.nowUNIX()
+			t = misc.now_UNIX()
 			
 			# read back data:
 			u = self.ser.read()
@@ -700,7 +700,7 @@ class rgams_SRS:
 			self.ser.write('MR' + str(mz+mz_offset) + '\r\n')
 			
 			# get timestamp
-			t = misc.nowUNIX()
+			t = misc.now_UNIX()
 			
 			# read back data:
 			u = self.ser.read()
@@ -781,7 +781,7 @@ class rgams_SRS:
 		self.ser.write('SC1\r\n')
 
 		# get time stamp before scan
-		t1 = misc.nowUNIX()
+		t1 = misc.now_UNIX()
 		
 		# read back result from RGA:
 		Y = [] # init empty list
@@ -821,7 +821,7 @@ class rgams_SRS:
 					nb = 0
 		
 		# get time stamp after scan
-		t2 = misc.nowUNIX()
+		t2 = misc.now_UNIX()
 		
 		# flush the remaining data from the serial port buffer (total pressure measurement):
 		#time.sleep(0.5) # wait a little to get all the data into the buffer
@@ -873,11 +873,11 @@ class rgams_SRS:
 			
 			plt.figure(self._peakbuffer_figure.number)
 			n = 0
-			t0 = misc.nowUNIX()
+			t0 = misc.now_UNIX()
 			
 			plt.show(block=False)
 			leg = [''] * MZ.shape[0] # initialize empy legend entries			
-			t0 = misc.nowUNIX()
+			t0 = misc.now_UNIX()
 			for mz in MZ:
 				k = numpy.where( self._peakbuffer_mz == mz )[0]
 				col = colors[n%7]
@@ -926,7 +926,7 @@ class rgams_SRS:
 			plt.plot( mz , intens , 'b.-' )
 			plt.xlabel('m/z')
 			plt.ylabel('Intensity (' + unit +')')
-			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.nowUNIX()))
+			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
 			plt.title('SCAN (' + self.label() + ')' + ' at ' + t0)
 			plt.draw()
 

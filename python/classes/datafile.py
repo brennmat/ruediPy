@@ -460,7 +460,8 @@ class datafile:
 		(none)
 		"""
 		
-		s = 'position=' + str(position)
+		# s = 'position=' + str(position)
+		s = str(position)
 		self.writeln(caller,label,'POSITION',s,timestmp)
 
 
