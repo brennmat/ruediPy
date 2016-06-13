@@ -85,10 +85,10 @@ print 'Single mass measurements...'
 gate = 0.025
 mz = (28, 32, 40, 44)
 j = 0
-while j < 10:
+while j < 3:
 	DATAFILE.next('S') # start a new data file, typ 'S' (sample)
 	k = 0
-	while k < 100: # single peak readings
+	while k < 10: # single peak readings
 		k = k+1
 		print 'Frame ' + str(k) + ':'
 		for m in mz:
@@ -106,7 +106,7 @@ print '...done.'
 MS.filament_off()
 print 'Filament current: ' + MS.get_filament_current() + ' mA'
 
-print '...done.'
+print '...all measurements done.'
 
 # Wait to exit:
 input("Press ENTER to exit...")
