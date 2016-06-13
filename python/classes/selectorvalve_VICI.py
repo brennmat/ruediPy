@@ -78,7 +78,8 @@ class selectorvalve_VICI:
 		
 		print ('Successfully configured VICI selector valve on ' + serialport )
 
-	
+		print ('Successfully configured VICI selectorvalve on ' + serialport )
+
 	########################################################################################################
 	
 

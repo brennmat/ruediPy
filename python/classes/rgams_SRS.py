@@ -90,6 +90,9 @@ class rgams_SRS:
 		# object name label:
 		self._label = label
 		
+		# get ID / serial number of SRS RGA:
+		self._serial_number = self.param_IO('ID?',1)
+		
 		# data buffer for PEAK values:
 		self._peakbuffer_t = numpy.array([])
 		self._peakbuffer_mz = numpy.array([])
@@ -108,9 +111,8 @@ class rgams_SRS:
 			plt.ion()
 			plt.draw()
 			plt.show()
-		
-		print ('Successfully configured SRS RGA-MS on ' + serialport )
-		
+				
+		print ('Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on  ' + serialport )
 	
 	########################################################################################################
 	
