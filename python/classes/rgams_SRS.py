@@ -855,6 +855,67 @@ class rgams_SRS:
 	########################################################################################################
 	
 	
+	def tune_peak_position(self,mzLow,mzHigh,step,gate,limit):
+		'''
+		rgams_SRS.tune_peak_position(Mlow,Mhigh,step,gate,limit)
+		
+		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This uses two peaks (one at a low and one at a high mz value) to calibrate the mz vs. peak-position function across the full mass range.
+		
+		INPUT:
+		mzLow: low mz value
+		mzHigh: high mz value
+		step: scan resolution (number of mass increment steps per amu)
+		   step = integer number --> use given number (high number equals small mass increments between steps)
+		   step = '*' use default value (step = 10)
+		gate: gate time (seconds)
+		limit: if the peak height is is less than 'limit' (in units of detector signal), the peak is not centered
+		
+		   
+		OUTPUT:
+		(none)
+		
+		NOTE:
+		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+		'''
+	
+		# check for range of input values:
+		mzLow = int(mzLow)
+		mzHigh = int(mzHigh)
+		step = int(step)
+		if mzLow >= mzHigh 0:
+			error ('mzLow must be less than mzHigh! Aborting...')
+			
+		# peak shape function:
+		def peak(m,M0,BASE,HEIGHT,WHIGH,WLOW):
+			y = 0 * m
+			for k in range(1,length(m)):
+				if abs(m(K)-M0) > WLOW: # baseline
+					y(k) = BASE
+				else:
+					if abs(m(k)-M0) < WTOP: # peak top
+						y(k) = BASE + HEIGHT
+					elif M < M0: # left slope
+						y(k) = BASE + HEIGHT * (M0-WHIGH-m(k))/(WLOW-WHIGH)
+					elif M > M0: # right slope
+						y(k) = BASE + HEIGHT * (m(k)-WHIGH-m0)/(WLOW-WHIGH)
+
+
+		# configure RGA (gate time):
+		self.set_gate_time(gate)
+		
+		N = 5 # max. number of peak-centering iterations
+		w = 1.2 # scan width relative to center of scan
+		while k < N:
+			# scan peaks:
+			ML,YL = self.scan(self,mzLow-w,mzLow+w,step,gate,'nofile')		# low mz peak
+			MH,YH = self.scan(self,mzHigh-w,mzHigh+w,step,gate,'nofile')	# high mz peak
+			
+
+
+	
+	########################################################################################################
+	
+	
 	def plot_peakbuffer(self):
 		'''
 		rgams_SRS.plot_peakbuffer()
