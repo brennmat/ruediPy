@@ -910,6 +910,8 @@ class rgams_SRS:
 			ML,YL,UL = self.scan(mzLow-w,mzLow+w,25,gateLow,'nofile')
 			self.plot_scan(ML,YL,UL)
 			
+			
+			
 			print ("Enter mz-offset (or X to quit: ")
 			u = sys.stdin.readline()
 			u = u.rstrip('\r\n')
@@ -1003,11 +1005,12 @@ class rgams_SRS:
 			self.warning('Plotting of scan data not possible (no display system available).')
 		
 		else:
-			plt.figure(self._scan_figure.number)
+			fig = plt.figure(self._scan_figure.number)
 			plt.plot( mz , intens , 'b.-' )
 			plt.xlabel('m/z')
 			plt.ylabel('Intensity (' + unit +')')
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
 			plt.title('SCAN (' + self.label() + ')' + ' at ' + t0)
 			plt.draw()
+			plt.show()
 
