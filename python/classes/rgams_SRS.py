@@ -910,7 +910,7 @@ class rgams_SRS:
 			self.plot_scan(ML,YL,UL)
 
 			try:
-				offset = int(input("Enter mz-offset (or X to quit: "))
+				offset = input("Enter mz-offset (or X to quit: ")
 			except ValueError:
 				if offset == 'X':
 					doLoop = False
@@ -919,6 +919,7 @@ class rgams_SRS:
 					continue
 			else:
 				print ( '...dealing with offset = ' + offset + ' now...' )
+				offset = float(offset)
 				break
 
 
