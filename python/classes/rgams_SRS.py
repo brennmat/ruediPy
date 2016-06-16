@@ -859,7 +859,7 @@ class rgams_SRS:
 		'''
 		rgams_SRS.tune_peak_position(Mlow,Mhigh,step,gate,limit)
 		
-		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This uses two peaks (one at a low and one at a high mz value) to calibrate the mz vs. peak-position function across the full mass range.
+		Interactively adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This uses two peaks (one at a low and one at a high mz value) to calibrate the mz vs. peak-position function across the full mass range.
 		
 		INPUT:
 		mzLow: low mz value
@@ -885,19 +885,19 @@ class rgams_SRS:
 		if mzLow >= mzHigh:
 			error ('mzLow must be less than mzHigh! Aborting...')
 		
-		# peak shape function:
-		def peak(m,M0,BASE,HEIGHT,WHIGH,WLOW):
-			y = 0 * m
-			for k in range(1,length(m)):
-				if abs(m(K)-M0) > WLOW: # baseline
-					y(k) = BASE
-				else:
-					if abs(m(k)-M0) < WTOP: # peak top
-						y(k) = BASE + HEIGHT
-					elif M < M0: # left slope
-						y(k) = BASE + HEIGHT * (M0-WHIGH-m(k))/(WLOW-WHIGH)
-					elif M > M0: # right slope
-						y(k) = BASE + HEIGHT * (m(k)-WHIGH-m0)/(WLOW-WHIGH)
+###		# peak shape function:
+###		def peak(m,M0,BASE,HEIGHT,WHIGH,WLOW):
+###			y = 0 * m
+###			for k in range(1,length(m)):
+###				if abs(m(K)-M0) > WLOW: # baseline
+###					y(k) = BASE
+###				else:
+###					if abs(m(k)-M0) < WTOP: # peak top
+###						y(k) = BASE + HEIGHT
+###					elif M < M0: # left slope
+###						y(k) = BASE + HEIGHT * (M0-WHIGH-m(k))/(WLOW-WHIGH)
+###					elif M > M0: # right slope
+###						y(k) = BASE + HEIGHT * (m(k)-WHIGH-m0)/(WLOW-WHIGH)
 
 
 		# configure RGA (gate time):
