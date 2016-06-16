@@ -902,12 +902,14 @@ class rgams_SRS:
 		
 		N = 5 # max. number of peak-centering iterations
 		w = 3 # scan width relative to center of scan
+		k = 0
 		while k < N:
 			# scan at mzLow:
 			self.set_detector(detLow)
 			ML,YL,UL = self.scan(self,mzLow-w,mzLow+w,25,gateLow,'nofile')
 			self.plot_scan(ML,YL,UL)
-
+			
+			k = k + 1
 #			MH,YH = self.scan(self,mzHigh-w,mzHigh+w,step,gate,'nofile')	# high mz peak
 #			self.plot_scan(MH,YH,UH)
 			
