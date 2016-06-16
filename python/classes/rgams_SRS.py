@@ -855,9 +855,9 @@ class rgams_SRS:
 	########################################################################################################
 	
 	
-	def tune_peak_position(self,mzLow,mzHigh,step,gate,limit):
+	def tune_peak_position(self,mzLow,gateLow,detLow,mzHigh,gateHigh,detHigh):
 		'''
-		rgams_SRS.tune_peak_position(Mlow,Mhigh,step,gate,limit)
+		rgams_SRS.tune_peak_position( ... )
 		
 		Interactively adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This uses two peaks (one at a low and one at a high mz value) to calibrate the mz vs. peak-position function across the full mass range.
 		
@@ -904,11 +904,15 @@ class rgams_SRS:
 		self.set_gate_time(gate)
 		
 		N = 5 # max. number of peak-centering iterations
-		w = 1.2 # scan width relative to center of scan
+		w = 3 # scan width relative to center of scan
 		while k < N:
-			# scan peaks:
-			ML,YL = self.scan(self,mzLow-w,mzLow+w,step,gate,'nofile')		# low mz peak
-			MH,YH = self.scan(self,mzHigh-w,mzHigh+w,step,gate,'nofile')	# high mz peak
+			# scan at mzLow:
+			self.set_detector(detLow)
+			ML,YL,UL = self.scan(self,mzLow-w,mzLow+w,25,gateLow,'nofile')
+			self.plot_scan(ML,YL,UL)
+
+#			MH,YH = self.scan(self,mzHigh-w,mzHigh+w,step,gate,'nofile')	# high mz peak
+#			self.plot_scan(MH,YH,UH)
 			
 
 
