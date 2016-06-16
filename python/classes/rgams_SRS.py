@@ -908,15 +908,15 @@ class rgams_SRS:
 			self.set_detector(detLow)
 			ML,YL,UL = self.scan(mzLow-w,mzLow+w,25,gateLow,'nofile')
 			self.plot_scan(ML,YL,UL)
-
+			offset = input("Enter mz-offset (or X to quit: ")
 			try:
-				offset = input("Enter mz-offset (or X to quit: ")
+				offset = float(input("Enter mz-offset (or X to quit: "))
 			except ValueError:
 				if offset == 'X':
 					doLoop = False
 				else:
 					print("Could not parse input -- try again!")
-					continue
+				continue
 			else:
 				print ( '...dealing with offset = ' + offset + ' now...' )
 				offset = float(offset)
