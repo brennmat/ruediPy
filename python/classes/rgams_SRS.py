@@ -40,6 +40,7 @@ import time
 import struct
 import numpy
 import os
+import sys
 from classes.misc	import misc
 # from classes.plots	import plots
 havedisplay = "DISPLAY" in os.environ
@@ -902,21 +903,21 @@ class rgams_SRS:
 		
 		N = 5 # max. number of peak-centering iterations
 		w = 3 # scan width relative to center of scan
-		if hasattr(__builtins__, 'raw_input'):
-			input=raw_input # make sure that with python 2.x raw_input is used
 		doLoop = True
 		while doLoop:
 			# scan at mzLow:
 			self.set_detector(detLow)
 			ML,YL,UL = self.scan(mzLow-w,mzLow+w,25,gateLow,'nofile')
 			self.plot_scan(ML,YL,UL)
-			offset = input("Enter mz-offset (or X to quit: ")
-			u = input("Enter mz-offset (or X to quit: ")
+			
+			print ("Enter mz-offset (or X to quit: ")
+			u = sys.stdin.readline()
+			u = u.rstrip('\r\n')
 			
 			try:
 				offset = float(u)
 			except ValueError:
-				if offset == 'X':
+				if u == 'X':
 					doLoop = False
 				else:
 					print("Could not parse input -- try again!")
