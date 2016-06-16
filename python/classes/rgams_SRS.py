@@ -912,9 +912,9 @@ class rgams_SRS:
 			try:
 				offset = int(input("Enter mz-offset (or X to quit: "))
 			except ValueError:
-				if offset == 'X'
+				if offset == 'X':
 					doLoop = False
-				else
+				else:
 					print("Could not parse input -- try again!")
 					continue
 			else:
