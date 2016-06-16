@@ -897,7 +897,7 @@ class rgams_SRS:
 			# scan peak at mz[k]:
 			print 'Scanning peak at mz = ' + str(mz[k]) + '...'
 			self.set_detector(det[k])
-			ML,YL,UL = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
+			MZ,YL,UL = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
 
 			# normalize peak
 			a = min(YL)
@@ -909,12 +909,12 @@ class rgams_SRS:
 			CY = numpy.cumsum(YL)
 			a = CY[len(CY)-1]
 			CY[:] = [x / a for x in CY] # normalize cumulative sum
-			F = interp1d(CY,ML) # interpolator function
+			F = interp1d(CY,MZ) # interpolator function
 			m1 = F(0.5)
 			print 'Median peak center: mz = ' , str(m1)
 
 			# use values close to peak maximum to find peak center:
-			m2 = [ ML[n] for n,i in enumerate(YL) if i>0.8] # mz values of YL values > 0.8
+			m2 = [ MZ[n] for n,i in enumerate(YL) if i>0.8] # mz values of YL values > 0.8
 			m2 = sum(m2) / len(m2)
 			print 'Center of mass of values > 80% of peak-max: mz = ' , str(m2)
 
@@ -931,8 +931,8 @@ class rgams_SRS:
         	                plt.draw()
                 	        plt.show()
 				plt.figure(peakfig[k].number)
-				plt.plot( ML , YL , 'b.-' )
-				plt.plot( ML , CY , 'r.-' )
+				plt.plot( MZ , YL , 'b.-' )
+				plt.plot( MZ , CY , 'r.-' )
 				plt.xlabel('m/z')
 				plt.ylabel('Intensity (normalised)')
 				plt.draw()
