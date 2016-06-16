@@ -902,6 +902,8 @@ class rgams_SRS:
 		
 		N = 5 # max. number of peak-centering iterations
 		w = 3 # scan width relative to center of scan
+		if hasattr(__builtins__, 'raw_input'):
+			input=raw_input # make sure that with python 2.x raw_input is used
 		doLoop = True
 		while doLoop:
 			# scan at mzLow:
@@ -909,8 +911,10 @@ class rgams_SRS:
 			ML,YL,UL = self.scan(mzLow-w,mzLow+w,25,gateLow,'nofile')
 			self.plot_scan(ML,YL,UL)
 			offset = input("Enter mz-offset (or X to quit: ")
+			u = input("Enter mz-offset (or X to quit: ")
+			
 			try:
-				offset = float(input("Enter mz-offset (or X to quit: "))
+				offset = float(u)
 			except ValueError:
 				if offset == 'X':
 					doLoop = False
@@ -918,8 +922,7 @@ class rgams_SRS:
 					print("Could not parse input -- try again!")
 				continue
 			else:
-				print ( '...dealing with offset = ' + offset + ' now...' )
-				offset = float(offset)
+				print ( '...dealing with offset = ' + str(offset) + ' now...' )
 				break
 
 
