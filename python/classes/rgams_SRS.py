@@ -899,9 +899,6 @@ class rgams_SRS:
 ###					elif M > M0: # right slope
 ###						y(k) = BASE + HEIGHT * (m(k)-WHIGH-m0)/(WLOW-WHIGH)
 
-
-		# configure RGA (gate time):
-		self.set_gate_time(gate)
 		
 		N = 5 # max. number of peak-centering iterations
 		w = 3 # scan width relative to center of scan
