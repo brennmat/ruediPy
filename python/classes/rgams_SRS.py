@@ -881,7 +881,7 @@ class rgams_SRS:
 		# check for range of input values:
 		mzLow = int(mzLow)
 		mzHigh = int(mzHigh)
-		step = int(step)
+		# step = int(step)
 		if mzLow >= mzHigh:
 			error ('mzLow must be less than mzHigh! Aborting...')
 		
