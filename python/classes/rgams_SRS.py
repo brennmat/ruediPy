@@ -902,7 +902,7 @@ class rgams_SRS:
 
 		
 		N = 5 # max. number of peak-centering iterations
-		w = 3 # scan width relative to center of scan
+		w = 0.6 # scan width relative to center of scan
 		doLoop = True
 		while doLoop:
 			# scan at mzLow:
