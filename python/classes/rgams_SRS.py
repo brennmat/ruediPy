@@ -909,7 +909,7 @@ class rgams_SRS:
 			self.set_detector(detLow)
 			ML,YL,UL = self.scan(mzLow-w,mzLow+w,25,gateLow,'nofile')
 			self.plot_scan(ML,YL,UL)
-			time.sleep(0.01)		
+			time.sleep(1)		
 			
 			print ("Enter mz-offset (or X to quit: ")
 			u = sys.stdin.readline()
