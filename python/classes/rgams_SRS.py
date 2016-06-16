@@ -882,9 +882,9 @@ class rgams_SRS:
 		mzLow = int(mzLow)
 		mzHigh = int(mzHigh)
 		step = int(step)
-		if mzLow >= mzHigh 0:
+		if mzLow >= mzHigh:
 			error ('mzLow must be less than mzHigh! Aborting...')
-			
+		
 		# peak shape function:
 		def peak(m,M0,BASE,HEIGHT,WHIGH,WLOW):
 			y = 0 * m
