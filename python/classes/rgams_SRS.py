@@ -902,24 +902,27 @@ class rgams_SRS:
 		
 		N = 5 # max. number of peak-centering iterations
 		w = 3 # scan width relative to center of scan
-		k = 0
-		while k < N:
+		doLoop = True
+		while doLoop:
 			# scan at mzLow:
 			self.set_detector(detLow)
 			ML,YL,UL = self.scan(mzLow-w,mzLow+w,25,gateLow,'nofile')
 			self.plot_scan(ML,YL,UL)
-			
-			offset = input('Enter mz offset (leave empty to abort): ')
-			print "you entered", offset
-			
-			k = k + 1
-#			MH,YH = self.scan(self,mzHigh-w,mzHigh+w,step,gate,'nofile')	# high mz peak
-#			self.plot_scan(MH,YH,UH)
-			
+
+			try:
+				offset = int(input("Enter mz-offset (or X to quit: "))
+			except ValueError:
+				if offset == 'X'
+					doLoop = False
+				else
+					print("Could not parse input -- try again!")
+					continue
+			else:
+				print ( '...dealing with offset = ' + offset + ' now...' )
+				break
 
 
-	
-	########################################################################################################
+########################################################################################################
 	
 	
 	def plot_peakbuffer(self):
