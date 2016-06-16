@@ -1012,5 +1012,5 @@ class rgams_SRS:
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
 			plt.title('SCAN (' + self.label() + ')' + ' at ' + t0)
 			plt.draw()
-			plt.show()
+			fig.canvas.draw()
 
