@@ -41,6 +41,7 @@ import struct
 import numpy
 import os
 import sys
+from scipy.interpolate import interp1d
 from classes.misc	import misc
 # from classes.plots	import plots
 havedisplay = "DISPLAY" in os.environ
@@ -856,7 +857,7 @@ class rgams_SRS:
 	########################################################################################################
 	
 	
-	def tune_peak_position(self,mzLow,gateLow,detLow,mzHigh,gateHigh,detHigh):
+	def tune_peak_position(self,mz,gate,det):
 		'''
 		rgams_SRS.tune_peak_position( ... )
 		
@@ -871,60 +872,70 @@ class rgams_SRS:
 		gate: gate time (seconds)
 		limit: if the peak height is is less than 'limit' (in units of detector signal), the peak is not centered
 		
-		   
+		
 		OUTPUT:
 		(none)
 		
 		NOTE:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
-	
-		# check for range of input values:
-		mzLow = int(mzLow)
-		mzHigh = int(mzHigh)
-		# step = int(step)
-		if mzLow >= mzHigh:
-			error ('mzLow must be less than mzHigh! Aborting...')
-		
-###		# peak shape function:
-###		def peak(m,M0,BASE,HEIGHT,WHIGH,WLOW):
-###			y = 0 * m
-###			for k in range(1,length(m)):
-###				if abs(m(K)-M0) > WLOW: # baseline
-###					y(k) = BASE
-###				else:
-###					if abs(m(k)-M0) < WTOP: # peak top
-###						y(k) = BASE + HEIGHT
-###					elif M < M0: # left slope
-###						y(k) = BASE + HEIGHT * (M0-WHIGH-m(k))/(WLOW-WHIGH)
-###					elif M > M0: # right slope
-###						y(k) = BASE + HEIGHT * (m(k)-WHIGH-m0)/(WLOW-WHIGH)
 
-		
-		N = 5 # max. number of peak-centering iterations
-		w = 0.6 # scan width relative to center of scan
-		doLoop = True
-		while doLoop:
-			# scan at mzLow:
-			self.set_detector(detLow)
-			ML,YL,UL = self.scan(mzLow-w,mzLow+w,25,gateLow,'nofile')
-			self.plot_scan(ML,YL,UL)
-			
-			print ("Enter mz-offset (or X to quit: ")
-			u = sys.stdin.readline()
-			u = u.rstrip('\r\n')
-			
-			try:
-				offset = float(u)
-			except ValueError:
-				if u == 'X':
-					doLoop = False
-				else:
-					print("Could not parse input -- try again!")
-				continue
+		# check for range of input values:
+		mz = list(set(mz)) # get list of unique mz values
+		mz.sort()
+		N = len(mz)
+		if N < 2:
+			error ('Need at least two distinct mz values to tune peak positions!')
+
+		if self._has_display: # prepare plotting environment and figure
+			peakfig = [ plt.figure() for k in range(0,N) ]
+#			plt.ion()
+#			plt.draw()
+#			plt.show()
+
+		for k in range(0,N):
+			# scan peak at mz[k]:
+			print 'Scanning peak at mz = ' + str(mz[k]) + '...'
+			self.set_detector(det[k])
+			ML,YL,UL = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
+
+			# normalize peak
+			a = min(YL)
+			YL[:] = [x - a for x in YL]
+			a = max(YL)
+			YL[:] = [x / a for x in YL]
+
+			# analyse cumulative sum of peak (median center of peak):
+			CY = numpy.cumsum(YL)
+			a = CY[len(CY)-1]
+			CY[:] = [x / a for x in CY] # normalize cumulative sum
+			F = interp1d(CY,ML) # interpolator function
+			m1 = F(0.5)
+			print 'Median peak center: mz = ' , str(m1)
+
+			# use values close to peak maximum to find peak center:
+			m2 = [ ML[n] for n,i in enumerate(YL) if i>0.8] # mz values of YL values > 0.8
+			m2 = sum(m2) / len(m2)
+			print 'Center of mass of values > 80% of peak-max: mz = ' , str(m2)
+
+			# mean of m1 and m2:
+			m = (m1+m2)/2
+			print 'Peak center at mz = ' , m
+
+
+			if not self._has_display:
+				self.warning('Plotting of scan data not possible (no display system available).')
 			else:
-				print ( '...dealing with offset = ' + str(offset) + ' now...' )
-				break
+#	                        peakfig[k] = plt.figure()
+	                        plt.ion()
+        	                plt.draw()
+                	        plt.show()
+				plt.figure(peakfig[k].number)
+				plt.plot( ML , YL , 'b.-' )
+				plt.plot( ML , CY , 'r.-' )
+				plt.xlabel('m/z')
+				plt.ylabel('Intensity (normalised)')
+				plt.draw()
 
 
 ########################################################################################################
