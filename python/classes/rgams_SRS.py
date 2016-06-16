@@ -106,11 +106,11 @@ class rgams_SRS:
 		# set up plotting environment
 		self._has_display = havedisplay
 		if self._has_display: # prepare plotting environment and figure
-			self._scan_figure = plt.figure()
+			self._peakbuffer_figure = plt.figure()
 			plt.ion()
 			plt.draw()
 			plt.show()
-			self._peakbuffer_figure = plt.figure()
+			self._scan_figure = plt.figure()
 			plt.ion()
 			plt.draw()
 			plt.show()
