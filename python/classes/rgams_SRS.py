@@ -906,7 +906,7 @@ class rgams_SRS:
 		while k < N:
 			# scan at mzLow:
 			self.set_detector(detLow)
-			ML,YL,UL = self.scan(self,mzLow-w,mzLow+w,25,gateLow,'nofile')
+			ML,YL,UL = self.scan(mzLow-w,mzLow+w,25,gateLow,'nofile')
 			self.plot_scan(ML,YL,UL)
 			
 			k = k + 1
