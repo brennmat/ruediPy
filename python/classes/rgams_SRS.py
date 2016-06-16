@@ -909,6 +909,9 @@ class rgams_SRS:
 			ML,YL,UL = self.scan(mzLow-w,mzLow+w,25,gateLow,'nofile')
 			self.plot_scan(ML,YL,UL)
 			
+			offset = input('Enter mz offset (leave empty to abort): ')
+			print "you entered", offset
+			
 			k = k + 1
 #			MH,YH = self.scan(self,mzHigh-w,mzHigh+w,step,gate,'nofile')	# high mz peak
 #			self.plot_scan(MH,YH,UH)
