@@ -873,7 +873,7 @@ class rgams_SRS:
 		rgams_SRS.tune_peak_position(mz,gate,det,n=1)
 
 		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure can be repeated several times.
-		
+
 		INPUT:
 		mz: list of mz values where peaks are scanned
 		gate: list of gate times used in the scans
@@ -897,74 +897,95 @@ class rgams_SRS:
 		if self._has_display: # prepare plotting environment and figure
 			peakfig = [ plt.figure() for k in range(0,N) ]
 
-        # prepare lists for delta-m values determined from the various peaks:
-        delta_m = []
-		
-		for i in range(0,n)
+		for i in range(0,n):
 			RI0 = self.get_RI()
 			RS0 = self.get_RS()
-			print ('Before tuning (cycle ' + i+1 + ' of ' + n +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
+			print ('\nBefore tuning (cycle ' + str(i+1) + ' of ' + str(n) +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
+
+	                # prepare lists for delta-m values determined from the various peaks:
+        	        delta_m = []
 
 			# scan peaks and find peak centers:
 			for k in range(0,N):
 				# scan peak at mz[k]:
 				print 'Scanning peak at mz = ' + str(mz[k]) + '...'
 				self.set_detector(det[k])
-				MZ,YL,UL = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
-	
+				MZ,Y,U = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
+
+				# subtract baseline
+				yL = (Y[0]+Y[1])/2
+				yR = (Y[-1]+Y[-2])/2
+                                mL = (MZ[0]+MZ[1])/2
+	                        mR = (MZ[-1]+MZ[-2])/2
+	                        fit = numpy.polyfit([mL,mR],[yL,yR],1)
+        	                fit_fn = numpy.poly1d(fit)
+				Y = Y - fit_fn(MZ)
+
 				# normalize peak
-				a = min(YL)
-				YL[:] = [x - a for x in YL]
-				a = max(YL)
-				YL[:] = [x / a for x in YL]
-	
+				#a = max(Y)
+				#Y[:] = [x / a for x in Y]
+
 				# analyse cumulative sum of peak (median center of peak):
-				CY = numpy.cumsum(YL)
-				a = CY[len(CY)-1]
-				CY[:] = [x / a for x in CY] # normalize cumulative sum
-				F = interp1d(CY,MZ) # interpolator function
+				CY = numpy.cumsum(Y)
+				CYmax = max(CY)
+				print CYmax
+				cy = [ x/CYmax for x in CY ]
+				F = interp1d(cy,MZ) # interpolator function
 				m1 = F(0.5)
 				print 'Median peak center: mz = ' , str(m1)
-	
+
 				# use values close to peak maximum to find peak center:
-				m2 = [ MZ[n] for n,i in enumerate(YL) if i>0.8] # mz values of YL values > 0.8
+				m2 = [ MZ[n] for n,i in enumerate(Y) if i>=0.75*max(Y)] # mz values of Y values >= 0.75*max(Y)
 				m2 = sum(m2) / len(m2)
-				print 'Center of mass of values > 80% of peak-max: mz = ' , str(m2)
-	
+				print 'Center of mass of values > 75% of peak-max: mz = ' , str(m2)
+
 				# mean of m1 and m2:
-				if abs(m1-m2) > 0.3:
-					self.warning ('Peak center values determined from peak top and peak median differ by more than 0.3, ignoring peak at mz = ' + str(mz[k]) + '. Consider using a peak at a different mz value for tuning!')
+				if abs(m1-m2) > 0.35:
+					self.warning ('Peak center values determined from peak top and peak median differ by more than 0.35, ignoring peak at mz = ' + str(mz[k]) + '. Consider using a peak at a different mz value for tuning!')
 					delta_m.append(numpy.nan)
 				else:
 					m = (m1+3*m2)/4
+					#m = m2
 					print 'Peak center at mz = ' , m
-	
-					# determine delta-m value:
+
 					delta_m.append(mz[k]-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
-					print ('Delta-m = ' + str(delta_m) )
-	
+
 				if not self._has_display:
 					self.warning('Plotting of scan data not possible (no display system available).')
 				else:
 					plt.figure(peakfig[k].number)
-					plt.plot( MZ , YL , 'b.-' )
-					plt.plot( MZ , CY , 'r.-' )
+					plt.plot( MZ , Y , 'b.-' )
+					plt.plot( MZ , CY/CYmax*max(Y) , 'r.-' )
 					plt.xlabel('m/z')
-					plt.ylabel('Intensity (normalised)')
+					plt.ylabel('Intensity (A)')
 					plt.draw()
-				
-			print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
-			print mz
-			print delta_m
-			
-			#		ri = RI0 - delta_m*(RS0/128) * 128/(128-mz[k]) # ri < RI <==> peak will be shifted towards higher mz value
-			#		rs = RS0 * mz[k]/(mz[k]+delta_m)
-			#
-			#		RI.append(ri)
-			#		RS.append(rs)
+					time.sleep(1)
 
-			#self.set_RI(ri)
-			#self.set_RS(rs)
+			# print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
+			# fit first-order polynomial function to mz vs. delta_m:
+			kk = ~numpy.isnan(delta_m)
+			nn = len(mz)
+			x = [ mz[i] for i in range(0,nn) if kk[i] ]
+                        y = [ delta_m[i] for i in range(0,nn) if kk[i] ]
+			fit = numpy.polyfit(x,y,1)
+			fit_fn = numpy.poly1d(fit)
+
+			# estimate delta-m at mz=0 and mz=128
+			delta_m0   = fit_fn(0)
+			delta_m128 = fit_fn(128)
+
+			print ('mz-offset at mz = 0: ' + str(delta_m0))
+			print ('mz-offset at mz = 128: ' + str(delta_m128))
+
+			# use smaller steps if repeating the tuning (to improve convergence/stability):
+			if n > 1:
+				delta_m0 = (0.2 + 1/n**0.5) * delta_m0
+                                delta_m128 = (0.2 + 1/n**0.5) * delta_m128
+
+			ri = RI0 - delta_m0*(RS0/128)
+			rs = RS0 * mz[k]/(mz[k]+delta_m128)
+			self.set_RI(ri)
+			self.set_RS(rs)
 
 
 
@@ -979,7 +1000,7 @@ class rgams_SRS:
                 Set RI parameter value (peak-position tuning at low mz range)
 
                 INPUT:
-                x: RI value
+                x: RI voltage
 
                 OUTPUT:
                 (none)
@@ -990,14 +1011,13 @@ class rgams_SRS:
 
 		if (x < -86.0) or ( x > 86.0):
 			error ('RI value out of allowed range (-86...+86V)')
-
                 if x >= 0:
                 	x = '+' + '{:.4f}'.format(x)
                 else:
                 	x = '{:.4f}'.format(x)
 
                 self.param_IO('RI' + x,0)
-		print ('New RI value: ' +  x + 'V')
+		print ('Set RI voltage to ' +  x + 'V')
 
 
 
@@ -1026,8 +1046,8 @@ class rgams_SRS:
 
                 x = '{:.4f}'.format(x)
 
-                self.param_IO('RI' + x,0)
-		print ('New RS value: ' + x + 'V')
+                self.param_IO('RS' + x,0)
+		print ('Set RS voltage to ' + x + 'V')
 
 
 
