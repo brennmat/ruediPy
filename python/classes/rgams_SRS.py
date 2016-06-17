@@ -868,20 +868,17 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def tune_peak_position(self,mz,gate,det):
+	def tune_peak_position(self,mz,gate,det,n=1):
 		'''
-		rgams_SRS.tune_peak_position( ... )
+		rgams_SRS.tune_peak_position(mz,gate,det,n=1)
 
-		Interactively adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This uses two peaks (one at a low and one at a high mz value) to calibrate the mz vs. peak-position function across the full mass range.
-
+		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure can be repeated several times.
+		
 		INPUT:
-		mzLow: low mz value
-		mzHigh: high mz value
-		step: scan resolution (number of mass increment steps per amu)
-		   step = integer number --> use given number (high number equals small mass increments between steps)
-		   step = '*' use default value (step = 10)
-		gate: gate time (seconds)
-		limit: if the peak height is is less than 'limit' (in units of detector signal), the peak is not centered
+		mz: list of mz values where peaks are scanned
+		gate: list of gate times used in the scans
+		det: list of detectors to be used in the scans ('F' or 'M')
+		n: number of repetitions of the tune procedure (optional, default is n = 1)
 
 		OUTPUT:
 		(none)
@@ -900,71 +897,75 @@ class rgams_SRS:
 		if self._has_display: # prepare plotting environment and figure
 			peakfig = [ plt.figure() for k in range(0,N) ]
 
-                # prepare lists for RI and RF parameter values determined from the various peaks:
-                RI = []
-                RS = []
+        # prepare lists for delta-m values determined from the various peaks:
+        delta_m = []
+		
+		for i in range(0,n)
+			RI0 = self.get_RI()
+			RS0 = self.get_RS()
+			print ('Before tuning (cycle ' + i+1 + ' of ' + n +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
 
-		print ('Before tuning:\n   RI = ' + str(self.get_RI()) + 'V\n   RS = ' + str(self.get_RS()) + 'V')
+			# scan peaks and find peak centers:
+			for k in range(0,N):
+				# scan peak at mz[k]:
+				print 'Scanning peak at mz = ' + str(mz[k]) + '...'
+				self.set_detector(det[k])
+				MZ,YL,UL = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
+	
+				# normalize peak
+				a = min(YL)
+				YL[:] = [x - a for x in YL]
+				a = max(YL)
+				YL[:] = [x / a for x in YL]
+	
+				# analyse cumulative sum of peak (median center of peak):
+				CY = numpy.cumsum(YL)
+				a = CY[len(CY)-1]
+				CY[:] = [x / a for x in CY] # normalize cumulative sum
+				F = interp1d(CY,MZ) # interpolator function
+				m1 = F(0.5)
+				print 'Median peak center: mz = ' , str(m1)
+	
+				# use values close to peak maximum to find peak center:
+				m2 = [ MZ[n] for n,i in enumerate(YL) if i>0.8] # mz values of YL values > 0.8
+				m2 = sum(m2) / len(m2)
+				print 'Center of mass of values > 80% of peak-max: mz = ' , str(m2)
+	
+				# mean of m1 and m2:
+				if abs(m1-m2) > 0.3:
+					self.warning ('Peak center values determined from peak top and peak median differ by more than 0.3, ignoring peak at mz = ' + str(mz[k]) + '. Consider using a peak at a different mz value for tuning!')
+					delta_m.append(numpy.nan)
+				else:
+					m = (m1+3*m2)/4
+					print 'Peak center at mz = ' , m
+	
+					# determine delta-m value:
+					delta_m.append(mz[k]-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
+					print ('Delta-m = ' + str(delta_m) )
+	
+				if not self._has_display:
+					self.warning('Plotting of scan data not possible (no display system available).')
+				else:
+					plt.figure(peakfig[k].number)
+					plt.plot( MZ , YL , 'b.-' )
+					plt.plot( MZ , CY , 'r.-' )
+					plt.xlabel('m/z')
+					plt.ylabel('Intensity (normalised)')
+					plt.draw()
+				
+			print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
+			print mz
+			print delta_m
+			
+			#		ri = RI0 - delta_m*(RS0/128) * 128/(128-mz[k]) # ri < RI <==> peak will be shifted towards higher mz value
+			#		rs = RS0 * mz[k]/(mz[k]+delta_m)
+			#
+			#		RI.append(ri)
+			#		RS.append(rs)
 
-		# scan peaks and find peak centers:
-		for k in range(0,N):
-			# scan peak at mz[k]:
-			print 'Scanning peak at mz = ' + str(mz[k]) + '...'
-			self.set_detector(det[k])
-			MZ,YL,UL = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
+			#self.set_RI(ri)
+			#self.set_RS(rs)
 
-			# normalize peak
-			a = min(YL)
-			YL[:] = [x - a for x in YL]
-			a = max(YL)
-			YL[:] = [x / a for x in YL]
-
-			# analyse cumulative sum of peak (median center of peak):
-			CY = numpy.cumsum(YL)
-			a = CY[len(CY)-1]
-			CY[:] = [x / a for x in CY] # normalize cumulative sum
-			F = interp1d(CY,MZ) # interpolator function
-			m1 = F(0.5)
-			print 'Median peak center: mz = ' , str(m1)
-
-			# use values close to peak maximum to find peak center:
-			m2 = [ MZ[n] for n,i in enumerate(YL) if i>0.8] # mz values of YL values > 0.8
-			m2 = sum(m2) / len(m2)
-			print 'Center of mass of values > 80% of peak-max: mz = ' , str(m2)
-
-			# mean of m1 and m2:
-			if abs(m1-m2) > 0.3:
-				self.warning ('Peak center values determined from peak top and peak median differ by more than 0.3, ignoring peak at mz = ' + str(mz[k]) + '. Consider using a peak at a different mz value for tuning!')
-			else:
-				m = (m1+2*m2)/3
-				print 'Peak center at mz = ' , m
-
-				# determine new RI and RS values:
-				delta_m = mz[k]-m # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
-				print ('Delta-m = ' + str(delta_m) )
-				RI0 = self.get_RI()
-				RS0 = self.get_RS()
-				ri = RI0 - delta_m*(RS0/128) * 128/(128-mz[k]) # ri < RI <==> peak will be shifted towards higher mz value
-				rs = RS0 * mz[k]/(mz[k]+delta_m)
-
-				RI.append(ri)
-				RS.append(rs)
-
-			if not self._has_display:
-				self.warning('Plotting of scan data not possible (no display system available).')
-			else:
-				plt.figure(peakfig[k].number)
-				plt.plot( MZ , YL , 'b.-' )
-				plt.plot( MZ , CY , 'r.-' )
-				plt.xlabel('m/z')
-				plt.ylabel('Intensity (normalised)')
-				plt.draw()
-
-		print RI
-		print RS
-                print ('Determine average weighted RI and RS values for new tuning here...')
-                #self.set_RI(ri)
-                #self.set_RS(rs)
 
 
 ########################################################################################################
