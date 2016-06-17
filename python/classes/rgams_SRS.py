@@ -784,8 +784,8 @@ class rgams_SRS:
 		self.param_IO('SA' + str(step),0) # number of steps per amu
 
 		# scan configuration correct? (DEBUGGING):
-		print ( '**** DEBUG TESTING INFO: Scan start at mz = ' + self.param_IO('MI?',1) )
-		print ( '**** DEBUG TESTING INFO: Scan end at mz = ' + self.param_IO('MF?',1) )
+		print ( '**** DEBUG TESTING INFO: Scan start at mz = ' + self.param_IO('MI?',1) + ', should be ' + str(low) )
+		print ( '**** DEBUG TESTING INFO: Scan end at mz = ' + self.param_IO('MF?',1) + ', should be ' + str(high) )
 		print ( '**** DEBUG TESTING INFO: Scan number of steps per amu = ' + self.param_IO('SA?',1) )
 
 		N = self.param_IO('AP?',1) # number of data points in the scan
