@@ -780,6 +780,7 @@ class rgams_SRS:
 
 		# configure scan:
 		self.param_IO('MI' + str(low),0) # low end mz value
+		self.param_IO('MI' + str(low),0) # low end mz value
 		self.param_IO('MF' + str(high),0) # high end mz value
 		self.param_IO('SA' + str(step),0) # number of steps per amu
 
