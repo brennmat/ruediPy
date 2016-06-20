@@ -895,6 +895,7 @@ class rgams_SRS:
 			error ('Need at least two distinct mz values to tune peak positions!')
 
 		if self._has_display: # prepare plotting environment and figure
+			plt.ion() # allow interactive plotting
 			peakfig = [ plt.figure() for k in range(0,N) ]
 
 		for i in range(0,n):
@@ -958,8 +959,9 @@ class rgams_SRS:
 					plt.plot( MZ , CY/CYmax*max(Y) , 'r.-' )
 					plt.xlabel('m/z')
 					plt.ylabel('Intensity (A)')
-					plt.draw()
-					time.sleep(1)
+					#plt.draw()
+					#time.sleep(1)
+					plt.pause(0.05)
 
 			# print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
 			# fit first-order polynomial function to mz vs. delta_m:
