@@ -16,6 +16,6 @@ print 'Filament current: ' + MS.get_filament_current() + ' mA'
 
 MS.set_RI(-9.5)
 MS.set_RS(1080.0)
-MS.tune_peak_position([14,18,28,32,40,44,84],[0.025,0.2,0.025,0.025,0.1,0.1,2.4],['F','F','F','F','F','M','M'],10)
+MS.tune_peak_position([14,18,28,32,40,44,84],[0.2,0.2,0.025,0.1,0.4,0.1,2.4],['F','F','F','F','F','M','M'],10)
 
 input("Press ENTER to exit...")

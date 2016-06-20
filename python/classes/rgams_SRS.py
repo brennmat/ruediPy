@@ -56,9 +56,9 @@ class rgams_SRS:
 	ruediPy class for SRS RGA-MS control.
 	"""
 
-	
+
 	########################################################################################################
-	
+
 
 	def __init__( self , serialport , label='MS' , max_buffer_points = 500 ):
 		'''
@@ -883,6 +883,11 @@ class rgams_SRS:
 		OUTPUT:
 		(none)
 
+		EXAMPLE:
+		>>> MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 1000 )
+		>>> MS.filament_on()
+		>>> MS.tune_peak_position([14,18,28,32,40,44,84],[0.2,0.2,0.025,0.1,0.4,0.1,2.4],['F','F','F','F','F','M','M'],10)
+
 		NOTE:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
@@ -908,6 +913,7 @@ class rgams_SRS:
 
 			# scan peaks and find peak centers:
 			for k in range(0,N):
+
 				# scan peak at mz[k]:
 				print 'Scanning peak at mz = ' + str(mz[k]) + '...'
 				self.set_detector(det[k])
@@ -922,45 +928,54 @@ class rgams_SRS:
         	                fit_fn = numpy.poly1d(fit)
 				Y = Y - fit_fn(MZ)
 
-				# normalize peak
-				#a = max(Y)
-				#Y[:] = [x / a for x in Y]
-
 				# analyse cumulative sum of peak (median center of peak):
 				CY = numpy.cumsum(Y)
 				CYmax = max(CY)
-				print CYmax
 				cy = [ x/CYmax for x in CY ]
-				F = interp1d(cy,MZ) # interpolator function
-				m1 = F(0.5)
-				print 'Median peak center: mz = ' , str(m1)
+				a = [ i for i in range(0,len(cy)) if cy[i] > 0.5 ] # indices to all occurrence of cy > 0.5
+				b = [ i for i in range(0,len(cy)) if cy[i] <= 0.5 ] # indices to all occurrences of cy <= 0.5
+				if len(a) > 0:
+					a = a[0]
+				else:
+					a = 0
+				if len(b) > 0:
+					b = b[-1]
+				else:
+					b = 0
+				if a > b:
+					m1 = MZ[a] + (0.5-cy[a])/(cy[b]-cy[a])*(MZ[b]-MZ[a]) # interpolated MZ value at cy = 0.5
+					print 'Median peak center: mz = ' , str(m1)
+				else:
+					print 'Could not determine median peak centre. Ignoring this peak....'
+					m1 = numpy.nan
 
 				# use values close to peak maximum to find peak center:
-				m2 = [ MZ[n] for n,i in enumerate(Y) if i>=0.75*max(Y)] # mz values of Y values >= 0.75*max(Y)
+				m2 = [ MZ[j] for j,i in enumerate(Y) if i>=0.75*max(Y)] # mz values of Y values >= 0.75*max(Y)
 				m2 = sum(m2) / len(m2)
 				print 'Center of mass of values > 75% of peak-max: mz = ' , str(m2)
 
 				# mean of m1 and m2:
-				if abs(m1-m2) > 0.35:
-					self.warning ('Peak center values determined from peak top and peak median differ by more than 0.35, ignoring peak at mz = ' + str(mz[k]) + '. Consider using a peak at a different mz value for tuning!')
+				if numpy.isnan(m1) or numpy.isnan(m2):
 					delta_m.append(numpy.nan)
 				else:
-					m = (m1+3*m2)/4
-					#m = m2
-					print 'Peak center at mz = ' , m
-
-					delta_m.append(mz[k]-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
+					if abs(m1-m2) > 0.35:
+						self.warning ('Peak center values determined from peak top and peak median differ by more than 0.35, ignoring peak at mz = ' + str(mz[k]) + '. Consider using a peak at a different mz value for tuning!')
+						delta_m.append(numpy.nan)
+					else:
+						m = (m1+3*m2)/4
+						#m = m2
+						print 'Peak center at mz = ' , m
+						delta_m.append(mz[k]-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
 
 				if not self._has_display:
 					self.warning('Plotting of scan data not possible (no display system available).')
 				else:
 					plt.figure(peakfig[k].number)
 					plt.plot( MZ , Y , 'b.-' )
-					plt.plot( MZ , CY/CYmax*max(Y) , 'r.-' )
+					if ~numpy.isnan(m1):
+						plt.plot( MZ , CY/CYmax*max(Y) , 'r.-' )
 					plt.xlabel('m/z')
 					plt.ylabel('Intensity (A)')
-					#plt.draw()
-					#time.sleep(1)
 					plt.pause(0.05)
 
 			# print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
@@ -1112,36 +1127,36 @@ class rgams_SRS:
 
 
 ########################################################################################################
-	
-	
+
+
 	def plot_peakbuffer(self):
 		'''
 		rgams_SRS.plot_peakbuffer()
-		
+
 		Plot trend (or update plot) of values in PEAKs data buffer (e.g. after adding data)
 		NOTE: plotting may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.
-		
+
 		INPUT:
 		(none)
-		
+
 		OUTPUT:
 		(none)
 		'''
-		
+
 		if not self._has_display:
 			self.warning('Plotting of peakbuffer trend not possible (no display system available).')
-		
+
 		else:
 			MZ = numpy.unique(self._peakbuffer_mz) # unique list of all mz values
-			
+
 			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
-			
+
 			plt.figure(self._peakbuffer_figure.number)
 			n = 0
 			t0 = misc.now_UNIX()
-			
+
 			plt.show(block=False)
-			leg = [''] * MZ.shape[0] # initialize empy legend entries			
+			leg = [''] * MZ.shape[0] # initialize empy legend entrie
 			t0 = misc.now_UNIX()
 			for mz in MZ:
 				k = numpy.where( self._peakbuffer_mz == mz )[0]
@@ -1152,40 +1167,42 @@ class rgams_SRS:
 				plt.hold(True)
 				leg[n] = 'mz='+str(int(mz))
 				n = n+1
-					
+
 			plt.hold( False )
 			plt.legend( leg , loc=3 )
-			
+
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-			
+
 			plt.title('PEAK VALUES (' + self.label() + ') at ' + t0)
 			plt.xlabel('Time (s)')
 			plt.ylabel('Intensity')
 			plt.yscale('log')
-			plt.draw()
+			# plt.draw()
+			plt.show() # tell it to update the plot
+			plt.pause(0.01) # allow some time to update the plot
 
-	
+
 	########################################################################################################
-	
-	
+
+
 	def plot_scan(self,mz,intens,unit):
 		'''
 		rgams_SRS.plot_scan(mz,intens,unit)
-		
+
 		Plot scan data
-		
+
 		INPUT:
 		mz: mz values (x-axis)
 		intens: intensity values (y-axis)
 		unit: intensity unit (string)
-		
+
 		OUTPUT:
 		(none)
 		'''
-		
+
 		if not self._has_display:
 			self.warning('Plotting of scan data not possible (no display system available).')
-		
+
 		else:
 			plt.figure(self._scan_figure.number)
 			plt.plot( mz , intens , 'b.-' )
@@ -1193,5 +1210,6 @@ class rgams_SRS:
 			plt.ylabel('Intensity (' + unit +')')
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
 			plt.title('SCAN (' + self.label() + ')' + ' at ' + t0)
-			plt.draw()
-
+			# plt.draw()
+			plt.show() # tell it to update the plot
+			plt.pause(0.01) # allow some time to update the plot
