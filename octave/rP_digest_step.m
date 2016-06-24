@@ -158,6 +158,11 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 				[tp,k] = sort(tp); peaks = peaks(k);
 				[tz,k] = sort(tz); zeros = zeros(k);				
 				
+				% keep original ZERO data for plotting
+				ZZ = zeros;
+				TZ = tz;
+				
+				% check if ZERO data needs padding for interpolation
 				if tz(1) > tp(1)
 					tz    = [ tp(1) ; tz ];
 					zeros = [ zeros(1) ; zeros ];
@@ -214,11 +219,11 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 				ylabel (sprintf('PEAK (%s)',X.mean_unit{end}))
 				title (sprintf('PEAKs and ZEROs at mz=%i / detector=%s',M(iM),D{iD}))
 				subplot (3,1,2);
-				plot (tz-t1,zeros,'b.','markersize',12);
+				plot (TZ-t1,ZZ,'b.','markersize',12);
 				axis ([-dt t2-t1+dt]);
 				ylabel (sprintf('ZERO (%s)',X.mean_unit{end}))
 				subplot (3,1,3);
-				plot (tp-t1,h,'k.','markersize',12 , [-dt t2-t1+dt],[X.mean X.mean],'k-');
+				plot (tp-t1,h,'k.','markersize',12 , [-dt t2-t1+dt],[X.mean(end) X.mean(end)],'k-');
 				axis ([-dt t2-t1+dt]);
 				ylabel (sprintf('PEAK-ZERO (%s)',X.mean_unit{end}))
 				xlabel ('Time (s)')
