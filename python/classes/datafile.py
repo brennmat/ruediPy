@@ -215,7 +215,12 @@ class datafile:
 		Close then current data file (if it's still open) and start a new file.
 		
 		INPUT:
-		typ (optional): string that will be appended to the file name. This may be useful to indicate 'type' of mesurement data, e.g. typ = 'SAMPLE', typ = 'S', typ = 'BLANK', typ = 'B', typ = 'CAL', typ = 'C', etc.). The string can be anything. If omitted or typ = '', nothing will be appended to the file name
+		typ (optional): analysis type (string, default: typ = ''). The analysis type is written to the data file, and is appended to the file name. typ can be one of the following analysis types:
+			typ = 'SAMPLE' (for sample analyses)
+			typ = 'STANDARD' (for standard / calibration gas analyses)
+			typ = 'BLANK' (for blank analyses)
+			typ = 'UNKNOWN' (if analysis type is unknown)
+			typ = '' (if analysis type is unknown; nothing is added to the file name)
 		
 		OUTPUT:
 		(none)
@@ -223,6 +228,13 @@ class datafile:
 
 		# close the current datafile (if it exists and is still open)
 		self.close()
+		
+		# parse analysis type:
+		typ = typ.upper()
+		if not ( typ == '' ):
+			if not ( typ in ( 'SAMPLE' , 'STANDARD' , 'BLANK' , 'UNKNOWN' ) )
+				self.warning ( 'Unknown analysis type ' + typ + '. Ignoring analysis type...' )
+				typ = ''
 		
 		# determine file name for new file
 		n = misc.now_string()
@@ -260,9 +272,10 @@ class datafile:
 	   		typ = 'UNKNOWN'
 		self.write_analysis_type( self.label() , typ , misc.now_UNIX() )
 
+
 	########################################################################################################
 
-	
+
 	def writeln(self,caller,label,identifier,data,timestmp):
 		"""
 		datafile.writeln(caller,identifier,data,timestmp)
@@ -349,6 +362,29 @@ class datafile:
 		typ = typ.replace(' ','');
 
 		self.writeln(caller,'','ANALYSISTYPE',typ,timestmp)
+
+
+	########################################################################################################
+
+
+	def write_stdandard_conc( self , caller , species , conc , mz ):
+		"""
+		datafile.write_stdandard_conc( self , caller , species , conc , mz )
+		
+		Write line with standard/calibration gas information to data file: name, concentration/mixing ratio, and mz value of gas species.
+				
+		INPUT:
+		caller: type of calling object, i.e. the "data origin" (string)
+		species: name of gas species (string)
+		conc: volumetric concentration / mixing ratio (float)
+		mz: mz value (integer)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		s = 'mixingratio=' + str(conc) + ' vol/vol ; mz=' + str(mz)
+		self.writeln(caller,'','STANDARDGAS',species,s,misc.now_UNIX())
 
 
 	########################################################################################################
