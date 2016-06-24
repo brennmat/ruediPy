@@ -84,8 +84,11 @@ if exist('opt','var') % change defaults
 	if any(strcmp (tolower(opt),'userwait'))
 		userwait = true;
 	end
-end	
-	
+end
+
+% make sure hyphens are treaded correctly:
+MS_name = strrep (MS_name,'-','_');
+
 figr = 1;
 
 % load raw data:
@@ -93,7 +96,7 @@ RAW = rP_read_datafile (data);	% complete data from file
 if isfield (RAW,MS_name)
 	MS  = getfield (RAW,MS_name);	% MS data
 else
-	error (sprintf('rP_digest_step: found no MS data for ``%s''.'))
+	error (sprintf('rP_digest_step: found no MS data for ''%s''.',MS_name))
 end
 
 % get PEAK and ZERO data:
