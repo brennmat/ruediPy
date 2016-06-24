@@ -233,11 +233,11 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 	end % for iD = ...
 end % for iM = ...
 
-% determine analysis type (SAMPLE, CALIBRATION, BLANK)
+% determine analysis type (SAMPLE, STANDARD, BLANK, UNKNOWN)
 warning('rP_digest_step: ANALYSISTYPE not yet implemented, need to do that!')
 
 % determine partial pressures of standard gas (for calibrations)
-warning('rP_digest_step: partial pressures of gas standards not yet implemented, need to do that!')
+warning('rP_digest_step: partial pressures of gas standards not yet implemented, need to do that!  THIS GOES TO rP_calibrate_steps !!!!')
 
 % determine sample description / ID (for samples)
 warning('rP_digest_step: sample description / ID not yet implemented, need to do that!')

@@ -208,9 +208,9 @@ class datafile:
 	########################################################################################################
 
 		
-	def next(self,typ=''):
+	def next(self,typ='',samplename='',std_species='',std_conc='',std_mz=''):
 		"""
-		datafile.next()
+		datafile.next(,typ='',samplename='',std_species='',std_conc='',std_mz='')
 		
 		Close then current data file (if it's still open) and start a new file.
 		
@@ -221,6 +221,7 @@ class datafile:
 			typ = 'BLANK' (for blank analyses)
 			typ = 'UNKNOWN' (if analysis type is unknown)
 			typ = '' (if analysis type is unknown; nothing is added to the file name)
+		samplename (optional, only used if typ='SAMPLE'): description, name, or ID of sample
 		
 		OUTPUT:
 		(none)
@@ -230,6 +231,7 @@ class datafile:
 		self.close()
 		
 		# parse analysis type:
+		typ = typ.replace(' ','')
 		typ = typ.upper()
 		if not ( typ == '' ):
 			if not ( typ in ( 'SAMPLE' , 'STANDARD' , 'BLANK' , 'UNKNOWN' ) )
@@ -270,7 +272,22 @@ class datafile:
 	   	# write analysis type:
 	   	if typ == '':
 	   		typ = 'UNKNOWN'
-		self.write_analysis_type( self.label() , typ , misc.now_UNIX() )
+		self.writeln( self.label() ,'','ANALYSISTYPE' , typ , misc.now_UNIX() )
+		
+		# write sample name:
+	   	if typ == 'SAMPLE':
+	   		if samplename == '':
+	   			self.warning('No sample name given!')
+	   		else:
+				self.writeln( self.label() ,'','SAMPLENAME' , samplename , misc.now_UNIX() )
+
+		# write standard gas information:
+	   	if typ == 'STANDARD':
+	   		if std_species == '':
+	   			self.warning('Standard gas information not given!')
+	   		else:
+	   			for i in range(0,len(std_species)):
+					self.write_standard_conc(std_species[i],std_conc[i],std_mz[i])
 
 
 	########################################################################################################
@@ -343,36 +360,13 @@ class datafile:
 	
 	########################################################################################################
 
-	
-	def write_analysis_type( self , caller , typ , timestmp ):
+
+	def write_standard_conc(self,species,conc,mz):
 		"""
-		datafile.write_analysis_type( caller , typ , timestmp )
-		
-		Write ANALYSIS TYPE info line to the data file.
-		
-		INPUT:
-		caller: type of calling object, i.e. the "data origin" (string)
-		typ: analysis type (string / char)
-		timestmp: timestamp of the peak measurement (see misc.now_UNIX)
-		
-		OUTPUT:
-		(none)
-		"""
-		
-		typ = typ.replace(' ','');
-
-		self.writeln(caller,'','ANALYSISTYPE',typ,timestmp)
-
-
-	########################################################################################################
-
-
-	def write_stdandard_conc( self , caller , species , conc , mz ):
-		"""
-		datafile.write_stdandard_conc( self , caller , species , conc , mz )
+		datafile.write_standard_conc(species,conc,mz)
 		
 		Write line with standard/calibration gas information to data file: name, concentration/mixing ratio, and mz value of gas species.
-				
+		
 		INPUT:
 		caller: type of calling object, i.e. the "data origin" (string)
 		species: name of gas species (string)
@@ -383,8 +377,27 @@ class datafile:
 		(none)
 		"""
 		
-		s = 'mixingratio=' + str(conc) + ' vol/vol ; mz=' + str(mz)
-		self.writeln(caller,'','STANDARDGAS',species,s,misc.now_UNIX())
+		s = 'species=' + species + ' ; mixingratio=' + str(conc) + ' vol/vol ; mz=' + str(mz)
+		self.writeln(self.label(),'','STANDARDGAS',s,misc.now_UNIX())
+
+
+	########################################################################################################
+
+
+	def write_sample_desc(self,desc):
+		"""
+		datafile.write_sample_desc(self,desc)
+		
+		Write line with sample description (e.g., name or ID of sample)
+		
+		INPUT:
+		desc: sample description, name, or ID (string)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		self.writeln(self.label(),'','SAMPLENAME',desc,misc.now_UNIX())
 
 
 	########################################################################################################
