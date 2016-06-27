@@ -157,6 +157,10 @@ else % read file line by line:
 					u = __parse_TEMPERATURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
 					X = setfield (X,L{k},u); % add TEMPERATURESENSOR[LABEL-k] data
 				
+				case 'PRESSURESENSOR_WIKA'
+					u = __parse_PRESSURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					X = setfield (X,L{k},u); % add PRESSURESENSOR[LABEL-k] data
+				
 				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 				otherwise
 					warning (sprintf('rP_read_datafile: Unknown object type %s, skipping...',O{i}))
@@ -531,6 +535,51 @@ function X = __parse_TEMPERATURESENSOR (TYPE,DATA,t) % parse TEMPERATURESENSOR o
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			otherwise
 				warning (sprintf('rP_read_datafile: type = %s unknown for TEMPERATURESENSOR object, skipping...',T{i}))
+
+		end % switch
+	end % for i = ...
+end % function
+
+
+
+function X = __parse_PRESSURESENSOR (TYPE,DATA,t) % parse PRESSURESENSOR object data
+	X = [];
+	T  = unique (TYPE);
+
+	for i = 1:length(T)
+		j = find (strcmp(TYPE,T{i})); % index to lines with type = T{i}
+		tt = t(j); TT = TYPE(j); DD = DATA(j);
+				
+		% parse line by line
+		switch toupper(T{i})
+			
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TEMPERATURE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			case 'PRESSURE'
+				for k = 1:length(TT)
+					
+					% timestamp:
+					p.epochtime = tt(k);
+										
+					% split data line entries:
+					u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace from s
+															
+					% pressure value + unit:
+					uu = strsplit(strtrim(DD{k}),' ');
+					p.val  = str2num (uu{1});
+					p.unit = strtrim(uu{2});
+		
+					% append to PRESSUREs:
+					if k == 1 % first iteration
+						X.PRESSURE = p;
+					else
+						X.PRESSURE = [ X.PRESSURE p ];
+					end
+													
+				end % for k = ...
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			otherwise
+				warning (sprintf('rP_read_datafile: type = %s unknown for PRESSURESENSOR object, skipping...',T{i}))
 
 		end % switch
 	end % for i = ...
