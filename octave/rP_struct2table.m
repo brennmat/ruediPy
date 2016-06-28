@@ -2,7 +2,10 @@ function [val,epochtime,unit] = rP_struct2table (s)
 
 % function [val,epochtime,unit] = rP_struct2table (s)
 % 
-% Convert object data in a ruediPy struct to vector data.
+% Convert object data in a ruediPy struct to vector data:
+%		s(1:end).epochtime ---> epochtime
+% 		s(1:end).val       ---> val
+%		s(1:end).unit	   ---> unit
 % 
 % INPUT:
 % s: ruediPy struct (fieldnames: epochtime, val, unit)
