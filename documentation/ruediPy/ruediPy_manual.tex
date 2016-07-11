@@ -61,6 +61,45 @@ The GNU Octave tools (m-files) are designed to work hand-in-hand with the data f
 \section{Obtaining and installing \ruediPy}
 \ruediPy\ can be downloaded from \url{http://brennmat.github.io/ruediPy} either as a compressed archive file, or using Subversion or Git version control systems. \ruediPy\ can be installed to just about any directory on the computer that is used for instrument control -- but the user home directory  (\path{~/ruediPy}) may seem like a sensible choice, and that's what is assumed throughout the examples shown in this manual.
 
+As an example, here's a step-by-step list of instructions to install \ruediPy  on a Linux computer running Ubuntu 16.04 (the user account name in this example is \tt{brennmat}):
+\begin{enumerate}
+
+
+\item Update system software to latest versions and install basic software requirements for \ruediPy:
+
+> sudo apt-get update
+> sudo apt-get upgrade
+> sudo apt-get install subversion python-pip python-serial
+> pip install pydigitemp
+
+
+\item Download ruediPy:
+
+> svn co https://github.com/brennmat/ruediPy.git/trunk ~/ruediPy
+
+
+\item Permanently add ruediPy to the users Python searchpath (this requires the user to log out and log back in to become active):
+
+> echo export PYTHONPATH=~/ruediPy/python >> .profile
+
+\item Prepare directory for ruediPy data files:
+
+> mkdir ~/ruedi_data
+
+\item Set permission for using the serial ports (this requires the user to log out and log back in to become active):
+
+> sudo usermod -a -G dialout brennmat
+
+
+\item Prepare directory for ruediPy data files:
+
+> mkdir ~/ruedi_data
+
+\item Log out and log back in to make the above changes active.
+
+\end{enumerate}
+
+
 \section{Python classes}
 \subsection{Overview}
 The Python classes are used to control the various hardware units of the RUEDI instruments, to acquire measurement data, and to write these data to well-formatted and structured data files.\par
