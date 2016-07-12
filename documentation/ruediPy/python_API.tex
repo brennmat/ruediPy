@@ -1,0 +1,1034 @@
+%% THIS NEEDS THE underscore PACKAGE: \usepackage[strings]{underscore}
+
+\subsubsection{Class \texttt{rgams_SRS}}
+\path{ruediPy/python/classes/rgams_SRS.py}\par
+ruediPy class for SRS RGA-MS control.\par
+
+\paragraph{Method \texttt{filament_off}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.filament_off()\newline
+\newline
+Turn off filament current.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{filament_on}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.filamenOn()\newline
+\newline
+Turn on filament current at default current value.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_RI}}
+\vspace{1ex}
+\texttt{\newline
+x = rgams_SRS.get_RI(x)\newline
+\newline
+Get current RI parameter value (peak-position tuning at low mz range)\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+x: RI value\newline
+\newline
+NOTE:\newline
+See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_RS}}
+\vspace{1ex}
+\texttt{\newline
+x = rgams_SRS.get_RS(x)\newline
+\newline
+Get current RS parameter value (peak-position tuning at high mz range)\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+x: RS value\newline
+\newline
+NOTE:\newline
+See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_detector}}
+\vspace{1ex}
+\texttt{\newline
+det = rgams_SRS.get_detector()\newline
+\newline
+Return current detector (Faraday or electron multiplier)\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+det: detecor (string):\newline
+det='F' for Faraday\newline
+det='M' for electron Multiplier\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_electron_energy}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.get_electron_energy()\newline
+\newline
+Return electron energy of the ionizer (in eV).\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: electron energy in eV\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_filament_current}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.get_filament_current()\newline
+\newline
+Return filament current (in mA)\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: filament current in mA\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_noise_floor}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.get_noise_floor()\newline
+\newline
+Get noise floor (NF) parameter for RGA measurements (noise floor controls gate time, i.e., noise vs. measurement speed).\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: NF noise floor parameter value, 0...7 (integer)\newline
+\newline
+}
+
+\paragraph{Method \texttt{has_multiplier}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.has_multiplier()\newline
+\newline
+Check if MS has electron multiplier installed.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: result flag, val = 0 --> MS has no multiplier, val <> 0: MS has multiplier\newline
+\newline
+}
+
+\paragraph{Method \texttt{label}}
+\vspace{1ex}
+\texttt{\newline
+l = rgams_SRS.label()\newline
+\newline
+Return label / name of the RGAMS object.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+l: label / name (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{mz_max}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.mz_max()\newline
+\newline
+Determine highest mz value supported by the MS.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: max. supported mz value \newline
+\newline
+}
+
+\paragraph{Method \texttt{param_IO}}
+\vspace{1ex}
+\texttt{\newline
+ans = rgams_SRS.param_IO(cmd,ansreq)\newline
+\newline
+Set / read parameter value of the SRS RGA.\newline
+\newline
+INPUT:\newline
+cmd: command string that is sent to RGA (see RGA manual for commands and syntax)\newline
+ansreq: flag indicating if answer from RGA is expected:\newline
+ansreq = 1: answer expected, check for answer\newline
+ansreq = 0: no answer expected, don't check for answer\newline
+\newline
+OUTPUT:\newline
+ans: answer / result returned from RGA\newline
+\newline
+}
+
+\paragraph{Method \texttt{peak}}
+\vspace{1ex}
+\texttt{\newline
+val,unit = rgams_SRS.peak(mz,gate,f)\newline
+\newline
+Read out detector signal at single mass (m/z value).\newline
+\newline
+INPUT:\newline
+mz: m/z value (integer)\newline
+gate: gate time (seconds)\newline
+f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+\newline
+OUTPUT:\newline
+val: signal intensity (float)\newline
+unit: unit (string)\newline
+\newline
+NOTE FROM THE SRS RGA MANUAL:\newline
+Single mass measurements are commonly performed in sets\newline
+where several different masses are monitored sequencially\newline
+and in a merry-go-round fashion.\newline
+For best accuracy of results, it is best to perform the consecutive\newline
+mass measurements in a set with the same type of detector\newline
+and at the same noise floor (NF) setting.\newline
+Fixed detector settings eliminate settling time problems\newline
+in the electrometer and in the CDEM's HV power supply.\newline
+\newline
+}
+
+\paragraph{Method \texttt{peakbuffer_add}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.peakbuffer_add(t,mz,intens)\newline
+\newline
+Add data to PEAKS data buffer\newline
+\newline
+INPUT:\newline
+t: epoch time\newline
+mz: mz values (x-axis)\newline
+intens: intensity values (y-axis)\newline
+det: detector (char/string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{plot_peakbuffer}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.plot_peakbuffer()\newline
+\newline
+Plot trend (or update plot) of values in PEAKs data buffer (e.g. after adding data)\newline
+NOTE: plotting may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{plot_scan}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.plot_scan(mz,intens,unit)\newline
+\newline
+Plot scan data\newline
+\newline
+INPUT:\newline
+mz: mz values (x-axis)\newline
+intens: intensity values (y-axis)\newline
+unit: intensity unit (string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{scan}}
+\vspace{1ex}
+\texttt{\newline
+M,Y,unit = rgams_SRS.scan(low,high,step,gate,f,p)\newline
+\newline
+Analog scan\newline
+\newline
+INPUT:\newline
+low: low m/z value\newline
+high: high m/z value\newline
+step: scan resolution (number of mass increment steps per amu)\newline
+step = integer number --> use given number (high number equals small mass increments between steps)\newline
+step = '*' use default value (step = 10)\newline
+gate: gate time (seconds)\newline
+f: file object or 'nofile':\newline
+if f is a DATAFILE object, the scan data is written to the current data file\newline
+if f = 'nofile' (string), the scan data is not written to a datafile\newline
+\newline
+OUTPUT:\newline
+M: mass values (mz, in amu)\newline
+Y: signal intensity values (float)\newline
+unit: unit of Y (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{set_RI}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_RI(x)\newline
+\newline
+Set RI parameter value (peak-position tuning at low mz range)\newline
+\newline
+INPUT:\newline
+x: RI voltage\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+NOTE:\newline
+See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
+\paragraph{Method \texttt{set_RS}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_RS(x)\newline
+\newline
+Set RS parameter value (peak-position tuning at high mz range)\newline
+\newline
+INPUT:\newline
+x: RS value\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+NOTE:\newline
+See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
+\paragraph{Method \texttt{set_detector}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_detector()\newline
+\newline
+Set current detetector used by the MS (direct the ion beam to the Faraday or electron multiplier detector).\newline
+\newline
+INPUT:\newline
+det: detecor (string):\newline
+det='F' for Faraday\newline
+det='M' for electron multiplier\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{set_electron_energy}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_electron_energy(val)\newline
+\newline
+Set electron energy of the ionizer.\newline
+\newline
+INPUT:\newline
+val: electron energy in eV\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{set_filament_current}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_filament_current(val)\newline
+\newline
+Set filament current.\newline
+\newline
+INPUT:\newline
+val: current in mA\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{set_gate_time}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.set_gate_time()\newline
+\newline
+Set noi floor (NF) parameter for RGA measurements according to desired gate time (by choosing the best-match NF value).\newline
+\newline
+INPUT:\newline
+gate: gate time in (fractional) seconds\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+NOTE (1):\newline
+FROM THE SRS RGA MANUAL:\newline
+Single mass measurements are commonly performed in sets\newline
+where several different masses are monitored sequencially\newline
+and in a merry-go-round fashion.\newline
+For best accuracy of results, it is best to perform the consecutive\newline
+mass measurements in a set with the same type of detector\newline
+and at the same noise floor (NF) setting.\newline
+Fixed detector settings eliminate settling time problems\newline
+in the electrometer and in the CDEM HV power supply.\newline
+\newline
+NOTE (2):\newline
+Experiment gave the following gate times vs NF parameter values:\newline
+\newline
+NF	gate (seconds)\newline
+0	2.4	  \newline
+1	1.21	  \newline
+2	0.48	  \newline
+3	0.25	  \newline
+4	0.163 \newline
+5	0.060 \newline
+6	0.043 \newline
+7	0.025 \newline
+\newline
+}
+
+\paragraph{Method \texttt{set_noise_floor}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.set_noise_floor()\newline
+\newline
+Set noise floor (NF) parameter for RGA measurements (noise floor controls gate time, i.e., noise vs. measurement speed).\newline
+\newline
+INPUT:\newline
+NF: noise floor parameter value, 0...7 (integer)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{tune_peak_position}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.tune_peak_position(mz,gate,det,n=1)\newline
+\newline
+Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure can be repeated several times.\newline
+\newline
+INPUT:\newline
+mz: list of mz values where peaks are scanned\newline
+gate: list of gate times used in the scans\newline
+det: list of detectors to be used in the scans ('F' or 'M')\newline
+n: number of repetitions of the tune procedure (optional, default is n = 1)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+EXAMPLE:\newline
+>>> MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 1000 )\newline
+>>> MS.filament_on()\newline
+>>> MS.tune_peak_position([14,18,28,32,40,44,84],[0.2,0.2,0.025,0.1,0.4,0.1,2.4],['F','F','F','F','F','M','M'],10)\newline
+\newline
+NOTE:\newline
+See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
+\paragraph{Method \texttt{warning}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.warning(msg)\newline
+\newline
+Issue warning about issues related to operation of MS.\newline
+\newline
+INPUT:\newline
+msg: warning message (string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{zero}}
+\vspace{1ex}
+\texttt{\newline
+val,unit = rgams_SRS.zero(mz,mz_offset,gate,f)\newline
+\newline
+Read out detector signal at single mass with relative offset to given m/z value (this is useful to determine the baseline near a peak at a given m/z value), see rgams_SRS.peak())\newline
+The detector signal is read at mz+mz_offset\newline
+\newline
+INPUT:\newline
+mz: m/z value (integer)\newline
+mz_offset: offset relative m/z value (integer).\newline
+gate: gate time (seconds)\newline
+f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+\newline
+OUTPUT:\newline
+val: signal intensity (float)\newline
+unit: unit (string)\newline
+\newline
+NOTE FROM THE SRS RGA MANUAL:\newline
+Single mass measurements are commonly performed in sets\newline
+where several different masses are monitored sequencially\newline
+and in a merry-go-round fashion.\newline
+For best accuracy of results, it is best to perform the consecutive\newline
+mass measurements in a set with the same type of detector\newline
+and at the same noise floor (NF) setting.\newline
+Fixed detector settings eliminate settling time problems\newline
+in the electrometer and in the CDEM's HV power supply.\newline
+\newline
+}
+
+\subsubsection{Class \texttt{selectorvalve_VICI}}
+\path{ruediPy/python/classes/selectorvalve_VICI.py}\par
+ruediPy class for VICI valve control.\par
+
+\paragraph{Method \texttt{getpos}}
+\vspace{1ex}
+\texttt{\newline
+pos = selectorvalve_VICI.getpos()\newline
+\newline
+Get valve position\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+pos: valve postion (integer)\newline
+\newline
+}
+
+\paragraph{Method \texttt{label}}
+\vspace{1ex}
+\texttt{\newline
+label = selectorvalve_VICI.label()\newline
+\newline
+Return label / name of the SELECTORVALVE object\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+label: label / name (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{setpos}}
+\vspace{1ex}
+\texttt{\newline
+selectorvalve_VICI.setpos(val,f)\newline
+\newline
+Set valve position\newline
+\newline
+INPUT:\newline
+val: new valve position (integer)\newline
+f: datafile object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{warning}}
+\vspace{1ex}
+No method description available.\par
+
+\subsubsection{Class \texttt{pressuresensor_WIKA}}
+\path{ruediPy/python/classes/pressuresensor_WIKA.py}\par
+ruediPy class for WIKA pressure sensor control.\par
+
+\paragraph{Method \texttt{label}}
+\vspace{1ex}
+\texttt{\newline
+label = pressuresensor_WIKA.label()\newline
+\newline
+Return label / name of the PRESSURESENSOR object\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+label: label / name (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{pressure}}
+\vspace{1ex}
+\texttt{\newline
+press,unit = pressuresensor_WIKA.pressure(f)\newline
+\newline
+Read out current pressure value.\newline
+\newline
+INPUT:\newline
+f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+\newline
+OUTPUT:\newline
+press: pressure value in hPa (float)\newline
+unit: unit of pressure value (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{serial_checksum}}
+\vspace{1ex}
+\texttt{\newline
+cs = pressuresensor_WIKA.serial_checksum( cmd )\newline
+\newline
+Return checksum used for serial port communication with WIKA pressure sensor.\newline
+\newline
+INPUT:\newline
+cmd: serial-port command string without checksum\newline
+\newline
+OUTPUT:\newline
+cs: checksum byte\newline
+\newline
+}
+
+\paragraph{Method \texttt{warning}}
+\vspace{1ex}
+\texttt{\newline
+pressuresensor_WIKA.warning(msg)\newline
+\newline
+Issue warning about issues related to operation of pressure sensor.\newline
+\newline
+INPUT:\newline
+msg: warning message (string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\subsubsection{Class \texttt{temperaturesensor_MAXIM}}
+\path{ruediPy/python/classes/temperaturesensor_MAXIM.py}\par
+ruediPy class for MAXIM DS1820 type temperature sensors (wrapper class for pydigitemp package).\par
+
+\paragraph{Method \texttt{label}}
+\vspace{1ex}
+\texttt{\newline
+label = temperaturesensor_MAXIM.label()\newline
+\newline
+Return label / name of the TEMPERATURESENSOR object\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+label: label / name (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{temperature}}
+\vspace{1ex}
+\texttt{\newline
+temp,unit = temperaturesensor_MAXIM.temperature(f)\newline
+\newline
+Read out current temperaure value.\newline
+\newline
+INPUT:\newline
+f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+\newline
+OUTPUT:\newline
+temp: temperature value (float)\newline
+unit: unit of temperature value (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{warning}}
+\vspace{1ex}
+\texttt{\newline
+temperaturesensor_MAXIM.warning(msg)\newline
+\newline
+Issue warning about issues related to operation of pressure sensor.\newline
+\newline
+INPUT:\newline
+msg: warning message (string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\subsubsection{Class \texttt{datafile}}
+\path{ruediPy/python/classes/datafile.py}\par
+ruediPy class for handling of data files.\par
+
+\paragraph{Method \texttt{basepath}}
+\vspace{1ex}
+\texttt{\newline
+pat = datafile.basepath()\newline
+\newline
+Return the base path where datafiles are stored\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+pat: datafile base path (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{close}}
+\vspace{1ex}
+\texttt{\newline
+datafile.close()\newline
+\newline
+Close the currently open data file (if any)\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{fid}}
+\vspace{1ex}
+\texttt{\newline
+f = datafile.fid()\newline
+\newline
+Return the file ID / object of the current file\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+f: datafile object\newline
+\newline
+}
+
+\paragraph{Method \texttt{label}}
+\vspace{1ex}
+\texttt{\newline
+lab = datafile.label()\newline
+\newline
+Return label / name of the DATAFILE object\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+lab: label / name (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{name}}
+\vspace{1ex}
+\texttt{\newline
+n = datafile.name()\newline
+\newline
+Return the name the current file (or empty string if not datafile has been created)\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+n: ile name (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{next}}
+\vspace{1ex}
+\texttt{\newline
+datafile.next(,typ='',samplename='',std_species='',std_conc='',std_mz='')\newline
+\newline
+Close then current data file (if it's still open) and start a new file.\newline
+\newline
+INPUT:\newline
+typ (optional): analysis type (string, default: typ = ''). The analysis type is written to the data file, and is appended to the file name. typ can be one of the following analysis types:\newline
+typ = 'SAMPLE' (for sample analyses)\newline
+typ = 'STANDARD' (for standard / calibration gas analyses)\newline
+typ = 'BLANK' (for blank analyses)\newline
+typ = 'UNKNOWN' (if analysis type is unknown)\newline
+typ = '' (if analysis type is unknown; nothing is added to the file name)\newline
+samplename (optional, only used if typ='SAMPLE'): description, name, or ID of sample\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{warning}}
+\vspace{1ex}
+\texttt{\newline
+datafile.warning(msg)\newline
+\newline
+Warn about issues related to DATAFILE object\newline
+\newline
+INPUT:\newline
+msg: warning message (string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{write_comment}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_comment(caller,cmt)\newline
+\newline
+Write COMMENT line to the data file.\newline
+\newline
+INPUT:\newline
+caller: label / name of the calling object (string)\newline
+cmt: comment string\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{write_peak}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_peak(caller,mz,intensity,unit,det,gate,timestmp)\newline
+\newline
+Write PEAK data line to the data file.\newline
+\newline
+INPUT:\newline
+caller: type of calling object, i.e. the "data origin" (string)\newline
+label: name/label of the calling object (string)\newline
+mz: mz value (integer)\newline
+intensity: peak intensity value (float)\newline
+unit: unit of peak intensity value (string)\newline
+det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier\newline
+gate: gate time (float)\newline
+timestmp: timestamp of the peak measurement (see misc.now_UNIX)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{write_pressure}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_pressure(caller,label,value,unit,timestmp)\newline
+\newline
+Write PRESSURE data line to the data file.\newline
+\newline
+INPUT:\newline
+caller: type of calling object, i.e. the "data origin" (string)\newline
+label: name/label of the calling object (string)\newline
+value: pressure value (float)\newline
+unit: unit of peak intensity value (string)\newline
+timestmp: timestamp of the pressure measurement (see misc.now_UNIX)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{write_sample_desc}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_sample_desc(self,desc)\newline
+\newline
+Write line with sample description (e.g., name or ID of sample)\newline
+\newline
+INPUT:\newline
+desc: sample description, name, or ID (string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{write_scan}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_scan(caller,mz,intensity,unit,det,gate,timestmp)\newline
+\newline
+Write PEAK data line to the data file.\newline
+\newline
+INPUT:\newline
+caller: type of calling object, i.e. the "data origin" (string)\newline
+label: name/label of the calling object (string)\newline
+mz: mz values (floats)\newline
+intensity: intensity values (floats)\newline
+unit: unit of intensity values (string)\newline
+det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier\newline
+gate: gate time (float)\newline
+timestmp: timestamp of the peak measurement (see misc.now_UNIX)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{write_standard_conc}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_standard_conc(species,conc,mz)\newline
+\newline
+Write line with standard/calibration gas information to data file: name, concentration/mixing ratio, and mz value of gas species.\newline
+\newline
+INPUT:\newline
+caller: type of calling object, i.e. the "data origin" (string)\newline
+species: name of gas species (string)\newline
+conc: volumetric concentration / mixing ratio (float)\newline
+mz: mz value (integer)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{write_temperature}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_temperature(caller,label,value,unit,timestmp)\newline
+\newline
+Write TEMPERATURE data line to the data file.\newline
+\newline
+INPUT:\newline
+caller: type of calling object, i.e. the "data origin" (string)\newline
+label: name/label of the calling object (string)\newline
+value: temperature value (float)\newline
+unit: unit of peak intensity value (string)\newline
+timestmp: timestamp of the temperature measurement (see misc.now_UNIX)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{write_valve_pos}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_valve_pos(caller,position,timestmp)\newline
+\newline
+Write multi-port valve position data line to the data file.\newline
+\newline
+INPUT:\newline
+caller: type of calling object, i.e. the "data origin" (string)\newline
+label: name/label of the calling object (string)\newline
+position: valve position (integer)\newline
+timestmp: timestamp of the peak measurement (see misc.now_UNIX)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{write_zero}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_zero(caller,mz,mz_offset,intensity,unit,det,gate,timestmp)\newline
+\newline
+Write ZERO data line to the data file.\newline
+\newline
+INPUT:\newline
+caller: type of calling object, i.e. the "data origin" (string)\newline
+label: name/label of the calling object (string)\newline
+mz: mz value (integer)\newline
+mz_offset: mz offset value (integer, positive offset corresponds to higher mz value)\newline
+intensity: zero intensity value (float)\newline
+unit: unit of peak intensity value (string)\newline
+det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier\newline
+gate: gate time (float)\newline
+timestmp: timestamp of the peak measurement (see misc.now_UNIX)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{writeln}}
+\vspace{1ex}
+\texttt{\newline
+datafile.writeln(caller,identifier,data,timestmp)\newline
+\newline
+Write a text line to the data file (format: TIMESTAMP CALLER[LABEL] IDENTIFIER: DATA). CALLER, LABEL, and IDENTIFIER should not contain spaces or similar white space (will be removed before writing to file). If LABEL == '' or LABEL == CALLER, the [LABEL] part is omitted.\newline
+\newline
+INPUT:\newline
+caller: type of calling object, i.e. the "data origin" (string)\newline
+label: name/label of the calling object (string)\newline
+identifier: data type identifier (string)\newline
+data: data / info string\newline
+timestmp: timestamp of the data in unix time (see misc.now_UNIX)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\subsubsection{Class \texttt{misc}}
+\path{ruediPy/python/classes/misc.py}\par
+ruediPy class with helper functions.\par
+
+\paragraph{Method \texttt{now_UNIX}}
+\vspace{1ex}
+\texttt{\newline
+dt = misc.now_UNIX()\newline
+\newline
+Return date/time as UNIX time / epoch (seconds after Jan 01 1970 UTC)\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+dt: date-time (UNIX / epoch time)\newline
+\newline
+}
+
+\paragraph{Method \texttt{now_string}}
+\vspace{1ex}
+\texttt{\newline
+dt = misc.now_string()\newline
+\newline
+Return string with current date and time\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+dt: date-time (string) in YYYY-MM-DD hh:mm:ss format\newline
+\newline
+}
+
+\paragraph{Method \texttt{warnmessage}}
+\vspace{1ex}
+\texttt{\newline
+misc.warnmessage(caller,msg)\newline
+\newline
+Print a warning message\newline
+\newline
+INPUT:\newline
+caller: caller label / name of the calling object (string)\newline
+msg: warning message\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
