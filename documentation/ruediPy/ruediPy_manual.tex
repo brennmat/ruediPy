@@ -67,7 +67,8 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \item Update system software to latest versions and install basic software requirements for \ruediPy:\par
 \texttt{sudo apt-get update}\\
 \texttt{sudo apt-get upgrade}\\
-\texttt{sudo apt-get install subversion python-pip python-serial python-matplotlib python-scipy}\\
+\texttt{sudo apt-get install subversion python-pip}\\
+\texttt{python-serial python-matplotlib python-scipy}\\
 \texttt{sudo pip install pydigitemp}\\
 
 \item Download ruediPy:\par
@@ -79,8 +80,9 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \item Set permission to access the serial ports (this requires the user to log out and log back in to become active):\par
 \texttt{sudo usermod -a -G dialout brennmat}
 
-\item Prepare directory for ruediPy data files:\par
-\texttt{mkdir \path{~/ruedi_data}}
+\item Prepare directory for ruediPy data files and measurement scripts:\par
+\texttt{mkdir \path{~/ruedi_data}}\\
+\texttt{mkdir \path{~/ruedi_scripts}}
 
 \end{enumerate}
 
