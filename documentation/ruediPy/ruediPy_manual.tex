@@ -61,44 +61,30 @@ The GNU Octave tools (m-files) are designed to work hand-in-hand with the data f
 \section{Obtaining and installing \ruediPy}
 \ruediPy\ can be downloaded from \url{http://brennmat.github.io/ruediPy} either as a compressed archive file, or using Subversion or Git version control systems. \ruediPy\ can be installed to just about any directory on the computer that is used for instrument control -- but the user home directory  (\path{~/ruediPy}) may seem like a sensible choice, and that's what is assumed throughout the examples shown in this manual.
 
-As an example, here's a step-by-step list of instructions to install \ruediPy  on a Linux computer running Ubuntu 16.04 (the user account name in this example is \tt{brennmat}):
+As an example, here's a step-by-step list of terminal commands to install \ruediPy  on a Linux computer running Ubuntu 16.04. Other Linux distributions will be similar. The user account name in this example is ``\texttt{brennmat}'', and this user account is enabled for \texttt{sudo} operations (i.e., it has `admin' rights):
 \begin{enumerate}
 
+\item Update system software to latest versions and install basic software requirements for \ruediPy:\par
+\texttt{sudo apt-get update}\\
+\texttt{sudo apt-get upgrade}\\
+\texttt{sudo apt-get install subversion python-pip python-serial python-matplotlib python-scipy}\\
+\texttt{pip install pydigitemp}\\
 
-\item Update system software to latest versions and install basic software requirements for \ruediPy:
+\item Download ruediPy:\par
+\texttt{svn co https://github.com/brennmat/ruediPy.git/trunk ~/ruediPy}
 
-> sudo apt-get update
-> sudo apt-get upgrade
-> sudo apt-get install subversion python-pip python-serial python-matplotlib python-scipy
-> pip install pydigitemp
+\item Permanently add \ruediPy\ to the Python searchpath (this requires the user to log out and log back in to become active):\par
+\texttt{echo export PYTHONPATH=~/ruediPy/python >> .profile}
 
+\item Set permission to access the serial ports (this requires the user to log out and log back in to become active):\par
+\texttt{sudo usermod -a -G dialout brennmat}
 
-\item Download ruediPy:
-
-> svn co https://github.com/brennmat/ruediPy.git/trunk ~/ruediPy
-
-
-\item Permanently add ruediPy to the users Python searchpath (this requires the user to log out and log back in to become active):
-
-> echo export PYTHONPATH=~/ruediPy/python >> .profile
-
-\item Prepare directory for ruediPy data files:
-
-> mkdir ~/ruedi_data
-
-\item Set permission for using the serial ports (this requires the user to log out and log back in to become active):
-
-> sudo usermod -a -G dialout brennmat
-
-
-\item Prepare directory for ruediPy data files:
-
-> mkdir ~/ruedi_data
-
-\item Log out and log back in to make the above changes active.
+\item Prepare directory for ruediPy data files:\par
+\texttt{mkdir ~/ruedi_data}
 
 \end{enumerate}
 
+Log out and log back in to make the above changes active. You should also consider setting up the computer to avoid going to `sleep' mode, because this might interrupt the measurement procedure.
 
 \section{Python classes}
 \subsection{Overview}
