@@ -71,16 +71,16 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \texttt{pip install pydigitemp}\\
 
 \item Download ruediPy:\par
-\texttt{svn co https://github.com/brennmat/ruediPy.git/trunk ~/ruediPy}
+\texttt{svn co https://github.com/brennmat/ruediPy.git/trunk \path{~/ruediPy}}
 
 \item Permanently add \ruediPy\ to the Python searchpath (this requires the user to log out and log back in to become active):\par
-\texttt{echo export PYTHONPATH=~/ruediPy/python >> .profile}
+\texttt{echo export PYTHONPATH=~/ruediPy/python >> \path{~/.profile}}
 
 \item Set permission to access the serial ports (this requires the user to log out and log back in to become active):\par
 \texttt{sudo usermod -a -G dialout brennmat}
 
 \item Prepare directory for ruediPy data files:\par
-\texttt{mkdir ~/ruedi_data}
+\texttt{mkdir \path{~/ruedi_data}}
 
 \end{enumerate}
 
