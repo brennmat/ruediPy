@@ -107,15 +107,23 @@ class rgams_SRS:
 		# set up plotting environment
 		self._has_display = havedisplay
 		if self._has_display: # prepare plotting environment and figure
-			self._peakbuffer_figure = plt.figure()
-			plt.ion()
+			self._figure = plt.figure()
+			# plt.figure(self._figure.number)
+			self._figure.suptitle(label + " data")
+			self._peakbuffer_ax = plt.subplot("211")
+    		self._peakbuffer_ax.set_title("PEAK VALUES")
+			plt.xlabel('Time (s)')
+			plt.ylabel('Intensity')
+
+    		
+			self._scan_ax = plt.subplot("212")
+    		self._scan_ax.set_title("SCAN")
+   			plt.ion() # enables interactive mode
 			plt.draw()
 			plt.show()
-			self._scan_figure = plt.figure()
-			plt.ion()
-			plt.draw()
-			plt.show()
-				
+			
+			print ('***** TO DO: CREATE PLOT WINDOW WITH TWO PANELS: UPPER PANEL FOR PEAK-VALUES VS. TIME, LOWER PANEL FOR PEAK SCANS. ADAPT PEAK PLOTTING (plot_peakbuffer) AND SCAN PLOTTING (plot_scan) TO USE THESE PANELS FOR PLOTTING *****')
+			
 		print ('Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 	
 	########################################################################################################
@@ -899,9 +907,9 @@ class rgams_SRS:
 		if N < 2:
 			error ('Need at least two distinct mz values to tune peak positions!')
 
-		if self._has_display: # prepare plotting environment and figure
-			plt.ion() # allow interactive plotting
-			peakfig = [ plt.figure() for k in range(0,N) ]
+		### if self._has_display: # prepare plotting environment and figure
+		### 	plt.ion() # allow interactive plotting
+		### 	peakfig = [ plt.figure() for k in range(0,N) ]
 
 		for i in range(0,n):
 			RI0 = self.get_RI()
@@ -918,14 +926,17 @@ class rgams_SRS:
 				print 'Scanning peak at mz = ' + str(mz[k]) + '...'
 				self.set_detector(det[k])
 				MZ,Y,U = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
+				
+				# plot scan:
+				self.plot_scan(MZ,Y,U)
 
 				# subtract baseline
 				yL = (Y[0]+Y[1])/2
 				yR = (Y[-1]+Y[-2])/2
-                                mL = (MZ[0]+MZ[1])/2
-	                        mR = (MZ[-1]+MZ[-2])/2
-	                        fit = numpy.polyfit([mL,mR],[yL,yR],1)
-        	                fit_fn = numpy.poly1d(fit)
+                mL = (MZ[0]+MZ[1])/2
+	            mR = (MZ[-1]+MZ[-2])/2
+	            fit = numpy.polyfit([mL,mR],[yL,yR],1)
+        	    fit_fn = numpy.poly1d(fit)
 				Y = Y - fit_fn(MZ)
 
 				# analyse cumulative sum of peak (median center of peak):
@@ -967,16 +978,16 @@ class rgams_SRS:
 						print 'Peak center at mz = ' , m
 						delta_m.append(mz[k]-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
 
-				if not self._has_display:
-					self.warning('Plotting of scan data not possible (no display system available).')
-				else:
-					plt.figure(peakfig[k].number)
-					plt.plot( MZ , Y , 'b.-' )
-					if ~numpy.isnan(m1):
-						plt.plot( MZ , CY/CYmax*max(Y) , 'r.-' )
-					plt.xlabel('m/z')
-					plt.ylabel('Intensity (A)')
-					plt.pause(0.05)
+				### if not self._has_display:
+				### 	self.warning('Plotting of scan data not possible (no display system available).')
+				### else:
+				### 	plt.figure(peakfig[k].number)
+				### 	plt.plot( MZ , Y , 'b.-' )
+				### 	if ~numpy.isnan(m1):
+				### 		plt.plot( MZ , CY/CYmax*max(Y) , 'r.-' )
+				### 	plt.xlabel('m/z')
+				### 	plt.ylabel('Intensity (A)')
+				### 	plt.pause(0.05)
 
 			# print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
 			# fit first-order polynomial function to mz vs. delta_m:
@@ -1147,38 +1158,37 @@ class rgams_SRS:
 			self.warning('Plotting of peakbuffer trend not possible (no display system available).')
 
 		else:
+		
+			self.warning('PLOTTING OF PEAKBUFFER DATA TO SUBPLOT/PANEL IS UNTESTED AND MAY CAUSE ISSUES...')
+		
 			MZ = numpy.unique(self._peakbuffer_mz) # unique list of all mz values
 
 			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
 
-			plt.figure(self._peakbuffer_figure.number)
+			####  plt.figure(self._figure.number)   <---- NEEDED?
 			n = 0
+			leg = [''] * MZ.shape[0] # initialize empy legend entries
 			t0 = misc.now_UNIX()
-
-			plt.show(block=False)
-			leg = [''] * MZ.shape[0] # initialize empy legend entrie
-			t0 = misc.now_UNIX()
+			####  plt.show(block=False)  <--- NEEDED? 
 			for mz in MZ:
 				k = numpy.where( self._peakbuffer_mz == mz )[0]
 				col = colors[n%7]
 				# intens0 = self._peakbuffer_intens[k[0]]
 				# plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + 'o-' )
-				plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k] , col + '.-' )
-				plt.hold(True)
+				self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k] , col + '.-' )
+				self._peakbuffer_ax.hold(True)
 				leg[n] = 'mz='+str(int(mz))
 				n = n+1
 
-			plt.hold( False )
-			plt.legend( leg , loc=3 )
+			self._peakbuffer_ax.hold( False )
+			self._peakbuffer_ax.legend( leg , loc=3 )
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
+    		self._peakbuffer_ax.title('PEAK VALUES (' + self.label() + ') at ' + t0)
 
-			plt.title('PEAK VALUES (' + self.label() + ') at ' + t0)
-			plt.xlabel('Time (s)')
-			plt.ylabel('Intensity')
-			plt.yscale('log')
+			self._peakbuffer_ax.yscale('log')
 			# plt.draw()
-			plt.show() # tell it to update the plot
+			plt.show() # update the plot
 			plt.pause(0.01) # allow some time to update the plot
 
 
@@ -1204,6 +1214,9 @@ class rgams_SRS:
 			self.warning('Plotting of scan data not possible (no display system available).')
 
 		else:
+		
+			self.warning('PLOTTING OF SCAN DATA NEEDS TO BE UPDATED TO USE THE SCAN SUBPLOT/PANEL...')
+		
 			plt.figure(self._scan_figure.number)
 			plt.plot( mz , intens , 'b.-' )
 			plt.xlabel('m/z')
