@@ -929,7 +929,8 @@ class rgams_SRS:
 				
 				# plot scan:
 				self.plot_scan(MZ,Y,U)
-
+				print ('**** PLOT BOTH SCANS AND THEIR CUMULATIVE SUMS (as calculated below)! EXTEND THE plot_scan METHOD TO ALSO ACCEPT THE CUMULATIVE SUM DATA AS AN OPTIONAL ARUGMENT, AND PLOT THIS ACCORDINGLY! ****')
+				
 				# subtract baseline
 				yL = (Y[0]+Y[1])/2
 				yR = (Y[-1]+Y[-2])/2
@@ -988,6 +989,8 @@ class rgams_SRS:
 				### 	plt.xlabel('m/z')
 				### 	plt.ylabel('Intensity (A)')
 				### 	plt.pause(0.05)
+				
+				print ('**** PLOT BOTH SCANS AND THEIR CUMULATIVE SUMS! EXTEND THE plot_scan METHOD TO ALSO ACCEPT THE CUMULATIVE SUM DATA AS AN OPTIONAL ARUGMENT, AND PLOT THIS ACCORDINGLY! ****')
 
 			# print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
 			# fit first-order polynomial function to mz vs. delta_m:
