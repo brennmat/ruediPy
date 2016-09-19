@@ -54,7 +54,7 @@ from classes.rgams_SRS		import rgams_SRS
 from classes.datafile		import datafile
 
 # set up ruediPy objects:
-MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 1000 )
+MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
 DATAFILE  = datafile ( '~/ruedi_data' )
 
 # start data file:
@@ -85,7 +85,8 @@ print 'Single mass measurements...'
 gate = 0.025
 mz = (28, 32, 40, 44)
 j = 0
-while j < 3:
+# while j < 3:
+while 1:
 	DATAFILE.next('S') # start a new data file, typ 'S' (sample)
 	k = 0
 	while k < 10: # single peak readings

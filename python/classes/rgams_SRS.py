@@ -60,7 +60,7 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , max_buffer_points = 500 ):
+	def __init__( self , serialport , label='MS' , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 ):
 		'''
 		rgams_SRS.__init__( serialport , label='MS' , max_buffer_points = 500 )
 		
@@ -70,6 +70,7 @@ class rgams_SRS:
 		serialport: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
 		label (optional): label / name of the RGAMS object (string). Default: label = 'MS'
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
+		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
 
 		OUTPUT:
 		(none)
@@ -107,22 +108,33 @@ class rgams_SRS:
 		# set up plotting environment
 		self._has_display = havedisplay
 		if self._has_display: # prepare plotting environment and figure
-			self._figure = plt.figure()
-			# plt.figure(self._figure.number)
-			self._figure.suptitle(label + " data")
-			self._peakbuffer_ax = plt.subplot("211")
-    		self._peakbuffer_ax.set_title("PEAK VALUES")
+
+			# set up plotting environment
+			# w, h = plt.figaspect(0.9)
+			self._fig = plt.figure(figsize=(fig_w,fig_h))
+			# f.suptitle('SRS RGA DATA')
+
+			# set up upper panel for peak history plot:
+			self._peakbuffer_ax = plt.subplot(2,1,1)
+			# self._peakbuffer_ax.set_title("PEAK VALUES",loc="center")
+			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ')',loc="center")
 			plt.xlabel('Time (s)')
 			plt.ylabel('Intensity')
 
-    		
-			self._scan_ax = plt.subplot("212")
-    		self._scan_ax.set_title("SCAN")
-   			plt.ion() # enables interactive mode
-			plt.draw()
-			plt.show()
+			# set up lower panel for scans:
+			self._scan_ax = plt.subplot(2,1,2)
+			self._scan_ax.set_title('SCAN (' + self.label() + ')',loc="center")
+			plt.xlabel('mz')
+			plt.ylabel('Intensity')
+
+			# get some space in between panels to avoid overlapping labels / titles
+			self._fig.tight_layout(pad=0.5)
+
+			plt.ion() # enables interactive mode
+			# plt.draw()
+			# plt.show()
+			plt.pause(0.1) # allow some time to update the plot
 			
-			print ('***** TO DO: CREATE PLOT WINDOW WITH TWO PANELS: UPPER PANEL FOR PEAK-VALUES VS. TIME, LOWER PANEL FOR PEAK SCANS. ADAPT PEAK PLOTTING (plot_peakbuffer) AND SCAN PLOTTING (plot_scan) TO USE THESE PANELS FOR PLOTTING *****')
 			
 		print ('Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 	
@@ -934,10 +946,10 @@ class rgams_SRS:
 				# subtract baseline
 				yL = (Y[0]+Y[1])/2
 				yR = (Y[-1]+Y[-2])/2
-                mL = (MZ[0]+MZ[1])/2
-	            mR = (MZ[-1]+MZ[-2])/2
-	            fit = numpy.polyfit([mL,mR],[yL,yR],1)
-        	    fit_fn = numpy.poly1d(fit)
+				mL = (MZ[0]+MZ[1])/2
+				mR = (MZ[-1]+MZ[-2])/2
+			        fit = numpy.polyfit([mL,mR],[yL,yR],1)
+				fit_fn = numpy.poly1d(fit)
 				Y = Y - fit_fn(MZ)
 
 				# analyse cumulative sum of peak (median center of peak):
@@ -1163,12 +1175,13 @@ class rgams_SRS:
 		else:
 		
 			self.warning('PLOTTING OF PEAKBUFFER DATA TO SUBPLOT/PANEL IS UNTESTED AND MAY CAUSE ISSUES...')
-		
+
 			MZ = numpy.unique(self._peakbuffer_mz) # unique list of all mz values
 
 			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
 
-			####  plt.figure(self._figure.number)   <---- NEEDED?
+			# plt.figure(self._fig.number)
+			# plt.subplot(2,1,1)
 			n = 0
 			leg = [''] * MZ.shape[0] # initialize empy legend entries
 			t0 = misc.now_UNIX()
@@ -1176,21 +1189,24 @@ class rgams_SRS:
 			for mz in MZ:
 				k = numpy.where( self._peakbuffer_mz == mz )[0]
 				col = colors[n%7]
-				# intens0 = self._peakbuffer_intens[k[0]]
-				# plt.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + 'o-' )
-				self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k] , col + '.-' )
+				intens0 = self._peakbuffer_intens[k[0]]
+				self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + 'o-' )
 				self._peakbuffer_ax.hold(True)
-				leg[n] = 'mz='+str(int(mz))
+				val_min = self._peakbuffer_intens[k].min()
+				val_max = self._peakbuffer_intens[k].max()
+				leg[n] = 'mz=' + str(int(mz)) + ': ' + str(val_min) + ' ... ' + str(val_max)
 				n = n+1
-
+			
 			self._peakbuffer_ax.hold( False )
 			self._peakbuffer_ax.legend( leg , loc=3 )
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-    		self._peakbuffer_ax.title('PEAK VALUES (' + self.label() + ') at ' + t0)
+			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + self.label() + ') at ' + t0)
 
-			self._peakbuffer_ax.yscale('log')
-			# plt.draw()
+			from matplotlib.ticker import FuncFormatter
+			yformatter = FuncFormatter(lambda y, _: '{:.0%}'.format(y))
+			self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
+			
 			plt.show() # update the plot
 			plt.pause(0.01) # allow some time to update the plot
 
@@ -1220,12 +1236,11 @@ class rgams_SRS:
 		
 			self.warning('PLOTTING OF SCAN DATA NEEDS TO BE UPDATED TO USE THE SCAN SUBPLOT/PANEL...')
 		
-			plt.figure(self._scan_figure.number)
-			plt.plot( mz , intens , 'b.-' )
+			self._scan_ax.plot( mz , intens , 'b.-' )
 			plt.xlabel('m/z')
 			plt.ylabel('Intensity (' + unit +')')
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
-			plt.title('SCAN (' + self.label() + ')' + ' at ' + t0)
-			# plt.draw()
+
+			self._scan_ax.set_title('SCAN (' + self.label() + ')' + ' at ' + t0)
 			plt.show() # tell it to update the plot
 			plt.pause(0.01) # allow some time to update the plot

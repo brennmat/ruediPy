@@ -45,7 +45,8 @@ import time
 from classes.temperaturesensor_MAXIM	import temperaturesensor_MAXIM
 from classes.datafile					import datafile
 
-TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/pci-Prolific_Technology_Inc._USB-Serial_Controller-if00-port0' , label = 'TEMP-TEST' )
+# TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/pci-Prolific_Technology_Inc._USB-Serial_Controller-if00-port0' , label = 'TEMP-TEST' )
+TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller-if00-port0' , label = 'TEMP-TEST' )
 DATAFILE	= datafile ( '~/ruedi_data' )
 
 # start data file:
