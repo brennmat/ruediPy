@@ -63,13 +63,13 @@ print 'Filament current: ' + MS.get_filament_current() + ' mA'
 #MS.set_electron_energy(60)  <-- uncomment this to change electon energy in ion source
 
 # warm up instrument
-n = 2
-print 'Warming up instrument for ' + str(n) + ' minutes...'
+n = 80
+print 'Warming up instrument for ' + str(n) + ' seconds...'
 MS.set_detector('F')
 peak,unit = MS.peak(28,1,'nofile')
 peak,unit = MS.peak(28,1,'nofile')
 MS.peakbuffer_clear()
-T0 = time.time() + 60*n # n minutes from now
+T0 = time.time() + n # n seconds from now
 while time.time() < T0:
 	peak,unit = MS.peak(28,1,'nofile')
 	MS.plot_peakbuffer()
@@ -78,7 +78,7 @@ while time.time() < T0:
 print 'Tuning peak positions...'
 ## MS.set_RI(-9.7) # set start value
 ## MS.set_RS(1070.0) # set start value
-MS.tune_peak_position([4,14,18,28,32,40,44,84,86],[2.4,0.2,0.2,0.025,0.1,0.4,0.1,2.4,2.4],['M','F','F','F','F','F','M','M','M'],max_iter=5,max_delta_mz = 0.05)
+MS.tune_peak_position([4,14,18,28,32,40,44,84,86],[2.4,0.2,0.2,0.025,0.1,0.4,0.1,2.4,2.4],['M','F','F','F','F','F','M','M','M'],max_iter=5,max_delta_mz = 0.1)
 MS.set_detector('F') # make sure ion beam is on Faraday
 
 # series of sinlge mass measurements ('PEAK' readings):
