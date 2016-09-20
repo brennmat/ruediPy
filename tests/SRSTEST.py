@@ -52,11 +52,9 @@ from classes.datafile		import datafile
 MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
 DATAFILE  = datafile ( '~/ruedi_data' )
 
-# print some MS information:
+# set/show MS configuraton:
 print 'MS has electron multiplier: ' + MS.has_multiplier()
 print 'MS max m/z range: ' + MS.mz_max()
-
-# set/show MS configuraton:
 print 'Ionizer electron energy: ' + MS.get_electron_energy() + ' eV'
 MS.set_detector('F')
 print 'Set ion beam to Faraday detector: ' + MS.get_detector()
@@ -68,6 +66,9 @@ print 'Filament current: ' + MS.get_filament_current() + ' mA'
 n = 2
 print 'Warming up instrument for ' + str(n) + ' minutes...'
 MS.set_detector('F')
+peak,unit = MS.peak(28,1,'nofile')
+peak,unit = MS.peak(28,1,'nofile')
+MS.peakbuffer_clear()
 T0 = time.time() + 60*n # n minutes from now
 while time.time() < T0:
 	peak,unit = MS.peak(28,1,'nofile')
