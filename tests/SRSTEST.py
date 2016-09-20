@@ -43,11 +43,6 @@
 import time
 from datetime import datetime
 import os
-#havedisplay = "DISPLAY" in os.environ
-#if havedisplay: # prepare plotting environment
-#	import matplotlib
-#	matplotlib.use('GTKAgg') # use this for faster plotting
-#	import matplotlib.pyplot as plt
 
 # import ruediPy classes:
 from classes.rgams_SRS		import rgams_SRS
@@ -56,10 +51,6 @@ from classes.datafile		import datafile
 # set up ruediPy objects:
 MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
 DATAFILE  = datafile ( '~/ruedi_data' )
-
-# start data file:
-DATAFILE.next('SAMPLE') # start a new data file with analysistype 'SAMPLE'
-print 'Data output to ' + DATAFILE.name()
 
 # print some MS information:
 print 'MS has electron multiplier: ' + MS.has_multiplier()
@@ -73,15 +64,8 @@ MS.filament_on() # turn on with default current
 print 'Filament current: ' + MS.get_filament_current() + ' mA'
 #MS.set_electron_energy(60)  <-- uncomment this to change electon energy in ion source
 
-# scan Ar-40 peak:
-# print 'Scanning...'
-# MS.set_gate_time(0.3) # set gate time for each reading
-# mz,intens,unit = MS.scan(38,42,15,0.5,DATAFILE)
-# MS.plot_scan (mz,intens,unit)
-# print '...done.'
-
 # warm up instrument
-n = 0
+n = 2
 print 'Warming up instrument for ' + str(n) + ' minutes...'
 MS.set_detector('F')
 T0 = time.time() + 60*n # n minutes from now
@@ -96,15 +80,18 @@ print 'Tuning peak positions...'
 MS.tune_peak_position([4,14,18,28,32,40,44,84,86],[2.4,0.2,0.2,0.025,0.1,0.4,0.1,2.4,2.4],['M','F','F','F','F','F','M','M','M'],max_iter=5,max_delta_mz = 0.05)
 MS.set_detector('F') # make sure ion beam is on Faraday
 
+
+
 # series of sinlge mass measurements ('PEAK' readings):
 print 'Single mass measurements...'
-MS.peakbuffer_clear()
+MS.peakbuffer_clear() # clear peakbuffer (to start with fresh display)
 gate = 0.025
 mz = (28, 32, 40, 44)
 j = 0
 # while j < 3:
 while 1:
-	DATAFILE.next('S') # start a new data file, typ 'S' (sample)
+	DATAFILE.next('SAMPLE') # start a new data file, type 'SAMPLE'
+	print 'Data output to ' + DATAFILE.name()
 	k = 0
 	while k < 10: # single peak readings
 		k = k+1
