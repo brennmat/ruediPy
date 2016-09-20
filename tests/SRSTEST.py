@@ -89,7 +89,7 @@ mz = (28, 32, 40, 44)
 j = 0
 # while j < 3:
 while 1:
-	DATAFILE.next(typ='SAMPLE',samplename='Test') # start a new data file, type 'SAMPLE'
+	DATAFILE.next(typ='SAMPLE',samplename='Test_'+str(j)) # start a new data file, type 'SAMPLE'
 	print 'Data output to ' + DATAFILE.name()
 	k = 0
 	while k < 10: # single peak readings
