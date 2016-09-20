@@ -1056,10 +1056,11 @@ class rgams_SRS:
 			self.set_RS(rs)
 
 			# next iteration:
-			ii = ii+1
-			if ii > max_iter:
-				print ('Tuning completed after ' + str(max_iter) + ' iterations.')
-				doTune = False
+			if doTune:
+				ii = ii+1
+				if ii > max_iter:
+					print ('Tuning completed after ' + str(max_iter) + ' iterations.')
+					doTune = False
 
 ########################################################################################################
 

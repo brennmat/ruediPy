@@ -81,8 +81,6 @@ print 'Tuning peak positions...'
 MS.tune_peak_position([4,14,18,28,32,40,44,84,86],[2.4,0.2,0.2,0.025,0.1,0.4,0.1,2.4,2.4],['M','F','F','F','F','F','M','M','M'],max_iter=5,max_delta_mz = 0.05)
 MS.set_detector('F') # make sure ion beam is on Faraday
 
-
-
 # series of sinlge mass measurements ('PEAK' readings):
 print 'Single mass measurements...'
 MS.peakbuffer_clear() # clear peakbuffer (to start with fresh display)
@@ -91,7 +89,7 @@ mz = (28, 32, 40, 44)
 j = 0
 # while j < 3:
 while 1:
-	DATAFILE.next('SAMPLE') # start a new data file, type 'SAMPLE'
+	DATAFILE.next(typ='SAMPLE',samplename='Test') # start a new data file, type 'SAMPLE'
 	print 'Data output to ' + DATAFILE.name()
 	k = 0
 	while k < 10: # single peak readings
