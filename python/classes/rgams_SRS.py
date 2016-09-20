@@ -939,10 +939,6 @@ class rgams_SRS:
 				self.set_detector(det[k])
 				MZ,Y,U = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
 				
-				# plot scan:
-				self.plot_scan(MZ,Y,U)
-				print ('**** PLOT BOTH SCANS AND THEIR CUMULATIVE SUMS (as calculated below)! EXTEND THE plot_scan METHOD TO ALSO ACCEPT THE CUMULATIVE SUM DATA AS AN OPTIONAL ARUGMENT, AND PLOT THIS ACCORDINGLY! ****')
-				
 				# subtract baseline
 				yL = (Y[0]+Y[1])/2
 				yR = (Y[-1]+Y[-2])/2
@@ -954,9 +950,14 @@ class rgams_SRS:
 
 				# analyse cumulative sum of peak (median center of peak):
 				CY = numpy.cumsum(Y)
+				dMZ = (MZ[1]-MZ[0])/2
+				CMZ = [u + dMZ for u in MZ] # MZ values of cumulative sum, offset by dMZ relative to MZ
+
+				self.plot_scan(MZ,Y,U , CMZ,CY )
+
 				CYmax = max(CY)
 				cy = [ x/CYmax for x in CY ]
-				a = [ i for i in range(0,len(cy)) if cy[i] > 0.5 ] # indices to all occurrence of cy > 0.5
+				a = [ i for i in range(0,len(cy)) if cy[i] > 0.5 ] # indices to all occurrences of cy > 0.5
 				b = [ i for i in range(0,len(cy)) if cy[i] <= 0.5 ] # indices to all occurrences of cy <= 0.5
 				if len(a) > 0:
 					a = a[0]
@@ -967,42 +968,32 @@ class rgams_SRS:
 				else:
 					b = 0
 				if a > b:
-					m1 = MZ[a] + (0.5-cy[a])/(cy[b]-cy[a])*(MZ[b]-MZ[a]) # interpolated MZ value at cy = 0.5
-					print 'Median peak center: mz = ' , str(m1)
+					# m1 = MZ[a] + (0.5-cy[a])/(cy[b]-cy[a])*(MZ[b]-MZ[a]) # interpolated MZ value at cy = 0.5
+                                        m1 = CMZ[a] + (0.5-cy[a])/(cy[b]-cy[a])*(CMZ[b]-CMZ[a]) # interpolated CMZ value at cy = 0.5
+					print '   Median peak center: mz = ' + ' {:.3f}'.format(m1)
+
 				else:
-					print 'Could not determine median peak centre. Ignoring this peak....'
+					print '   Could not determine median peak centre from cumulative sum.'
 					m1 = numpy.nan
 
 				# use values close to peak maximum to find peak center:
-				m2 = [ MZ[j] for j,i in enumerate(Y) if i>=0.75*max(Y)] # mz values of Y values >= 0.75*max(Y)
+				m2 = [ MZ[j] for j,i in enumerate(Y) if i>=0.75*max(Y)] # mz values of YY values >= 0.75*max(YY)
 				m2 = sum(m2) / len(m2)
-				print 'Center of mass of values > 75% of peak-max: mz = ' , str(m2)
+				print '   Center of mass of values > 75% of peak-max: mz = ' + ' {:.3f}'.format(m2)
 
 				# mean of m1 and m2:
 				if numpy.isnan(m1) or numpy.isnan(m2):
 					delta_m.append(numpy.nan)
+					print ('   Could not reliably determine peak center. Ignoring this peak...')
 				else:
 					if abs(m1-m2) > 0.35:
-						self.warning ('Peak center values determined from peak top and peak median differ by more than 0.35, ignoring peak at mz = ' + str(mz[k]) + '. Consider using a peak at a different mz value for tuning!')
+						print ('   Peak center values determined from peak top and peak median differ by more than 0.35, ignoring peak at mz = ' + str(mz[k]) + '. Consider using a peak at a different mz value for tuning!')
 						delta_m.append(numpy.nan)
 					else:
 						m = (m1+3*m2)/4
 						#m = m2
-						print 'Peak center at mz = ' , m
+						print '   Peak center at mz = ' + ' {:.3f}'.format(m)
 						delta_m.append(mz[k]-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
-
-				### if not self._has_display:
-				### 	self.warning('Plotting of scan data not possible (no display system available).')
-				### else:
-				### 	plt.figure(peakfig[k].number)
-				### 	plt.plot( MZ , Y , 'b.-' )
-				### 	if ~numpy.isnan(m1):
-				### 		plt.plot( MZ , CY/CYmax*max(Y) , 'r.-' )
-				### 	plt.xlabel('m/z')
-				### 	plt.ylabel('Intensity (A)')
-				### 	plt.pause(0.05)
-				
-				print ('**** PLOT BOTH SCANS AND THEIR CUMULATIVE SUMS! EXTEND THE plot_scan METHOD TO ALSO ACCEPT THE CUMULATIVE SUM DATA AS AN OPTIONAL ARUGMENT, AND PLOT THIS ACCORDINGLY! ****')
 
 			# print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
 			# fit first-order polynomial function to mz vs. delta_m:
@@ -1174,8 +1165,6 @@ class rgams_SRS:
 
 		else:
 		
-			self.warning('PLOTTING OF PEAKBUFFER DATA TO SUBPLOT/PANEL IS UNTESTED AND MAY CAUSE ISSUES...')
-
 			MZ = numpy.unique(self._peakbuffer_mz) # unique list of all mz values
 
 			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
@@ -1214,9 +1203,9 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def plot_scan(self,mz,intens,unit):
+	def plot_scan(self,mz,intens,unit,cumsum_mz=[],cumsum_val=[]):
 		'''
-		rgams_SRS.plot_scan(mz,intens,unit)
+		rgams_SRS.plot_scan(mz,intens,unit,cumsum_mz=[],cumsum_val=[])
 
 		Plot scan data
 
@@ -1224,6 +1213,7 @@ class rgams_SRS:
 		mz: mz values (x-axis)
 		intens: intensity values (y-axis)
 		unit: intensity unit (string)
+		cumsum_mz,cumsum_val (optional): cumulative sum of peak data (mz and sum values), as used for peak centering
 
 		OUTPUT:
 		(none)
@@ -1233,10 +1223,15 @@ class rgams_SRS:
 			self.warning('Plotting of scan data not possible (no display system available).')
 
 		else:
-		
-			self.warning('PLOTTING OF SCAN DATA NEEDS TO BE UPDATED TO USE THE SCAN SUBPLOT/PANEL...')
-		
-			self._scan_ax.plot( mz , intens , 'b.-' )
+			self._scan_ax.plot( mz , intens , 'k.-' )
+			if cumsum_mz:
+				# normalize cumulative sum values to intens (to match plot scales):
+				cumsum_val = cumsum_val / max(cumsum_val) * max(intens)
+				# add cumulative sum data to plot:
+				self._scan_ax.hold(True)
+				self._scan_ax.plot( cumsum_mz , cumsum_val , 'r.-' )
+				self._scan_ax.hold(False)
+
 			plt.xlabel('m/z')
 			plt.ylabel('Intensity (' + unit +')')
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
