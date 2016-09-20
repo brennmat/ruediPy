@@ -888,7 +888,7 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def tune_peak_position(self,mz,gate,det,n=1):
+	def tune_peak_position(self,mz,gate,det,n=1,maxdelta_mz=[]):
 		'''
 		rgams_SRS.tune_peak_position(mz,gate,det,n=1)
 
@@ -899,6 +899,7 @@ class rgams_SRS:
 		gate: list of gate times used in the scans
 		det: list of detectors to be used in the scans ('F' or 'M')
 		n: number of repetitions of the tune procedure (optional, default is n = 1)
+		maxdelta_mz: tolerance of mz offset at mz=0 and mz=128. If the absolute offset is less than maxdelta_z after tuning and n > 1, the tuning procedure is aborted.
 
 		OUTPUT:
 		(none)
@@ -923,7 +924,9 @@ class rgams_SRS:
 		### 	plt.ion() # allow interactive plotting
 		### 	peakfig = [ plt.figure() for k in range(0,N) ]
 
-		for i in range(0,n):
+		i = 0
+		doTune = True
+		while doTune:
 			RI0 = self.get_RI()
 			RS0 = self.get_RS()
 			print ('\nBefore tuning (cycle ' + str(i+1) + ' of ' + str(n) +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
@@ -938,7 +941,7 @@ class rgams_SRS:
 				print 'Scanning peak at mz = ' + str(mz[k]) + '...'
 				self.set_detector(det[k])
 				MZ,Y,U = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
-				
+
 				# subtract baseline
 				yL = (Y[0]+Y[1])/2
 				yR = (Y[-1]+Y[-2])/2
@@ -1013,6 +1016,12 @@ class rgams_SRS:
 
 			# use smaller steps if repeating the tuning (to improve convergence/stability):
 			if n > 1:
+				if maxdelta_mz: # check if tuning is within tolerance:
+					if abs(delta_m0) < maxdelta_mz:
+						if abs(delta_m128) < maxdelta_mz:
+							print 'Peak positions are within tolerance (delta-mz = ' + str(maxdelta_mz) + '). Tuning finished.'
+							doTune = False
+
 				delta_m0 = (0.2 + 1/n**0.5) * delta_m0
                                 delta_m128 = (0.2 + 1/n**0.5) * delta_m128
 
@@ -1021,7 +1030,10 @@ class rgams_SRS:
 			self.set_RI(ri)
 			self.set_RS(rs)
 
-
+			# next iteration:
+			i = i+1
+			if i >= n:
+				doTune = False
 
 ########################################################################################################
 
@@ -1164,13 +1176,8 @@ class rgams_SRS:
 			self.warning('Plotting of peakbuffer trend not possible (no display system available).')
 
 		else:
-		
 			MZ = numpy.unique(self._peakbuffer_mz) # unique list of all mz values
-
 			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
-
-			# plt.figure(self._fig.number)
-			# plt.subplot(2,1,1)
 			n = 0
 			leg = [''] * MZ.shape[0] # initialize empy legend entries
 			t0 = misc.now_UNIX()
@@ -1185,7 +1192,7 @@ class rgams_SRS:
 				val_max = self._peakbuffer_intens[k].max()
 				leg[n] = 'mz=' + str(int(mz)) + ': ' + str(val_min) + ' ... ' + str(val_max)
 				n = n+1
-			
+
 			self._peakbuffer_ax.hold( False )
 			self._peakbuffer_ax.legend( leg , loc=3 )
 
@@ -1193,7 +1200,7 @@ class rgams_SRS:
 			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + self.label() + ') at ' + t0)
 
 			from matplotlib.ticker import FuncFormatter
-			yformatter = FuncFormatter(lambda y, _: '{:.0%}'.format(y))
+			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
 			self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
 			
 			plt.show() # update the plot

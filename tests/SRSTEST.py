@@ -43,11 +43,11 @@
 import time
 from datetime import datetime
 import os
-havedisplay = "DISPLAY" in os.environ
-if havedisplay: # prepare plotting environment
-	import matplotlib
-	matplotlib.use('GTKAgg') # use this for faster plotting
-	import matplotlib.pyplot as plt
+#havedisplay = "DISPLAY" in os.environ
+#if havedisplay: # prepare plotting environment
+#	import matplotlib
+#	matplotlib.use('GTKAgg') # use this for faster plotting
+#	import matplotlib.pyplot as plt
 
 # import ruediPy classes:
 from classes.rgams_SRS		import rgams_SRS
@@ -65,7 +65,7 @@ print 'Data output to ' + DATAFILE.name()
 print 'MS has electron multiplier: ' + MS.has_multiplier()
 print 'MS max m/z range: ' + MS.mz_max()
 
-# change MS configuraton:
+# set/show MS configuraton:
 print 'Ionizer electron energy: ' + MS.get_electron_energy() + ' eV'
 MS.set_detector('F')
 print 'Set ion beam to Faraday detector: ' + MS.get_detector()
@@ -74,11 +74,27 @@ print 'Filament current: ' + MS.get_filament_current() + ' mA'
 #MS.set_electron_energy(60)  <-- uncomment this to change electon energy in ion source
 
 # scan Ar-40 peak:
-print 'Scanning...'
-MS.set_gate_time(0.3) # set gate time for each reading
-mz,intens,unit = MS.scan(38,42,15,0.5,DATAFILE)
-MS.plot_scan (mz,intens,unit)
-print '...done.'
+# print 'Scanning...'
+# MS.set_gate_time(0.3) # set gate time for each reading
+# mz,intens,unit = MS.scan(38,42,15,0.5,DATAFILE)
+# MS.plot_scan (mz,intens,unit)
+# print '...done.'
+
+# warm up instrument
+n = 0.3
+print 'Warming up instrument for ' + str(n) + ' minutes...'
+MS.set_detector('F')
+T0 = time.time() + 60*n # n minutes from now
+while time.time() < T0:
+	peak,unit = MS.peak(28,1,'nofile')
+	MS.plot_peakbuffer()
+
+# tune peak positions:
+print 'Tuning peak positions...'
+# MS.set_RI(-9.7) # set start value
+# MS.set_RS(1070.0) # set start value
+MS.tune_peak_position([4,14,18,28,32,40,44,84,86],[2.4,0.2,0.2,0.025,0.1,0.4,0.1,2.4,2.4],['M','F','F','F','F','F','M','M','M'],n=5,maxdelta_mz = 0.05)
+MS.set_detector('F') # make sure ion beam is on Faraday
 
 # series of sinlge mass measurements ('PEAK' readings):
 print 'Single mass measurements...'
@@ -98,9 +114,9 @@ while 1:
 
 		if k%5 == 0: # update trend plot every 5th iteration
 			MS.plot_peakbuffer() # plot PEAK values in buffer (time trend)
-		
+
 	j = j+1
-		
+
 print '...done.'
 
 # turn off filament:
