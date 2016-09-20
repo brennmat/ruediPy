@@ -103,6 +103,7 @@ class rgams_SRS:
 		self._peakbuffer_mz = numpy.array([])
 		self._peakbuffer_intens = numpy.array([])
 		self._peakbuffer_det = ['x'] * 0 # empty list
+		self._peakbuffer_unit = ['x'] * 0 # empty list
 		self._peakbuffer_max_len = max_buffer_points
 		
 		# set up plotting environment
@@ -116,9 +117,8 @@ class rgams_SRS:
 
 			# set up upper panel for peak history plot:
 			self._peakbuffer_ax = plt.subplot(2,1,1)
-			# self._peakbuffer_ax.set_title("PEAK VALUES",loc="center")
 			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ')',loc="center")
-			plt.xlabel('Time (s)')
+			plt.xlabel('Time')
 			plt.ylabel('Intensity')
 
 			# set up lower panel for scans:
@@ -128,7 +128,7 @@ class rgams_SRS:
 			plt.ylabel('Intensity')
 
 			# get some space in between panels to avoid overlapping labels / titles
-			self._fig.tight_layout(pad=0.5)
+			self._fig.tight_layout(pad=1.5)
 
 			plt.ion() # enables interactive mode
 			# plt.draw()
@@ -569,17 +569,18 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def peakbuffer_add(self,t,mz,intens,det):
+	def peakbuffer_add(self,t,mz,intens,det,unit):
 		"""
-		rgams_SRS.peakbuffer_add(t,mz,intens)
+		rgams_SRS.peakbuffer_add(t,mz,intens,unit)
 		
 		Add data to PEAKS data buffer
 				
 		INPUT:
 		t: epoch time
-		mz: mz values (x-axis)
-		intens: intensity values (y-axis)
+		mz: mz values
+		intens: intensity value
 		det: detector (char/string)
+		unit: unit of intensity value (char/string)
 		
 		OUTPUT:
 		(none)
@@ -589,7 +590,8 @@ class rgams_SRS:
 		self._peakbuffer_mz = numpy.append( self._peakbuffer_mz , mz )
 		self._peakbuffer_intens = numpy.append( self._peakbuffer_intens , intens )
 		self._peakbuffer_det.append( det )
-		
+		self._peakbuffer_unit.append( unit )
+
 		N = self._peakbuffer_max_len
 		
 		if self._peakbuffer_t.shape[0] > N:
@@ -597,9 +599,33 @@ class rgams_SRS:
 			self._peakbuffer_mz 		= self._peakbuffer_mz[-N:]
 			self._peakbuffer_intens	    = self._peakbuffer_intens[-N:]
 			self._peakbuffer_det	    = self._peakbuffer_det[-N:]
+			self._peakbuffer_unit       = self._peakbuffer_unit[-N:]
 
 
 	########################################################################################################
+
+
+        def peakbuffer_clear(self):
+                """
+                rgams_SRS.peakbuffer_clear()
+                
+                Clear data in PEAKS data buffer
+                                
+                INPUT:
+                (none)
+
+                OUTPUT:
+                (none)
+                """
+
+                self._peakbuffer_t          = self._peakbuffer_t[[]]
+                self._peakbuffer_mz         = self._peakbuffer_mz[[]]
+                self._peakbuffer_intens     = self._peakbuffer_intens[[]]
+		self._peakbuffer_det = ['x'] * 0 # empty list
+                self._peakbuffer_unit = ['x'] * 0 # empty list
+
+
+        ########################################################################################################
 
 
 	def peak(self,mz,gate,f):
@@ -669,7 +695,7 @@ class rgams_SRS:
 			f.write_peak('RGA_SRS',self.label(),mz,val,unit,det,gate,t)
 		
 		# add data to peakbuffer
-		self.peakbuffer_add(t,mz,val,det)
+		self.peakbuffer_add(t,mz,val,det,unit)
 
 		return val,unit
 		
@@ -888,9 +914,9 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def tune_peak_position(self,mz,gate,det,n=1,maxdelta_mz=[]):
+	def tune_peak_position(self,mz,gate,det,max_iter=10,max_delta_mz=0.05):
 		'''
-		rgams_SRS.tune_peak_position(mz,gate,det,n=1)
+		rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05)
 
 		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure can be repeated several times.
 
@@ -898,8 +924,8 @@ class rgams_SRS:
 		mz: list of mz values where peaks are scanned
 		gate: list of gate times used in the scans
 		det: list of detectors to be used in the scans ('F' or 'M')
-		n: number of repetitions of the tune procedure (optional, default is n = 1)
-		maxdelta_mz: tolerance of mz offset at mz=0 and mz=128. If the absolute offset is less than maxdelta_z after tuning and n > 1, the tuning procedure is aborted.
+		max_iter (optional): max. number of repetitions of the tune procedure
+		maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offset is less than maxdelta_z after tuning and max_iter > 1, the tuning procedure is stopped.
 
 		OUTPUT:
 		(none)
@@ -924,12 +950,12 @@ class rgams_SRS:
 		### 	plt.ion() # allow interactive plotting
 		### 	peakfig = [ plt.figure() for k in range(0,N) ]
 
-		i = 0
+		ii = 1 # first iteration
 		doTune = True
 		while doTune:
 			RI0 = self.get_RI()
 			RS0 = self.get_RS()
-			print ('\nBefore tuning (cycle ' + str(i+1) + ' of ' + str(n) +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
+			print ('\nBefore tuning (cycle ' + str(ii) +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
 
 	                # prepare lists for delta-m values determined from the various peaks:
         	        delta_m = []
@@ -1015,15 +1041,14 @@ class rgams_SRS:
 			print ('mz-offset at mz = 128: ' + str(delta_m128))
 
 			# use smaller steps if repeating the tuning (to improve convergence/stability):
-			if n > 1:
-				if maxdelta_mz: # check if tuning is within tolerance:
-					if abs(delta_m0) < maxdelta_mz:
-						if abs(delta_m128) < maxdelta_mz:
-							print 'Peak positions are within tolerance (delta-mz = ' + str(maxdelta_mz) + '). Tuning finished.'
-							doTune = False
+			if max_iter > 1:
+				if abs(delta_m0) < max_delta_mz:
+					if abs(delta_m128) < max_delta_mz:
+						print 'Peak positions are within tolerance (delta-mz = ' + str(max_delta_mz) + '). Tuning completed.'
+						doTune = False
 
-				delta_m0 = (0.2 + 1/n**0.5) * delta_m0
-                                delta_m128 = (0.2 + 1/n**0.5) * delta_m128
+				delta_m0 = (0.2 + 1/max_iter**0.5) * delta_m0
+                                delta_m128 = (0.2 + 1/max_iter**0.5) * delta_m128
 
 			ri = RI0 - delta_m0*(RS0/128)
 			rs = RS0 * mz[k]/(mz[k]+delta_m128)
@@ -1031,8 +1056,9 @@ class rgams_SRS:
 			self.set_RS(rs)
 
 			# next iteration:
-			i = i+1
-			if i >= n:
+			ii = ii+1
+			if ii > max_iter:
+				print ('Tuning completed after ' + str(max_iter) + ' iterations.')
 				doTune = False
 
 ########################################################################################################
@@ -1190,19 +1216,22 @@ class rgams_SRS:
 				self._peakbuffer_ax.hold(True)
 				val_min = self._peakbuffer_intens[k].min()
 				val_max = self._peakbuffer_intens[k].max()
-				leg[n] = 'mz=' + str(int(mz)) + ': ' + str(val_min) + ' ... ' + str(val_max)
+				leg[n] = 'mz=' + str(int(mz)) + ': ' + str(val_min) + ' ... ' + str(val_max) + ' ' + self._peakbuffer_unit[k[0]]
 				n = n+1
 
 			self._peakbuffer_ax.hold( False )
-			self._peakbuffer_ax.legend( leg , loc=3 )
+			self._peakbuffer_ax.legend( leg , loc=2 )
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
 			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + self.label() + ') at ' + t0)
+                        self._peakbuffer_ax.set_xlabel('Time (s)')
+                        self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
 
 			from matplotlib.ticker import FuncFormatter
 			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
 			self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
-			
+
+			self._fig.tight_layout(pad=1.5)
 			plt.show() # update the plot
 			plt.pause(0.01) # allow some time to update the plot
 
@@ -1239,10 +1268,10 @@ class rgams_SRS:
 				self._scan_ax.plot( cumsum_mz , cumsum_val , 'r.-' )
 				self._scan_ax.hold(False)
 
-			plt.xlabel('m/z')
-			plt.ylabel('Intensity (' + unit +')')
+                        self._scan_ax.set_xlabel('mz')
+                        self._scan_ax.set_ylabel('Intensity (' + unit +')')
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
-
 			self._scan_ax.set_title('SCAN (' + self.label() + ')' + ' at ' + t0)
+			self._fig.tight_layout(pad=1.5)
 			plt.show() # tell it to update the plot
 			plt.pause(0.01) # allow some time to update the plot
