@@ -923,14 +923,14 @@ class rgams_SRS:
 		'''
 		rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05)
 
-		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure can be repeated several times.
+		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF, which define the peak positions at mz=0 and mz=128). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure is repeated several times.
 
 		INPUT:
 		mz: list of mz values where peaks are scanned
 		gate: list of gate times used in the scans
 		det: list of detectors to be used in the scans ('F' or 'M')
 		max_iter (optional): max. number of repetitions of the tune procedure
-		maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offset is less than maxdelta_z after tuning and max_iter > 1, the tuning procedure is stopped.
+		maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offsets at mz=0 and mz=128 after tuning are less than maxdelta_z after tuning, the tuning procedure is stopped.
 
 		OUTPUT:
 		(none)
