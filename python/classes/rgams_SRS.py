@@ -455,12 +455,17 @@ class rgams_SRS:
 			det = 'F'
 		else:
 			hv = self.param_IO('HV?',1) # send command to serial port
-			hv = float(hv)
-			if hv == 0:
-				det = 'F'
-			else:
-				det = 'M'
-		
+			try:
+				hv = float(hv)
+				if hv == 0:
+					det = 'F'
+				else:
+					det = 'M'
+			except ValueError:
+				det = '?'
+				print "Could not determine electron multiplier high voltage. RGA-MS returned HV = " + hv
+			except:
+				print "Unexpected error. Could not determine electron multiplier HV."
 		return det
 
 	
