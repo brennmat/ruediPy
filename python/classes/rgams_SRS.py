@@ -689,6 +689,9 @@ class rgams_SRS:
 			u = u + self.ser.read()
 			u = u + self.ser.read()
 			
+			while self.ser.inWaiting() > 0:
+				self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
+
 			# parse result:
 			u = struct.unpack('<i',u)[0] # unpack 4-byte data value
 			val = u * 1E-16 # multiply by 1E-16 to convert to Amperes
@@ -766,6 +769,9 @@ class rgams_SRS:
 			u = u + self.ser.read()
 			u = u + self.ser.read()
 			u = u + self.ser.read()
+
+			while self.ser.inWaiting() > 0:
+				self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
 
 			# parse result:
 			u = struct.unpack('<i',u)[0] # unpack 4-byte data value
