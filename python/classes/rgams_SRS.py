@@ -48,6 +48,7 @@ havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
 	import matplotlib
 	matplotlib.use('GTKAgg') # use this for faster plotting
+	# matplotlib.use('Agg') # this does not work with X11 forwarding
 	import matplotlib.pyplot as plt
 
 
@@ -789,7 +790,7 @@ class rgams_SRS:
 
 	def scan(self,low,high,step,gate,f):
 		'''
-		M,Y,unit = rgams_SRS.scan(low,high,step,gate,f,p)
+		M,Y,unit = rgams_SRS.scan(low,high,step,gate,f)
 
 		Analog scan
 
@@ -797,7 +798,7 @@ class rgams_SRS:
 		low: low m/z value
 		high: high m/z value
 		step: scan resolution (number of mass increment steps per amu)
-		   step = integer number --> use given number (high number equals small mass increments between steps)
+		   step = integer number (10...25) --> use given number (high number equals small mass increments between steps)
 		   step = '*' use default value (step = 10)
 		gate: gate time (seconds)
 		f: file object or 'nofile':
@@ -846,11 +847,6 @@ class rgams_SRS:
                         self.param_IO('MF' + str(high),0) # high end mz value
 		self.param_IO('SA' + str(step),0) # number of steps per amu
 
-		# scan configuration correct? (DEBUGGING):
-		#print ( '**** DEBUG TESTING INFO: Scan start at mz = ' + self.param_IO('MI?',1) + ', should be ' + str(low) )
-		#print ( '**** DEBUG TESTING INFO: Scan end at mz = ' + self.param_IO('MF?',1) + ', should be ' + str(high) )
-		#print ( '**** DEBUG TESTING INFO: Scan number of steps per amu = ' + self.param_IO('SA?',1) )
-
 		N = int(self.param_IO('AP?',1)) # number of data points in the scan
 
 		# start the scan:
@@ -898,11 +894,6 @@ class rgams_SRS:
 
 		# get time stamp after scan
 		t2 = misc.now_UNIX()
-
-		# flush the remaining data from the serial port buffer (total pressure measurement):
-		#time.sleep(0.5) # wait a little to get all the data into the buffer
-		#self.ser.flushInput() 	# make sure input is empty
-		#self.ser.flushOutput() 	# make sure output is empty
 
 		# determine scan mz values:
 		low = float(low)
@@ -956,10 +947,6 @@ class rgams_SRS:
 		N = len(mz)
 		if N < 2:
 			error ('Need at least two distinct mz values to tune peak positions!')
-
-		### if self._has_display: # prepare plotting environment and figure
-		### 	plt.ion() # allow interactive plotting
-		### 	peakfig = [ plt.figure() for k in range(0,N) ]
 
 		ii = 1 # first iteration
 		doTune = True

@@ -226,15 +226,31 @@ in the electrometer and in the CDEM's HV power supply.\newline
 \paragraph{Method \texttt{peakbuffer_add}}
 \vspace{1ex}
 \texttt{\newline
-rgams_SRS.peakbuffer_add(t,mz,intens)\newline
+rgams_SRS.peakbuffer_add(t,mz,intens,unit)\newline
 \newline
 Add data to PEAKS data buffer\newline
 \newline
 INPUT:\newline
 t: epoch time\newline
-mz: mz values (x-axis)\newline
-intens: intensity values (y-axis)\newline
+mz: mz values\newline
+intens: intensity value\newline
 det: detector (char/string)\newline
+unit: unit of intensity value (char/string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{peakbuffer_clear}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.peakbuffer_clear()\newline
+\newline
+Clear data in PEAKS data buffer\newline
+\newline
+INPUT:\newline
+(none)\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -260,7 +276,7 @@ OUTPUT:\newline
 \paragraph{Method \texttt{plot_scan}}
 \vspace{1ex}
 \texttt{\newline
-rgams_SRS.plot_scan(mz,intens,unit)\newline
+rgams_SRS.plot_scan(mz,intens,unit,cumsum_mz=[],cumsum_val=[])\newline
 \newline
 Plot scan data\newline
 \newline
@@ -268,6 +284,7 @@ INPUT:\newline
 mz: mz values (x-axis)\newline
 intens: intensity values (y-axis)\newline
 unit: intensity unit (string)\newline
+cumsum_mz,cumsum_val (optional): cumulative sum of peak data (mz and sum values), as used for peak centering\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -277,7 +294,7 @@ OUTPUT:\newline
 \paragraph{Method \texttt{scan}}
 \vspace{1ex}
 \texttt{\newline
-M,Y,unit = rgams_SRS.scan(low,high,step,gate,f,p)\newline
+M,Y,unit = rgams_SRS.scan(low,high,step,gate,f)\newline
 \newline
 Analog scan\newline
 \newline
@@ -285,7 +302,7 @@ INPUT:\newline
 low: low m/z value\newline
 high: high m/z value\newline
 step: scan resolution (number of mass increment steps per amu)\newline
-step = integer number --> use given number (high number equals small mass increments between steps)\newline
+step = integer number (10...25) --> use given number (high number equals small mass increments between steps)\newline
 step = '*' use default value (step = 10)\newline
 gate: gate time (seconds)\newline
 f: file object or 'nofile':\newline
@@ -439,15 +456,16 @@ OUTPUT:\newline
 \paragraph{Method \texttt{tune_peak_position}}
 \vspace{1ex}
 \texttt{\newline
-rgams_SRS.tune_peak_position(mz,gate,det,n=1)\newline
+rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05)\newline
 \newline
-Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure can be repeated several times.\newline
+Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF, which define the peak positions at mz=0 and mz=128). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure is repeated several times.\newline
 \newline
 INPUT:\newline
 mz: list of mz values where peaks are scanned\newline
 gate: list of gate times used in the scans\newline
 det: list of detectors to be used in the scans ('F' or 'M')\newline
-n: number of repetitions of the tune procedure (optional, default is n = 1)\newline
+max_iter (optional): max. number of repetitions of the tune procedure\newline
+maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offsets at mz=0 and mz=128 after tuning are less than maxdelta_z after tuning, the tuning procedure is stopped.\newline
 \newline
 OUTPUT:\newline
 (none)\newline
