@@ -135,7 +135,7 @@ class selectorvalve_VICI:
 			f.write_valve_pos('SELECTORVALVE_VICI',self.label(),val,misc.now_UNIX())
 
 		# give the valve some time to actually do the switch:
-		time.sleep(0.50)
+		time.sleep(0.5)
 
 	########################################################################################################
 	
@@ -181,6 +181,7 @@ class selectorvalve_VICI:
 			while self.ser.inWaiting() > 0: # while there's something in the buffer...
 				ans = ans + self.ser.read() # read each byte
 	    	try:
+			# print ans
 			ans = ans.split('=')[1] # split answer in the form 'Position is  = 1'
 			ans = ans.strip() # strip away whitespace
 		except:
