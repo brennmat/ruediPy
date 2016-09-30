@@ -134,7 +134,9 @@ class selectorvalve_VICI:
 		if not f == 'nofile':
 			f.write_valve_pos('SELECTORVALVE_VICI',self.label(),val,misc.now_UNIX())
 
-	
+		# give the valve some time to actually do the switch:
+		time.sleep(0.50)
+
 	########################################################################################################
 	
 
@@ -178,8 +180,12 @@ class selectorvalve_VICI:
 		if (ans != '-1'):
 			while self.ser.inWaiting() > 0: # while there's something in the buffer...
 				ans = ans + self.ser.read() # read each byte
-	    	ans = ans.split('=')[1] # split answer in the form 'Position is  = 1'
-	    	ans = ans.strip() # strip away whitespace
+	    	try:
+			ans = ans.split('=')[1] # split answer in the form 'Position is  = 1'
+			ans = ans.strip() # strip away whitespace
+		except:
+			self.warning('could not parse response from valve: ans = ' + ans)
+			ans = '?'
 	    	
 	    # check result:
 		if not ans.isdigit():
