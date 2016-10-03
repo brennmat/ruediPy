@@ -277,8 +277,56 @@ class rgams_SRS:
 		ans = self.param_IO('EE?',1)
 		return ans
 
+		########################################################################################################
 	
+
+	def set_multiplier_hv(self,val):
+		'''
+		rgams_SRS.set_multiplier_hv(val)
+		
+		Set electron multiplier (CEM) high voltage.
+		
+		INPUT:
+		val: voltage
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		# check if CEM option is installed:
+		if self.has_multiplier():
+			# send command to serial port:
+			self.param_IO('HV' + str(val),1)
+		else:
+			self.warning ('Cannot set multiplier (CEM) high voltage, because CEM option is not installed.')
+
 	########################################################################################################
+	
+
+	def get_multiplier_hv(self):
+		'''
+		val = rgams_SRS.get_multiplier_hv()
+		
+		Return electron multiplier (CEM) high voltage.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: voltage
+		'''
+		
+		# check if CEM option is installed:
+		if self.has_multiplier():
+			# send command to serial port:
+			ans = self.param_IO('HV?',1)
+		else:
+			self.warning ('Cannot get multiplier (CEM) high voltage, because CEM option is not installed.')
+			ans = ''
+
+		return ans
+
+		########################################################################################################
 	
 
 	def set_filament_current(self,val):
@@ -462,7 +510,7 @@ class rgams_SRS:
 					det = 'F'
 				else:
 					det = 'M'
-			except ValueError:
+			except ValuageeError:
 				det = '?'
 				print "Could not determine electron multiplier high voltage (could not convert string to float). RGA-MS returned HV = " + hv
 			except:

@@ -49,11 +49,22 @@ from classes.rgams_SRS		import rgams_SRS
 from classes.datafile		import datafile
 
 # set up ruediPy objects:
-MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
+# MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
+
+MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2374645-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
 DATAFILE  = datafile ( '~/ruedi_data' )
 
 # set/show MS configuraton:
-print 'MS has electron multiplier: ' + MS.has_multiplier()
+has_multi = MS.has_multiplier();
+if has_multi:
+	print 'MS has electron multiplier installed.'
+	# MS.set_multiplier_hv(1100)
+	MS.set_detector('M')
+	print 'Multiplier high voltage = ' + str(MS.get_multiplier_hv()) + ' V.'
+
+else:
+	print 'MS does not have electron multiplier installed.'
+ 
 print 'MS max m/z range: ' + MS.mz_max()
 print 'Ionizer electron energy: ' + MS.get_electron_energy() + ' eV'
 MS.set_detector('F')
@@ -63,7 +74,7 @@ print 'Filament current: ' + MS.get_filament_current() + ' mA'
 #MS.set_electron_energy(60)  <-- uncomment this to change electon energy in ion source
 
 # warm up instrument
-n = 80
+n = 10
 print 'Warming up instrument for ' + str(n) + ' seconds...'
 MS.set_detector('F')
 peak,unit = MS.peak(28,1,'nofile')
