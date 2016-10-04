@@ -504,7 +504,7 @@ class rgams_SRS:
 		elif det == 'M':
 			if self.has_multiplier():
 				# self.param_IO('HV*',1)  <--- this uses the factory default value (HV = 1400 V)
-				set_multiplier_hv( self.get_multi_default_hv() )
+				set_multiplier_hv( self.get_multiplier_default_hv() )
 			else:
 				self.warning ('RGA has no electron multiplier installed!')
 		else:
