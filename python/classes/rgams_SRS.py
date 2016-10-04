@@ -1022,7 +1022,7 @@ class rgams_SRS:
 		# check for range of input values:
 		N = len(peaks)
 		mmz = [];
-		for i in range(N)
+		for i in range(N):
 			mmz.append(peaks[0][i]
 		if len(list(set(mmz))) < 2:
 			error ('Need at least two distinct mz values to tune peak positions!')
