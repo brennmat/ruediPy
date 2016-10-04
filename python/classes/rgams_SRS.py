@@ -993,16 +993,17 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def tune_peak_position(self,mz,gate,det,max_iter=10,max_delta_mz=0.05):
+	def tune_peak_position(self,peaks,max_iter=10,max_delta_mz=0.05):
 		'''
 		rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05)
 
 		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF, which define the peak positions at mz=0 and mz=128). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure is repeated several times.
 
 		INPUT:
-		mz: list of mz values where peaks are scanned
-		gate: list of gate times used in the scans
-		det: list of detectors to be used in the scans ('F' or 'M')
+		peaks: list of (mz,gate,detector) tuples, where peaks should be scanned and tuned, with:
+			mz = mz value of peak
+			gate: gate time to be used for the scan
+			detector: detector to be used for the scan ('F' or 'M')
 		max_iter (optional): max. number of repetitions of the tune procedure
 		maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offsets at mz=0 and mz=128 after tuning are less than maxdelta_z after tuning, the tuning procedure is stopped.
 
@@ -1019,10 +1020,11 @@ class rgams_SRS:
 		'''
 
 		# check for range of input values:
-		mz = list(set(mz)) # get list of unique mz values
-		mz.sort()
-		N = len(mz)
-		if N < 2:
+		N = len(peaks)
+		mmz = [];
+		for i in range(N)
+			mmz.append(peaks[0][i]
+		if len(list(set(mmz))) < 2:
 			error ('Need at least two distinct mz values to tune peak positions!')
 
 		ii = 1 # first iteration
@@ -1039,9 +1041,12 @@ class rgams_SRS:
 			for k in range(0,N):
 
 				# scan peak at mz[k]:
-				print 'Scanning peak at mz = ' + str(mz[k]) + '...'
-				self.set_detector(det[k])
-				MZ,Y,U = self.scan(mz[k]-1,mz[k]+1,25,gate[k],'nofile')
+				mz   = peak[k][0];
+				gate = peak[k][1];
+				det  = peak[k][2];
+				print 'Scanning peak at mz = ' + str(mz) + '...'
+				self.set_detector(det)
+				MZ,Y,U = self.scan(mz-1,mz+1,25,gate,'nofile')
 
 				# subtract baseline
 				yL = (Y[0]+Y[1])/2
@@ -1091,19 +1096,19 @@ class rgams_SRS:
 					print ('   Could not reliably determine peak center. Ignoring this peak...')
 				else:
 					if abs(m1-m2) > 0.35:
-						print ('   Peak center values determined from peak top and peak median differ by more than 0.35, ignoring peak at mz = ' + str(mz[k]) + '. Consider using a peak at a different mz value for tuning!')
+						print ('   Peak center values determined from peak top and peak median differ by more than 0.35, ignoring peak at mz = ' + str(mz) + '. Consider using a peak at a different mz value for tuning!')
 						delta_m.append(numpy.nan)
 					else:
 						m = (m1+3*m2)/4
 						#m = m2
 						print '   Peak center at mz = ' + ' {:.3f}'.format(m)
-						delta_m.append(mz[k]-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
+						delta_m.append(mz-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
 
 			# print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
 			# fit first-order polynomial function to mz vs. delta_m:
 			kk = ~numpy.isnan(delta_m)
-			nn = len(mz)
-			x = [ mz[i] for i in range(0,nn) if kk[i] ]
+			nn = len(mmz)
+			x = [ mmz[i] for i in range(0,nn) if kk[i] ]
                         y = [ delta_m[i] for i in range(0,nn) if kk[i] ]
 			fit = numpy.polyfit(x,y,1)
 			fit_fn = numpy.poly1d(fit)
@@ -1126,7 +1131,7 @@ class rgams_SRS:
                                 delta_m128 = (0.2 + 1/max_iter**0.5) * delta_m128
 
 			ri = RI0 - delta_m0*(RS0/128)
-			rs = RS0 * mz[k]/(mz[k]+delta_m128)
+			rs = RS0 * mz/(mz+delta_m128)
 			self.set_RI(ri)
 			self.set_RS(rs)
 
