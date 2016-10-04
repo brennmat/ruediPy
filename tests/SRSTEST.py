@@ -41,8 +41,8 @@
 
 # import general purpose Python classes:
 import time
-from datetime import datetime
-import os
+#from datetime import datetime
+#import os
 
 # import ruediPy classes:
 from classes.rgams_SRS		import rgams_SRS
@@ -74,7 +74,7 @@ print 'Filament current: ' + MS.get_filament_current() + ' mA'
 #MS.set_electron_energy(60)  <-- uncomment this to change electon energy in ion source
 
 # warm up instrument
-n = 10
+n = 60
 print 'Warming up instrument for ' + str(n) + ' seconds...'
 MS.set_detector('F')
 peak,unit = MS.peak(28,1,'nofile')
@@ -94,26 +94,29 @@ print 'Tuning peak positions...'
 MS.tune_peak_position( [ (14,0.2,'F') , (18,0.4,'F') , (28,0.2,'F') , (32,0.2,'F') , (40,0.4,'F') , (44,0.5,'F') , (84,2.4,'M') ] , max_iter=10 , max_delta_mz = 0.05 )
 MS.set_detector('F') # make sure ion beam is on Faraday
 
+# conditioning F:
+for k in range(5):
+        peak,unit = MS.peak(28,0.1,'nofile')
+
 # series of sinlge mass measurements ('PEAK' readings):
 print 'Single mass measurements...'
 MS.peakbuffer_clear() # clear peakbuffer (to start with fresh display)
-gate = 0.025
-mz = (28, 32, 40, 44)
+peaks = [ (28,0.5,'F') , (32,0.5,'F') , (40,0.5,'F') , (44,0.5,'F') , (84,2.4,'M') ]
 j = 0
 # while j < 3:
 while 1:
 	DATAFILE.next(typ='SAMPLE',samplename='Test_'+str(j)) # start a new data file, type 'SAMPLE'
 	print 'Data output to ' + DATAFILE.name()
 	k = 0
-	while k < 10: # single peak readings
+	while k < 50: # single peak readings
 		k = k+1
 		print 'Frame ' + str(k) + ':'
-		for m in mz:
-			peak,unit = MS.peak(m,gate,DATAFILE) # get PEAK value
-			print '  mz=' + str(m) + ' peak=' + str(peak) + ' ' + unit # show PEAK value on console
+		for p in peaks:
+			MS.set_detector(p[2])
+			peak,unit = MS.peak(p[0],p[1],DATAFILE) # get PEAK value
+			print '  mz=' + str(p[0]) + ' detector=' + p[2] +' peak=' + str(peak) + ' ' + unit # show PEAK value on console
 
-		if k%5 == 0: # update trend plot every 5th iteration
-			MS.plot_peakbuffer() # plot PEAK values in buffer (time trend)
+		MS.plot_peakbuffer() # plot PEAK values in buffer (time trend)
 
 	j = j+1
 
