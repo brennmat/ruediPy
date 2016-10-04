@@ -61,7 +61,7 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 ):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 ):
 		'''
 		rgams_SRS.__init__( serialport , label='MS' , max_buffer_points = 500 )
 		
@@ -70,6 +70,7 @@ class rgams_SRS:
 		INPUT:
 		serialport: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
 		label (optional): label / name of the RGAMS object (string). Default: label = 'MS'
+		cem_hv (optional): default bias voltage to be used with the electron multiplier (CEM). Default value: cem_hv = 1400 V.
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
 
@@ -98,6 +99,9 @@ class rgams_SRS:
 		sn = self.param_IO('ID?',1)
 		sn = sn.split('.')
 		self._serial_number = sn[1]
+		
+		# cem bias / high voltage:
+		self._cem_hv = cem_hv
 		
 		# data buffer for PEAK values:
 		self._peakbuffer_t = numpy.array([])
@@ -277,14 +281,15 @@ class rgams_SRS:
 		ans = self.param_IO('EE?',1)
 		return ans
 
-		########################################################################################################
+
+	########################################################################################################
 	
 
 	def set_multiplier_hv(self,val):
 		'''
 		rgams_SRS.set_multiplier_hv(val)
 		
-		Set electron multiplier (CEM) high voltage.
+		Set electron multiplier (CEM) high voltage (bias voltage).
 		
 		INPUT:
 		val: voltage
@@ -300,6 +305,7 @@ class rgams_SRS:
 		else:
 			self.warning ('Cannot set multiplier (CEM) high voltage, because CEM option is not installed.')
 
+
 	########################################################################################################
 	
 
@@ -307,7 +313,7 @@ class rgams_SRS:
 		'''
 		val = rgams_SRS.get_multiplier_hv()
 		
-		Return electron multiplier (CEM) high voltage.
+		Return electron multiplier (CEM) high voltage (bias voltage).
 		
 		INPUT:
 		(none)
@@ -325,8 +331,29 @@ class rgams_SRS:
 			ans = ''
 
 		return ans
+		
+		
+	########################################################################################################
+	
 
-		########################################################################################################
+	def get_multiplier_default_hv(self):
+		'''
+		val = rgams_SRS.get_multiplier_default_hv()
+		
+		Return default value to be used for electron multiplier (CEM) high voltage (bias voltage).
+		NOTE: the value returned is NOT the value stored in the memory of the RGA head. This function is just a wrapper that returns the default high voltage value set in the RGA object (e.g., during initialisation of the object).
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: voltage
+		'''
+
+		return self._cem_hv
+
+	
+	########################################################################################################
 	
 
 	def set_filament_current(self,val):
@@ -460,6 +487,7 @@ class rgams_SRS:
 		rgams_SRS.set_detector()
 		
 		Set current detetector used by the MS (direct the ion beam to the Faraday or electron multiplier detector).
+		NOTE: To activate the electron multiplier (CEM), the default high voltage (bias voltage) as returned by self.get_multi_default_hv() is used (this is NOT necessarily the same as the default value stored in the RGA head).
 		
 		INPUT:
 		det: detecor (string):
@@ -475,7 +503,8 @@ class rgams_SRS:
 			self.param_IO('HV0',1)
 		elif det == 'M':
 			if self.has_multiplier():
-				self.param_IO('HV*',1)
+				# self.param_IO('HV*',1)  <--- this uses the factory default value (HV = 1400 V)
+				set_multiplier_hv( self.get_multi_default_hv() )
 			else:
 				self.warning ('RGA has no electron multiplier installed!')
 		else:
