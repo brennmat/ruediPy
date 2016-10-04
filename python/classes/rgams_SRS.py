@@ -38,6 +38,7 @@
 import serial
 import time
 import struct
+import math
 import numpy
 import os
 import sys
@@ -872,8 +873,8 @@ class rgams_SRS:
 		Analog scan
 
 		INPUT:
-		low: low m/z value
-		high: high m/z value
+		low: low m/z value (integer or decimal)
+		high: high m/z value (integer or decimal)
 		step: scan resolution (number of mass increment steps per amu)
 		   step = integer number (10...25) --> use given number (high number equals small mass increments between steps)
 		   step = '*' use default value (step = 10)
@@ -889,9 +890,11 @@ class rgams_SRS:
 		'''
 
 		# check for range of input values:
-		low = int(low)
-		high = int(high)
-		step = int(step)
+		llow  = low
+		hhigh = high
+		low   = math.floor(low)
+		high  = math.ceil(high)
+		step  = int(step)
 		if step < 10:
 			self.warning ('Scan step must be 10 or higher! Using step = 10...')
 			step = 10
@@ -972,14 +975,18 @@ class rgams_SRS:
 		# get time stamp after scan
 		t2 = misc.now_UNIX()
 
+		# determine "mean" timestamp
+		t = (t1 + t2) / 2.0
+
 		# determine scan mz values:
 		low = float(low)
 		high = float(high)
 		M = [low + x*(high-low)/N for x in range(N)]
 		unit = 'A'
 
-		# determine "mean" timestamp
-		t = (t1 + t2) / 2.0
+		# discard data that are out of the desired mz range:
+		Y = [ Y[i] for i in range(len(M)) if (M[i] >= llow) & (M[i] <= hhigh) ]
+		M = [ m for m in M if (m >= llow) & (m <= hhigh) ]
 
 		# write to data file:
 		if not ( f == 'nofile' ):
@@ -1000,10 +1007,12 @@ class rgams_SRS:
 		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF, which define the peak positions at mz=0 and mz=128). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure is repeated several times.
 
 		INPUT:
-		peaks: list of (mz,gate,detector) tuples, where peaks should be scanned and tuned, with:
-			mz = mz value of peak
+		peaks: list of (mz,width,gate,detector) tuples, where peaks should be scanned and tuned
+			mz = mz value of peak (center of the scan)
+			width = width of the peak (relative to center mz value)
 			gate: gate time to be used for the scan
 			detector: detector to be used for the scan ('F' or 'M')
+			
 		max_iter (optional): max. number of repetitions of the tune procedure
 		maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offsets at mz=0 and mz=128 after tuning are less than maxdelta_z after tuning, the tuning procedure is stopped.
 
@@ -1042,12 +1051,14 @@ class rgams_SRS:
 
 				# scan peak at mz[k]:
 				mz   = peaks[k][0];
-				gate = peaks[k][1];
-				det  = peaks[k][2];
+				w    = peaks[k][1];
+				gate = peaks[k][2];
+				det  = peaks[k][3];			
 				print 'Scanning peak at mz = ' + str(mz) + '...'
 				self.set_detector(det)
-				MZ,Y,U = self.scan(mz-1,mz+1,25,gate,'nofile')
 
+				MZ,Y,U = self.scan(mz-w,mz+w,25,gate,'nofile')
+				
 				# subtract baseline
 				yL = (Y[0]+Y[1])/2
 				yR = (Y[-1]+Y[-2])/2
@@ -1055,7 +1066,8 @@ class rgams_SRS:
 				mR = (MZ[-1]+MZ[-2])/2
 			        fit = numpy.polyfit([mL,mR],[yL,yR],1)
 				fit_fn = numpy.poly1d(fit)
-				Y = Y - fit_fn(MZ)
+				Y = Y - fit_fn(MZ) # subtract baseline (straight trend line)
+				Y = Y - min(Y) # force min(Y) to zero (to avoid bad cum-sum data)
 
 				# analyse cumulative sum of peak (median center of peak):
 				CY = numpy.cumsum(Y)
@@ -1086,9 +1098,9 @@ class rgams_SRS:
 					m1 = numpy.nan
 
 				# use values close to peak maximum to find peak center:
-				m2 = [ MZ[j] for j,i in enumerate(Y) if i>=0.75*max(Y)] # mz values of YY values >= 0.75*max(YY)
+				m2 = [ MZ[j] for j,i in enumerate(Y) if i>=0.80*max(Y)] # mz values of YY values >= 0.75*max(YY)
 				m2 = sum(m2) / len(m2)
-				print '   Center of mass of values > 75% of peak-max: mz = ' + ' {:.3f}'.format(m2)
+				print '   Center of mass of values > 80% of peak-max: mz = ' + ' {:.3f}'.format(m2)
 
 				# mean of m1 and m2:
 				if numpy.isnan(m1) or numpy.isnan(m2):

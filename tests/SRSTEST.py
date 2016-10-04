@@ -50,8 +50,8 @@ from classes.datafile		import datafile
 
 # set up ruediPy objects:
 # MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
-MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2304868-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
-#MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2374645-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
+# MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2304868-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
+MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2374645-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
 DATAFILE  = datafile ( '~/ruedi_data' )
 
 # set/show MS configuraton:
@@ -74,7 +74,7 @@ print 'Filament current: ' + MS.get_filament_current() + ' mA'
 #MS.set_electron_energy(60)  <-- uncomment this to change electon energy in ion source
 
 # warm up instrument
-n = 60
+n = 0
 print 'Warming up instrument for ' + str(n) + ' seconds...'
 MS.set_detector('F')
 peak,unit = MS.peak(28,1,'nofile')
@@ -89,9 +89,7 @@ while time.time() < T0:
 print 'Tuning peak positions...'
 ## MS.set_RI(-9.7) # set start value
 ## MS.set_RS(1070.0) # set start value
-# MS.tune_peak_position([4,14,18,28,32,40,44,84],[2.4,0.2,0.2,0.025,0.1,0.4,0.1,2.4],['M','F','F','F','F','F','F','M'],max_iter=5,max_delta_mz = 0.02)
-# MS.tune_peak_position([14,18,28,32,40,44],[0.2,0.2,0.025,0.1,0.4,0.1],['F','F','F','F','F','F'],max_iter=5,max_delta_mz = 0.02)
-MS.tune_peak_position( [ (14,0.2,'F') , (18,0.4,'F') , (28,0.2,'F') , (32,0.2,'F') , (40,0.4,'F') , (44,0.5,'F') , (84,2.4,'M') ] , max_iter=10 , max_delta_mz = 0.05 )
+MS.tune_peak_position( [ (14,1,0.2,'F') , (18,1,0.4,'F') , (28,1,0.2,'F') , (32,1,0.2,'F') , (40,1,0.4,'F') , (44,1,0.5,'F') , (84,0.65,2.4,'M') ] , max_iter=10 , max_delta_mz = 0.05 )
 MS.set_detector('F') # make sure ion beam is on Faraday
 
 # conditioning F:
