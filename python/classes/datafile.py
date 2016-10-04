@@ -210,18 +210,17 @@ class datafile:
 		
 	def next(self,typ='',samplename='',std_species='',std_conc='',std_mz=''):
 		"""
-		datafile.next(,typ='',samplename='',std_species='',std_conc='',std_mz='')
+		datafile.next(,typ='MISC',samplename='',std_species='',std_conc='',std_mz='')
 		
 		Close then current data file (if it's still open) and start a new file.
 		
 		INPUT:
-		typ (optional): analysis type (string, default: typ = ''). The analysis type is written to the data file, and is appended to the file name. typ can be one of the following analysis types:
+		typ (optional): analysis type (string, default: typ = 'MISC'). The analysis type is written to the data file, and is appended to the file name. typ can be one of the following analysis types:
 			typ = 'SAMPLE' (for sample analyses)
-			typ = 'STANDARD' (for standard / calibration gas analyses)
+			typ = 'STANDARD' (for standard / calibration analyses)
 			typ = 'BLANK' (for blank analyses)
-			typ = 'UNKNOWN' (if analysis type is unknown)
-			typ = '' (if analysis type is unknown; nothing is added to the file name)
-		samplename (optional, only used if typ='SAMPLE'): description, name, or ID of sample
+			typ = 'MISC' (for miscellaneous analysis types, useful for testing, maintenance, or similar purposes)
+		samplename (optional, only used if typ='SAMPLE'): description, name, or ID of sample (string)
 		
 		OUTPUT:
 		(none)
