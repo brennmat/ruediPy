@@ -1023,7 +1023,7 @@ class rgams_SRS:
 		N = len(peaks)
 		mmz = [];
 		for i in range(N):
-			mmz.append(peaks[0][i]
+			mmz.append(peaks[i][0])
 		if len(list(set(mmz))) < 2:
 			error ('Need at least two distinct mz values to tune peak positions!')
 
@@ -1041,9 +1041,9 @@ class rgams_SRS:
 			for k in range(0,N):
 
 				# scan peak at mz[k]:
-				mz   = peak[k][0];
-				gate = peak[k][1];
-				det  = peak[k][2];
+				mz   = peaks[k][0];
+				gate = peaks[k][1];
+				det  = peaks[k][2];
 				print 'Scanning peak at mz = ' + str(mz) + '...'
 				self.set_detector(det)
 				MZ,Y,U = self.scan(mz-1,mz+1,25,gate,'nofile')
