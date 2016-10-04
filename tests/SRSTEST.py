@@ -89,7 +89,8 @@ while time.time() < T0:
 print 'Tuning peak positions...'
 ## MS.set_RI(-9.7) # set start value
 ## MS.set_RS(1070.0) # set start value
-MS.tune_peak_position([4,14,18,28,32,40,44,84],[2.4,0.2,0.2,0.025,0.1,0.4,0.1,2.4],['M','F','F','F','F','F','F','M'],max_iter=5,max_delta_mz = 0.02)
+# MS.tune_peak_position([4,14,18,28,32,40,44,84],[2.4,0.2,0.2,0.025,0.1,0.4,0.1,2.4],['M','F','F','F','F','F','F','M'],max_iter=5,max_delta_mz = 0.02)
+MS.tune_peak_position([14,18,28,32,40,44],[0.2,0.2,0.025,0.1,0.4,0.1],['F','F','F','F','F','F'],max_iter=5,max_delta_mz = 0.02)
 MS.set_detector('F') # make sure ion beam is on Faraday
 
 # series of sinlge mass measurements ('PEAK' readings):
