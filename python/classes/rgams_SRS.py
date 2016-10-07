@@ -48,8 +48,13 @@ from classes.misc	import misc
 havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
 	import matplotlib
+	
+	# suppress mplDeprecation warning:
+	import warnings
+	import matplotlib.cbook
+	warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
+	
 	matplotlib.use('GTKAgg') # use this for faster plotting
-	# matplotlib.use('Agg') # this does not work with X11 forwarding
 	import matplotlib.pyplot as plt
 
 
@@ -1298,22 +1303,26 @@ class rgams_SRS:
 			MZ = numpy.unique(self._peakbuffer_mz) # unique list of all mz values
 			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
 			n = 0
-			leg = [''] * MZ.shape[0] # initialize empy legend entries
-			t0 = misc.now_UNIX()
-			####  plt.show(block=False)  <--- NEEDED? 
+			leg = []
+			t0 = misc.now_UNIX()			
+			N = len(self._peakbuffer_mz)
 			for mz in MZ:
-				k = numpy.where( self._peakbuffer_mz == mz )[0]
-				col = colors[n%7]
-				intens0 = self._peakbuffer_intens[k[0]]
-				self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + 'o-' )
-				self._peakbuffer_ax.hold(True)
-				val_min = self._peakbuffer_intens[k].min()
-				val_max = self._peakbuffer_intens[k].max()
-				leg[n] = 'mz=' + str(int(mz)) + ': ' + str(val_min) + ' ... ' + str(val_max) + ' ' + self._peakbuffer_unit[k[0]]
-				n = n+1
+				for det in [ 'F' , 'M' ]:
+					k = [ i for i in range(N) if ((self._peakbuffer_mz[i] == mz) & (self._peakbuffer_det[i] == det)) ] # index to data with current mz / detector pair
+					if len(k) > 0: # if k is not empty
+						col = colors[n%7]
+						intens0 = self._peakbuffer_intens[k[0]]
+						self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + 'o-' )
+						self._peakbuffer_ax.hold(True)
+						val_min = self._peakbuffer_intens[k].min()
+						val_max = self._peakbuffer_intens[k].max()
+						min = "{:.2e}".format(val_min)
+						max = "{:.2e}".format(val_max)
+						leg.append( 'mz=' + str(int(mz)) + ' det=' + det + ': ' + min + ' ... ' + max + ' ' + self._peakbuffer_unit[k[0]] )
+						n = n+1
 
 			self._peakbuffer_ax.hold( False )
-			self._peakbuffer_ax.legend( leg , loc=2 )
+			self._peakbuffer_ax.legend( leg , loc=2 , prop={'size':8})
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
 			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + self.label() + ') at ' + t0)
@@ -1368,3 +1377,35 @@ class rgams_SRS:
 			self._fig.tight_layout(pad=1.5)
 			plt.show() # tell it to update the plot
 			plt.pause(0.01) # allow some time to update the plot
+			
+			
+	########################################################################################################
+
+
+	def print_status(self):
+		'''
+		rgams_SRS.print_status()
+
+		Print status of the RGA head.
+
+		INPUT:
+		(none)
+
+		OUTPUT:
+		(none)
+		'''
+
+		print 'SRS RGA status:'
+		print '   MS max m/z range: ' + self.mz_max()
+		print '   Ionizer electron energy: ' + self.get_electron_energy() + ' eV'
+		print '   Filament current: ' + self.get_filament_current() + ' mA'
+		if self.has_multiplier():
+			print '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)'
+			print '   Currently active detector: ' + self.get_detector()
+		else:
+			print '   MS does not have electron multiplier installed (Faraday only).'
+		print '   Current mz-tuning:'
+		print '      RI (intercept) = ' + str(self.get_RI())
+		print '      RS (slope)     = ' + str(self.get_RS())
+ 
+			

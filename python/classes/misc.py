@@ -35,6 +35,7 @@
 # Copyright 2016, Matthias Brennwald (brennmat@gmail.com) and Yama Tomonaga
 
 import time
+import sys
 
 class misc:
 	"""
@@ -102,3 +103,25 @@ class misc:
 		M = '***** WARNING from ' + unit + ' at ' + misc.now_string() + ': ' + msg
 		print (M)
 		
+
+	########################################################################################################
+	
+
+	@staticmethod
+	def wait_for_enter(msg='Press ENTER to continue.'):
+		'''
+		misc.wait_for_enter(msg='Press ENTER to continue.')
+		
+		Print a message and wait until the user presses the ENTER key.
+		
+		INPUT:
+		msg (optional): message
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		if sys.version_info >= (3,0): # Python 3.0 or newer
+			input( msg )
+		else:
+			raw_input( msg )
