@@ -244,7 +244,7 @@ class rgams_SRS:
 			
 		else: # check if serial buffer is empty (will be useful to catch errors):
 			if self.ser.inWaiting() > 0:
-				self.warning('**** DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd + ' ans = ' + ans)
+				self.warning('**** DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd +'. First byte in buffer: ' + self.ser.read() )
 			
 	
 	########################################################################################################
@@ -1137,23 +1137,23 @@ class rgams_SRS:
 			print ('mz-offset at mz = 0: ' + str(delta_m0))
 			print ('mz-offset at mz = 128: ' + str(delta_m128))
 
-			# use smaller steps if repeating the tuning (to improve convergence/stability):
-			if max_iter > 1:
-				if abs(delta_m0) < max_delta_mz:
-					if abs(delta_m128) < max_delta_mz:
-						print 'Peak positions are within tolerance (delta-mz = ' + str(max_delta_mz) + '). Tuning completed.'
-						doTune = False
-
-				delta_m0 = (0.2 + 1/max_iter**0.5) * delta_m0
-                                delta_m128 = (0.2 + 1/max_iter**0.5) * delta_m128
-
-			ri = RI0 - delta_m0*(RS0/128)
-			rs = RS0 * mz/(mz+delta_m128)
-			self.set_RI(ri)
-			self.set_RS(rs)
-
-			# next iteration:
+			if abs(delta_m0) < max_delta_mz:
+			   	if abs(delta_m128) < max_delta_mz:
+			   		print 'Peak positions are within tolerance (delta-mz = ' + str(max_delta_mz) + '). Tuning completed.'
+			   		doTune = False
+			
+			# determine new values of RI and RS if tuning is yet within tolerance:
 			if doTune:
+				ri = RI0 - delta_m0*(RS0/128)
+				rs = RS0 * mz/(mz+delta_m128)
+				# if max_iter > 1: # use smaller steps if repeating the tuning (to improve convergence/stability):
+				# 	delta_m0 = (0.2 + 1/max_iter**0.5) * delta_m0
+				# 	delta_m128 = (0.2 + 1/max_iter**0.5) * delta_m128
+
+				self.set_RI(ri)
+				self.set_RS(rs)
+				
+				# next iteration:
 				ii = ii+1
 				if ii > max_iter:
 					print ('Tuning completed after ' + str(max_iter) + ' iterations.')
@@ -1325,7 +1325,7 @@ class rgams_SRS:
 			self._peakbuffer_ax.legend( leg , loc=2 , prop={'size':8})
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + self.label() + ') at ' + t0)
+			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ') at ' + t0)
                         self._peakbuffer_ax.set_xlabel('Time (s)')
                         self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
 
@@ -1405,7 +1405,7 @@ class rgams_SRS:
 		else:
 			print '   MS does not have electron multiplier installed (Faraday only).'
 		print '   Current mz-tuning:'
-		print '      RI (intercept) = ' + str(self.get_RI())
-		print '      RS (slope)     = ' + str(self.get_RS())
+		print '      RI (RF output at 0 amu)   = ' + str(self.get_RI()) + ' V'
+		print '      RS (RF output at 128 amu) = ' + str(self.get_RS()) + ' V'
  
 			
