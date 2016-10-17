@@ -48,7 +48,7 @@ from classes.misc	import misc
 havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
 	import matplotlib
-	
+	matplotlib.rcParams['legend.numpoints'] = 1
 	# suppress mplDeprecation warning:
 	import warnings
 	import matplotlib.cbook
@@ -1301,7 +1301,8 @@ class rgams_SRS:
 
 		else:
 			MZ = numpy.unique(self._peakbuffer_mz) # unique list of all mz values
-			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k')
+			COLORS = [(4,'c'),(15,'g'),(28,'k'),(32,'r'),(40,'y'),(44,'b'),(84,'m')] # fixed colors for the more common mz values
+			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k') # some colors for use with all other mz values
 			n = 0
 			leg = []
 			t0 = misc.now_UNIX()			
@@ -1310,9 +1311,20 @@ class rgams_SRS:
 				for det in [ 'F' , 'M' ]:
 					k = [ i for i in range(N) if ((self._peakbuffer_mz[i] == mz) & (self._peakbuffer_det[i] == det)) ] # index to data with current mz / detector pair
 					if len(k) > 0: # if k is not empty
-						col = colors[n%7]
+						# col = colors[n%7]
 						intens0 = self._peakbuffer_intens[k[0]]
-						self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + 'o-' )
+						col = [c for c in COLORS if c[0] == mz]
+						if not col:
+							col = colors[n%7]
+						else:
+							col = col[0][1]
+						if det == 'F':
+							style = 'o-'
+						elif det == 'M':
+							style = 's-'
+						else:
+							style = 'x-'
+						self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + style , markersize = 10 )
 						self._peakbuffer_ax.hold(True)
 						val_min = self._peakbuffer_intens[k].min()
 						val_max = self._peakbuffer_intens[k].max()
@@ -1408,4 +1420,66 @@ class rgams_SRS:
 		print '      RI (RF output at 0 amu)   = ' + str(self.get_RI()) + ' V'
 		print '      RS (RF output at 128 amu) = ' + str(self.get_RS()) + ' V'
  
-			
+
+
+####################################################################################################
+
+
+
+	def peak_zero_loop (self,mz,detector,gate,ND,NC,datafile):
+		'''
+		peak_zero_loop (mz,detector,gate,ND,NC,datafile)
+		
+		Cycle PEAKS and ZERO readings given mz values.
+		
+		INPUT:
+		mz: list of tuples with peak m/z value (for PEAK) and delta-mz (for ZERO). If delta-mz == 0, no ZERO value is read.
+		detector: detector string ('F' or 'M')
+		gate: integration time
+		ND: number of data cycles recorded to the current data file
+		NC: number of cycles used for conditioning of the detector and electronics before recording the data (not written to datafile)
+		datafile: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
+
+		OUTPUT:
+		(none)
+	'''
+
+
+		def pz_cycle (m,g,f):
+			for i in range(len(m)):
+				self.peak(m[i][0],g,f) # read PEAK value
+				if not m[i][1] == 0:
+					self.zero(m[i][0],m[i][1],g,f) # read ZERO value
+			self.plot_peakbuffer()
+
+
+		# prepare:
+		self.set_detector(detector)
+		bs  = '\b' * 1000            # The backspace
+	
+		# conditioning detector and electronics:
+		if NC > 0:
+			self.peakbuffer_clear() # clear peakbuffer
+			# print 'Conditioning ' + detector + ' detector (' + str(NC) + ' cycles)...'
+			for i in range(NC):
+				if i > 0:
+					print bs,
+				print '\bConditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...',
+				sys.stdout.flush()
+				pz_cycle (mz,gate,'nofile')
+			print 'done.'
+
+		# reading data values:
+		if ND > 0:
+			self.peakbuffer_clear() # clear peakbuffer
+			# print 'Reading data using ' + detector + ' detector (' + str(ND) + ' cycles)...'
+			for i in range(ND):
+				if i > 0:
+					print bs,
+				print '\bReading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...',
+				sys.stdout.flush()
+				pz_cycle (mz,gate,datafile)
+			print 'done.'
+
+
+####################################################################################################
