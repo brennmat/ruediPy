@@ -93,6 +93,7 @@ class rgams_SRS:
 			bytesize = serial.EIGHTBITS,
 			timeout  = 10.0
 		)
+
 		ser.flushInput() 	# make sure input is empty
 		ser.flushOutput() 	# make sure output is empty
 		
@@ -1144,11 +1145,13 @@ class rgams_SRS:
 			
 			# determine new values of RI and RS if tuning is yet within tolerance:
 			if doTune:
-				ri = RI0 - delta_m0*(RS0/128)
-				rs = RS0 * mz/(mz+delta_m128)
 				# if max_iter > 1: # use smaller steps if repeating the tuning (to improve convergence/stability):
 				# 	delta_m0 = (0.2 + 1/max_iter**0.5) * delta_m0
 				# 	delta_m128 = (0.2 + 1/max_iter**0.5) * delta_m128
+				delta_m0   = (0.5 + 0.5/max_iter**0.5) * delta_m0
+				delta_m128 = (0.5 + 0.5/max_iter**0.5) * delta_m128
+				ri = RI0 - delta_m0*(RS0/128)
+				rs = RS0 * mz/(mz+delta_m128)
 
 				self.set_RI(ri)
 				self.set_RS(rs)
