@@ -1170,10 +1170,10 @@ class rgams_SRS:
                 '''
                 rgams_SRS.set_RI(x)
 
-                Set RI parameter value (peak-position tuning at low mz range)
+                Set RI parameter value (peak-position tuning at low mz range / RF voltage output at 0 amu, in mV)
 
                 INPUT:
-                x: RI voltage
+                x: RI voltage (mV)
 
                 OUTPUT:
                 (none)
@@ -1202,10 +1202,10 @@ class rgams_SRS:
                 '''
                 rgams_SRS.set_RS(x)
 
-                Set RS parameter value (peak-position tuning at high mz range)
+                Set RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)
 
                 INPUT:
-                x: RS value
+                x: RS voltage (mV)
 
                 OUTPUT:
                 (none)
@@ -1232,13 +1232,13 @@ class rgams_SRS:
                 '''
                 x = rgams_SRS.get_RI(x)
 
-                Get current RI parameter value (peak-position tuning at low mz range)
+                Get current RI parameter value (peak-position tuning at low mz range / RF voltage output at 0 amu, in mV).
 
                 INPUT:
 		(none)
 
 		OUTPUT:
-                x: RI value
+                x: RI voltage (in mV)
 
                 NOTE:
                 See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
@@ -1261,13 +1261,13 @@ class rgams_SRS:
                 '''
                 x = rgams_SRS.get_RS(x)
 
-                Get current RS parameter value (peak-position tuning at high mz range)
+                Get current RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)
 
                 INPUT:
                 (none)
 
                 OUTPUT:
-                x: RS value
+                x: RS voltage (in mV)
 
                 NOTE:
                 See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
@@ -1283,6 +1283,65 @@ class rgams_SRS:
 
 
 ########################################################################################################
+
+
+
+        def get_DI(self):
+                '''
+                x = rgams_SRS.get_DI(x)
+
+                Get current DI parameter value (peak-width tuning at low mz range)
+
+                INPUT:
+		(none)
+
+		OUTPUT:
+                x: DI value (bit units)
+
+                NOTE:
+                See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+                '''
+
+                x = float(self.param_IO('DI?',1))
+
+                if ( x < 0 ) or ( x > 255 ) :
+                        error ('Could not determine current DI setting, or DI value returned was out of bounds (0...255)')
+
+		return x
+
+
+
+########################################################################################################
+
+
+
+        def get_DS(self):
+                '''
+                x = rgams_SRS.get_DS(x)
+
+                Get current DS parameter value (peak-width tuning at high mz range)
+
+                INPUT:
+		(none)
+
+		OUTPUT:
+                x: DS value (bit/amu units)
+
+                NOTE:
+                See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+                '''
+
+                x = float(self.param_IO('DS?',1))
+
+                if ( x < -2.55 ) or ( x > 2.55 ) :
+                        error ('Could not determine current DS setting, or DS value returned was out of bounds (-2.55...2.55)')
+
+		return x
+
+
+
+########################################################################################################
+
 
 
 	def plot_peakbuffer(self):
@@ -1420,8 +1479,10 @@ class rgams_SRS:
 		else:
 			print '   MS does not have electron multiplier installed (Faraday only).'
 		print '   Current mz-tuning:'
-		print '      RI (RF output at 0 amu)   = ' + str(self.get_RI()) + ' V'
-		print '      RS (RF output at 128 amu) = ' + str(self.get_RS()) + ' V'
+		print '      RI = ' + str(self.get_RI()) + ' mV (RF output at 0 amu)'
+		print '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu)'
+		print '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at 0 amu)'
+		print '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter high mz)'
  
 
 
