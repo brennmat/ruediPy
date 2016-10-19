@@ -126,6 +126,10 @@ class rgams_SRS:
 			# w, h = plt.figaspect(0.9)
 			self._fig = plt.figure(figsize=(fig_w,fig_h))
 			# f.suptitle('SRS RGA DATA')
+			t = 'SRS RGA'
+			if self._label:
+				t = t + ' (' + self._label + ')'
+			self._fig.canvas.set_window_title(t)
 
 			# set up upper panel for peak history plot:
 			self._peakbuffer_ax = plt.subplot(2,1,1)

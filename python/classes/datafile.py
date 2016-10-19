@@ -283,7 +283,7 @@ class datafile:
 		# write standard gas information:
 	   	if typ == 'STANDARD':
 	   		if std_species == '':
-	   			self.warning('Standard gas information not given!')
+	   			self.warning('Standard gas information missing!')
 	   		else:
 	   			for i in range(0,len(std_species)):
 					self.write_standard_conc(std_species[i],std_conc[i],std_mz[i])
