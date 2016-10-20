@@ -16,7 +16,7 @@ function X = rP_read_datafile (file)
 % file: file name. Either the full path to the file must be specified or the file name only. If only the filename is given, then the first file in the search path matching this file name is used. If file contains a wildcard, all files matching the pattern are loaded.
 % 
 % OUPUT:
-% X: struct object with data from file. Stuct fields correspond to OBJECT and TYPE keys found in the data file.
+% X: struct object with data from file (or cell array of data objects if multiple files are processed). Stuct fields correspond to OBJECT and TYPE keys found in the data file.
 % 
 % EXAMPLE 1 (read datafile ~/ruedi_data/2016-03-30_13-27-02.txt, where the RGAMS object was called 'RGA-MS' and the SELECTORVALVE object was called 'INLETSELECTVALVE'):
 % DAT = rP_read_datafile('~/ruedi_data/2016-03-30_13-27-02.txt',{'RGA-MS' 'SRSRGA' ; 'INLETSELECTVALVE' 'SELECTORVALVE'})
@@ -83,6 +83,9 @@ else % read file line by line:
 	disp (sprintf('rP_read_datafile: reading file %s...',file)); fflush (stdout);
 	t = [];	OBJ = LABEL = TYPE = DATA = {};
 	line = fgetl (fid); k = 1;
+	
+	tic()
+	
 	while line != -1
 		% parse line (format: "TIMESTAMP OBJECT-KEY TYPE-KEY: ...DATA...")
 		l = strsplit (line,': '); % split time / data keys from data part
@@ -111,15 +114,21 @@ else % read file line by line:
 		line = fgetl (fid); k = k + 1;
 	end % while line != -1
 	
+	
 	% close the file after reading it:
 	ans = fclose (fid);
 	if ans == -1
 		error (sprintf('ruediPy_read_datafile: could not close file %s',file))
 	end % ans = fclose(...)
+
+	u = toc();
+	disp (sprintf('   Reading file line by line took %f seconds.',u))
 	
 	
 	% parse file data into struct object, parse data for each object type
 	X.file = file;
+	
+	tic();
 	
 	O  = unique (OBJ);
 	NO = length (O); % number of object types in the data file
@@ -168,6 +177,10 @@ else % read file line by line:
 			end % switch
 		end % for k = ...			
 	end % for i = ...
+
+	u = toc();
+	disp (sprintf('   Parsing file line by line took %f seconds.',u))
+
 end % if / else
 end % function
 
@@ -222,9 +235,27 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					
 				end % for k = ...
 
+			case 'SAMPLENAME'
+				for k = 1:length(TT)
+					
+					% timestamp:
+					p.epochtime = tt(k);
+					
+					% sampletype text:
+					p.name = strtrim (DD{k}); % remove leading and trailing whitespace
+
+					% append to SAMPLENAMEs (although there should be only one):
+					if k == 1 % first iteration
+						X.SAMPLENAME = p;
+					else
+						X.SAMPLENAME = [ X.SAMPLENAME p ];
+					end
+					
+				end % for k = ...
+
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			otherwise
-				warning (sprintf('rP_read_datafile: type = %s unknown for DATAFILE object, skipping...',T{i}))
+				warning (sprintf('rP_read_datafile: type = %s unknown for DATAFILE object, skipping this entry...',T{i}))
 
 		end % switch
 	end % for i = ...

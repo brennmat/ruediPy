@@ -1,18 +1,18 @@
-function X = rP_digest_step (data,MS_name,opt)
+function X = rP_digest_step (RAW,MS_name,opt)
 
-% function X = rP_digest_step (data,MS_name,opt)
+% function X = rP_digest_step (RAW,MS_name,opt)
 % 
-% Load raw data and process ("digest") PEAK, ZERO, etc. data to obatin mean peak heights. This assumes that each datafile corresponds to a single "step" of analysis (i.e., a block of PEAK/ZERO readings corresponding to a given sample, calibration, or blank analyisis. Results can be printed on the terminal and plotted on screen.
+% Load raw data and process ("digest") PEAK, ZERO, etc. data to obatin mean peak heights. This assumes that each datafile corresponds to a single "step" of analysis (i.e., a block of PEAK/ZERO readings corresponding to a given sample, calibration, or blank analyisis). Results can be printed on the terminal and plotted on screen.q
 % 
 % INPUT:
-% data: raw data structure or name of data file (see also rP_read_datafile)
+% RAW: raw data struct (see also OUTPUT of rP_read_datafile)
 % MS_name: name / label of mass spectrometer for which data should be digested (string)
 % opt (optional): string or cellstring with keyword(s) to control various behaviours (use defauls if opt is empty). Multiple keywords can be combined in a cellstring.
 %	opt = 'showplot' --> show plot(s) of the data (default: no plots are shown)
 %	opt = 'printsummary' --> print results to STDOUT (default: don't print anything)
 %	opt = 'userwait' --> same as 'printsummary', but wait for user to press a key after printing the results
 % 
-% OUPUT:
+% OUTPUT:
 % X: struct object with "digested" data from file:
 %	X.type: analysis type (string; S, C, B, or X)
 %	X.mz_det: mz/detector combination of the digested PEAK-ZERO data (cell string)
@@ -57,6 +57,10 @@ function X = rP_digest_step (data,MS_name,opt)
 % 
 % Copyright 2016, Matthias Brennwald (brennmat@gmail.com)
 
+if length(RAW) > 1
+	error ('rP_digest_step: cannot process an array of multiple steps! Please try again with a single step struct...')
+end
+
 % init empty data containers for digested data:
 X.type = '?';
 X.mz_det = {};
@@ -91,8 +95,8 @@ MS_name = strrep (MS_name,'-','_');
 
 figr = 1;
 
-% load raw data:
-RAW = rP_read_datafile (data);	% complete data from file
+
+% get data corresponding to MS_name:
 if isfield (RAW,MS_name)
 	MS  = getfield (RAW,MS_name);	% MS data
 else
@@ -194,14 +198,14 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 			X.mean_time        = [ X.mean_time ; mean(tp) ] ;
 			X.mz_det{end+1}    = sprintf('%i_%s',M(iM),D{iD});
 			
-			if printsummary % print digest summary
+			if printsummary % print digest summary			
 				disp (sprintf('mz=%i, detector=%s: MEAN = %g +/- %g %s (%s UTC)',...
 						M(iM),...
 						D{iD},...
 						X.mean(end),...
 						X.mean_err(end),...
 						X.mean_unit{end},...
-						datestr(datenum (1970,1,1,0,0) + X.mean_time/86400)))
+						datestr(datenum (1970,1,1,0,0) + X.mean_time(end)/86400)))
 			end
 			
 			if showplot	% plot results
@@ -234,10 +238,29 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 end % for iM = ...
 
 % determine analysis type (SAMPLE, STANDARD, BLANK, UNKNOWN)
-warning('rP_digest_step: ANALYSISTYPE not yet implemented, need to do that!')
+switch toupper(RAW.DATAFILE.ANALYSISTYPE.type)
+	case { 'SAMPLE' 'S' }
+		X.type = 'SAMPLE';
+	case { 'STANDARD' 'STD' }
+		X.type = 'STANDARD';
+	case { 'BLANK' 'B' }
+		X.type = 'BLANK';
+	case { 'MISC' }
+		X.type = 'MISC';
+	otherwise
+		X.type = 'UNKNOWN';
+end
+
+% determine sample description / ID (for samples)
+if strcmp(X.type,'SAMPLE')
+	if isfield (RAW.DATAFILE,'SAMPLENAME')
+		X.SAMPLENAME = RAW.DATAFILE.SAMPLENAME;
+	else
+		X.SAMPLENAME = '';
+	end
+else
+	X.SAMPLENAME = '--nosample--';
+end
 
 % determine partial pressures of standard gas (for calibrations)
 warning('rP_digest_step: partial pressures of gas standards not yet implemented, need to do that!  THIS GOES TO rP_calibrate_steps !!!!')
-
-% determine sample description / ID (for samples)
-warning('rP_digest_step: sample description / ID not yet implemented, need to do that!')
