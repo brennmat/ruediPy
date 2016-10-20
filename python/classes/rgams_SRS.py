@@ -1400,7 +1400,8 @@ class rgams_SRS:
 						n = n+1
 
 			self._peakbuffer_ax.hold( False )
-			self._peakbuffer_ax.legend( leg , loc=2 , prop={'size':8})
+			# self._peakbuffer_ax.legend( leg , loc=2 , prop={'size':8})
+			self._peakbuffer_ax.legend( leg , loc=2 )
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
 			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ') at ' + t0)
