@@ -270,5 +270,7 @@ X.standard.species = {};
 X.standard.conc    = [];
 X.standard.mz      = [];
 if strcmp (X.type,'STANDARD')
-	keyboard
+	for i = 1:length(RAW.DATAFILE.STANDARDGAS)
+		keyboard
+	end
 end

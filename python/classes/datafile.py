@@ -387,7 +387,7 @@ class datafile:
 		"""
 		
 		s = 'species=' + species + ' ; concentration=' + str(conc) + ' vol/vol ; mz=' + str(mz)
-		self.writeln(self.label(),'','STANDARDGAS',s,misc.now_UNIX())
+		self.writeln(self.label(),'','STANDARD',s,misc.now_UNIX())
 
 
 	########################################################################################################
