@@ -236,7 +236,7 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					
 				end % for k = ...
 
-			case 'STANDARDGAS'
+			case 'STANDARD'
 				for k = 1:length(TT)
 					
 					% timestamp:
@@ -248,7 +248,7 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					% species value:
 					l = find (index(u,'species') == 1);
 					if isempty(l)
-						error ('rP_read_datafile: could not find ''species'' field in STANDARDGAS data of DATAFILE object data. Aborting...')
+						error ('rP_read_datafile: could not find ''species'' field in STANDARD data of DATAFILE object data. Aborting...')
 					else
 						p.species = strsplit(u{l},'='){2};
 					end
@@ -256,7 +256,7 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					% concentration value:
 					l = find (index(u,'concentration') == 1);
 					if isempty(l)
-						error ('rP_read_datafile: could not find ''concentration'' field in STANDARDGAS data of DATAFILE object data. Aborting...')
+						error ('rP_read_datafile: could not find ''concentration'' field in STANDARD data of DATAFILE object data. Aborting...')
 					else
 						p.concentration = str2num (strsplit(strsplit(u{l},'='){2},' '){1});
 					end
@@ -264,16 +264,16 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					% mz value:
 					l = find (index(u,'mz') == 1);
 					if isempty(l)
-						error ('rP_read_datafile: could not find ''mz'' field in STANDARDGAS data of DATAFILE object data. Aborting...')
+						error ('rP_read_datafile: could not find ''mz'' field in STANDARD data of DATAFILE object data. Aborting...')
 					else
 						p.mz = str2num (strsplit(u{l},'='){2});
 					end
 
-					% append to STANDARDGAS:
+					% append to STANDARD:
 					if k == 1 % first iteration
-						X.STANDARDGAS = p;
+						X.STANDARD = p;
 					else
-						X.STANDARDGAS = [ X.STANDARDGAS p ];
+						X.STANDARD = [ X.STANDARD p ];
 					end
 					
 				end % for k = ...

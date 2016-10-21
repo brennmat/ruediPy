@@ -1,40 +1,18 @@
-function X = rP_calibrate_steps (data,MS_name)
+function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_steps (data,MS_name)
 
-% function X = rP_calibrate_steps (data,MS_name)
+% function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_steps (data,MS_name)
 % 
-% Calibrate ruediPy data by combining data from samples, calibrations, and blanks.
+% Calibrate ruediPy data by combining batch data from samples, calibrations, and blanks.
 %
-%
-%
-% *** THIS IS JUST A PLACEHOLDER FILE, WHICH DOES NOT YET CONTAIN ANY USEFUL CODE ****
-% 
-% APROACH:
-% * GET RAW DATA:
-% 	- Load raw data from all files / analysis steps
-% 	- DIGEST RAW DATA: Determine mean peak heights for all steps, at all mz-detector combinations in the data set
-% 	- Determine all combinations of mz values and detector types in the data set
-% * PROCESS CALIBRATION DATA (STANDARDS, BLANKS):
-% 	- Plot peak heights for steps of type STANDARD and BLANK (to identify potential outliers etc.)
-% 	- Subtract mean BLANK peak heights for all peak heights for all mz-detector combinations
-% 	- Determine gas partial pressures in STANDARD gas analyses from standard gas concentrations (as given in the data file) and the total gas pressure at the gas inlet (use TOTALGASPRESSURE value if available, or ask user for a total gas pressure value)
-% 	- Determine sensitivities for all steps of type 'STANDARD', at all mz-detector combinations in the data set
-% 	  (sensitivity = blank-corrected detector signal / partial pressure at gas inlet)
-% * PROCESS SAMPLE DATA:
-% 	- Interpolate sensitivities to SAMPLE analysis times (to compensate sensitivity drifts)
-% 	- Determine SAMPLE partial pressures by multiplying SAMPLE peak heights (blank-corrected) with sensitivites
-% 	- (optional?) Normalise SAMPLE partial pressures such that sum of all partial pressures is equal to TOTALGASPRESSURE reading taken from sample
-% 
-%
-%
-% 
 % INPUT:
-% data: vector of raw data structures or data file names, or pattern matching list of data files (see also rP_read_datafile)
-% MS_name: name / label of mass spectrometer for which data should be digested (string)
+% data: files to be processed (string with file/path pattern)
+% MS_name: name / label of mass spectrometer for which data should be processed (string)
 % 
-% OUPUT:
-% ...(not yet defined)...
-% ...(will likely be a time series of calibrated data / partial pressures at different mz values)...
-%
+% OUTPUT:
+% P_val: partial pressures of samples (vector)
+% P_err: uncertainties of partial pressures, taking into account ONLY the counting statistics of the data, not the overall reproducibility of the measurements (vector)
+% SPECIES: species names (cell string)
+% SAMPLES: sample names (cell string)
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
 % 
@@ -82,10 +60,10 @@ function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
 	for j = 1:length(steps)
 		k = find(strcmp(steps(j).mz_det,mz_det)); % find index to specified mz_det combination
 		if isempty(k)
-			warning (sprintf('rP_calibrate_steps: there are no data for %s!',mz_det))
-			val = NA;
-			err = NA;
-			t   = NA;
+			warning (sprintf('rP_calibrate_steps: there are no data for %s in file %s!',mz_det,steps(j).file))
+			val = [ val , NA ];
+			err = [ err , NA ];
+			t   = [ t   , NA ];
 		else
 			val = [ val , steps(j).mean(k)      ];
 			err = [ err , steps(j).mean_err(k)  ];
@@ -93,7 +71,6 @@ function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
 		end % if isempty(k)
 	end % for	
 endfunction
-
 
 function [p,unit] = __get_totalpressure (steps)
 % return total gas pressure from calibration steps (TOTALPRESSUE field value, or ask user if TOTALPRESSURE is not available)
@@ -107,7 +84,7 @@ function [p,unit] = __get_totalpressure (steps)
 			disp ('...TOTALPRESSURE field/value not yet implemented...')
 		
 		else % if no TOTALPRESSURE field/value is available, ask user for pressure:
-			u = input ( sprintf( 'Enter total gas pressure in hPa at capillary inlet for STANDARD step %s [or leave empty to use %g %s]:' , steps(j).NAME , default_p , unit ));
+			u = input ( sprintf( 'Enter total gas pressure in hPa at capillary inlet for STANDARD step %s [or leave empty to use %g %s]:' , steps(j).name , default_p , unit ));
 			if isempty (u) % use default value
 				u = default_p;
 			else % use u value for next default
@@ -134,12 +111,6 @@ endfunction
 
 
 
-
-warning('rP_calibrate_steps: NOT YET IMPLEMENTED!')
-
-
-
-
 % ************************************
 % Load and digest raw data from files:
 % ************************************
@@ -156,15 +127,13 @@ for i = 1:length(RAW)
 	end % if
 end % for
 
-
-
 % *************************************************
 % Process calibrations data (standards and blanks):
 % *************************************************
 
 % sort out samples, standards, blanks; and determine list of unique mz/detector combinations:
 iSTANDARD = iBLANK = iSAMPLE = [];
-mz_det = {};
+mz_det = {};	% list of all mz/detector combinations in the data set
 for i = 1:length(X)
 	switch X(i).type
 		case 'STANDARD'
@@ -179,17 +148,15 @@ for i = 1:length(X)
 	mz_det = unique ( { mz_det{:} X(i).mz_det{:} } );
 end % for
 
+for i = 1:length(iSAMPLE)
+	SAMPLES{i} = X(iSAMPLE(i)).name.name;
+end % for i = ...
+
 if isempty(iSTANDARD)
 	error ('rP_calibrate_steps: there are no STANDARDs! Aborting...')
 elseif isempty(iBLANK)
 	error ('rP_calibrate_steps: there are no BLANKs! Aborting...')
 end
-
-
-
-keyboard
-
-
 
 % sort out digested values for all mz/detector combinations
 v_standard = v_blank = v_sample = []; % mean values
@@ -244,27 +211,84 @@ for i = 1:length(mz_det)
 	figure(i)
 	subplot (3,1,1)
 	plot (t_standard(i,:),v_standard(i,:),'r.-','markersize',MS); axis ([t1 t2]);
-	title (sprintf('STANDARDs: %s peak heights',mz_det{i}))
+	title (sprintf('STANDARDs: %s peak heights',strrep(mz_det{i},'_','\_')))
+	set (gca,'xticklabel','')
 	subplot (3,1,2)
-	plot (t_blank(i,:),v_blank(i,:),'b.','markersize',MS , [min(t_blank(i,:)) max(t_blank(i,:))],[Bmean(i) Bmean(i)],'b-' ); axis ([t1 t2]);
-	title (sprintf('BLANKs: %s peak heights',mz_det{i}))
+	plot (t_blank(i,:),v_blank(i,:),'b.','markersize',MS , [t1 t2],[Bmean(i) Bmean(i)],'b-' ); axis ([t1 t2]);
+	title (sprintf('BLANKs: %s peak heights',strrep(mz_det{i},'_','\_')))
+	set (gca,'xticklabel','')
 	subplot (3,1,3)
 	plot (t_standard(i,:),V_standard(i,:),'k.-','markersize',MS); axis ([t1 t2]);
-	title (sprintf('STANDARDs - mean BLANK: %s peak heights',mz_det{i}))
+	title (sprintf('STANDARDs - mean BLANK: %s peak heights',strrep(mz_det{i},'_','\_')))
 end % for
 
 % get total gas pressure at capillary inlet for STANDARDs:
 [PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD));
 
+% get standard gas info for STANDARDs and determine sensitivities:
+S_val = S_err = repmat (NA,length(mz_det),length(iSTANDARD)); % matrices with sensitivities (and their uncertainties) of all mz_det combinations for all STANDARD steps (each row corresponds to one step)
+SPECIES = cellstr(repmat('?',length(mz_det),1));
+for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for all mz_det cominations
+	u   = strsplit(mz_det{i},'_');
+	MZ  = str2num(u{1});
+	DET = u{2};	
+	for j = 1:length(iSTANDARD) % determine sensitivity S_val(i,j) and S_err(i,j) for mz_det{i} in step iSTANDARD(j)
+		k = find ( X(iSTANDARD(j)).standard.mz == MZ );
+		if ~isempty(k) % there is (at least) one standard entry for this MZ value
+			if length(k) > 1 % don't know how to treat this...
+				error (sprintf('rP_calibrate_steps: there are multiple STANDARD entries for the same mz value in STANDARD step %s. Aborting...',X(j).name))
+			else
+				SPECIES{i} = X(iSTANDARD(j)).standard.species{k};
+				if ( l = find(strcmp( X(iSTANDARD(j)).mz_det , mz_det{i})) ) % l is index to mz_det{i} combination in current step/measurement. Skip if l is empty.
+					pi = PRESS_standard(j) * X(iSTANDARD(j)).standard.conc(k); % partial pressure
+					S_val(i,j) = X(iSTANDARD(j)).mean(l) / pi;
+					S_err(i,j) = X(iSTANDARD(j)).mean_err(l) / pi;
+				end % if l = ...
+			end % if length(k) > 1
+		end % if ~isempty(k)
+	end % for j = ...	
+end % for i = ...
 
+% plot S_val vs. time:
+figure()
+for i = 1:length(mz_det)
+	subplot (length(mz_det),1,i)
+	plot (t_standard(i,:),S_val(i,:),'k.-','markersize',MS); axis ([t1 t2]);
+end % for i = 
 
-disp ('NEED TO ADD GAS CONCENTRATIONS AND TOTAL GAS PRESSURE IN STANDARD GAS ANALYSES, THEN DETERMINE PARTIAL PRESSURES VS. PEAK HEIGHT.')
-disp ('THEN DETERMINE SENSITIVITIES = BLANK-CORRECTED PEAK HEIGHTS / PARTIAL PRESSURES')
+% convert SAMPLEs peak heights to partial pressures using the S_val and S_err (interpolate in time):
+P_val = P_err = repmat (NA,length(mz_det),length(iSAMPLE)); % matrices with sample partial pressures (and their uncertainties) of all mz_det combinations (each row corresponds to one step)
+for i = 1:length(mz_det)
+	
+	tS = t_standard(i,:);
+	Sv  = S_val(i,:);
+	Se  = S_err(i,:);
+	k = find (~isnan(Sv)); tS = tS(k); Sv = Sv(k); Se = Se(k); % remove NA and NaN entries
+	if length(Sv) == 0
+		warning (sprintf('rP_calibrate_steps: no valid STANDARDs data for %s. Skipping...',mz_det{i}))
+	else
+		[tS,k] = sort(tS); Sv = Sv(k); Se = Se(k);
+		% If necessary, add 'fake' STANDARD steps before first SAMPLE and after last SAMPLE to allow interpolation / bracketing:
+		if tS(1) > min(t_sample(i,:))
+			tS = [ min(t_sample(i,:))-1 , tS ];
+			Sv  = [ Sv(1) , Sv ];
+			Se  = [ Se(1) , Se ];
+		end % if min() ...
+		if tS(end) < max(t_sample(i,:))
+			tS = [ tS , max(t_sample(i,:))+1 ];
+			Sv  = [ Sv , Sv(end) ];
+			Se  = [ Se , Se(end) ];
+		end % if min() ...
+		
+		% sensitivities at SAMPLE analysis times:
+		S_smpl_val = interp1 ( tS , Sv , t_sample(i,:) );
+		S_smpl_err = interp1 ( tS , Se , t_sample(i,:) );
+	
+		% sample partial pressures:	
+		P_val(i,:) = v_sample(i,:) ./ S_smpl_val ;
+		P_err(i,:) = sqrt ( (e_sample(i,:)./v_sample(i,:)).^2 + (S_smpl_err./S_smpl_val).^2 ) .* P_val(i,:) ; % error from counting statistics (NOT overall reproducibility of analyses!)
 
-% * PROCESS CALIBRATION DATA (STANDARDS, BLANKS):
-% 	- Determine gas partial pressures in STANDARD gas analyses from standard gas concentrations (as given in the data file) and the total gas pressure at the gas inlet (use TOTALGASPRESSURE value if available, or ask user for a total gas pressure value)
-% 	- Determine sensitivities for all steps of type 'STANDARD', at all mz-detector combinations in the data set
-% 	  (sensitivity = blank-corrected detector signal / partial pressure at gas inlet)
-
+	end
+end % for i = ...
 
 endfunction % main function

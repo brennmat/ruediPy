@@ -252,17 +252,19 @@ switch toupper(RAW.DATAFILE.ANALYSISTYPE.type)
 end % switch
 
 % determine sample description / ID
+[p,f,e] = fileparts(RAW.file);
+X.file = [ f e ];
 switch X.type
 	case 'SAMPLE'
 		if isfield (RAW.DATAFILE,'SAMPLENAME')
-			X.NAME = RAW.DATAFILE.SAMPLENAME;
+			X.name = RAW.DATAFILE.SAMPLENAME;
 		else
-			X.NAME = 'UNKNOWN SAMPLE';
+			X.name = 'UNKNOWN SAMPLE';
 		end
 	case { 'STANDARD' 'BLANK' }
-		X.NAME = datestr(rP_epochtime2datenum(mean(X.mean_time)),'yyyy-mm-dd*HH:MM:SS');
+		X.name = datestr(rP_epochtime2datenum(mean(X.mean_time)),'yyyy-mm-dd_HH:MM:SS');
 	otherwise
-		X.NAME = 'UNKNOWN'
+		X.name = 'UNKNOWN'
 end % switch
 
 % parse standard gas information (for calibrations)
@@ -270,7 +272,9 @@ X.standard.species = {};
 X.standard.conc    = [];
 X.standard.mz      = [];
 if strcmp (X.type,'STANDARD')
-	for i = 1:length(RAW.DATAFILE.STANDARDGAS)
-		keyboard
+	for i = 1:length(RAW.DATAFILE.STANDARD)
+		X.standard.species{i} = RAW.DATAFILE.STANDARD(i).species;
+		X.standard.conc       = [ X.standard.conc ; RAW.DATAFILE.STANDARD(i).concentration ];
+		X.standard.mz         = [ X.standard.mz   ; RAW.DATAFILE.STANDARD(i).mz ];
 	end
 end
