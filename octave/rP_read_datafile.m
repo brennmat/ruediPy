@@ -194,7 +194,8 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 	for i = 1:length(T)
 		j = find (strcmp(TYPE,T{i})); % index to lines with type = T{i}
 		tt = t(j); TT = TYPE(j); DD = DATA(j);
-		
+		p = [];
+
 		% parse line by line
 		switch toupper(T{i})
 			
@@ -235,12 +236,54 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					
 				end % for k = ...
 
+			case 'STANDARDGAS'
+				for k = 1:length(TT)
+					
+					% timestamp:
+					p.epochtime = tt(k);
+
+					% split data line entries:
+					u = strtrim (strsplit(DD{k},';')); % split fields and remove leading and trailing whitespace
+					
+					% species value:
+					l = find (index(u,'species') == 1);
+					if isempty(l)
+						error ('rP_read_datafile: could not find ''species'' field in STANDARDGAS data of DATAFILE object data. Aborting...')
+					else
+						p.species = strsplit(u{l},'='){2};
+					end
+									
+					% concentration value:
+					l = find (index(u,'concentration') == 1);
+					if isempty(l)
+						error ('rP_read_datafile: could not find ''concentration'' field in STANDARDGAS data of DATAFILE object data. Aborting...')
+					else
+						p.concentration = str2num (strsplit(strsplit(u{l},'='){2},' '){1});
+					end
+
+					% mz value:
+					l = find (index(u,'mz') == 1);
+					if isempty(l)
+						error ('rP_read_datafile: could not find ''mz'' field in STANDARDGAS data of DATAFILE object data. Aborting...')
+					else
+						p.mz = str2num (strsplit(u{l},'='){2});
+					end
+
+					% append to STANDARDGAS:
+					if k == 1 % first iteration
+						X.STANDARDGAS = p;
+					else
+						X.STANDARDGAS = [ X.STANDARDGAS p ];
+					end
+					
+				end % for k = ...
+
 			case 'SAMPLENAME'
 				for k = 1:length(TT)
 					
 					% timestamp:
 					p.epochtime = tt(k);
-					
+
 					% sampletype text:
 					p.name = strtrim (DD{k}); % remove leading and trailing whitespace
 

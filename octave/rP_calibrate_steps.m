@@ -185,6 +185,12 @@ elseif isempty(iBLANK)
 	error ('rP_calibrate_steps: there are no BLANKs! Aborting...')
 end
 
+
+
+keyboard
+
+
+
 % sort out digested values for all mz/detector combinations
 v_standard = v_blank = v_sample = []; % mean values
 e_standard = e_blank = e_sample = []; % error-of-the mean values

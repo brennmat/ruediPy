@@ -265,5 +265,10 @@ switch X.type
 		X.NAME = 'UNKNOWN'
 end % switch
 
-% determine partial pressures of standard gas (for calibrations)
-warning('rP_digest_step: partial pressures of gas standards not yet implemented, need to do that!  THIS GOES TO rP_calibrate_steps !!!!')
+% parse standard gas information (for calibrations)
+X.standard.species = {};
+X.standard.conc    = [];
+X.standard.mz      = [];
+if strcmp (X.type,'STANDARD')
+	keyboard
+end
