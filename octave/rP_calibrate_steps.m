@@ -77,7 +77,7 @@ function X = rP_calibrate_steps (data,MS_name)
 % ************************************
 
 function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
-	% return time series of data measured on specified mz/detector combination (value, error, and datetime)
+% return time series of data measured on specified mz/detector combination (value, error, and datetime)
 	val = err = t = [];
 	for j = 1:length(steps)
 		k = find(strcmp(steps(j).mz_det,mz_det)); % find index to specified mz_det combination
@@ -95,6 +95,34 @@ function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
 endfunction
 
 
+function [p,unit] = __get_totalpressure (steps)
+% return total gas pressure from calibration steps (TOTALPRESSUE field value, or ask user if TOTALPRESSURE is not available)
+	default_p = 1013.25;
+	p = repmat (NA,1,length(steps));
+	unit = 'hPa';
+	for j = 1:length(steps)
+		
+		% ...check for TOTALPRESSURE field/value in steps(i) here (not yet implemented)...
+		if 0
+			disp ('...TOTALPRESSURE field/value not yet implemented...')
+		
+		else % if no TOTALPRESSURE field/value is available, ask user for pressure:
+			u = input ( sprintf( 'Enter total gas pressure in hPa at capillary inlet for STANDARD step %s [or leave empty to use %g %s]:' , steps(j).NAME , default_p , unit ));
+			if isempty (u) % use default value
+				u = default_p;
+			else % use u value for next default
+				default_p = u;
+			end
+			p(j) = u;
+		
+		end % if/else
+				
+	end % for	
+endfunction
+
+
+
+% ************************************************************************************************************************************************
 
 
 
@@ -218,6 +246,11 @@ for i = 1:length(mz_det)
 	plot (t_standard(i,:),V_standard(i,:),'k.-','markersize',MS); axis ([t1 t2]);
 	title (sprintf('STANDARDs - mean BLANK: %s peak heights',mz_det{i}))
 end % for
+
+% get total gas pressure at capillary inlet for STANDARDs:
+[PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD));
+
+
 
 disp ('NEED TO ADD GAS CONCENTRATIONS AND TOTAL GAS PRESSURE IN STANDARD GAS ANALYSES, THEN DETERMINE PARTIAL PRESSURES VS. PEAK HEIGHT.')
 disp ('THEN DETERMINE SENSITIVITIES = BLANK-CORRECTED PEAK HEIGHTS / PARTIAL PRESSURES')

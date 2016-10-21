@@ -249,18 +249,21 @@ switch toupper(RAW.DATAFILE.ANALYSISTYPE.type)
 		X.type = 'MISC';
 	otherwise
 		X.type = 'UNKNOWN';
-end
+end % switch
 
-% determine sample description / ID (for samples)
-if strcmp(X.type,'SAMPLE')
-	if isfield (RAW.DATAFILE,'SAMPLENAME')
-		X.SAMPLENAME = RAW.DATAFILE.SAMPLENAME;
-	else
-		X.SAMPLENAME = '';
-	end
-else
-	X.SAMPLENAME = '--nosample--';
-end
+% determine sample description / ID
+switch X.type
+	case 'SAMPLE'
+		if isfield (RAW.DATAFILE,'SAMPLENAME')
+			X.NAME = RAW.DATAFILE.SAMPLENAME;
+		else
+			X.NAME = 'UNKNOWN SAMPLE';
+		end
+	case { 'STANDARD' 'BLANK' }
+		X.NAME = datestr(rP_epochtime2datenum(mean(X.mean_time)),'yyyy-mm-dd*HH:MM:SS');
+	otherwise
+		X.NAME = 'UNKNOWN'
+end % switch
 
 % determine partial pressures of standard gas (for calibrations)
 warning('rP_digest_step: partial pressures of gas standards not yet implemented, need to do that!  THIS GOES TO rP_calibrate_steps !!!!')

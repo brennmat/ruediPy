@@ -208,10 +208,10 @@ class datafile:
 	########################################################################################################
 
 		
-	def next(self,typ='',samplename='',std_species='',std_conc='',std_mz=''):
+	def next( self , typ='' , samplename='' , standardconc=[] ):
 		"""
-		datafile.next(,typ='MISC',samplename='',std_species='',std_conc='',std_mz='')
-		
+		datafile.next( typ='MISC' , samplename='' , standardconc=[] )
+				
 		Close then current data file (if it's still open) and start a new file.
 		
 		INPUT:
@@ -221,7 +221,13 @@ class datafile:
 			typ = 'BLANK' (for blank analyses)
 			typ = 'MISC' (for miscellaneous analysis types, useful for testing, maintenance, or similar purposes)
 		samplename (optional, only used if typ='SAMPLE'): description, name, or ID of sample (string)
-		
+		standardconc (optional, only used if typ='STANDARD'): standard gas information, list of 3-tuples, one tuple for each mz-value). Each tuple has the following 3 fields:
+			field-1: name of species (string)
+			field-2: volumetric species concentration in standard gas
+			field-3: mz value used for analysis of this species
+			
+			example for N2 and Ar-40 in air, analyzed on mz=28 and mz=40: standardconc = [ ('N2',0.781,28) , ('Ar-40',0.9303,40) ]
+					
 		OUTPUT:
 		(none)
 		"""
@@ -282,14 +288,18 @@ class datafile:
 
 		# write standard gas information:
 	   	if typ == 'STANDARD':
-	   		if std_species == '':
+	   		if len(standardconc) == 0:
 	   			self.warning('Standard gas information missing!')
 	   		else:
-	   			for i in range(0,len(std_species)):
-					self.write_standard_conc(std_species[i],std_conc[i],std_mz[i])
+	   			# for i in range(0,len(std_species)):
+				# 	self.write_standard_conc(std_species[i],std_conc[i],std_mz[i])
+	   			for i in range(0,len(standardconc)):
+					self.write_standard_conc(standardconc[i][0],standardconc[i][1],standardconc[i][2])
+
 
 
 	########################################################################################################
+
 
 
 	def writeln(self,caller,label,identifier,data,timestmp):
