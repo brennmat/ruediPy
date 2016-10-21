@@ -1,8 +1,8 @@
-function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_steps (data,MS_name)
+function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_batch(data,MS_name)
 
-% function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_steps (data,MS_name)
+% function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_batch (data,MS_name)
 % 
-% Calibrate ruediPy data by combining batch data from samples, calibrations, and blanks.
+% Calibrate a batch of ruediPy analysis steps by combining data from samples, calibrations, and blanks.
 %
 % INPUT:
 % data: files to be processed (string with file/path pattern)
