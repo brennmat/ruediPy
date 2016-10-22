@@ -81,7 +81,6 @@ if fid == -1 % could not get read access to file, issue error:
 	
 else % read file line by line:
 	disp (sprintf('rP_read_datafile: reading file %s...',file)); fflush (stdout);
-	
 	t = [];	OBJ = LABEL = TYPE = DATA = {};
 	line = fgetl (fid); k = 1;
 	
@@ -311,7 +310,7 @@ end % function
 function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 	X = [];
 	T  = unique (TYPE);
-
+	
 	for i = 1:length(T)
 		j = find (strcmp(TYPE,T{i})); % index to lines with type = T{i}
 		tt = t(j); TT = TYPE(j); DD = DATA(j);
@@ -321,34 +320,134 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 			
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PEAK %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			case 'PEAK'
-			
-				a = sscanf ( sprintf('%s\n',DD{:}) ,'mz=%d ; intensity=%f %s ; detector=%s ; gate=%f %s\n' , [6,Inf] );
+				for k = 1:length(TT)
+										
+					% timestamp:
+					p.epochtime = tt(k);
+					
+					% split data line entries:
+					u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace from s
+					
+					% mz value:
+					l = find (index(u,'mz') == 1);
+					if isempty(l)
+						warning ('rP_read_datafile: could not find ''mz'' field in PEAK data of SRSRGA object data. Using mz = NA...')
+						p.mz = NA;
+					else
+						p.mz = str2num (strsplit(u{l},'='){2});
+					end
+									
+					% intensity value:
+					l = find (index(u,'intensity') == 1);
+					if isempty(l)
+						warning ('rP_read_datafile: could not find ''intensity'' field in PEAK data of SRSRGA object data. Using intensity.val = NA and intensity.unit = ''?''...')
+						p.intensity.val = NA;
+						p.intensity.unit = '?';
+					else
+						uu = strsplit ( strsplit(strtrim(u{l}),'='){2} , ' ' );
+						p.intensity.val  = str2num (uu{1});
+						p.intensity.unit = strtrim(uu{2});
+					end
 
-				for j = 1:length(tt)
-					X.PEAK(j).epochtime      = tt(j);
-					X.PEAK(j).mz             = a(1,j);
-					X.PEAK(j).intensity.val  = a(2,j);
-					X.PEAK(j).intensity.unit = char (a(3,j));
-					X.PEAK(j).gate.val       = a(4,j);
-					X.PEAK(j).gate.unit      = char (a(5,j));
-					X.PEAK(j).detector       = char (a(6,j));
-				end % for j = ..
-								
+					% gate value:
+					l = find (index(u,'gate') == 1);
+					if isempty(l)
+						warning ('rP_read_datafile: could not find ''gate'' field in PEAK data of SRSRGA object data. Using gate.val = NA and gate.unit = ''?''...')
+						p.gate.val = NA;
+						p.gate.unit = '?';
+					else
+						uu = strsplit ( strsplit(strtrim(u{l}),'='){2} , ' ' );
+						p.gate.val  = str2num (uu{1});
+						p.gate.unit = strtrim(uu{2});
+					end
+					
+					% detector:
+					l = find (index(u,'detector') == 1);
+					if isempty(l)
+						warning ('rP_read_datafile: could not find ''detector'' field in PEAK data of SRSRGA object data. Using detector = ''?''...')
+						p.detector = '?';
+					else
+						p.detector = strtrim (strsplit(u{l},'='){2});
+					end
+					
+					% append to PEAKs:
+					if k == 1 % first iteration
+						X.PEAK = p;
+					else
+						X.PEAK = [ X.PEAK p ];
+					end
+													
+				end % for k = ...
+
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ZERO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			case 'ZERO'
+				for k = 1:length(TT)
+					
+					% timestamp:
+					p.epochtime = tt(k);
+					
+					% split data line entries:
+					u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace from s
+					
+					% mz value:
+					l = find (index(u,'mz=') == 1);
+					if isempty(l)
+						warning ('rP_read_datafile: could not find ''mz'' field in ZERO data of SRSRGA object data. Using mz = NA...')
+						p.mz = NA;
+					else
+						p.mz = str2num (strsplit(u{l},'='){2});
+					end
+									
+					% mz-offset value:
+					l = find (index(u,'mz-offset') == 1);
+					if isempty(l)
+						warning ('rP_read_datafile: could not find ''mz-offset'' field in ZERO data of SRSRGA object data. Using mz = NA...')
+						p.mz_offset = NA;
+					else
+						p.mz_offset = str2num (strsplit(u{l},'='){2});
+					end
+									
+					% intensity value:
+					l = find (index(u,'intensity') == 1);
+					if isempty(l)
+						warning ('rP_read_datafile: could not find ''intensity'' field in ZERO data of SRSRGA object data. Using intensity.val = NA and intensity.unit = ''?''...')
+						p.intensity.val = NA;
+						p.intensity.unit = '?';
+					else
+						uu = strsplit ( strsplit(strtrim(u{l}),'='){2} , ' ' );
+						p.intensity.val  = str2num (uu{1});
+						p.intensity.unit = strtrim (uu{2});
+					end
 
-				a = sscanf ( sprintf('%s\n',DD{:}) ,'mz=%d ; mz-offset=%d ; intensity=%f %s ; detector=%s ; gate=%f %s\n' , [7,Inf] );
-
-				for j = 1:length(tt)
-					X.ZERO(j).epochtime      = tt(j);
-					X.ZERO(j).mz             = a(1,j);
-					X.ZERO(j).mz_offset      = a(2,j);
-					X.ZERO(j).intensity.val  = a(3,j);
-					X.ZERO(j).intensity.unit = char (a(4,j));
-					X.ZERO(j).gate.val       = a(5,j);
-					X.ZERO(j).gate.unit      = char (a(6,j));
-					X.ZERO(j).detector       = char (a(7,j));
-				end % for j = ..
+					% gate value:
+					l = find (index(u,'gate') == 1);
+					if isempty(l)
+						warning ('rP_read_datafile: could not find ''gate'' field in ZERO data of SRSRGA object data. Using gate.val = NA and gate.unit = ''?''...')
+						p.gate.val = NA;
+						p.gate.unit = '?';
+					else
+						uu = strsplit ( strsplit(strtrim(u{l}),'='){2} , ' ' );
+						p.gate.val  = str2num (uu{1});
+						p.gate.unit = strtrim(uu{2});
+					end
+					
+					% detector:
+					l = find (index(u,'detector') == 1);
+					if isempty(l)
+						warning ('rP_read_datafile: could not find ''detector'' field in ZERO data of SRSRGA object data. Using detector = ''?''...')
+						p.detector = '?';
+					else
+						p.detector = strtrim (strsplit(u{l},'='){2});
+					end
+					
+					% append to ZEROs:
+					if k == 1 % first iteration
+						X.ZERO = p;
+					else
+						X.ZERO = [ X.ZERO p ];
+					end
+													
+				end % for k = ...
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SCAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			case 'SCAN'
