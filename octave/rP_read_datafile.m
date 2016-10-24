@@ -89,8 +89,11 @@ else % read file line by line:
 	
 	while line != -1
 		% parse line (format: "TIMESTAMP OBJECT-KEY TYPE-KEY: ...DATA...")
-		l = strsplit (line,': '); % split time / data keys from data part
-		
+		% l = strsplit (line,': '); % split time / data keys from data part
+		k = index (line,': '); % find first occurrence of ': ' delimiter
+		l{1} = line(1:k-1);
+		l{2} = line(k+2:end);
+				
 		% get TIME, OBJECT, and TYPE parts:
 		time_keys = strsplit (l{1},' ');
 		t = [ t ; str2num(time_keys{1}) ]; % append time value
