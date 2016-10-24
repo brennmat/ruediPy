@@ -82,21 +82,21 @@ if fid == -1 % could not get read access to file, issue error:
 else % read file line by line:
 	disp (sprintf('rP_read_datafile: reading file %s...',file)); fflush (stdout);
 	
-	t = [];	OBJ = LABEL = TYPE = DATA = {};
+	% tic
+	
+	t = OBJ = LABEL = TYPE = DATA = {};
 	line = fgetl (fid); k = 1;
-	
-	tic()
-	
+		
 	while line != -1
+		
 		% parse line (format: "TIMESTAMP OBJECT-KEY TYPE-KEY: ...DATA...")
-		% l = strsplit (line,': '); % split time / data keys from data part
-		k = index (line,': '); % find FIRST occurrence of ': ' delimiter
-		l{1} = line(1:k-1);
-		l{2} = line(k+2:end);
-				
-		% get TIME, OBJECT, and TYPE parts:
-		time_keys = strsplit (l{1},' ');
-		t = [ t ; str2num(time_keys{1}) ]; % append time value
+		j = index (line,': '); % find FIRST occurrence of ': ' delimiter (there may be additional ': ' delimiters in the "DATA" part of the line)
+		time_keys = line(1:j-1);
+		DATA{k} = line(j+2:end);
+		
+		% TIME:
+		time_keys = strsplit (time_keys,' ');
+		t{k} = time_keys{1};
 		
 		% DATASOURCE[LABEL]:
 		u = strsplit (time_keys{2},'[');
@@ -105,19 +105,16 @@ else % read file line by line:
 			LABEL{k} = OBJ{k};
 		else
 			OBJ{k}   = strtrim (u{1});
-			LABEL{k} = strtrim (strrep(u{2},']',''));
+			LABEL{k} = u{2}(1:end-1);
 		end	
 		
 		% data TYPE:
 		TYPE{k}  = time_keys{3}; % type of data
 		
-		% get DATA part:
-		DATA{k} = l{2};
-		
 		% read next line:
 		line = fgetl (fid); k = k + 1;
+				
 	end % while line != -1
-	
 	
 	% close the file after reading it:
 	ans = fclose (fid);
@@ -125,15 +122,16 @@ else % read file line by line:
 		error (sprintf('ruediPy_read_datafile: could not close file %s',file))
 	end % ans = fclose(...)
 
-	u = toc();
-	disp (sprintf('   Reading file line by line took %f seconds.',u))
+	t = sscanf(sprintf('%s\n',t{:}),'%f');
+
+	% u = toc();	
+	% disp (sprintf('   Reading file line by line took %f seconds.',u))
 	
-	
+	% tic();
+
 	% parse file data into struct object, parse data for each object type
 	X.file = file;
-	
-	tic();
-	
+		
 	O  = unique (OBJ);
 	NO = length (O); % number of object types in the data file
 			
@@ -182,8 +180,8 @@ else % read file line by line:
 		end % for k = ...			
 	end % for i = ...
 
-	u = toc();
-	disp (sprintf('   Parsing file line by line took %f seconds.',u))
+	% u = toc();
+	% disp (sprintf('   Parsing file line by line took %f seconds.',u))
 
 end % if / else
 end % function
@@ -328,6 +326,7 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 				a = sscanf ( sprintf('%s\n',DD{:}) ,'mz=%d ; intensity=%f %s ; detector=%s ; gate=%f %s\n' , [6,Inf] );
 
 				for j = 1:length(tt)
+							
 					X.PEAK(j).epochtime      = tt(j);
 					X.PEAK(j).mz             = a(1,j);
 					X.PEAK(j).intensity.val  = a(2,j);
