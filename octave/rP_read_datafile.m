@@ -331,9 +331,10 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					X.PEAK(j).mz             = a(1,j);
 					X.PEAK(j).intensity.val  = a(2,j);
 					X.PEAK(j).intensity.unit = char (a(3,j));
-					X.PEAK(j).gate.val       = a(4,j);
-					X.PEAK(j).gate.unit      = char (a(5,j));
-					X.PEAK(j).detector       = char (a(6,j));
+					X.PEAK(j).detector       = char (a(4,j));
+					X.PEAK(j).gate.val       = a(5,j);
+					X.PEAK(j).gate.unit      = char (a(6,j));
+									
 				end % for j = ..
 								
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ZERO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -347,9 +348,10 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					X.ZERO(j).mz_offset      = a(2,j);
 					X.ZERO(j).intensity.val  = a(3,j);
 					X.ZERO(j).intensity.unit = char (a(4,j));
-					X.ZERO(j).gate.val       = a(5,j);
-					X.ZERO(j).gate.unit      = char (a(6,j));
-					X.ZERO(j).detector       = char (a(7,j));
+					X.ZERO(j).detector       = char (a(5,j));
+					X.ZERO(j).gate.val       = a(6,j);
+					X.ZERO(j).gate.unit      = char (a(7,j));
+					
 				end % for j = ..
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SCAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

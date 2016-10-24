@@ -48,58 +48,6 @@ function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_batch(data,MS_name)
 % Copyright 2016, Matthias Brennwald (brennmat@gmail.com)
 
 
-% ************************************
-% ************************************
-%helper functions:
-% ************************************
-% ************************************
-
-function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
-% return time series of data measured on specified mz/detector combination (value, error, and datetime)
-	val = err = t = [];
-	for j = 1:length(steps)
-		k = find(strcmp(steps(j).mz_det,mz_det)); % find index to specified mz_det combination
-		if isempty(k)
-			warning (sprintf('rP_calibrate_steps: there are no data for %s in file %s!',mz_det,steps(j).file))
-			val = [ val , NA ];
-			err = [ err , NA ];
-			t   = [ t   , NA ];
-		else
-			val = [ val , steps(j).mean(k)      ];
-			err = [ err , steps(j).mean_err(k)  ];
-			t   = [ t   , steps(j).mean_time(k) ];
-		end % if isempty(k)
-	end % for	
-endfunction
-
-function [p,unit] = __get_totalpressure (steps)
-% return total gas pressure from calibration steps (TOTALPRESSUE field value, or ask user if TOTALPRESSURE is not available)
-	default_p = 1013.25;
-	p = repmat (NA,1,length(steps));
-	unit = 'hPa';
-	for j = 1:length(steps)
-		
-		% ...check for TOTALPRESSURE field/value in steps(i) here (not yet implemented)...
-		if 0
-			disp ('...TOTALPRESSURE field/value not yet implemented...')
-		
-		else % if no TOTALPRESSURE field/value is available, ask user for pressure:
-			u = input ( sprintf( 'Enter total gas pressure in hPa at capillary inlet for STANDARD step %s [or leave empty to use %g %s]:' , steps(j).name , default_p , unit ));
-			if isempty (u) % use default value
-				u = default_p;
-			else % use u value for next default
-				default_p = u;
-			end
-			p(j) = u;
-		
-		end % if/else
-				
-	end % for	
-endfunction
-
-
-
-% ************************************************************************************************************************************************
 
 
 
@@ -145,8 +93,12 @@ for i = 1:length(X)
 		otherwise
 			warning (sprintf("rP_calibrate_steps: unknown analysis type \'%s\' in file %s. Ignoring this step...",X(i).type,RAW(i).file))
 	end % switch
-	mz_det = unique ( { mz_det{:} X(i).mz_det{:} } );
+
+	mz_det = { mz_det{:} X(i).mz_det{:} };
+	
 end % for
+	
+mz_det = unique ( mz_det );
 
 for i = 1:length(iSAMPLE)
 	SAMPLES{i} = X(iSAMPLE(i)).name.name;
@@ -238,7 +190,7 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 			if length(k) > 1 % don't know how to treat this...
 				error (sprintf('rP_calibrate_steps: there are multiple STANDARD entries for the same mz value in STANDARD step %s. Aborting...',X(j).name))
 			else
-				SPECIES{i} = X(iSTANDARD(j)).standard.species{k};
+				SPECIES{i} = [ X(iSTANDARD(j)).standard.species{k} , ' (' , mz_det{i} , ')' ];
 				if ( l = find(strcmp( X(iSTANDARD(j)).mz_det , mz_det{i})) ) % l is index to mz_det{i} combination in current step/measurement. Skip if l is empty.
 					pi = PRESS_standard(j) * X(iSTANDARD(j)).standard.conc(k); % partial pressure
 					S_val(i,j) = X(iSTANDARD(j)).mean(l) / pi;
@@ -292,3 +244,60 @@ for i = 1:length(mz_det)
 end % for i = ...
 
 endfunction % main function
+
+
+
+
+% ************************************************************************************************************************************************
+
+
+
+
+% ************************************
+% ************************************
+% helper functions:
+% ************************************
+% ************************************
+
+function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
+% return time series of data measured on specified mz/detector combination (value, error, and datetime)
+	val = err = t = [];
+	for j = 1:length(steps)
+		k = find(strcmp(steps(j).mz_det,mz_det)); % find index to specified mz_det combination
+		if isempty(k)
+			warning (sprintf('rP_calibrate_steps: there are no data for %s in file %s!',mz_det,steps(j).file))
+			val = [ val , NA ];
+			err = [ err , NA ];
+			t   = [ t   , NA ];
+		else
+			val = [ val , steps(j).mean(k)      ];
+			err = [ err , steps(j).mean_err(k)  ];
+			t   = [ t   , steps(j).mean_time(k) ];
+		end % if isempty(k)
+	end % for	
+endfunction
+
+function [p,unit] = __get_totalpressure (steps)
+% return total gas pressure from calibration steps (TOTALPRESSUE field value, or ask user if TOTALPRESSURE is not available)
+	default_p = 1013.25;
+	p = repmat (NA,1,length(steps));
+	unit = 'hPa';
+	for j = 1:length(steps)
+		
+		% ...check for TOTALPRESSURE field/value in steps(i) here (not yet implemented)...
+		if 0
+			disp ('...TOTALPRESSURE field/value not yet implemented...')
+		
+		else % if no TOTALPRESSURE field/value is available, ask user for pressure:
+			u = input ( sprintf( 'Enter total gas pressure in hPa at capillary inlet for STANDARD step %s [or leave empty to use %g %s]:' , steps(j).name , default_p , unit ));
+			if isempty (u) % use default value
+				u = default_p;
+			else % use u value for next default
+				default_p = u;
+			end
+			p(j) = u;
+		
+		end % if/else
+				
+	end % for	
+endfunction
