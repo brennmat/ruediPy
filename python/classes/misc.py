@@ -121,7 +121,9 @@ class misc:
 		(none)
 		'''
 		
+		print ('')
 		if sys.version_info >= (3,0): # Python 3.0 or newer
 			input( msg )
 		else:
 			raw_input( msg )
+		print ('')
