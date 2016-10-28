@@ -719,7 +719,30 @@ class rgams_SRS:
                 self._peakbuffer_unit = ['x'] * 0 # empty list
 
 
+
+	########################################################################################################
+
+
+
+        def peakbuffer_set_length(self,N):
+                """
+                rgams_SRS.peakbuffer_set_length(N)
+                
+                Set max. length of peakbuffer
+                                
+                INPUT:
+                N: number of PEAK values
+
+                OUTPUT:
+                (none)
+                """
+
+                self._peakbuffer_max_len = N
+
+
+
         ########################################################################################################
+
 
 
 	def peak(self,mz,gate,f):
@@ -1495,9 +1518,9 @@ class rgams_SRS:
 
 
 
-	def peak_zero_loop (self,mz,detector,gate,ND,NC,datafile):
+	def peak_zero_loop (self,mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True ):
 		'''
-		peak_zero_loop (mz,detector,gate,ND,NC,datafile)
+		peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True)
 		
 		Cycle PEAKS and ZERO readings given mz values.
 		
@@ -1508,6 +1531,8 @@ class rgams_SRS:
 		ND: number of data cycles recorded to the current data file
 		NC: number of cycles used for conditioning of the detector and electronics before recording the data (not written to datafile)
 		datafile: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
+		clear_peakbuf_cond: flag to set clearing of peakbuffer before conditioning cycles on/off (optional, default=True)
+		clear_peakbuf_main: flag to set clearing of peakbuffer before main cycles on/off (optional, default=True)
 
 		OUTPUT:
 		(none)
@@ -1528,7 +1553,8 @@ class rgams_SRS:
 	
 		# conditioning detector and electronics:
 		if NC > 0:
-			self.peakbuffer_clear() # clear peakbuffer
+			if clear_peakbuf_cond:
+				self.peakbuffer_clear() # clear peakbuffer
 			# print 'Conditioning ' + detector + ' detector (' + str(NC) + ' cycles)...'
 			for i in range(NC):
 				if i > 0:
@@ -1540,7 +1566,8 @@ class rgams_SRS:
 
 		# reading data values:
 		if ND > 0:
-			self.peakbuffer_clear() # clear peakbuffer
+			if clear_peakbuf_main:
+				self.peakbuffer_clear() # clear peakbuffer
 			# print 'Reading data using ' + detector + ' detector (' + str(ND) + ' cycles)...'
 			for i in range(ND):
 				if i > 0:
