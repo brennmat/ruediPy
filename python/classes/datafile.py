@@ -239,7 +239,7 @@ class datafile:
 		typ = typ.replace(' ','')
 		typ = typ.upper()
 		if not ( typ == '' ):
-			if not ( typ in ( 'SAMPLE' , 'STANDARD' , 'BLANK' , 'UNKNOWN' ) ):
+			if not ( typ in ( 'SAMPLE' , 'STANDARD' , 'BLANK' , 'MISC' ) ):
 				self.warning ( 'Unknown analysis type ' + typ + '. Ignoring analysis type...' )
 				typ = ''
 		
