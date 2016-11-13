@@ -127,3 +127,31 @@ class misc:
 		else:
 			raw_input( msg )
 		print ('')
+
+
+
+	########################################################################################################
+	
+	
+
+	@staticmethod
+	def sleep( wait , msg='' ):
+		'''
+		misc.sleep( wait , msg='' )
+		
+		Wait for a specified time and print a message.
+		
+		INPUT:
+		wait: waiting time (seconds)
+		msg (optional): message
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		if msg:
+			print ('Waiting ' + str(wait) + ' seconds (' + msg + ')...' )
+		else:
+			print ('Waiting ' + str(wait) + ' seconds...' )
+		
+		time.sleep(wait)
