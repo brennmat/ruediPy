@@ -149,9 +149,23 @@ class misc:
 		(none)
 		'''
 		
-		if msg:
-			print ('Waiting ' + str(wait) + ' seconds (' + msg + ')...' )
-		else:
-			print ('Waiting ' + str(wait) + ' seconds...' )
-		
-		time.sleep(wait)
+		dt = wait/10
+		dt = round(dt/5)*5
+		if dt < 1:
+			dt = 1
+		if dt > 30:
+			dt = 30
+
+
+		start = time.time()
+		lastmessage = start - dt-1
+		while time.time()-start < wait:
+			if time.time() > lastmessage + dt:
+				if msg:
+					print 'Waiting ' + str(int(round(wait-(time.time()-start)))) + ' seconds (' + msg + ')...'
+				else:
+					print 'Waiting ' + str(int(round(wait-(time.time()-start)))) + ' seconds...'
+	
+				lastmessage = time.time()
+
+			time.sleep(1)
