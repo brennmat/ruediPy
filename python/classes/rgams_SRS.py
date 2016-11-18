@@ -747,7 +747,7 @@ class rgams_SRS:
 
 	def peak(self,mz,gate,f):
 		'''
-		val,unit = rgams_SRS.peak(mz,gate,f)
+		val,unit = rgams_SRS.peak(mz,gate,f,add_to_peakbuffer=True)
 		
 		Read out detector signal at single mass (m/z value).
 		
@@ -755,6 +755,7 @@ class rgams_SRS:
 		mz: m/z value (integer)
 		gate: gate time (seconds)
 		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
+		add_to_peakbuffer (optional): flag to choose if peak value is added to peakbuffer (default: add_to_peakbuffer=True)
 		
 		OUTPUT:
 		val: signal intensity (float)
@@ -815,7 +816,8 @@ class rgams_SRS:
 			f.write_peak('RGA_SRS',self.label(),mz,val,unit,det,gate,t)
 		
 		# add data to peakbuffer
-		self.peakbuffer_add(t,mz,val,det,unit)
+		if add_to_peakbuffer:
+			self.peakbuffer_add(t,mz,val,det,unit)
 
 		return val,unit
 		
@@ -1518,9 +1520,9 @@ class rgams_SRS:
 
 
 
-	def peak_zero_loop (self,mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False ):
+	def peak_zero_loop (self,mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False):
 		'''
-		peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True)
+		peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False)
 		
 		Cycle PEAKS and ZERO readings given mz values.
 		
@@ -1533,16 +1535,16 @@ class rgams_SRS:
 		datafile: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
 		clear_peakbuf_cond: flag to set clearing of peakbuffer before conditioning cycles on/off (optional, default=True)
 		clear_peakbuf_main: flag to set clearing of peakbuffer before main cycles on/off (optional, default=True)
-		plot_cond: flat to set plotting of readings used for detector conditioning
+		plot_cond: flag to set plotting of readings used for detector conditioning (inclusion of values in peakbuffer)
 
 		OUTPUT:
 		(none)
 	'''
 
 
-		def pz_cycle (m,g,f):
+		def pz_cycle (m,g,f,add_to_peakbuffer=True):
 			for i in range(len(m)):
-				self.peak(m[i][0],g,f) # read PEAK value
+				self.peak(m[i][0],g,f,add_to_peakbuffer) # read PEAK value
 				if not m[i][1] == 0:
 					self.zero(m[i][0],m[i][1],g,f) # read ZERO value
 			self.plot_peakbuffer()
@@ -1562,7 +1564,7 @@ class rgams_SRS:
 					print bs,
 				print '\bConditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...',
 				sys.stdout.flush()
-				pz_cycle (mz,gate,'nofile')
+				pz_cycle (mz,gate,'nofile',plot_cond)
 			print 'done.'
 
 		# reading data values:
