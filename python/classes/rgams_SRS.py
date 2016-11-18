@@ -1518,7 +1518,7 @@ class rgams_SRS:
 
 
 
-	def peak_zero_loop (self,mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True ):
+	def peak_zero_loop (self,mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False ):
 		'''
 		peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True)
 		
@@ -1533,6 +1533,7 @@ class rgams_SRS:
 		datafile: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
 		clear_peakbuf_cond: flag to set clearing of peakbuffer before conditioning cycles on/off (optional, default=True)
 		clear_peakbuf_main: flag to set clearing of peakbuffer before main cycles on/off (optional, default=True)
+		plot_cond: flat to set plotting of readings used for detector conditioning
 
 		OUTPUT:
 		(none)
