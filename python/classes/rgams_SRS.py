@@ -745,7 +745,7 @@ class rgams_SRS:
 
 
 
-	def peak(self,mz,gate,f):
+	def peak(self,mz,gate,f,add_to_peakbuffer=True):
 		'''
 		val,unit = rgams_SRS.peak(mz,gate,f,add_to_peakbuffer=True)
 		
