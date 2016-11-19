@@ -129,7 +129,6 @@ class misc:
 		print ('')
 
 
-
 	########################################################################################################
 	
 	
@@ -169,3 +168,55 @@ class misc:
 				lastmessage = time.time()
 
 			time.sleep(1)
+
+
+
+########################################################################################################
+	
+
+	@staticmethod
+	def user_menu(menu,title='Choose an option'):
+		'''
+		x = misc.user_menu(menu,title='Choose an option')
+		
+		Show a "menu" for selection of different user options, return user choice based on key pressed by user.
+		
+		INPUT:
+		menu: menu entries (tuple of strings)
+		title (optional): title of the menu (default='Choose an option')
+		
+		OUTPUT:
+		x: number of menu choice
+		
+		EXAMPLE:
+		k = misc.user_menu( title='Choose dinner' , menu=('Chicken','Burger','Veggies') )
+		'''
+		
+		N = len(menu);
+		do_menu = True;
+		while do_menu:
+			print ''
+			print title + ':'
+			for i in range(N):
+				print '   ' + str(i+1) + ': ' + menu[i]
+			if sys.version_info >= (3,0): # Python 3.0 or newer
+				ans = input( 'Enter number: ' )
+			else:
+				ans = raw_input( 'Enter number: ' )
+			print ('')
+			
+			try:
+				ans = int(ans) # try converting from string to integer number
+			except ValueError:
+				ans = -1
+				
+			if int(ans) in range(1,N+1):
+				do_menu = False
+
+			if do_menu:
+				print ('Invalid input. Try again...')
+		
+		return ans					
+									
+
+########################################################################################################
