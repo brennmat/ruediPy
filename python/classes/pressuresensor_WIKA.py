@@ -37,10 +37,11 @@
 import serial
 import time
 import struct
+import numpy
+import os
 
 from classes.misc	import misc
 
-import os
 havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
 	import matplotlib
@@ -62,7 +63,7 @@ class pressuresensor_WIKA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' , max_buffer_points = 500 , fig_w = 3 , fig_h = 2):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
 		'''
 		pressuresensor_WIKA.__init__( serialport , label = 'PRESSURESENSOR' , max_buffer_points = 500 , fig_w = 3 , fig_h = 2 )
 		
@@ -109,7 +110,14 @@ class pressuresensor_WIKA:
 		ans = self.ser.read(4) # four bytes of UNSIGNED32 number
 		self.ser.read(2) # 6th and 7th byte (not used)
 		self._serial_number = struct.unpack('<I',ans)[0] # convert to 4 bytes to integer
-		
+	
+
+		# data buffer for PEAK values:
+		self._pressbuffer_t = numpy.array([])
+		self._pressbuffer_p = numpy.array([])
+		self._pressbuffer_unit = ['x'] * 0 # empty list
+		self._pressbuffer_max_len = max_buffer_points
+	
 		# set up plotting environment
 		self._has_display = havedisplay
 		if self._has_display: # prepare plotting environment and figure
@@ -124,13 +132,15 @@ class pressuresensor_WIKA:
 
 			# set up panel for pressure history plot:
 			self._pressbuffer_ax = plt.subplot(1,1,1)
-			self._peakbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ')',loc="center")
+			self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ')',loc="center")
 			plt.xlabel('Time')
 			plt.ylabel('Pressure')
+			self._pressbuffer_ax.hold(False)
 			# get some space in between panels to avoid overlapping labels / titles
 			# self._fig.tight_layout(pad=1.5)
 
 			plt.ion() # enables interactive mode
+
 			plt.pause(0.1) # allow some time to update the plot
 		
 		
@@ -192,15 +202,16 @@ class pressuresensor_WIKA:
 	########################################################################################################
 		
 
-	def pressure(self,f):
+	def pressure(self,f,add_to_pressbuffer=True):
 		"""
-		press,unit = pressuresensor_WIKA.pressure(f)
+		press,unit = pressuresensor_WIKA.pressure(f,add_to_pressbuffer=True)
 		
 		Read out current pressure value.
 		
 		INPUT:
 		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
-		
+		add_to_pressbuffer (optional): flag to indicate if data get appended to pressure buffer (default=True)
+
 		OUTPUT:
 		press: pressure value in hPa (float)
 		unit: unit of pressure value (string)
@@ -214,6 +225,9 @@ class pressuresensor_WIKA:
 		p = struct.unpack('<f',ans)[0] # convert to 4 bytes to float
 		ans = self.ser.read(1) # unit
 		self.ser.read(2) # last two bytes (not used)
+		
+		# get timestamp
+		t = misc.now_UNIX()
 
 		# get unit:
 		if ans == '\xFF':
@@ -235,9 +249,11 @@ class pressuresensor_WIKA:
 		else:
 			self.warning('WIKA pressure sensor returned unknown pressure unit')
 		
+		# add data to peakbuffer
+		if add_to_pressbuffer:
+			self.pressbuffer_add(t,p,unit)
+
 		if not ( f == 'nofile' ):
-			# get timestamp
-			t = misc.now_UNIX()
 			f.write_pressure('PRESSURESENSOR_WIKA',self.label(),p,unit,t)
 			# self.warning('writing pressure value to data file is not yet implemented!')
 
@@ -261,4 +277,74 @@ class pressuresensor_WIKA:
 		'''
 		
 		misc.warnmessage (self.label(),msg)
+
+
+	########################################################################################################
+	
+
+	def pressbuffer_add(self,t,p,unit):
+		"""
+		pressuresensor_WIKA.pressbuffer_add(t,p,unit)
+		
+		Add data to pressure data buffer
+				
+		INPUT:
+		t: epoch time
+		p: pressure value
+		unit: unit of pressure value (char/string)
+		
+		OUTPUT:
+		(none)
+		"""
+				
+		self._pressbuffer_t = numpy.append( self._pressbuffer_t , t )
+		self._pressbuffer_p = numpy.append( self._pressbuffer_p , p )
+		self._pressbuffer_unit.append( unit )
+
+		N = self._pressbuffer_max_len
+		
+		if self._pressbuffer_t.shape[0] > N:
+			self._pressbuffer_t 	     = self._pressbuffer_t[-N:]
+			self._pressbuffer_p 	     = self._pressbuffer_p[-N:]
+			self._pressbuffer_unit       = self._pressbuffer_unit[-N:]
+
+
+
+	########################################################################################################
+
+
+	def plot_pressbuffer(self):
+		'''
+		pressuresensor_WIKA.plot_pressbuffer()
+
+		Plot trend (or update plot) of values in pressure data buffer (e.g. after adding data)
+		NOTE: plotting may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.
+
+		INPUT:
+		(none)
+
+		OUTPUT:
+		(none)
+		'''
+
+		if not self._has_display:
+			self.warning('Plotting of pressbuffer trend not possible (no display system available).')
+
+		else:
+			t0 = misc.now_UNIX()
+			self._pressbuffer_ax.plot( self._pressbuffer_t - t0 , self._pressbuffer_p , 'ko-' , markersize = 10 )
+
+			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
+			self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ') at ' + t0)
+                        self._pressbuffer_ax.set_xlabel('Time (s)')
+                        self._pressbuffer_ax.set_ylabel('Pressure ('+self._pressbuffer_unit[0]+')')
+
+			#self._fig.tight_layout(pad=1.5)
+			plt.show() # update the plot
+			plt.pause(0.01) # allow some time to update the plot
+
+
+	########################################################################################################
+
+
 

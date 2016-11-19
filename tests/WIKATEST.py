@@ -46,12 +46,12 @@ from classes.pressuresensor_WIKA	import pressuresensor_WIKA
 from classes.datafile			import datafile
 
 # for Linux (use device 'file' by ID to avoid confusion of com ports):
-# PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/pci-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2254391-if00-port0' , label = 'TOTALPRESSURE' )
+PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2257101-if00-port0' , label = 'TOTALPRESSURE' , max_buffer_points = 100)
 
 # for Mac OS X (use SiLabs USB driver):
-PSENS		= pressuresensor_WIKA ( serialport = '/dev/cu.SLAB_USBtoUART' , label = 'TOTALPRESSURE' )
+# PSENS		= pressuresensor_WIKA ( serialport = '/dev/cu.SLAB_USBtoUART' , label = 'TOTALPRESSURE' )
 
-DATAFILE	= datafile ( '~/ruedi_data' )
+DATAFILE	= datafile ( '~/data' )
 
 # start data file:
 DATAFILE.next() # start a new data file
@@ -60,5 +60,6 @@ print 'Data output to ' + DATAFILE.name()
 # take pressure readings:
 while 1:
 	p,unit = PSENS.pressure(DATAFILE)
-	# time.sleep (2)
 	print ( str(p) + ' ' + unit )
+        PSENS.plot_pressbuffer()
+	# time.sleep (0.5)
