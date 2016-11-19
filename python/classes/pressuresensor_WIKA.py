@@ -40,6 +40,19 @@ import struct
 
 from classes.misc	import misc
 
+import os
+havedisplay = "DISPLAY" in os.environ
+if havedisplay: # prepare plotting environment
+	import matplotlib
+	matplotlib.rcParams['legend.numpoints'] = 1
+	# suppress mplDeprecation warning:
+	import warnings
+	import matplotlib.cbook
+	warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
+	
+	matplotlib.use('GTKAgg') # use this for faster plotting
+	import matplotlib.pyplot as plt
+
 class pressuresensor_WIKA:
 	"""
 	ruediPy class for WIKA pressure sensor control.
@@ -49,15 +62,18 @@ class pressuresensor_WIKA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' ):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' , max_buffer_points = 500 , fig_w = 3 , fig_h = 2):
 		'''
-		pressuresensor_WIKA.__init__( serialport , label = 'SELECTORVALVE' )
+		pressuresensor_WIKA.__init__( serialport , label = 'PRESSURESENSOR' , max_buffer_points = 500 , fig_w = 3 , fig_h = 2 )
 		
 		Initialize PRESSURESENSOR object (WIKA), configure serial port connection
 		
 		INPUT:
 		serialport: device name of the serial port, e.g. serialport = '/dev/ttyUSB3'
 		label (optional): label / name of the PRESSURESENSOR object (string). Default: label = 'PRESSURESENSOR'
+		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
+		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
+
 		
 		OUTPUT:
 		(none)
@@ -93,6 +109,31 @@ class pressuresensor_WIKA:
 		ans = self.ser.read(4) # four bytes of UNSIGNED32 number
 		self.ser.read(2) # 6th and 7th byte (not used)
 		self._serial_number = struct.unpack('<I',ans)[0] # convert to 4 bytes to integer
+		
+		# set up plotting environment
+		self._has_display = havedisplay
+		if self._has_display: # prepare plotting environment and figure
+
+			# set up plotting environment
+			self._fig = plt.figure(figsize=(fig_w,fig_h))
+			# f.suptitle('SRS RGA DATA')
+			t = 'WIKA P30'
+			if self._label:
+				t = t + ' (' + self._label + ')'
+			self._fig.canvas.set_window_title(t)
+
+			# set up panel for pressure history plot:
+			self._pressbuffer_ax = plt.subplot(1,1,1)
+			self._peakbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ')',loc="center")
+			plt.xlabel('Time')
+			plt.ylabel('Pressure')
+			# get some space in between panels to avoid overlapping labels / titles
+			# self._fig.tight_layout(pad=1.5)
+
+			plt.ion() # enables interactive mode
+			plt.pause(0.1) # allow some time to update the plot
+		
+		
 		print ('Successfully configured WIKA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport )
 
 	
