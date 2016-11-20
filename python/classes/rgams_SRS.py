@@ -67,9 +67,9 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , cem_hv = 1400 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 ):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 ):
 		'''
-		rgams_SRS.__init__( serialport , label='MS' , max_buffer_points = 500 )
+		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
@@ -79,6 +79,7 @@ class rgams_SRS:
 		cem_hv (optional): default bias voltage to be used with the electron multiplier (CEM). Default value: cem_hv = 1400 V.
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
+		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
 
 		OUTPUT:
 		(none)
@@ -123,7 +124,6 @@ class rgams_SRS:
 		if self._has_display: # prepare plotting environment and figure
 
 			# set up plotting environment
-			# w, h = plt.figaspect(0.9)
 			self._fig = plt.figure(figsize=(fig_w,fig_h))
 			# f.suptitle('SRS RGA DATA')
 			t = 'SRS RGA'
@@ -136,6 +136,8 @@ class rgams_SRS:
 			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ')',loc="center")
 			plt.xlabel('Time')
 			plt.ylabel('Intensity')
+			self._peakbuffer_plot_min_y = peakbuffer_plot_min
+			self._peakbuffer_plot_max_y = peakbuffer_plot_max
 
 			# set up lower panel for scans:
 			self._scan_ax = plt.subplot(2,1,2)
@@ -1436,10 +1438,61 @@ class rgams_SRS:
 			from matplotlib.ticker import FuncFormatter
 			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
 			self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
-
+			
+			yy = list(self._peakbuffer_ax.get_ylim())
+			if yy[0] < self._peakbuffer_plot_min_y:
+				yy[0] = self._peakbuffer_plot_min_y
+				self._peakbuffer_ax.set_ylim(yy)
+			if yy[1] > self._peakbuffer_plot_max_y:
+				yy[1] = self._peakbuffer_plot_max_y
+				self._peakbuffer_ax.set_ylim(yy)
+			
 			self._fig.tight_layout(pad=1.5)
 			plt.show() # update the plot
 			plt.pause(0.01) # allow some time to update the plot
+
+
+
+	########################################################################################################
+
+
+
+	def set_peakbuffer_plot_min_y(self):
+		'''
+		rgams_SRS.set_peakbuffer_plot_min_y(val)
+
+		Set lower limit of y range in peakbuffer plot.
+
+		INPUT:
+		val: lower limit of y-axis range
+
+		OUTPUT:
+		(none)
+		'''
+
+		self._peakbuffer_plot_min_y = val
+
+
+
+	########################################################################################################
+
+
+
+	def set_peakbuffer_plot_max_y(self):
+		'''
+		rgams_SRS.set_peakbuffer_plot_max_y(val)
+
+		Set upper limit of y range in peakbuffer plot.
+
+		INPUT:
+		val: upper limit of y-axis range
+
+		OUTPUT:
+		(none)
+		'''
+
+		self._peakbuffer_plot_max_y = val
+
 
 
 	########################################################################################################
@@ -1552,13 +1605,12 @@ class rgams_SRS:
 
 		# prepare:
 		self.set_detector(detector)
-		bs  = '\b' * 1000            # The backspace
+		bs  = '\b' * 1000   # backspaces
 	
 		# conditioning detector and electronics:
 		if NC > 0:
 			if clear_peakbuf_cond:
 				self.peakbuffer_clear() # clear peakbuffer
-			# print 'Conditioning ' + detector + ' detector (' + str(NC) + ' cycles)...'
 			for i in range(NC):
 				if i > 0:
 					print bs,

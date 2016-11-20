@@ -158,16 +158,32 @@ class misc:
 
 		start = time.time()
 		lastmessage = start - dt-1
+		bs  = '\b' * 1000   # backspaces
+		do_bs = False
+		
 		while time.time()-start < wait:
 			if time.time() > lastmessage + dt:
+				d = 'Waiting ' + str(wait) + ' seconds'
 				if msg:
-					print 'Waiting ' + str(int(round(wait-(time.time()-start)))) + ' seconds (' + msg + ')...'
+					d = d + ' (' + msg + ')'
+				l = int(round(wait-(time.time()-start)))
+				if l > 1:
+					d = d + '. ' + str(l) + ' seconds left...'
 				else:
-					print 'Waiting ' + str(int(round(wait-(time.time()-start)))) + ' seconds...'
-	
+					d = d + '. ' + str(l) + ' second left...'
+				
+				if do_bs: # print backspaces to delete previous wait message:
+					print bs,
+				
+				print '\b' + d ,
+				sys.stdout.flush() 
+				do_bs = True
+				
 				lastmessage = time.time()
 
 			time.sleep(1)
+			
+		print 'done.'
 
 
 
