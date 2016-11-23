@@ -1,6 +1,6 @@
-function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_batch(data,MS_name)
+function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_name,varargin)
 
-% function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_batch (data,MS_name)
+% function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch (data,MS_name,options)
 % 
 % Calibrate a batch of ruediPy analysis steps by combining data from samples, calibrations, and blanks.
 %
@@ -9,10 +9,23 @@ function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_batch(data,MS_name)
 % MS_name: name / label of mass spectrometer for which data should be processed (string)
 % 
 % OUTPUT:
-% P_val: partial pressures of samples (vector)
-% P_err: uncertainties of partial pressures, taking into account ONLY the counting statistics of the data, not the overall reproducibility of the measurements (vector)
+% P_val: partial pressures of samples (matrix)
+% P_err: uncertainties of partial pressures, taking into account ONLY the counting statistics of the data, not the overall reproducibility of the measurements (matrix)
 % SPECIES: species names (cell string)
 % SAMPLES: sample names (cell string)
+% TIME: sample time stamps (epoch times as returned by rP_digest_step) (matrix)
+% options: optional parameters:
+%	- 'no_peak_zero_plot': don't plot PEAK and ZERO values
+%	- 'no_sensitivity_plot': don't plot sensitivities
+%	- 'no_partialpressure_plot': don't plot partial pressures
+%	- 'no_plots','noplots': don't plot anything
+%	- 'standardgas_pressure',X,unit: use this gas inlet pressure for all standard analyses (X: number, unit: string)
+%	- 'wait_exit': wait for key press by user before exiting this function (useful for interactive use from shell scripts)
+%
+% EXAMPLE:
+% Process 'ruediMS' data in *.txt files stored in 'mydata' directory, don't plot PEAK and ZERO data, and assume 970 hPa inlet pressure for all standard analyses:
+% > [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch ('mydata/*.txt','ruediMS','no_peak_zero_plot','standardgas_pressure',970,'hPa')
+%
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
 % 
@@ -57,6 +70,45 @@ function [P_val,P_err,SPECIES,SAMPLES] = rP_calibrate_batch(data,MS_name)
 % ************************************
 % ************************************
 
+
+% option defaults (plotting etc.):
+flag_plot_peak_zero = true;
+flag_plot_sensitivity = true;
+flag_plot_partialpressure = true;
+MS = 12; % default marker size
+standardgas_pressure_val = NA;
+standardgas_pressure_unit = '?';
+wait_exit = false;
+
+for i = 1:length(varargin) % parse options
+	
+	switch tolower(varargin{i})
+	
+		% plotting options:
+		case 'no_peak_zero_plot'
+			flag_plot_peak_zero = false;
+		case 'no_sensitivity_plot'
+			flag_plot_peak_zero = false;
+		case 'no_partialpressure_plot'
+			flag_plot_partialpressure = false;
+		case {'no_plots','noplots'}
+			flag_plot_peak_zero = false;
+			flag_plot_sensitivity = false;
+			flag_plot_partialpressure = false;
+		
+		% other options:
+		case 'standardgas_pressure'
+			standardgas_pressure_val = varargin{i+1};
+			standardgas_pressure_unit = varargin{i+2};
+			i = i+2;
+			
+		case 'wait_exit'
+			wait_exit = true;
+		
+		otherwise
+			warning (sprintf("rP_calibrate_batch: unknown option '%s'. Ignoring...",varargin{i}))
+	end
+end
 
 
 % ************************************
@@ -154,28 +206,34 @@ for i = 1:length(mz_det)
 end
 
 % plot STANDARD and BLANK data:
-MS = 12;
-t1 = min ([ t_standard(:) ; t_blank(:) ; t_sample(:) ]);
-t2 = max ([ t_standard(:) ; t_blank(:) ; t_sample(:) ]);
-dt = (t2-t1)/20; t1 = t1-dt; t2 = t2+dt;
-
-for i = 1:length(mz_det)
-	figure(i)
-	subplot (3,1,1)
-	plot (t_standard(i,:),v_standard(i,:),'r.-','markersize',MS); axis ([t1 t2]);
-	title (sprintf('STANDARDs: %s peak heights',strrep(mz_det{i},'_','\_')))
-	set (gca,'xticklabel','')
-	subplot (3,1,2)
-	plot (t_blank(i,:),v_blank(i,:),'b.','markersize',MS , [t1 t2],[Bmean(i) Bmean(i)],'b-' ); axis ([t1 t2]);
-	title (sprintf('BLANKs: %s peak heights',strrep(mz_det{i},'_','\_')))
-	set (gca,'xticklabel','')
-	subplot (3,1,3)
-	plot (t_standard(i,:),V_standard(i,:),'k.-','markersize',MS); axis ([t1 t2]);
-	title (sprintf('STANDARDs - mean BLANK: %s peak heights',strrep(mz_det{i},'_','\_')))
-end % for
+if flag_plot_peak_zero
+	t1 = min ([ t_standard(:) ; t_blank(:) ; t_sample(:) ]);
+	t2 = max ([ t_standard(:) ; t_blank(:) ; t_sample(:) ]);
+	dt = (t2-t1)/20; t1 = t1-dt; t2 = t2+dt;
+	
+	for i = 1:length(mz_det)
+		figure()
+		subplot (3,1,1)
+		plot (t_standard(i,:),v_standard(i,:),'r.-','markersize',MS); axis ([t1 t2]);
+		title (sprintf('STANDARDs: %s peak heights',strrep(mz_det{i},'_','\_')))
+		set (gca,'xticklabel','')
+		subplot (3,1,2)
+		plot (t_blank(i,:),v_blank(i,:),'b.','markersize',MS , [t1 t2],[Bmean(i) Bmean(i)],'b-' ); axis ([t1 t2]);
+		title (sprintf('BLANKs: %s peak heights',strrep(mz_det{i},'_','\_')))
+		set (gca,'xticklabel','')
+		subplot (3,1,3)
+		plot (t_standard(i,:),V_standard(i,:),'k.-','markersize',MS); axis ([t1 t2]);
+		title (sprintf('STANDARDs - mean BLANK: %s peak heights',strrep(mz_det{i},'_','\_')))
+	end % for
+end
 
 % get total gas pressure at capillary inlet for STANDARDs:
-[PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD));
+if isnan(standardgas_pressure_val)
+	[PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD));
+else
+	PRESS_standard = repmat(standardgas_pressure_val,size(iSTANDARD));
+	unit = standardgas_pressure_unit;
+end
 
 % get standard gas info for STANDARDs and determine sensitivities:
 S_val = S_err = repmat (NA,length(mz_det),length(iSTANDARD)); % matrices with sensitivities (and their uncertainties) of all mz_det combinations for all STANDARD steps (each row corresponds to one step)
@@ -201,12 +259,40 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 	end % for j = ...	
 end % for i = ...
 
-% plot S_val vs. time:
-figure()
-for i = 1:length(mz_det)
-	subplot (length(mz_det),1,i)
-	plot (t_standard(i,:),S_val(i,:),'k.-','markersize',MS); axis ([t1 t2]);
-end % for i = 
+
+
+
+
+
+
+% plot sensitivities (S_val) vs. time:
+if flag_plot_sensitivity
+	figure()
+	tt = rP_epochtime2datenum (t_standard);
+	tt1 = min(min(tt));
+	tt2 = max(max(tt));
+	dtt = (tt2-tt1)/20; tt1 = tt1-dtt; tt2 = tt2+dtt;
+	
+	m = mean(S_val')'; k = find (m<0);
+	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(S_val,2)); scal(k,:) = -scal(k,:);
+	plot (tt',S_val'./scal','.-','markersize',MS);
+	datetick;
+	xlabel ('Time');
+	ylabel (sprintf('Sensitivity (A/%s)',unit))
+	leg = strrep(SPECIES,'_','');
+	for i = 1:length(leg)	
+		if ( expon(i) ~= 0 )
+			if ( expon(i) == 1 )
+				leg{i} = sprintf('%s \\times 10',leg{i});
+			else
+				leg{i} = sprintf('%s \\times 10^{%i}',leg{i},expon(i));
+			end
+		end
+	end
+	legend (leg,'location','northoutside','orientation','horizontal');
+end
+
+
 
 % convert SAMPLEs peak heights to partial pressures using the S_val and S_err (interpolate in time):
 P_val = P_err = repmat (NA,length(mz_det),length(iSAMPLE)); % matrices with sample partial pressures (and their uncertainties) of all mz_det combinations (each row corresponds to one step)
@@ -242,6 +328,57 @@ for i = 1:length(mz_det)
 
 	end
 end % for i = ...
+
+TIME = t_sample;
+
+
+% *************************************************
+% Plot SAMPLE results vs. time
+% *************************************************
+
+if flag_plot_partialpressure
+	figure()
+	tt = rP_epochtime2datenum (TIME);
+	tt1 = min(min(tt));
+	tt2 = max(max(tt));
+	dtt = (tt2-tt1)/20; tt1 = tt1-dtt; tt2 = tt2+dtt;
+	
+	expon = round(log10(mean(P_val')')); scal = repmat (10.^expon,1,size(P_val,2));
+	plot (tt',P_val'./scal','.-','markersize',MS);
+	datetick;
+	xlabel ('Time');
+	ylabel (sprintf('Partial pressure (%s)',unit));
+	leg = strrep(SPECIES,'_','');
+	for i = 1:length(leg)
+		if ( expon(i) ~= 0 )
+			if ( expon(i) == 1 )
+				leg{i} = sprintf('%s \\times 10',leg{i});
+			else
+				leg{i} = sprintf('%s \\times 10^{%i}',leg{i},expon(i));
+			end
+		end
+	end
+	legend (leg,'location','northoutside','orientation','horizontal');
+end
+
+% *************************************************
+% Write SAMPLE results to data file
+% *************************************************
+
+disp ('*********************************************************')
+disp ('*********************************************************')
+disp ('NOT YET IMPLEMENTED: WRITING SAMPLE RESULTS TO DATA FILE.')
+disp ('*********************************************************')
+disp ('*********************************************************')
+% ...do it here...
+
+
+if wait_exit
+	drawnow
+	input ("Processing complete! Press ENTER to exit...", "s");
+end
+
+
 
 endfunction % main function
 
