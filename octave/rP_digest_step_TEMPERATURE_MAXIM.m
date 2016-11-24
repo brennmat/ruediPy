@@ -57,7 +57,13 @@ if length(RAW) > 1
 	error ('rP_digest_step_TEMPERATURE_MAXIM: cannot process an array of multiple steps! Please try again with a single step struct...')
 end
 
-error ('rP_digest_step_TEMPERATURE_MAXIM: this function is not yet implemented!')
+
+warning ('rP_digest_step_TEMPERATURE_MAXIM: this function is not yet implemented! Returning N/A data...')
+
+X.mean      = [];
+X.mean_err  = [];
+X.mean_unit = '';
+X.mean_time = [];
 
 %%%%%%%%%%%%%%
 % implement the rP_digest_step_PRESSURESENSOR_WIKA function first; then use this as a template for rP_digest_step_TEMPERATURE_MAXIM

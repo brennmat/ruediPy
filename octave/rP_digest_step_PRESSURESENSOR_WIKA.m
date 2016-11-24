@@ -58,7 +58,6 @@ if length(RAW) > 1
 end
 
 
-
 warning ('rP_digest_step_PRESSURESENSOR_WIKA: this function is not yet implemented! Returning N/A data...')
 
 X.mean      = [];
