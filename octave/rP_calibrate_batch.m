@@ -13,7 +13,7 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_name,va
 % P_err: uncertainties of partial pressures, taking into account ONLY the counting statistics of the data, not the overall reproducibility of the measurements (matrix)
 % SPECIES: species names (cell string)
 % SAMPLES: sample names (cell string)
-% TIME: sample time stamps (epoch times as returned by rP_digest_step) (matrix)
+% TIME: sample time stamps (epoch times as returned by rP_digest_RGA_SRS_step) (matrix)
 % options: optional parameters:
 %	- 'no_peak_zero_plot': don't plot PEAK and ZERO values
 %	- 'no_sensitivity_plot': don't plot sensitivities
@@ -24,7 +24,7 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_name,va
 %
 % EXAMPLE:
 % Process 'ruediMS' data in *.txt files stored in 'mydata' directory, don't plot PEAK and ZERO data, and assume 970 hPa inlet pressure for all standard analyses:
-% > [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch ('mydata/*.txt','ruediMS','no_peak_zero_plot','standardgas_pressure',970,'hPa')
+% > [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch ("mydata/*.txt","ruediMS","no_peak_zero_plot","standardgas_pressure",970,"hPa")
 %
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
@@ -80,29 +80,37 @@ standardgas_pressure_val = NA;
 standardgas_pressure_unit = '?';
 wait_exit = false;
 
-for i = 1:length(varargin) % parse options
-	
+% parse options:
+i = 0;
+while i < length(varargin) % parse options
+	i = i+1;
 	switch tolower(varargin{i})
 	
 		% plotting options:
 		case 'no_peak_zero_plot'
 			flag_plot_peak_zero = false;
+			disp ('rP_calibrate_batch: plotting of PEAK and ZERO data turned off.')
 		case 'no_sensitivity_plot'
 			flag_plot_peak_zero = false;
+			disp ('rP_calibrate_batch: plotting of sensitivities turned off.')
 		case 'no_partialpressure_plot'
 			flag_plot_partialpressure = false;
+			disp ('rP_calibrate_batch: plotting of partialpressures turned off.')
 		case {'no_plots','noplots'}
 			flag_plot_peak_zero = false;
 			flag_plot_sensitivity = false;
 			flag_plot_partialpressure = false;
+			disp ('rP_calibrate_batch: plotting turned off.')
 		
 		% other options:
 		case 'standardgas_pressure'
 			standardgas_pressure_val = varargin{i+1};
 			standardgas_pressure_unit = varargin{i+2};
 			i = i+2;
+			disp (sprintf('rP_calibrate_batch: using %g %s as inlet pressure for all STANDARDs.',standardgas_pressure_val,standardgas_pressure_unit))
 			
 		case 'wait_exit'
+			disp ('rP_calibrate_batch: will wait for user confirmation after completion.')
 			wait_exit = true;
 		
 		otherwise
@@ -121,9 +129,10 @@ RAW = rP_read_datafile (data);
 % digest data and store results in array (X):
 X = [];
 for i = 1:length(RAW)
-	u = rP_digest_step (RAW{i},MS_name);
-	if ~isempty(u) % only append if digesting data was successful
-		X = [ X ; u ];
+	ms = rP_digest_RGA_SRS_step (RAW{i},MS_name); % digest RGA_SRS data
+	keyboard
+	if ~isempty(ms) % only append if digesting data was successful
+		X = [ X ; ms ];
 	end % if
 end % for
 
@@ -229,7 +238,7 @@ end
 
 % get total gas pressure at capillary inlet for STANDARDs:
 if isnan(standardgas_pressure_val)
-	[PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD));
+	[PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD),false);
 else
 	PRESS_standard = repmat(standardgas_pressure_val,size(iSTANDARD));
 	unit = standardgas_pressure_unit;
@@ -249,7 +258,8 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 				error (sprintf('rP_calibrate_steps: there are multiple STANDARD entries for the same mz value in STANDARD step %s. Aborting...',X(j).name))
 			else
 				SPECIES{i} = [ X(iSTANDARD(j)).standard.species{k} , ' (' , mz_det{i} , ')' ];
-				if ( l = find(strcmp( X(iSTANDARD(j)).mz_det , mz_det{i})) ) % l is index to mz_det{i} combination in current step/measurement. Skip if l is empty.
+				l = find(strcmp( X(iSTANDARD(j)).mz_det , mz_det{i})); % l is index to mz_det{i} combination in current step/measurement.
+				if any(l) % skip if l is empty
 					pi = PRESS_standard(j) * X(iSTANDARD(j)).standard.conc(k); % partial pressure
 					S_val(i,j) = X(iSTANDARD(j)).mean(l) / pi;
 					S_err(i,j) = X(iSTANDARD(j)).mean_err(l) / pi;
@@ -258,11 +268,6 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 		end % if ~isempty(k)
 	end % for j = ...	
 end % for i = ...
-
-
-
-
-
 
 
 % plot sensitivities (S_val) vs. time:
@@ -291,8 +296,6 @@ if flag_plot_sensitivity
 	end
 	legend (leg,'location','northoutside','orientation','horizontal');
 end
-
-
 
 % convert SAMPLEs peak heights to partial pressures using the S_val and S_err (interpolate in time):
 P_val = P_err = repmat (NA,length(mz_det),length(iSAMPLE)); % matrices with sample partial pressures (and their uncertainties) of all mz_det combinations (each row corresponds to one step)
@@ -332,6 +335,9 @@ end % for i = ...
 TIME = t_sample;
 
 
+% get total gas pressure at capillary inlet for SAMPLEs:
+[TOTALPRESS_sample,TOTALPRESS_sample_unit] = __get_totalpressure (X(iSAMPLE),true);
+
 % *************************************************
 % Plot SAMPLE results vs. time
 % *************************************************
@@ -361,21 +367,30 @@ if flag_plot_partialpressure
 	legend (leg,'location','northoutside','orientation','horizontal');
 end
 
+% update plots / figures:
+drawnow
+
+
 % *************************************************
 % Write SAMPLE results to data file
 % *************************************************
 
-disp ('*********************************************************')
-disp ('*********************************************************')
-disp ('NOT YET IMPLEMENTED: WRITING SAMPLE RESULTS TO DATA FILE.')
-disp ('*********************************************************')
-disp ('*********************************************************')
-% ...do it here...
+warning ('rP_calibrate_batch: getting GE-MIMS temperature from SAMPLE datafiles is not yet implemented. Do this analogous to TOTALPRESSURE.')
+TEMP_sample = repmat (NA,size(TOTALPRESS_sample));
+TEMP_sample_unit = '???';
 
+__write_datafile (...
+	P_val,P_err,unit,...
+	SPECIES,SAMPLES,TIME,...
+	TOTALPRESS_sample,TOTALPRESS_sample_unit,...
+	TEMP_sample,TEMP_sample_unit,...
+	fileparts(data)...
+	)
 
 if wait_exit
-	drawnow
 	input ("Processing complete! Press ENTER to exit...", "s");
+else
+	disp ("Processing complete!")
 end
 
 
@@ -414,11 +429,14 @@ function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
 	end % for	
 endfunction
 
-function [p,unit] = __get_totalpressure (steps)
+function [p,unit] = __get_totalpressure (steps,do_not_ask)
 % return total gas pressure from calibration steps (TOTALPRESSUE field value, or ask user if TOTALPRESSURE is not available)
 	default_p = 1013.25;
 	p = repmat (NA,1,length(steps));
 	unit = 'hPa';
+	
+	warning ('rP_calibrate_batch: getting TOTALGASPRESSURE from data files is not yet implemented!')
+	
 	for j = 1:length(steps)
 		
 		% ...check for TOTALPRESSURE field/value in steps(i) here (not yet implemented)...
@@ -426,15 +444,59 @@ function [p,unit] = __get_totalpressure (steps)
 			disp ('...TOTALPRESSURE field/value not yet implemented...')
 		
 		else % if no TOTALPRESSURE field/value is available, ask user for pressure:
-			u = input ( sprintf( 'Enter total gas pressure in hPa at capillary inlet for STANDARD step %s [or leave empty to use %g %s]:' , steps(j).name , default_p , unit ));
-			if isempty (u) % use default value
-				u = default_p;
-			else % use u value for next default
-				default_p = u;
-			end
-			p(j) = u;
-		
+			if ~do_not_ask
+				u = input ( sprintf( 'Enter total gas pressure in hPa at capillary inlet for STANDARD step %s [or leave empty to use %g %s]:' , steps(j).name , default_p , unit ));
+				if isempty (u) % use default value
+					u = default_p;
+				else % use u value for next default
+					default_p = u;
+				end
+				p(j) = u;
+			end		
 		end % if/else
-				
-	end % for	
+	end % for
+
+endfunction
+
+
+function __write_datafile (p_val,p_err,p_unit,species,samples,time,totalpressure,totalpressure_unit,temperature,temperature_unit,path)
+% write processed data to CSV data file
+
+	name = input ('Enter file name for processed data (or leave empty to skip): ','s');
+	
+	if isempty(name)
+		disp ('rP_calibrate_batch: no file name given, not writing data to file.')
+	
+	else
+	
+		disp ('*********************************************************')
+		disp ('*********************************************************')
+		disp ('NOT YET IMPLEMENTED: WRITING SAMPLE RESULTS TO DATA FILE.')
+		disp ('*********************************************************')
+		disp ('*********************************************************')
+		% ...do it here...
+	
+		% SAMPLE NAME
+		% TOTAL PRESSURE
+		% GE-MIMS TEMPERATURE
+		% GAS-1 partial pressure: time stamp (epoch time), pressure value, pressure error
+		% GAS-2 ...
+		
+		% open ASCII file for writing:
+		if strcmp(path(end),filesep)
+			path = path(1:end-1);
+		end
+		[p,n,e] = fileparts (name)
+		path = sprintf ('%s%s%s',path,filesep,name);
+		[fid,msg] = fopen (path, 'wt')
+		if fid == -1
+			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))
+		else
+			disp (sprintf('Writing data to %s...',path))
+			% write header
+			fprintf (fid,'SAMPLE ; TOTALPRESSURE (%s) ; TEMPERATURE (%s)',totalpressure_unit,temperature_unit);
+			
+		end
+	end
+	
 endfunction

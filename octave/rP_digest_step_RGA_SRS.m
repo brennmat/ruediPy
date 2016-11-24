@@ -1,12 +1,12 @@
-function X = rP_digest_step (RAW,MS_name,opt)
+function X = rP_digest_step_RGA_SRS (RAW,MS_name,opt)
 
-% function X = rP_digest_step (RAW,MS_name,opt)
+% function X = rP_digest_step_RGA_SRS (RAW,MS_name,opt)
 % 
-% Load raw data and process ("digest") PEAK, ZERO, etc. data to obatin mean peak heights. This assumes that each datafile corresponds to a single "step" of analysis (i.e., a block of PEAK/ZERO readings corresponding to a given sample, calibration, or blank analyisis). Results can be printed on the terminal and plotted on screen.q
+% Load raw data and process ("digest") PEAK and ZERO data from RGA_SRS mass spectrometer to obatin mean peak heights. This assumes that each datafile corresponds to a single "step" of analysis (i.e., a block of PEAK/ZERO readings corresponding to a given sample, calibration, or blank analyisis). Results can be printed on the terminal and plotted on screen.q
 % 
 % INPUT:
 % RAW: raw data struct (see also OUTPUT of rP_read_datafile)
-% MS_name: name / label of mass spectrometer for which data should be digested (string)
+% MS_name: name / label of RGA_SRS mass spectrometer for which data should be digested (string)
 % opt (optional): string or cellstring with keyword(s) to control various behaviours (use defauls if opt is empty). Multiple keywords can be combined in a cellstring.
 %	opt = 'showplot' --> show plot(s) of the data (default: no plots are shown)
 %	opt = 'printsummary' --> print results to STDOUT (default: don't print anything)
@@ -58,7 +58,7 @@ function X = rP_digest_step (RAW,MS_name,opt)
 % Copyright 2016, Matthias Brennwald (brennmat@gmail.com)
 
 if length(RAW) > 1
-	error ('rP_digest_step: cannot process an array of multiple steps! Please try again with a single step struct...')
+	error ('rP_digest_step_RGA_SRS: cannot process an array of multiple steps! Please try again with a single step struct...')
 end
 
 % init empty data containers for digested data:
@@ -100,7 +100,7 @@ figr = 1;
 if isfield (RAW,MS_name)
 	MS  = getfield (RAW,MS_name);	% MS data
 else
-	error (sprintf('rP_digest_step: found no MS data for ''%s''.',MS_name))
+	error (sprintf('rP_digest_step_RGA_SRS: found no MS data for ''%s''.',MS_name))
 end
 
 % get PEAK and ZERO data:
@@ -108,14 +108,14 @@ if isfield (MS,'PEAK')
 	P = MS.PEAK; NP = length (P);
 else
 	P = []; NP = 0;
-	warning ('rP_digest_step: no PEAKs found!')
+	warning ('rP_digest_step_RGA_SRS: no PEAKs found!')
 end
 
 if isfield (MS,'ZERO')
 	Z   = MS.ZERO; NZ = length (Z);	
 else
 	Z = []; NZ = 0;
-	warning ('rP_digest_step: no ZEROs found!')
+	warning ('rP_digest_step_RGA_SRS: no ZEROs found!')
 end
 
 % determine PEAK values with associated timestamp, mz, and detector
@@ -179,7 +179,7 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 				h = peaks - interp1(tz,zeros,tp); % peak height = PEAKs - ZEROs
 				
 			else % there are no ZEROs available, so assume ZERO = 0.0
-				warning (sprintf('rP_digest_step: found no ZEROs for mz=%i and detector=%s, skipping baseline compensation...',M(iM),D{iD}))
+				warning (sprintf('rP_digest_step_RGA_SRS: found no ZEROs for mz=%i and detector=%s, skipping baseline compensation...',M(iM),D{iD}))
 				h = peaks;
 			end
 			
@@ -187,7 +187,7 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 			if length(h) > 1
 				e = std (h) / sqrt(length(h)-1);
 			else
-				warning (sprintf('rP_digest_step: found only single PEAK value for mz=%i and detector=%s, cannot determine standard deviation...',M(iM),D{iD}))
+				warning (sprintf('rP_digest_step_RGA_SRS: found only single PEAK value for mz=%i and detector=%s, cannot determine standard deviation...',M(iM),D{iD}))
 				e = NaN;
 			end
 						
