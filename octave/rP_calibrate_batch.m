@@ -1,4 +1,4 @@
-function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_name,varargin)
+function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,PRESS_names,varargin)
 
 % function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch (data,MS_name,options)
 % 
@@ -6,7 +6,9 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_name,va
 %
 % INPUT:
 % data: files to be processed (string with file/path pattern)
-% MS_name: name / label of mass spectrometer for which data should be processed (string)
+% MS_names: names / labels of mass spectrometers for which data should be processed (cellstring)
+% PRESS_names: names / labels of pressure sensors for which data should be processed (cellstring).
+%	If there is no pressure data in the data file, use PRESS_names = {}. Pressure values will be set to NA.
 % 
 % OUTPUT:
 % P_val: partial pressures of samples (matrix)
@@ -70,6 +72,12 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_name,va
 % ************************************
 % ************************************
 
+if ~iscellstr(MS_names)
+	MS_names = cellstr (MS_names);
+end
+if ~iscellstr(PRESS_names)
+	PRESS_names = cellstr (PRESS_names);
+end
 
 % option defaults (plotting etc.):
 flag_plot_peak_zero = true;
@@ -129,12 +137,59 @@ RAW = rP_read_datafile (data);
 % digest data and store results in array (X):
 X = [];
 for i = 1:length(RAW)
-	ms = rP_digest_RGA_SRS_step (RAW{i},MS_name); % digest RGA_SRS data
-	keyboard
-	if ~isempty(ms) % only append if digesting data was successful
-		X = [ X ; ms ];
-	end % if
+	
+	info = rP_digest_step_DATAFILEINFO(RAW{i});
+	
+	ms = p = {};
+	
+	% digest MS data (abort if not available):
+	for k = 1:length(MS_names)
+		u = rP_digest_step_RGA_SRS (RAW{i},MS_names{k}); % digest RGA_SRS data
+		if ~isempty(u.mean) % only keep data if digesting was successful
+			ms{length(ms)+1} = u;
+		end
+	end
+	if length(ms) > 1
+		error ("rP_calibrate_batch: there are data from different mass spectrometers. Don't know how to handle this...")
+	elseif length(ms) == 0
+		error ("rP_calibrate_batch: found no mass spectrometer data for specified RGA_SRS names...")
+	else
+		ms = ms{1};
+	end
+		
+	% digest PRESSURE data (use NA if no pressure sensors specified):
+	if isempty(PRESS_names) % use p = NA
+		p = NA;
+	else % find pressure data
+		for k = 1:length(PRESS_names)
+			u = rP_digest_step_PRESSURESENSOR_WIKA (RAW{i},PRESS_names{k}); % digest PRESSURESENSOR_WIKA data
+			if ~isempty(u.mean) % only keep data if digesting was successful
+				p{length(p)+1} = u;
+			end
+		end
+		if length(p) > 1
+			error ("rP_calibrate_batch: there are data from different pressure sensors in the same step. Don't know how to handle this...")
+		elseif length(p) == 0
+			error ("rP_calibrate_batch: found no pressure sensor data for specified PRESSURE_WIKA names...")
+		else
+			p = p{1};
+		end
+	end
+
+	% digest TEMPERATURE data (use NA if no temperature sensors specified):
+	warning ("rP_calibrate_batch: getting temperature readings from raw data files is not yet implemented.")
+
+	u.INFO        = info;
+	u.MS          = ms;
+	u.PRESSURE    = p;
+	u.TEMPERATURE = NA;
+
+	% if ~isempty(u) % only append if digesting data was successful
+		X = [ X ; u ];
+	% end % if
+		
 end % for
+
 
 % *************************************************
 % Process calibrations data (standards and blanks):
@@ -144,7 +199,7 @@ end % for
 iSTANDARD = iBLANK = iSAMPLE = [];
 mz_det = {};	% list of all mz/detector combinations in the data set
 for i = 1:length(X)
-	switch X(i).type
+	switch X(i).INFO.type
 		case 'STANDARD'
 			iSTANDARD = [ iSTANDARD , i ];
 		case 'BLANK'
@@ -155,16 +210,18 @@ for i = 1:length(X)
 			warning (sprintf("rP_calibrate_steps: unknown analysis type \'%s\' in file %s. Ignoring this step...",X(i).type,RAW(i).file))
 	end % switch
 
-	mz_det = { mz_det{:} X(i).mz_det{:} };
+	mz_det = { mz_det{:} X(i).MS.mz_det{:} };
 	
 end % for
 	
 mz_det = unique ( mz_det );
 
+% Determine sample names:
 for i = 1:length(iSAMPLE)
-	SAMPLES{i} = X(iSAMPLE(i)).name.name;
+	SAMPLES{i} = X(iSAMPLE(i)).INFO.name.name;
 end % for i = ...
 
+% make sure we've got STANDARDs and BLANKs:
 if isempty(iSTANDARD)
 	error ('rP_calibrate_steps: there are no STANDARDs! Aborting...')
 elseif isempty(iBLANK)
@@ -236,6 +293,7 @@ if flag_plot_peak_zero
 	end % for
 end
 
+
 % get total gas pressure at capillary inlet for STANDARDs:
 if isnan(standardgas_pressure_val)
 	[PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD),false);
@@ -252,17 +310,17 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 	MZ  = str2num(u{1});
 	DET = u{2};	
 	for j = 1:length(iSTANDARD) % determine sensitivity S_val(i,j) and S_err(i,j) for mz_det{i} in step iSTANDARD(j)
-		k = find ( X(iSTANDARD(j)).standard.mz == MZ );
+		k = find ( X(iSTANDARD(j)).INFO.standard.mz == MZ );
 		if ~isempty(k) % there is (at least) one standard entry for this MZ value
 			if length(k) > 1 % don't know how to treat this...
-				error (sprintf('rP_calibrate_steps: there are multiple STANDARD entries for the same mz value in STANDARD step %s. Aborting...',X(j).name))
+				error (sprintf('rP_calibrate_steps: there are multiple STANDARD entries for the same mz value in STANDARD step %s. Aborting...',X(j).INFO.name))
 			else
-				SPECIES{i} = [ X(iSTANDARD(j)).standard.species{k} , ' (' , mz_det{i} , ')' ];
-				l = find(strcmp( X(iSTANDARD(j)).mz_det , mz_det{i})); % l is index to mz_det{i} combination in current step/measurement.
+				SPECIES{i} = [ X(iSTANDARD(j)).INFO.standard.species{k} , ' (' , mz_det{i} , ')' ];
+				l = find(strcmp( X(iSTANDARD(j)).MS.mz_det , mz_det{i})); % l is index to mz_det{i} combination in current step/measurement.
 				if any(l) % skip if l is empty
-					pi = PRESS_standard(j) * X(iSTANDARD(j)).standard.conc(k); % partial pressure
-					S_val(i,j) = X(iSTANDARD(j)).mean(l) / pi;
-					S_err(i,j) = X(iSTANDARD(j)).mean_err(l) / pi;
+					pi = PRESS_standard(j) * X(iSTANDARD(j)).INFO.standard.conc(k); % partial pressure
+					S_val(i,j) = X(iSTANDARD(j)).MS.mean(l) / pi;
+					S_err(i,j) = X(iSTANDARD(j)).MS.mean_err(l) / pi;
 				end % if l = ...
 			end % if length(k) > 1
 		end % if ~isempty(k)
@@ -415,19 +473,20 @@ function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
 % return time series of data measured on specified mz/detector combination (value, error, and datetime)
 	val = err = t = [];
 	for j = 1:length(steps)
-		k = find(strcmp(steps(j).mz_det,mz_det)); % find index to specified mz_det combination
+		k = find(strcmp(steps(j).MS.mz_det,mz_det)); % find index to specified mz_det combination
 		if isempty(k)
-			warning (sprintf('rP_calibrate_steps: there are no data for %s in file %s!',mz_det,steps(j).file))
+			warning (sprintf('rP_calibrate_steps: there are no data for %s in file %s!',mz_det,steps(j).INFO.file))
 			val = [ val , NA ];
 			err = [ err , NA ];
 			t   = [ t   , NA ];
 		else
-			val = [ val , steps(j).mean(k)      ];
-			err = [ err , steps(j).mean_err(k)  ];
-			t   = [ t   , steps(j).mean_time(k) ];
+			val = [ val , steps(j).MS.mean(k)      ];
+			err = [ err , steps(j).MS.mean_err(k)  ];
+			t   = [ t   , steps(j).MS.mean_time(k) ];
 		end % if isempty(k)
 	end % for	
 endfunction
+
 
 function [p,unit] = __get_totalpressure (steps,do_not_ask)
 % return total gas pressure from calibration steps (TOTALPRESSUE field value, or ask user if TOTALPRESSURE is not available)
@@ -445,7 +504,7 @@ function [p,unit] = __get_totalpressure (steps,do_not_ask)
 		
 		else % if no TOTALPRESSURE field/value is available, ask user for pressure:
 			if ~do_not_ask
-				u = input ( sprintf( 'Enter total gas pressure in hPa at capillary inlet for STANDARD step %s [or leave empty to use %g %s]:' , steps(j).name , default_p , unit ));
+				u = input ( sprintf( 'Enter total gas pressure in hPa at capillary inlet for STANDARD step %s [or leave empty to use %g %s]:' , steps(j).INFO.name , default_p , unit ));
 				if isempty (u) % use default value
 					u = default_p;
 				else % use u value for next default

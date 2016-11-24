@@ -14,7 +14,6 @@ function X = rP_digest_step_TEMPERATURE_MAXIM (RAW,sensor_name,opt)
 % 
 % OUTPUT:
 % X: struct object with "digested" data from file:
-%	X.type: analysis type (string; S, C, B, or X)
 %	X.mean: mean of TEMPERATURE values
 %	X.mean_err: error of X.mean value (error of the mean)
 %	X.mean_unit: unit of X.mean and X.mean_err (cell string)

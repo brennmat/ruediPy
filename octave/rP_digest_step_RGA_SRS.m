@@ -2,7 +2,8 @@ function X = rP_digest_step_RGA_SRS (RAW,MS_name,opt)
 
 % function X = rP_digest_step_RGA_SRS (RAW,MS_name,opt)
 % 
-% Load raw data and process ("digest") PEAK and ZERO data from RGA_SRS mass spectrometer to obatin mean peak heights. This assumes that each datafile corresponds to a single "step" of analysis (i.e., a block of PEAK/ZERO readings corresponding to a given sample, calibration, or blank analyisis). Results can be printed on the terminal and plotted on screen.q
+% Load raw data and process ("digest") PEAK and ZERO data from RGA_SRS mass spectrometer to obatin mean peak heights. This assumes that each datafile corresponds to a single "step" of analysis (i.e., a block of PEAK/ZERO readings corresponding to a given sample, calibration, or blank analyisis). Results can be printed on the terminal and plotted on screen.
+% If there is no data for the RGA with the specified name/label, the fields in X are empty.
 % 
 % INPUT:
 % RAW: raw data struct (see also OUTPUT of rP_read_datafile)
@@ -14,14 +15,11 @@ function X = rP_digest_step_RGA_SRS (RAW,MS_name,opt)
 % 
 % OUTPUT:
 % X: struct object with "digested" data from file:
-%	X.type: analysis type (string; S, C, B, or X)
 %	X.mz_det: mz/detector combination of the digested PEAK-ZERO data (cell string)
 %	X.mean: means of PEAK-ZERO values (for each X.mz value)
 %	X.mean_err: errors of X.inens.val data (errors of the means)
 %	X.mean_unit: units of X.mean and X.mean_err (cell string)
 %	X.mean_time: epoch time corresponding to X.mean (mean of PEAK timestamps)
-% 	X.std: partial pressure(s) of the standard gas corresponding to each X.mz_det entry
-% 	X.std_unit: unit of X.std (string)
 %
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
@@ -62,13 +60,14 @@ if length(RAW) > 1
 end
 
 % init empty data containers for digested data:
-X.type = '?';
+% X.type = '?';
 X.mz_det = {};
 X.mean = [];
 X.mean_err = [];
 X.mean_time = [];
-X.std = [];
-X.std_unit = {};
+X.mean_unit = {};
+% X.std = [];
+% X.std_unit = {};
 
 % default behaviour:
 showplot = false;
@@ -100,7 +99,8 @@ figr = 1;
 if isfield (RAW,MS_name)
 	MS  = getfield (RAW,MS_name);	% MS data
 else
-	error (sprintf('rP_digest_step_RGA_SRS: found no MS data for ''%s''.',MS_name))
+	warning (sprintf("rP_digest_step_RGA_SRS: found no MS data for '%s'.",MS_name))
+	return
 end
 
 % get PEAK and ZERO data:
@@ -237,44 +237,44 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 	end % for iD = ...
 end % for iM = ...
 
-% determine analysis type (SAMPLE, STANDARD, BLANK, UNKNOWN)
-switch toupper(RAW.DATAFILE.ANALYSISTYPE.type)
-	case { 'SAMPLE' 'S' }
-		X.type = 'SAMPLE';
-	case { 'STANDARD' 'STD' }
-		X.type = 'STANDARD';
-	case { 'BLANK' 'B' }
-		X.type = 'BLANK';
-	case { 'MISC' }
-		X.type = 'MISC';
-	otherwise
-		X.type = 'UNKNOWN';
-end % switch
-
-% determine sample description / ID
-[p,f,e] = fileparts(RAW.file);
-X.file = [ f e ];
-switch X.type
-	case 'SAMPLE'
-		if isfield (RAW.DATAFILE,'SAMPLENAME')
-			X.name = RAW.DATAFILE.SAMPLENAME;
-		else
-			X.name = 'UNKNOWN SAMPLE';
-		end
-	case { 'STANDARD' 'BLANK' }
-		X.name = datestr(rP_epochtime2datenum(mean(X.mean_time)),'yyyy-mm-dd_HH:MM:SS');
-	otherwise
-		X.name = 'UNKNOWN'
-end % switch
-
-% parse standard gas information (for calibrations)
-X.standard.species = {};
-X.standard.conc    = [];
-X.standard.mz      = [];
-if strcmp (X.type,'STANDARD')
-	for i = 1:length(RAW.DATAFILE.STANDARD)
-		X.standard.species{i} = RAW.DATAFILE.STANDARD(i).species;
-		X.standard.conc       = [ X.standard.conc ; RAW.DATAFILE.STANDARD(i).concentration ];
-		X.standard.mz         = [ X.standard.mz   ; RAW.DATAFILE.STANDARD(i).mz ];
-	end
-end
+%%% % determine analysis type (SAMPLE, STANDARD, BLANK, UNKNOWN)
+%%% switch toupper(RAW.DATAFILE.ANALYSISTYPE.type)
+%%% 	case { 'SAMPLE' 'S' }
+%%% 		X.type = 'SAMPLE';
+%%% 	case { 'STANDARD' 'STD' }
+%%% 		X.type = 'STANDARD';
+%%% 	case { 'BLANK' 'B' }
+%%% 		X.type = 'BLANK';
+%%% 	case { 'MISC' }
+%%% 		X.type = 'MISC';
+%%% 	otherwise
+%%% 		X.type = 'UNKNOWN';
+%%% end % switch
+%%% 
+%%% % determine sample description / ID
+%%% [p,f,e] = fileparts(RAW.file);
+%%% X.file = [ f e ];
+%%% switch X.type
+%%% 	case 'SAMPLE'
+%%% 		if isfield (RAW.DATAFILE,'SAMPLENAME')
+%%% 			X.name = RAW.DATAFILE.SAMPLENAME;
+%%% 		else
+%%% 			X.name = 'UNKNOWN SAMPLE';
+%%% 		end
+%%% 	case { 'STANDARD' 'BLANK' }
+%%% 		X.name = datestr(rP_epochtime2datenum(mean(X.mean_time)),'yyyy-mm-dd_HH:MM:SS');
+%%% 	otherwise
+%%% 		X.name = 'UNKNOWN'
+%%% end % switch
+%%% 
+%%% % parse standard gas information (for calibrations)
+%%% X.standard.species = {};
+%%% X.standard.conc    = [];
+%%% X.standard.mz      = [];
+%%% if strcmp (X.type,'STANDARD')
+%%% 	for i = 1:length(RAW.DATAFILE.STANDARD)
+%%% 		X.standard.species{i} = RAW.DATAFILE.STANDARD(i).species;
+%%% 		X.standard.conc       = [ X.standard.conc ; RAW.DATAFILE.STANDARD(i).concentration ];
+%%% 		X.standard.mz         = [ X.standard.mz   ; RAW.DATAFILE.STANDARD(i).mz ];
+%%% 	end
+%%% end
