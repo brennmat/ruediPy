@@ -100,6 +100,7 @@ class misc:
 		(none)
 		'''
 		
+		print ('\a') # get user attention using the terminal bell
 		M = '***** WARNING from ' + unit + ' at ' + misc.now_string() + ': ' + msg
 		print (M)
 		
@@ -121,6 +122,7 @@ class misc:
 		(none)
 		'''
 		
+		print ('\a') # get user attention using the terminal bell
 		print ('')
 		if sys.version_info >= (3,0): # Python 3.0 or newer
 			input( msg )
@@ -208,6 +210,7 @@ class misc:
 		k = misc.user_menu( title='Choose dinner' , menu=('Chicken','Burger','Veggies') )
 		'''
 		
+		print ('\a') # get user attention using the terminal bell
 		N = len(menu);
 		do_menu = True;
 		while do_menu:
