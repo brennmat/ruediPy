@@ -137,11 +137,14 @@ RAW = rP_read_datafile (data);
 % digest data and store results in array (X):
 X = [];
 for i = 1:length(RAW)
-	
+
+	disp (sprintf('rP_calibrate_batch: parsing file %s...',RAW{i}.file))
+
 	info = rP_digest_step_DATAFILEINFO(RAW{i});
 	
 	ms = p = {};
-	
+	clear u;
+
 	% digest MS data (abort if not available):
 	for k = 1:length(MS_names)
 		u = rP_digest_step_RGA_SRS (RAW{i},MS_names{k}); % digest RGA_SRS data
@@ -150,61 +153,68 @@ for i = 1:length(RAW)
 		end
 	end
 	if length(ms) > 1
-		error ("rP_calibrate_batch: there are data from different mass spectrometers. Don't know how to handle this...")
+		warning ("rP_calibrate_batch: there are data from different mass spectrometers. Skipping this file...")
+		ms = {};
 	elseif length(ms) == 0
-		error ("rP_calibrate_batch: found no mass spectrometer data for specified RGA_SRS names...")
+		warning ("rP_calibrate_batch: found no mass spectrometer data for specified RGA_SRS names. Skipping this file...")
+		ms = {};
 	else
 		ms = ms{1};
 	end
-		
-	% digest PRESSURE data:
-	if isempty(PRESS_names) % no pressure sensors specified, use p.mean = []
-		p.mean = [];
-		p.mean_unit = '--';
-	else % find pressure data from specified sensors
-		for k = 1:length(PRESS_names)
-			u = rP_digest_step_PRESSURESENSOR_WIKA (RAW{i},PRESS_names{k}); % digest PRESSURESENSOR_WIKA data
-			if ~isempty(u.mean) % only keep data if digesting was successful
-				p{length(p)+1} = u;
-			end
-		end
-		if length(p) > 1
-			error ("rP_calibrate_batch: there are data from different pressure sensors in the same step. Don't know how to handle this...")
-		elseif length(p) == 0
-			error ("rP_calibrate_batch: found no pressure sensor data for specified PRESSURE_WIKA names...")
-		else
-			p = p{1};
-		end
-	end
-
-	% digest TEMPERATURE data:
-	if isempty(TEMP_names) % no temperature sensors specified, use t.mean = []
-		t.mean = [];
-		t.mean_unit = '--';
-	else % find temperature data from specified sensors
-		for k = 1:length(TEMP_names)
-			u = rP_digest_step_TEMPERATURESENSOR_MAXIM (RAW{i},TEMP_names{k}); % digest TEMPERATURESENSOR_MAXIM data
-			if ~isempty(u.mean) % only keep data if digesting was successful
-				t{length(t)+1} = u;
-			end
-		end
-		if length(t) > 1
-			error ("rP_calibrate_batch: there are data from different temperature sensors in the same step. Don't know how to handle this...")
-		elseif length(t) == 0
-			error ("rP_calibrate_batch: found no temperature sensor data for specified TEMPERATURESENSOR_MAXIM names...")
-		else
-			t = t{1};
-		end
-	end
-
-	clear u;
-	u.INFO        = info;
-	u.MS          = ms;
-	u.PRESSURE    = p;
-	u.TEMPERATURE = t;
 	
-	X = [ X ; u ];
-		
+	if ~isempty(ms) % otherwise skip parsing the rest of this file
+
+		% digest PRESSURE data:
+		if isempty(PRESS_names) % no pressure sensors specified, use p.mean = []
+			p.mean = [];
+			p.mean_unit = '--';
+		else % find pressure data from specified sensors
+			for k = 1:length(PRESS_names)
+				u = rP_digest_step_PRESSURESENSOR_WIKA (RAW{i},PRESS_names{k}); % digest PRESSURESENSOR_WIKA data
+				if ~isempty(u.mean) % only keep data if digesting was successful
+					p{length(p)+1} = u;
+				end
+			end
+			if length(p) > 1
+				error ("rP_calibrate_batch: there are data from different pressure sensors in the same step. Don't know how to handle this...")
+			elseif length(p) == 0
+				error ("rP_calibrate_batch: found no pressure sensor data for specified PRESSURE_WIKA names...")
+			else
+				p = p{1};
+			end
+		end
+
+		% digest TEMPERATURE data:
+		if isempty(TEMP_names) % no temperature sensors specified, use t.mean = []
+			t.mean = [];
+			t.mean_unit = '--';
+		else % find temperature data from specified sensors
+			for k = 1:length(TEMP_names)
+				u = rP_digest_step_TEMPERATURESENSOR_MAXIM (RAW{i},TEMP_names{k}); % digest TEMPERATURESENSOR_MAXIM data
+				if ~isempty(u.mean) % only keep data if digesting was successful
+					t{length(t)+1} = u;
+				end
+			end
+			if length(t) > 1
+				error ("rP_calibrate_batch: there are data from different temperature sensors in the same step. Don't know how to handle this...")
+			elseif length(t) == 0
+				error ("rP_calibrate_batch: found no temperature sensor data for specified TEMPERATURESENSOR_MAXIM names...")
+			else
+				t = t{1};
+			end
+		end
+
+		clear u;
+
+		u.INFO        = info;
+		u.MS          = ms;
+		u.PRESSURE    = p;
+		u.TEMPERATURE = t;
+	
+		X = [ X ; u ];
+	
+	end % ~isempty(ms)
+
 end % for
 
 
