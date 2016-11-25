@@ -424,7 +424,8 @@ if flag_plot_partialpressure
 	tt2 = max(max(tt));
 	dtt = (tt2-tt1)/20; tt1 = tt1-dtt; tt2 = tt2+dtt;
 	
-	expon = round(log10(mean(P_val')')); scal = repmat (10.^expon,1,size(P_val,2));
+	m = mean(P_val')'; k = find (m<0);
+	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(P_val,2)); scal(k,:) = -scal(k,:);
 	plot (tt',P_val'./scal','.-','markersize',MS);
 	datetick;
 	xlabel ('Time (UTC)');
