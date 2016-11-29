@@ -362,25 +362,36 @@ if flag_plot_sensitivity
 	tt1 = min(min(tt));
 	tt2 = max(max(tt));
 	dtt = (tt2-tt1)/20; tt1 = tt1-dtt; tt2 = tt2+dtt;
-	
-	m = mean(S_val')'; k = find (m<0);
+
+	if size(S_val,2) == 1
+		y = [ S_val repmat(NA,size(S_val)) ];
+		m = S_val;
+		x = [ tt repmat(NA,size(tt)) ];
+	else
+		y = S_val;
+		m = mean(S_val')';
+		x = tt;
+	end
+	k = find (m<0);
 	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(S_val,2)); scal(k,:) = -scal(k,:);
-	plot (tt',S_val'./scal','.-','markersize',MS);
+	plot (x',y'./scal','.-','markersize',MS);
 	datetick;
 	xlabel ('Time (UTC)');
 	ylabel (sprintf('Sensitivity (A/%s)',unit))
 	leg = strrep(SPECIES,'_','');
-	for i = 1:length(leg)	
+
+	for i = 1:length(leg)
 		if ( expon(i) ~= 0 )
 			if ( expon(i) == 1 )
-				leg{i} = sprintf('%s \\times 10',leg{i});
+				leg{i} = sprintf('%s x 10',leg{i});
 			else
-				leg{i} = sprintf('%s \\times 10^{%i}',leg{i},expon(i));
+				leg{i} = sprintf('%s x 10^{%i}',leg{i},expon(i));
 			end
 		end
 	end
 	legend (leg,'location','northoutside','orientation','horizontal');
 end
+
 
 % convert SAMPLEs peak heights to partial pressures using the S_val and S_err (interpolate in time):
 P_val = P_err = repmat (NA,length(mz_det),length(iSAMPLE)); % matrices with sample partial pressures (and their uncertainties) of all mz_det combinations (each row corresponds to one step)
@@ -434,9 +445,18 @@ if flag_plot_partialpressure
 	tt2 = max(max(tt));
 	dtt = (tt2-tt1)/20; tt1 = tt1-dtt; tt2 = tt2+dtt;
 	
-	m = mean(P_val')'; k = find (m<0);
+	if size(P_val,2) == 1
+		y = [ P_val repmat(NA,size(P_val)) ];
+		m = P_val;
+		x = [ tt repmat(NA,size(tt)) ];
+	else
+		y = P_val;
+		m = mean(P_val')';
+		x = tt;
+	end
+	k = find (m<0);
 	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(P_val,2)); scal(k,:) = -scal(k,:);
-	plot (tt',P_val'./scal','.-','markersize',MS);
+	plot (x',y'./scal','.-','markersize',MS);
 	datetick;
 	xlabel ('Time (UTC)');
 	ylabel (sprintf('Partial pressure (%s)',unit));
@@ -444,9 +464,9 @@ if flag_plot_partialpressure
 	for i = 1:length(leg)
 		if ( expon(i) ~= 0 )
 			if ( expon(i) == 1 )
-				leg{i} = sprintf('%s \\times 10',leg{i});
+				leg{i} = sprintf('%s x 10',leg{i});
 			else
-				leg{i} = sprintf('%s \\times 10^{%i}',leg{i},expon(i));
+				leg{i} = sprintf('%s x 10^{%i}',leg{i},expon(i));
 			end
 		end
 	end
