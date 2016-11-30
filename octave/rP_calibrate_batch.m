@@ -461,6 +461,7 @@ if flag_plot_partialpressure
 	xlabel ('Time (UTC)');
 	ylabel (sprintf('Partial pressure (%s)',unit));
 	leg = strrep(SPECIES,'_','');
+		
 	for i = 1:length(leg)
 		if ( expon(i) ~= 0 )
 			if ( expon(i) == 1 )
