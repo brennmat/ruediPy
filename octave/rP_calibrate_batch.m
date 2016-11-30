@@ -374,7 +374,7 @@ if flag_plot_sensitivity
 	end
 	k = find (m<0);
 	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(S_val,2)); scal(k,:) = -scal(k,:);
-	plot (x',y'./scal','.-','markersize',MS);
+	plot (x'-7.366e5,y'./scal','.-','markersize',MS);
 	datetick;
 	xlabel ('Time (UTC)');
 	ylabel (sprintf('Sensitivity (A/%s)',unit))
