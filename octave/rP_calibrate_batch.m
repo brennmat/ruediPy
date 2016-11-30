@@ -374,12 +374,11 @@ if flag_plot_sensitivity
 	end
 	k = find (m<0);
 	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(S_val,2)); scal(k,:) = -scal(k,:);
-	plot (x'-7.366e5,y'./scal','.-','markersize',MS);
+	plot (x',y'./scal','.-','markersize',MS);
 	datetick;
 	xlabel ('Time (UTC)');
 	ylabel (sprintf('Sensitivity (A/%s)',unit))
 	leg = strrep(SPECIES,'_','');
-
 	for i = 1:length(leg)
 		if ( expon(i) ~= 0 )
 			if ( expon(i) == 1 )
@@ -461,7 +460,6 @@ if flag_plot_partialpressure
 	xlabel ('Time (UTC)');
 	ylabel (sprintf('Partial pressure (%s)',unit));
 	leg = strrep(SPECIES,'_','');
-		
 	for i = 1:length(leg)
 		if ( expon(i) ~= 0 )
 			if ( expon(i) == 1 )
