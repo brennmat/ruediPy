@@ -486,6 +486,14 @@ drawnow
 % Write SAMPLE results to data file
 % *************************************************
 
+
+warning ('***************************************************************************')
+warning ('***************************************************************************')
+warning ('* MODIFY THIS TO INCLUDE TEMPERATURE AND PRESSURE DATA COLUMNS CORRESPONDING TO THE SENSORS SPECIFIED IN THE INPUT ARGUMENTS. IF SENSORS LISTS ARE EMPTY, DO NOT INCLUDE ANY PRESSURE OR TEMPERATURE COLUMNS. *')
+warning ('***************************************************************************')
+warning ('***************************************************************************')
+
+
 __write_datafile (...
 	P_val,P_err,unit,...
 	SPECIES,SAMPLES,...
