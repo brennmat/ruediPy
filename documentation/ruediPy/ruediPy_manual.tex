@@ -61,7 +61,7 @@ The GNU Octave tools (m-files) are designed to work hand-in-hand with the data f
 \section{Obtaining and installing \ruediPy}
 \ruediPy\ can be downloaded from \url{http://brennmat.github.io/ruediPy} either as a compressed archive file, or using Subversion or Git version control systems. \ruediPy\ can be installed to just about any directory on the computer that is used for instrument control -- but the user home directory  (\path{~/ruediPy}) may seem like a sensible choice, and that's what is assumed throughout the examples shown in this manual.
 
-As an example, here's a step-by-step list of terminal commands to install \ruediPy  on a Linux computer running Ubuntu 16.04. Other Linux distributions will be similar. The user account name in this example is ``\texttt{brennmat}'', and this user account is enabled for \texttt{sudo} operations (i.e., it has `admin' rights):
+As an example, here's a step-by-step list of terminal commands to install \ruediPy  on a Linux computer running Ubuntu 16.04. Other Linux distributions will be similar. The user account name in this example is ``\texttt{mRdemo}'', and this user account is enabled for \texttt{sudo} operations (i.e., it has `admin' rights):
 \begin{enumerate}
 
 \item Update system software to latest versions and install basic software requirements for \ruediPy:\par
@@ -77,12 +77,17 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \item Permanently add \ruediPy\ to the Python searchpath (this requires the user to log out and log back in to become active):\par
 \texttt{echo export PYTHONPATH=\path{~/ruediPy/python} >> \path{~/.profile}}
 
-\item Set permission to access the serial ports (this requires the user to log out and log back in to become active):\par
-\texttt{sudo usermod -a -G dialout brennmat}
+\item Set permission to access the serial ports:\par
+\texttt{sudo usermod -a -G dialout mRdemo}
 
-\item Prepare directory for ruediPy data files and measurement scripts:\par
-\texttt{mkdir \path{~/ruedi_data}}\\
-\texttt{mkdir \path{~/ruedi_scripts}}
+\item Prepare directories for \ruediPy\ data files and measurement scripts:\par
+\texttt{mkdir \path{~/data}}\\
+\texttt{mkdir \path{~/scripts}}
+
+\item Add \ruediPy\ and the measurement scripts to the Python and Shell searchpaths (this requires the user to log out and log back in to become active):\par
+\texttt{echo export PYTHONPATH=\$PYTHONPATH:\path{/home/mRdemo/ruediPy/python} >> \path{~/.profile}}\\
+\texttt{echo export PYTHONPATH=\$PYTHONPATH:\path{/home/mRdemo/scripts} >> \path{~/.profile}}\\
+\texttt{echo export PATH=\$PATH:\path{/home/mRdemo/scripts} >> \path{~/.profile}}
 
 \end{enumerate}
 
