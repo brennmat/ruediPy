@@ -74,8 +74,8 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \item Download ruediPy:\par
 \texttt{svn co https://github.com/brennmat/ruediPy.git/trunk \path{~/ruediPy}}
 
-\item Permanently add \ruediPy\ to the Python searchpath (this requires the user to log out and log back in to become active):\par
-\texttt{echo export PYTHONPATH=\path{~/ruediPy/python} >> \path{~/.profile}}
+%\item Permanently add \ruediPy\ to the Python searchpath (this requires the user to log out and log back in to become active):\par
+%\texttt{echo export PYTHONPATH=\path{~/ruediPy/python} >> \path{~/.profile}}
 
 \item Set permission to access the serial ports:\par
 \texttt{sudo usermod -a -G dialout mRdemo}
@@ -84,10 +84,10 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \texttt{mkdir \path{~/data}}\\
 \texttt{mkdir \path{~/scripts}}
 
-\item Add \ruediPy\ and the measurement scripts to the Python and Shell searchpaths (this requires the user to log out and log back in to become active):\par
-\texttt{echo export PYTHONPATH=\$PYTHONPATH:\path{/home/mRdemo/ruediPy/python} >> \path{~/.profile}}\\
-\texttt{echo export PYTHONPATH=\$PYTHONPATH:\path{/home/mRdemo/scripts} >> \path{~/.profile}}\\
-\texttt{echo export PATH=\$PATH:\path{/home/mRdemo/scripts} >> \path{~/.profile}}
+\item Permanently add \ruediPy\ and the measurement scripts to the Python and Shell searchpaths:\par
+\texttt{echo export PYTHONPATH=\$PYTHONPATH:\path{~/ruediPy/python} >> \path{~/.profile}}\\
+\texttt{echo export PYTHONPATH=\$PYTHONPATH:\path{~/scripts} >> \path{~/.profile}}\\
+\texttt{echo export PATH=\$PATH:\path{~/scripts} >> \path{~/.profile}}
 
 \end{enumerate}
 
