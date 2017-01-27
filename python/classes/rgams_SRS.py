@@ -794,12 +794,13 @@ class rgams_SRS:
 			v = 0.0;
 			if gate > 2.4:
 				N = int(round(gate/2.4))
-				gate = 2.4
+				gt = 2.4
 			else:
 				N = 1
+				gt = gate
 			for k in range(N):
 				# configure RGA (gate time):
-				self.set_gate_time(gate)
+				self.set_gate_time(gt)
 				
 				# send command to RGA:
 				self.ser.write('MR' + str(mz) + '\r\n')
@@ -883,28 +884,43 @@ class rgams_SRS:
 			unit = '(none)'
 			
 		else: # proceed with measurement
-						
-			# configure RGA (gate time):
-			self.set_gate_time(gate)
+		
+			# deal with gate times longer than 2.4 seconds (max. allowed with SRS-RGA):
+			v = 0.0;
+			if gate > 2.4:
+				N = int(round(gate/2.4))
+				gt = 2.4
+			else:
+				N = 1
+				gt = gate
 
-			# send command to RGA:
-			self.ser.write('MR' + str(mz+mz_offset) + '\r\n')
+			for k in range(N):
+			
+				# configure RGA (gate time):
+				self.set_gate_time(gt)
 
-			# get timestamp
-			t = misc.now_UNIX()
+				# send command to RGA:
+				self.ser.write('MR' + str(mz+mz_offset) + '\r\n')
 
-			# read back data:
-			u = self.ser.read()
-			u = u + self.ser.read()
-			u = u + self.ser.read()
-			u = u + self.ser.read()
+				# get timestamp
+				t = misc.now_UNIX()
 
-			while self.ser.inWaiting() > 0:
-				self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
+				# read back data:
+				u = self.ser.read()
+				u = u + self.ser.read()
+				u = u + self.ser.read()
+				u = u + self.ser.read()
 
-			# parse result:
-			u = struct.unpack('<i',u)[0] # unpack 4-byte data value
-			val = u * 1E-16 # multiply by 1E-16 to convert to Amperes
+				while self.ser.inWaiting() > 0:
+					self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
+
+				# parse result:
+				u = struct.unpack('<i',u)[0] # unpack 4-byte data value
+				
+				v = v + u
+
+			v = v/N
+			val = v * 1E-16 # multiply by 1E-16 to convert to Amperes
 			unit = 'A'
 
 		if not ( f == 'nofile' ):
