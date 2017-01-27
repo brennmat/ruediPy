@@ -46,6 +46,7 @@ havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
 	import matplotlib
 	matplotlib.rcParams['legend.numpoints'] = 1
+	matplotlib.rcParams['axes.formatter.useoffset'] = False
 	# suppress mplDeprecation warning:
 	import warnings
 	import matplotlib.cbook
@@ -136,9 +137,6 @@ class pressuresensor_WIKA:
 			plt.xlabel('Time')
 			plt.ylabel('Pressure')
 			self._pressbuffer_ax.hold(False)
-
-			# set number format for y-axis labels (use scientific for numbers outside 0.01...999 range):
-			self._pressbuffer_ax.ticklabel_format(axis='y' , style='sci' , scilimits=(-2,3))
 			
 			# get some space in between panels to avoid overlapping labels / titles
 			# self._fig.tight_layout(pad=1.5)

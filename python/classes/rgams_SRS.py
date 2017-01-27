@@ -49,6 +49,7 @@ havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
 	import matplotlib
 	matplotlib.rcParams['legend.numpoints'] = 1
+	matplotlib.rcParams['axes.formatter.useoffset'] = False
 	# suppress mplDeprecation warning:
 	import warnings
 	import matplotlib.cbook
