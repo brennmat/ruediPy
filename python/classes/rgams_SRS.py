@@ -620,7 +620,7 @@ class rgams_SRS:
 		'''
 		val = rgams_SRS.set_gate_time()
 		
-		Set noi floor (NF) parameter for RGA measurements according to desired gate time (by choosing the best-match NF value).
+		Set noise floor (NF) parameter for RGA measurements according to desired gate time (by choosing the best-match NF value).
 				
 		INPUT:
 		gate: gate time in (fractional) seconds
@@ -789,28 +789,39 @@ class rgams_SRS:
 			unit = '(none)'
 			
 		else: # proceed with measurement
-						
-			# configure RGA (gate time):
-			self.set_gate_time(gate)
 			
-			# send command to RGA:
-			self.ser.write('MR' + str(mz) + '\r\n')
+			# deal with gate times longer than 2.4 seconds (max. allowed with SRS-RGA):
+			v = 0.0;
+			if gate > 2.4:
+				N = round (gate/2.4)
+			else:
+				N =1
+			for k = range(N):
+				# configure RGA (gate time):
+				self.set_gate_time(gate)
+				
+				# send command to RGA:
+				self.ser.write('MR' + str(mz) + '\r\n')
+				
+				# get timestamp
+				t = misc.now_UNIX()
+				
+				# read back data:
+				u = self.ser.read()
+				u = u + self.ser.read()
+				u = u + self.ser.read()
+				u = u + self.ser.read()
+				
+				while self.ser.inWaiting() > 0:
+					self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
+	
+				# parse result:
+				u = struct.unpack('<i',u)[0] # unpack 4-byte data value
+				
+				v = v + u
 			
-			# get timestamp
-			t = misc.now_UNIX()
-			
-			# read back data:
-			u = self.ser.read()
-			u = u + self.ser.read()
-			u = u + self.ser.read()
-			u = u + self.ser.read()
-			
-			while self.ser.inWaiting() > 0:
-				self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
-
-			# parse result:
-			u = struct.unpack('<i',u)[0] # unpack 4-byte data value
-			val = u * 1E-16 # multiply by 1E-16 to convert to Amperes
+			v = v/N
+			val = v * 1E-16 # multiply by 1E-16 to convert to Amperes
 			unit = 'A'
 		
 		det = self.get_detector()
