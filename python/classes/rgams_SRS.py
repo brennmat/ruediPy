@@ -793,10 +793,11 @@ class rgams_SRS:
 			# deal with gate times longer than 2.4 seconds (max. allowed with SRS-RGA):
 			v = 0.0;
 			if gate > 2.4:
-				N = round (gate/2.4)
+				N = int(round(gate/2.4))
+				gate = 2.4
 			else:
-				N =1
-			for k = range(N):
+				N = 1
+			for k in range(N):
 				# configure RGA (gate time):
 				self.set_gate_time(gate)
 				
