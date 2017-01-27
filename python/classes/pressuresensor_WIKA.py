@@ -136,7 +136,10 @@ class pressuresensor_WIKA:
 			plt.xlabel('Time')
 			plt.ylabel('Pressure')
 			self._pressbuffer_ax.hold(False)
-			self._pressbuffer_ax.ticklabel_format(axis='y', style='sci', scilimits=(-2,3)) # use scientific notation on y axis numbers if value is out of 0.01...999 range.
+
+			# set number format for y-axis labels (use scientific for numbers outside 0.01...999 range):
+			self._pressbuffer_ax.ticklabel_format(axis='y' , style='sci' , scilimits=(-2,3))
+			
 			# get some space in between panels to avoid overlapping labels / titles
 			# self._fig.tight_layout(pad=1.5)
 
