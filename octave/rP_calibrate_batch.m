@@ -1,4 +1,4 @@
-function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,PRESS_names,TEMP_names,varargin)
+function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,SENSOR_names,varargin)
 
 % function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch (data,MS_names,PRESS_names,TEMP_names,options)
 % 
@@ -7,7 +7,7 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,P
 % INPUT:
 % data: files to be processed (string with file/path pattern)
 % MS_names: names / labels of mass spectrometers for which data should be processed (cellstring)
-% PRESS_names, TEMP_names: names / labels of pressure and temperature sensors for which data should be processed (cellstring).
+% SENSOR_names: names / labels of sensors (e.g., pressure, temperature, etc.) for which data should be processed (cellstring).
 %	If there is no pressure or temperature data in the data file, use PRESS_names = {} or TEMP_names = {}. Pressure / temperature values will then be set to N/A.
 % 
 % OUTPUT:
@@ -75,8 +75,8 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,P
 if ~iscellstr(MS_names)
 	MS_names = cellstr (MS_names);
 end
-if ~iscellstr(PRESS_names)
-	PRESS_names = cellstr (PRESS_names);
+if ~iscellstr(SENSOR_names)
+	SENSOR_names = cellstr (SENSOR_names);
 end
 
 % option defaults (plotting etc.):
@@ -142,8 +142,8 @@ for i = 1:length(RAW)
 
 	info = rP_digest_step_DATAFILEINFO(RAW{i});
 	
-	ms = p = {};
-	clear u;
+	ms = {};
+	sens = {};
 
 	% digest MS data (abort if not available):
 	for k = 1:length(MS_names)
@@ -161,59 +161,70 @@ for i = 1:length(RAW)
 	else
 		ms = ms{1};
 	end
+		
+	% digest SENSORs data:
+	for k = 1:length(SENSOR_names)
+		sens{k} = rP_digest_step_SENSOR (RAW{i},SENSOR_names{k});
+	end
+		
+	xx.INFO        = info;
+	xx.MS          = ms;
+	xx.SENSORS     = sens;
+    X = [ X ; xx ];
+
 	
-	if ~isempty(ms) % otherwise skip parsing the rest of this file
-
-		% digest PRESSURE data:
-		if isempty(PRESS_names) % no pressure sensors specified, use p.mean = []
-			p.mean = [];
-			p.mean_unit = '--';
-		else % find pressure data from specified sensors
-			for k = 1:length(PRESS_names)
-				u = rP_digest_step_PRESSURESENSOR_WIKA (RAW{i},PRESS_names{k}); % digest PRESSURESENSOR_WIKA data
-				if ~isempty(u.mean) % only keep data if digesting was successful
-					p{length(p)+1} = u;
-				end
-			end
-			if length(p) > 1
-				error ("rP_calibrate_batch: there are data from different pressure sensors in the same step. Don't know how to handle this...")
-			elseif length(p) == 0
-				error ("rP_calibrate_batch: found no pressure sensor data for specified PRESSURE_WIKA names...")
-			else
-				p = p{1};
-			end
-		end
-
-		% digest TEMPERATURE data:
-		if isempty(TEMP_names) % no temperature sensors specified, use t.mean = []
-			t.mean = [];
-			t.mean_unit = '--';
-		else % find temperature data from specified sensors
-			for k = 1:length(TEMP_names)
-				u = rP_digest_step_TEMPERATURESENSOR_MAXIM (RAW{i},TEMP_names{k}); % digest TEMPERATURESENSOR_MAXIM data
-				if ~isempty(u.mean) % only keep data if digesting was successful
-					t{length(t)+1} = u;
-				end
-			end
-			if length(t) > 1
-				error ("rP_calibrate_batch: there are data from different temperature sensors in the same step. Don't know how to handle this...")
-			elseif length(t) == 0
-				error ("rP_calibrate_batch: found no temperature sensor data for specified TEMPERATURESENSOR_MAXIM names...")
-			else
-				t = t{1};
-			end
-		end
-
-		clear u;
-
-		u.INFO        = info;
-		u.MS          = ms;
-		u.PRESSURE    = p;
-		u.TEMPERATURE = t;
-	
-		X = [ X ; u ];
-	
-	end % ~isempty(ms)
+%	if ~isempty(ms) % otherwise skip parsing the rest of this file
+%			% find pressure data from specified sensors
+%			for k = 1:length(PRESS_names)
+%				u = rP_digest_step_PRESSURESENSOR_WIKA (RAW{i},PRESS_names{k}); % digest PRESSURESENSOR_WIKA data
+%				if ~isempty(u.mean) % only keep data if digesting was successful
+%					p{length(p)+1} = u;
+%				end
+%			end
+%			if length(p) > 1
+%				error ("rP_calibrate_batch: there are data from different pressure sensors in the same step. Don't know how to handle this...")
+%			elseif length(p) == 0
+%				keyboard
+%				error ("rP_calibrate_batch: found no pressure sensor data for specified PRESSURE_WIKA names...")
+%			else
+%				p = p{1};
+%			end
+%			if length(p) >= 1	% there is data from at least one pressure sensor
+%				
+%			end
+%		end
+%
+%
+%		% digest TEMPERATURE data:
+%		if isempty(TEMP_names) % no temperature sensors specified, use t.mean = []
+%			t.mean = [];
+%			t.mean_unit = '--';
+%		else % find temperature data from specified sensors
+%			for k = 1:length(TEMP_names)
+%				u = rP_digest_step_TEMPERATURESENSOR_MAXIM (RAW{i},TEMP_names{k}); % digest TEMPERATURESENSOR_MAXIM data
+%				if ~isempty(u.mean) % only keep data if digesting was successful
+%					t{length(t)+1} = u;
+%				end
+%			end
+%			if length(t) > 1
+%				error ("rP_calibrate_batch: there are data from different temperature sensors in the same step. Don't know how to handle this...")
+%%%%			elseif length(t) == 0
+%%%%				error ("rP_calibrate_batch: found no temperature sensor data for specified TEMPERATURESENSOR_MAXIM names...")
+%			else
+%				t = t{1};
+%			end
+%		end
+%
+%		clear u;
+%
+%		xx.INFO        = info;
+%		xx.MS          = ms;
+%		xx.PRESSURE    = p;
+%		xx.TEMPERATURE = t;
+%	
+%		X = [ X ; xx ];
+%	
+%	end % ~isempty(ms)
 
 end % for
 
@@ -322,12 +333,12 @@ end
 
 
 % get total gas pressure at capillary inlet for STANDARDs:
-if isnan(standardgas_pressure_val)
-	[PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD),false);
-else
+%%% if isnan(standardgas_pressure_val)
+%%% 	[PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD),false);
+%%% else
 	PRESS_standard = repmat(standardgas_pressure_val,size(iSTANDARD));
 	unit = standardgas_pressure_unit;
-end
+%%% end
 
 % get standard gas info for STANDARDs and determine sensitivities:
 S_val = S_err = repmat (NA,length(mz_det),length(iSTANDARD)); % matrices with sensitivities (and their uncertainties) of all mz_det combinations for all STANDARD steps (each row corresponds to one step)
@@ -430,8 +441,8 @@ end % for i = ...
 TIME = t_sample;
 
 
-% get total gas pressure at capillary inlet for SAMPLEs:
-[TOTALPRESS_sample,TOTALPRESS_sample_unit] = __get_totalpressure (X(iSAMPLE),true);
+%%% % get total gas pressure at capillary inlet for SAMPLEs:
+%%% [TOTALPRESS_sample,TOTALPRESS_sample_unit] = __get_totalpressure (X(iSAMPLE),true);
 
 % *************************************************
 % Plot SAMPLE results vs. time
@@ -477,8 +488,8 @@ drawnow
 
 
 
-% get temperature values for SAMPLEs:
-[TEMPERATURE_sample,TEMPERATURE_sample_unit] = __get_temperature (X(iSAMPLE),true);
+%% % get temperature values for SAMPLEs:
+%% [TEMPERATURE_sample,TEMPERATURE_sample_unit] = __get_temperature (X(iSAMPLE),true);
 
 
 
@@ -494,11 +505,38 @@ warning ('**********************************************************************
 warning ('***************************************************************************')
 
 
+PARTIALPRESSURES.species = SPECIES;
+PARTIALPRESSURES.val     = P_val;
+PARTIALPRESSURES.err     = P_err;
+PARTIALPRESSURES.time    = TIME;
+PARTIALPRESSURES.unit    = unit;
+
+% S1.name = 'Wika pressure thingy';
+% S1.unit = 'bar';
+% S1.time  = repmat (123456789.01,length(SAMPLES),1);;
+% S1.val  = repmat (123456789.01,length(SAMPLES),1);;
+% S1.err  = repmat (0.123,length(SAMPLES),1);;
+% S2.name = 'Maxim temperature thingy';
+% S2.unit = 'deg.C';
+% S2.time  = repmat (123456789.01,length(SAMPLES),1);;
+% S2.val  = repmat (123456789.01,length(SAMPLES),1);;
+% S2.err  = repmat (0.123,length(SAMPLES),1);;
+
+% SENSORS{1} = S1;
+% SENSORS{2} = S2;
+
+
+% SENSORS data from samples:
+SENSORS = {};
+for i = 1:length(iSAMPLE)
+	SENSORS{i} = X(iSAMPLE(i)).SENSORS; 
+end
+
+
 __write_datafile (...
-	P_val,P_err,unit,...
-	SPECIES,SAMPLES,...
-	TIME, TOTALPRESS_sample,TOTALPRESS_sample_unit,...
-	TEMPERATURE_sample,TEMPERATURE_sample_unit,...
+	SAMPLES,...
+	PARTIALPRESSURES,...
+	SENSORS,...
 	fileparts(data)...
 	)
 
@@ -545,83 +583,89 @@ function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
 endfunction
 
 
-function [p,unit] = __get_totalpressure (steps,do_not_ask)
-% return total gas pressure from steps (TOTALPRESSUE field value, or ask user if TOTALPRESSURE is not available)
-	default_p = 1013.25;
-	p = repmat (NA,1,length(steps));
-	
-	for j = 1:length(steps)
-		
-		% ...check for TOTALPRESSURE field/value in steps(i) here (not yet implemented)...
-		
-		if ~isempty(steps(j).PRESSURE.mean)
-			p(j) = steps(j).PRESSURE.mean;
-			unit = steps(j).PRESSURE.mean_unit;
-			
-		else % if no pressure sensors were specified, or pressure data were not available for specified sensor(s)
-		
-			if ~do_not_ask % ask user for pressure:
-				unit = 'hPa';
-				u = input ( sprintf( 'Enter total gas pressure in %s at capillary inlet for step %s [or leave empty to use %g %s]:' , unit , steps(j).INFO.file , default_p , unit ));
-				if isempty (u) % use default value
-					u = default_p;
-				else % use u value for next default
-					default_p = u;
-				end
-				p(j) = u;
-
-			else % we don't know the pressure
-				p(j) = NA;
-				unit = '--';
-				
-			end % if ~do_not_ask
-			
-		end % ~isempty
-		
-	end % for
-
-endfunction
-
-
-function [t,unit] = __get_temperature (steps,do_not_ask)
-% return temperature from steps (e.g., water temperature for GE-MIMS)
-	default_t = 10;
-	t = repmat (NA,1,length(steps));
-	
-	for j = 1:length(steps)
-				
-		if ~isempty(steps(j).TEMPERATURE.mean)
-			t(j) = steps(j).TEMPERATURE.mean;
-			unit = steps(j).TEMPERATURE.mean_unit;
-			
-		else % if no temperature sensors were specified, or temperature data were not available for specified sensor(s)
-		
-			if ~do_not_ask % ask user for temperature:
-				unit = 'deg.C';
-				u = input ( sprintf( 'Enter temperature in %s for step %s [or leave empty to use %g %s]:' , unit , steps(j).INFO.file , default_t , unit ));
-				if isempty (u) % use default value
-					u = default_t;
-				else % use u value for next default
-					default_t = u;
-				end
-				t(j) = u;
-
-			else % we don't know the temperature
-				t(j) = NA;
-				unit = '--';
-				
-			end % if ~do_not_ask
-			
-		end % ~isempty
-		
-	end % for
-
-endfunction
+%%% function [p,unit] = __get_totalpressure (steps,do_not_ask)
+%%% % return total gas pressure from steps (TOTALPRESSUE field value, or ask user if TOTALPRESSURE is not available)
+%%% 	default_p = 1013.25;
+%%% 	p = repmat (NA,1,length(steps));
+%%% 	
+%%% 	for j = 1:length(steps)
+%%% 		
+%%% 		% ...check for TOTALPRESSURE field/value in steps(i) here (not yet implemented)...
+%%% 		
+%%% 		if ~isempty(steps(j).PRESSURE.mean)
+%%% 			p(j) = steps(j).PRESSURE.mean;
+%%% 			unit = steps(j).PRESSURE.mean_unit;
+%%% 			
+%%% 		else % if no pressure sensors were specified, or pressure data were not available for specified sensor(s)
+%%% 		
+%%% 			if ~do_not_ask % ask user for pressure:
+%%% 				unit = 'hPa';
+%%% 				u = input ( sprintf( 'Enter total gas pressure in %s at capillary inlet for step %s [or leave empty to use %g %s]:' , unit , steps(j).INFO.file , default_p , unit ));
+%%% 				if isempty (u) % use default value
+%%% 					u = default_p;
+%%% 				else % use u value for next default
+%%% 					default_p = u;
+%%% 				end
+%%% 				p(j) = u;
+%%% 
+%%% 			else % we don't know the pressure
+%%% 				p(j) = NA;
+%%% 				unit = '--';
+%%% 				
+%%% 			end % if ~do_not_ask
+%%% 			
+%%% 		end % ~isempty
+%%% 		
+%%% 	end % for
+%%% 
+%%% endfunction
 
 
-function __write_datafile (p_val,p_err,p_unit,species,samples,time,totalpressure,totalpressure_unit,temperature,temperature_unit,path)
+%%% function [t,unit] = __get_temperature (steps,do_not_ask)
+%%% % return temperature from steps (e.g., water temperature for GE-MIMS)
+%%% 	default_t = 10;
+%%% 	t = repmat (NA,1,length(steps));
+%%% 	
+%%% 	for j = 1:length(steps)
+%%% 				
+%%% 		if ~isempty(steps(j).TEMPERATURE.mean)
+%%% 			t(j) = steps(j).TEMPERATURE.mean;
+%%% 			unit = steps(j).TEMPERATURE.mean_unit;
+%%% 			
+%%% 		else % if no temperature sensors were specified, or temperature data were not available for specified sensor(s)
+%%% 		
+%%% 			if ~do_not_ask % ask user for temperature:
+%%% 				unit = 'deg.C';
+%%% 				u = input ( sprintf( 'Enter temperature in %s for step %s [or leave empty to use %g %s]:' , unit , steps(j).INFO.file , default_t , unit ));
+%%% 				if isempty (u) % use default value
+%%% 					u = default_t;
+%%% 				else % use u value for next default
+%%% 					default_t = u;
+%%% 				end
+%%% 				t(j) = u;
+%%% 
+%%% 			else % we don't know the temperature
+%%% 				t(j) = NA;
+%%% 				unit = '--';
+%%% 				
+%%% 			end % if ~do_not_ask
+%%% 			
+%%% 		end % ~isempty
+%%% 		
+%%% 	end % for
+%%% 
+%%% endfunction
+
+
+function __write_datafile (samples,partialpressures,sensors,path)
 % write processed data to CSV data file
 
+	species = partialpressures.species;
+	p_val   = partialpressures.val;
+	p_err   = partialpressures.err;
+	time    = partialpressures.time;
+	p_unit  = partialpressures.unit;
+	
 	name = input ('Enter file name for processed data (or leave empty to skip): ','s');
 	
 	if isempty(name)
@@ -641,22 +685,45 @@ function __write_datafile (p_val,p_err,p_unit,species,samples,time,totalpressure
 		if fid == -1
 			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))
 		else
+		
 			disp (sprintf('Writing data to %s...',path))
 			
 			% write header:
-			fprintf (fid,'SAMPLE;TOTALPRESSURE (%s);TEMPERATURE (%s)',totalpressure_unit,temperature_unit);
-			for i = 1:length(species)
-				fprintf (fid,';%s TIME (EPOCH);%s PARTIALPRESSURE (%s);%s PARTIALPRESSURE-ERR (%s)',species{i},species{i},p_unit,species{i},p_unit)
+			fprintf (fid,'SAMPLE')
+			for j = 1:length(species)
+				fprintf (fid,';%s TIME (EPOCH);%s PARTIALPRESSURE (%s);%s PARTIALPRESSURE ERR (%s)',species{j},species{j},p_unit,species{j},p_unit)
+			end	
+			if ~isempty(sensors)
+				nsens = length(sensors{1});
+				for j = 1:nsens
+					fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit)
+				end
 			end
 			
+						
 			% write data:
 			for i = 1:length(samples)
 				fprintf (fid,'\n');
-				fprintf (fid,'%s;%g;%g',samples{i},totalpressure(i),temperature(i));
-				for j = 1:length(species)
+				
+				% sample name:
+				fprintf (fid,'%s',samples{i});
+				
+				% gas partial pressures:
+				for j = 1:length(species)				
 					fprintf (fid,';%.2f;%g;%g',time(j,i),p_val(j,i),abs(p_err(j,i)))
-				end % for j = 
+				end
+
+				% sensor data (if any):
+				if ~isempty(sensors)
+					for j = 1:nsens					
+						fprintf (fid,';%.2f;%g;%g',sensors{i}{j}.mean_time,sensors{i}{j}.mean,sensors{i}{j}.mean_err)
+					end
+				end
+
 			end % for i = 
+
+			fclose (fid);
+
 		end % if fid == -1
 	end % if isempty(name)
 	

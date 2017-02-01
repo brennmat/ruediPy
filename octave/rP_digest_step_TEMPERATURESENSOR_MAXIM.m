@@ -1,6 +1,6 @@
-function X = rP_digest_step_TEMPERATURE_MAXIM (RAW,sensor_name,opt)
+function X = rP_digest_step_TEMPERATURESENSOR_MAXIM (RAW,sensor_name,opt)
 
-% function X = rP_digest_step_TEMPERATURE_MAXIM (RAW,sensor_name,opt)
+% function X = rP_digest_step_TEMPERATURESENSOR_MAXIM (RAW,sensor_name,opt)
 % 
 % Load raw data and process ("digest") TEMPERATURE data from TEMPERATURESENSOR_MAXIM temperature sensor to obatin mean temperature value. This assumes that each datafile corresponds to a single "step" of analysis (i.e., a block of PRESSURE readings corresponding to a given sample, calibration, or blank analyisis). Results can be printed on the terminal and plotted on screen.
 % 
@@ -54,17 +54,17 @@ function X = rP_digest_step_TEMPERATURE_MAXIM (RAW,sensor_name,opt)
 % Copyright 2016, Matthias Brennwald (brennmat@gmail.com)
 
 if length(RAW) > 1
-	error ('rP_digest_step_TEMPERATURE_MAXIM: cannot process an array of multiple steps! Please try again with a single step struct...')
+	error ('rP_digest_step_TEMPERATURESENSOR_MAXIM: cannot process an array of multiple steps! Please try again with a single step struct...')
 end
 
 
-warning ('rP_digest_step_TEMPERATURE_MAXIM: this function is not yet implemented! Returning N/A data...')
+warning ('rP_digest_step_TEMPERATURESENSOR_MAXIM: this function is not yet implemented! Returning N/A data...')
 
-X.mean      = [];
-X.mean_err  = [];
-X.mean_unit = '';
-X.mean_time = [];
+X.mean      = 10;
+X.mean_err  = 0.1;
+X.mean_unit = 'degC';
+X.mean_time = 123456789.123;
 
 %%%%%%%%%%%%%%
-% implement the rP_digest_step_PRESSURESENSOR_WIKA function first; then use this as a template for rP_digest_step_TEMPERATURE_MAXIM
+% implement the rP_digest_step_PRESSURESENSOR_WIKA function first; then use this as a template for rP_digest_step_TEMPERATURESENSOR_MAXIM
 %%%%%%%%%%%%%%

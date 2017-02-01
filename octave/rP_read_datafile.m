@@ -504,9 +504,11 @@ function X = __parse_TEMPERATURESENSOR (TYPE,DATA,t) % parse TEMPERATURESENSOR o
 		
 					% append to TEMPERATUREs:
 					if k == 1 % first iteration
-						X.TEMPERATURE = p;
+						% X.TEMPERATURE = p;
+						X = p;
 					else
-						X.TEMPERATURE = [ X.TEMPERATURE p ];
+						% X.TEMPERATURE = [ X.TEMPERATURE p ];
+						X = [ X p ];
 					end
 													
 				end % for k = ...
@@ -532,7 +534,7 @@ function X = __parse_PRESSURESENSOR (TYPE,DATA,t) % parse PRESSURESENSOR object 
 		% parse line by line
 		switch toupper(T{i})
 			
-			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TEMPERATURE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PRESSURE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			case 'PRESSURE'
 				for k = 1:length(TT)
 					
@@ -549,9 +551,11 @@ function X = __parse_PRESSURESENSOR (TYPE,DATA,t) % parse PRESSURESENSOR object 
 		
 					% append to PRESSUREs:
 					if k == 1 % first iteration
-						X.PRESSURE = p;
+						% X.PRESSURE = p;
+						X = p;
 					else
-						X.PRESSURE = [ X.PRESSURE p ];
+						% X.PRESSURE = [ X.PRESSURE p ];
+						X = [ X p ];
 					end
 													
 				end % for k = ...
@@ -560,6 +564,6 @@ function X = __parse_PRESSURESENSOR (TYPE,DATA,t) % parse PRESSURESENSOR object 
 			otherwise
 				warning (sprintf('rP_read_datafile: type = %s unknown for PRESSURESENSOR object, skipping...',T{i}))
 
-		end % switch
+		end % switch		
 	end % for i = ...
 end % function
