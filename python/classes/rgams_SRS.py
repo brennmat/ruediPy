@@ -756,7 +756,7 @@ class rgams_SRS:
 		
 		INPUT:
 		mz: m/z value (integer)
-		gate: gate time (seconds)
+		gate: gate time (seconds) NOTE: gate time can be longer than the max. gate time supported by the hardware (2.4 seconds). If so, the multiple peak readings will be averaged to achieve the requested gate time.
 		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
 		add_to_peakbuffer (optional): flag to choose if peak value is added to peakbuffer (default: add_to_peakbuffer=True)
 		
@@ -851,7 +851,7 @@ class rgams_SRS:
 		INPUT:
 		mz: m/z value (integer)
 		mz_offset: offset relative m/z value (integer).
-		gate: gate time (seconds)
+		gate: gate time (seconds) NOTE: gate time can be longer than the max. gate time supported by the hardware (2.4 seconds). If so, the multiple zero readings will be averaged to achieve the requested gate time.
 		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
 		
 		OUTPUT:
