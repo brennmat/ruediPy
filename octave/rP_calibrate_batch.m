@@ -161,17 +161,18 @@ for i = 1:length(RAW)
 	else
 		ms = ms{1};
 	end
+	
+	if ~isempty(ms) % otherwise skip parsing the rest of this file
+		% digest SENSORs data:
+		for k = 1:length(SENSOR_names)
+			sens{k} = rP_digest_step_SENSOR (RAW{i},SENSOR_names{k});
+		end
 		
-	% digest SENSORs data:
-	for k = 1:length(SENSOR_names)
-		sens{k} = rP_digest_step_SENSOR (RAW{i},SENSOR_names{k});
+		xx.INFO        = info;
+		xx.MS          = ms;
+		xx.SENSORS     = sens;
+	    X = [ X ; xx ];
 	end
-		
-	xx.INFO        = info;
-	xx.MS          = ms;
-	xx.SENSORS     = sens;
-    X = [ X ; xx ];
-
 	
 %	if ~isempty(ms) % otherwise skip parsing the rest of this file
 %			% find pressure data from specified sensors
@@ -245,7 +246,7 @@ for i = 1:length(X)
 		case 'SAMPLE'
 			iSAMPLE   = [ iSAMPLE , i ];
 		otherwise
-			warning (sprintf("rP_calibrate_steps: unknown analysis type \'%s\' in file %s. Ignoring this step...",X(i).type,RAW(i).file))
+			warning (sprintf("rP_calibrate_batch: unknown analysis type \'%s\' in file %s. Ignoring this step...",X(i).type,RAW(i).file))
 	end % switch
 
 	mz_det = { mz_det{:} X(i).MS.mz_det{:} };
@@ -261,9 +262,9 @@ end % for i = ...
 
 % make sure we've got STANDARDs and BLANKs:
 if isempty(iSTANDARD)
-	error ('rP_calibrate_steps: there are no STANDARDs! Aborting...')
+	error ('rP_calibrate_batch: there are no STANDARDs! Aborting...')
 elseif isempty(iBLANK)
-	error ('rP_calibrate_steps: there are no BLANKs! Aborting...')
+	error ('rP_calibrate_batch: there are no BLANKs! Aborting...')
 end
 
 % sort out digested values for all mz/detector combinations
@@ -332,13 +333,9 @@ if flag_plot_peak_zero
 end
 
 
-% get total gas pressure at capillary inlet for STANDARDs:
-%%% if isnan(standardgas_pressure_val)
-%%% 	[PRESS_standard,unit] = __get_totalpressure (X(iSTANDARD),false);
-%%% else
-	PRESS_standard = repmat(standardgas_pressure_val,size(iSTANDARD));
-	unit = standardgas_pressure_unit;
-%%% end
+PRESS_standard = repmat(standardgas_pressure_val,size(iSTANDARD));
+unit = standardgas_pressure_unit;
+
 
 % get standard gas info for STANDARDs and determine sensitivities:
 S_val = S_err = repmat (NA,length(mz_det),length(iSTANDARD)); % matrices with sensitivities (and their uncertainties) of all mz_det combinations for all STANDARD steps (each row corresponds to one step)
@@ -351,7 +348,7 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 		k = find ( X(iSTANDARD(j)).INFO.standard.mz == MZ );
 		if ~isempty(k) % there is (at least) one standard entry for this MZ value
 			if length(k) > 1 % don't know how to treat this...
-				error (sprintf('rP_calibrate_steps: there are multiple STANDARD entries for the same mz value in STANDARD step %s. Aborting...',X(j).INFO.name))
+				error (sprintf('rP_calibrate_batch: there are multiple STANDARD entries for the same mz value in STANDARD step %s. Aborting...',X(j).INFO.name))
 			else
 				SPECIES{i} = [ X(iSTANDARD(j)).INFO.standard.species{k} , ' (' , mz_det{i} , ')' ];
 				l = find(strcmp( X(iSTANDARD(j)).MS.mz_det , mz_det{i})); % l is index to mz_det{i} combination in current step/measurement.
@@ -412,7 +409,7 @@ for i = 1:length(mz_det)
 	Se  = S_err(i,:);
 	k = find (~isnan(Sv)); tS = tS(k); Sv = Sv(k); Se = Se(k); % remove NA and NaN entries
 	if length(Sv) == 0
-		warning (sprintf('rP_calibrate_steps: no valid STANDARDs data for %s. Skipping...',mz_det{i}))
+		warning (sprintf('rP_calibrate_batch: no valid STANDARDs data for %s. Skipping...',mz_det{i}))
 	else
 		[tS,k] = sort(tS); Sv = Sv(k); Se = Se(k);
 		% If necessary, add 'fake' STANDARD steps before first SAMPLE and after last SAMPLE to allow interpolation / bracketing:
@@ -440,9 +437,6 @@ end % for i = ...
 
 TIME = t_sample;
 
-
-%%% % get total gas pressure at capillary inlet for SAMPLEs:
-%%% [TOTALPRESS_sample,TOTALPRESS_sample_unit] = __get_totalpressure (X(iSAMPLE),true);
 
 % *************************************************
 % Plot SAMPLE results vs. time
@@ -488,21 +482,10 @@ drawnow
 
 
 
-%% % get temperature values for SAMPLEs:
-%% [TEMPERATURE_sample,TEMPERATURE_sample_unit] = __get_temperature (X(iSAMPLE),true);
-
-
 
 % *************************************************
 % Write SAMPLE results to data file
 % *************************************************
-
-
-warning ('***************************************************************************')
-warning ('***************************************************************************')
-warning ('* MODIFY THIS TO INCLUDE TEMPERATURE AND PRESSURE DATA COLUMNS CORRESPONDING TO THE SENSORS SPECIFIED IN THE INPUT ARGUMENTS. IF SENSORS LISTS ARE EMPTY, DO NOT INCLUDE ANY PRESSURE OR TEMPERATURE COLUMNS. *')
-warning ('***************************************************************************')
-warning ('***************************************************************************')
 
 
 PARTIALPRESSURES.species = SPECIES;
@@ -570,7 +553,7 @@ function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
 	for j = 1:length(steps)
 		k = find(strcmp(steps(j).MS.mz_det,mz_det)); % find index to specified mz_det combination
 		if isempty(k)
-			warning (sprintf('rP_calibrate_steps: there are no data for %s in file %s!',mz_det,steps(j).INFO.file))
+			warning (sprintf('rP_calibrate_batch: there are no data for %s in file %s!',mz_det,steps(j).INFO.file))
 			val = [ val , NA ];
 			err = [ err , NA ];
 			t   = [ t   , NA ];
