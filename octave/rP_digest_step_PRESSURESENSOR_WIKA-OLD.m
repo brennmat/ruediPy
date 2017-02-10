@@ -34,7 +34,7 @@ function X = rP_digest_step_PRESSURESENSOR_WIKA (RAW,sensor_name,opt)
 % along with ruediPy.  If not, see <http://www.gnu.org/licenses/>.
 % 
 % ruediPy: toolbox for operation of RUEDI mass spectrometer systems
-% Copyright (C) 2016  Matthias Brennwald
+% Copyright (C) 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 % 
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -45,7 +45,7 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 % along with ruediPy.  If not, see <http://www.gnu.org/licenses/>.
 % 
 % ruediPy: toolbox for operation of RUEDI mass spectrometer systems
-% Copyright (C) 2016  Matthias Brennwald
+% Copyright (C) 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 % 
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by

@@ -32,7 +32,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright 2016, Matthias Brennwald (brennmat@gmail.com) and Yama Tomonaga
+# Copyright 2016, 2917, Matthias Brennwald (brennmat@gmail.com)
 
 import time
 import sys
