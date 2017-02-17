@@ -150,12 +150,6 @@ class misc:
 		(none)
 		'''
 		
-		# dt = wait/10
-		# dt = round(dt/5)*5
-		# if dt < 1:
-		# 	dt = 1
-		# if dt > 30:
-		# 	dt = 30
 		dt = 1
 
 		start = time.time()

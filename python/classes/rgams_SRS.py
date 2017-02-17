@@ -1130,7 +1130,7 @@ class rgams_SRS:
 				yR = (Y[-1]+Y[-2])/2
 				mL = (MZ[0]+MZ[1])/2
 				mR = (MZ[-1]+MZ[-2])/2
-			        fit = numpy.polyfit([mL,mR],[yL,yR],1)
+				fit = numpy.polyfit([mL,mR],[yL,yR],1)
 				fit_fn = numpy.poly1d(fit)
 				Y = Y - fit_fn(MZ) # subtract baseline (straight trend line)
 				Y = Y - min(Y) # force min(Y) to zero (to avoid bad cum-sum data)
@@ -1155,8 +1155,7 @@ class rgams_SRS:
 				else:
 					b = 0
 				if a > b:
-					# m1 = MZ[a] + (0.5-cy[a])/(cy[b]-cy[a])*(MZ[b]-MZ[a]) # interpolated MZ value at cy = 0.5
-                                        m1 = CMZ[a] + (0.5-cy[a])/(cy[b]-cy[a])*(CMZ[b]-CMZ[a]) # interpolated CMZ value at cy = 0.5
+					m1 = CMZ[a] + (0.5-cy[a])/(cy[b]-cy[a])*(CMZ[b]-CMZ[a]) # interpolated CMZ value at cy = 0.5
 					print '   Median peak center: mz = ' + ' {:.3f}'.format(m1)
 
 				else:
@@ -1205,9 +1204,6 @@ class rgams_SRS:
 			
 			# determine new values of RI and RS if tuning is yet within tolerance:
 			if doTune:
-				# if max_iter > 1: # use smaller steps if repeating the tuning (to improve convergence/stability):
-				# 	delta_m0 = (0.2 + 1/max_iter**0.5) * delta_m0
-				# 	delta_m128 = (0.2 + 1/max_iter**0.5) * delta_m128
 				delta_m0   = (0.5 + 0.5/max_iter**0.5) * delta_m0
 				delta_m128 = (0.5 + 0.5/max_iter**0.5) * delta_m128
 				ri = RI0 - delta_m0*(RS0/128)
