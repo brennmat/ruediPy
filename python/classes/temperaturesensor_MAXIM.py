@@ -33,7 +33,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Copyright 2016, 2917, Matthias Brennwald (brennmat@gmail.com)
+# Copyright 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 
 from classes.misc	 import misc
 from digitemp.master import UART_Adapter
