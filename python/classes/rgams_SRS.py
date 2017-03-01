@@ -1543,6 +1543,7 @@ class rgams_SRS:
 			self.warning('Plotting of scan data not possible (no display system available).')
 
 		else:
+			self._scan_ax.hold(False)
 			self._scan_ax.plot( mz , intens , 'k.-' )
 			if cumsum_mz:
 				# normalize cumulative sum values to intens (to match plot scales):
