@@ -498,7 +498,7 @@ class rgams_SRS:
 
 	def set_detector(self,det):
 		'''
-		rgams_SRS.set_detector()
+		rgams_SRS.set_detector(det)
 		
 		Set current detetector used by the MS (direct the ion beam to the Faraday or electron multiplier detector).
 		NOTE: To activate the electron multiplier (CEM), the default high voltage (bias voltage) as returned by self.get_multi_default_hv() is used (this is NOT necessarily the same as the default value stored in the RGA head).

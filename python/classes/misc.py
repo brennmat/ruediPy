@@ -133,6 +133,33 @@ class misc:
 
 	########################################################################################################
 	
+
+	@staticmethod
+	def ask_for_value(msg='Enter value = '):
+		'''
+		x = misc.ask_for_value(msg='Enter value = ')
+		
+		Print a message asking the user to enter something, wait until the user presses the ENTER key, and return the value.
+		
+		INPUT:
+		msg (optional): message
+		
+		OUTPUT:
+		x: user value (string)
+		'''
+		
+		print ('\a') # get user attention using the terminal bell
+		print ('')
+		if sys.version_info >= (3,0): # Python 3.0 or newer
+			x = input( msg )
+		else:
+			x = raw_input( msg )
+		print ('')
+		return x
+		
+
+	########################################################################################################
+	
 	
 
 	@staticmethod
