@@ -1,6 +1,6 @@
 function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,SENSOR_names,varargin)
 
-% function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch (data,MS_names,PRESS_names,TEMP_names,options)
+% function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch (data,MS_names,SENSOR_names,varargin)
 % 
 % Calibrate a batch of ruediPy analysis steps by combining data from samples, calibrations, and blanks. Write results to CSV data file.
 %
@@ -676,7 +676,7 @@ function __write_datafile (samples,partialpressures,sensors,path)
 			for j = 1:length(species)
 				fprintf (fid,';%s TIME (EPOCH);%s PARTIALPRESSURE (%s);%s PARTIALPRESSURE ERR (%s)',species{j},species{j},p_unit,species{j},p_unit)
 			end	
-			if ~isempty(sensors)
+			if ~isempty(sensors)			
 				nsens = length(sensors{1});
 				for j = 1:nsens
 					fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit)
@@ -697,8 +697,8 @@ function __write_datafile (samples,partialpressures,sensors,path)
 				end
 
 				% sensor data (if any):
-				if ~isempty(sensors)
-					for j = 1:nsens					
+				if ~isempty(sensors)				
+					for j = 1:nsens						
 						fprintf (fid,';%.2f;%g;%g',sensors{i}{j}.mean_time,sensors{i}{j}.mean,sensors{i}{j}.mean_err)
 					end
 				end

@@ -2,7 +2,7 @@ function X = rP_read_datafile (file)
 
 % function X = rP_read_datafile (file)
 % 
-% Read and parse data in ruediPy datafiles (work in progress!).
+% Read and parse data in ruediPy datafiles.
 %
 % Datafile lines are formatted as follows:
 %   EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...

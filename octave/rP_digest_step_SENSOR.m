@@ -90,6 +90,11 @@ figr = 1;
 % get data corresponding to sensor_name:
 if ~isfield (RAW,sensor_name)
 	disp (sprintf('rP_digest_step_SENSOR: found no SENSOR data for ''%s''.',sensor_name))
+	X.mean = NA;
+	X.mean_err = NA;
+	X.mean_time = NA;
+	X.mean_unit = 'NA';
+
 	
 else
 	% get SENSOR data:
