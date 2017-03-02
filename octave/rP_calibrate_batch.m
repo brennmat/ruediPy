@@ -2,7 +2,7 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 
 % function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch (data,MS_names,PRESS_names,TEMP_names,options)
 % 
-% Calibrate a batch of ruediPy analysis steps by combining data from samples, calibrations, and blanks.
+% Calibrate a batch of ruediPy analysis steps by combining data from samples, calibrations, and blanks. Write results to CSV data file.
 %
 % INPUT:
 % data: files to be processed (string with file/path pattern)
