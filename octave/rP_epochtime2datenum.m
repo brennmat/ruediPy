@@ -2,13 +2,13 @@ function t = rP_epochtime2datenum (t)
 
 % function t = rP_epochtime2datenum (t)
 % 
-% Convert UNIX epoch time to datenum for use with GNU Octave or Matlab
+% Convert UNIX epoch time to datenum for use with GNU Octave or Matlab. The datenum output corresponds to UTC (Coordinated Universal Time standard, which does not observe daylight saving time and is essentially the same as Greenwich Mean Time / GMT).
 % 
 % INPUT:
 % t: UNIXT epoch time
 % 
 % OUPUT:
-% t: datenum
+% t: datenum (corresponding to UTC time)
 %
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
