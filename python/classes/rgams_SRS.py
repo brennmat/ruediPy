@@ -79,7 +79,7 @@ class rgams_SRS:
 		label (optional): label / name of the RGAMS object (string). Default: label = 'MS'
 		cem_hv (optional): default bias voltage to be used with the electron multiplier (CEM). Default value: cem_hv = 1400 V.
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
-		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
+		fig_w, fig_h (optional): width and height of figure window used to plot data (inches). If fig_w or fig_h is zero or negative, no window is opened.
 		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
 
 		OUTPUT:
@@ -121,7 +121,11 @@ class rgams_SRS:
 		self._peakbuffer_max_len = max_buffer_points
 		
 		# set up plotting environment
-		self._has_display = havedisplay
+		if (fig_w <= 0) or (fig_h <= 0):
+			self._has_display = False
+		else:
+			self._has_display = havedisplay
+		
 		if self._has_display: # prepare plotting environment and figure
 
 			# set up plotting environment
