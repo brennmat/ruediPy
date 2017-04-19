@@ -2,9 +2,9 @@ USING THE MAXIM DS18B20 ON USB PORT
 
 MATERIAL
 - DS18B20 temperature sensor in water proof probe with cable (e.g., Boxtec: Onewire Temperature Sensor (DS18B20) 2m (47120))
-- USB / TTL converter Prolific PL2303TA
+- USB / TTL converter such as FTDI TTL-232R-RPI (Distrelec Nr. 110-51-732). Prolific PL2303TA also works ok, but does not have unique USB ID, so multiple USB interfaces can be hard to distinguish.
 
-CONNECTIONS
+CONNECTIONS (color codes as with PROLIFIC PL2303TA, FTDI or other may have different color coding. Black is usually black, and that's enough to get the connections right)
 - See photos (OVERVIEW.jpg and CLOSEUP.jpg)
 - The red wire (5V) on the USB converter is not used. The DS18B20 "steals" power from the data line (so-called parasitic mode)
 - TXD and RXD (green and white) on USB converter joined together, then connected to DATA wire on DS18B20 (blue)

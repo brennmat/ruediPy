@@ -42,8 +42,8 @@
 # import ruediPy classes:
 from classes.temperaturesensor_MAXIM	import temperaturesensor_MAXIM
 
-TSENS1		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-path/pci-0000:00:14.0-usb-0:1.4.3:1.0-port0')
-TSENS2		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-path/pci-0000:00:14.0-usb-0:1.4.4:1.0-port0')
+TSENS1		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FT9PL2F6-if00-port0')
+TSENS2		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FT9PL7LS-if00-port0')
 
 # take temperature readings:
 while 1:
