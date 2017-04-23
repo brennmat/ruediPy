@@ -1406,6 +1406,33 @@ class rgams_SRS:
 
 
 
+	def close_plot_window(self):
+		'''
+		rgams_SRS.close_plot_window()
+
+		Close the plot window and disable plotting (this may be convenient if the plotting window is not used and just wastes too much screen space).
+
+		INPUT:
+		(none)
+
+		OUTPUT:
+		(none)
+		'''
+		
+		# close plot window (if it exists):
+		if hasattr(self,'_fig') # the _fig field exists
+			if plt.fignum_exists(self._fig.number) # the figure is still open
+				plt.close(self._fig.number)
+
+		# turn off plotting:
+		self._has_display = False
+
+
+
+########################################################################################################
+
+
+
 	def plot_peakbuffer(self):
 		'''
 		rgams_SRS.plot_peakbuffer()
