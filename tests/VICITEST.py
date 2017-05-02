@@ -46,17 +46,24 @@ from classes.selectorvalve_VICI	import selectorvalve_VICI
 from classes.datafile		import datafile
 
 # set up ruediPy objects:
-VALVE     = selectorvalve_VICI ( serialport = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2304832-if00-port0', label = 'INLETSELECTOR' )
-DATAFILE  = datafile ( '~/ruedi_data' )
+VALVE     = selectorvalve_VICI ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2374672-if00-port0', label = 'INLETSELECTOR' )
+DATAFILE  = datafile ( '~/data' )
 
 # start data file:
 DATAFILE.next() # start a new data file
 print 'Data output to ' + DATAFILE.name()
 
 # change valve positions:
-VALVE.setpos(1,DATAFILE)
-print 'Valve position is ' + str(VALVE.getpos())
-VALVE.setpos(2,DATAFILE)
-print 'Valve position is ' + str(VALVE.getpos())
-VALVE.setpos(3,DATAFILE)
-print 'Valve position is ' + str(VALVE.getpos())
+while True:
+	VALVE.setpos(1,DATAFILE)
+	print 'Valve position is ' + str(VALVE.getpos())
+	VALVE.setpos(2,DATAFILE)
+	print 'Valve position is ' + str(VALVE.getpos())
+	VALVE.setpos(5,DATAFILE)
+	print 'Valve position is ' + str(VALVE.getpos())
+	VALVE.setpos(4,DATAFILE)
+	print 'Valve position is ' + str(VALVE.getpos())
+	VALVE.setpos(2,DATAFILE)
+	print 'Valve position is ' + str(VALVE.getpos())
+	VALVE.setpos(6,DATAFILE)
+	print 'Valve position is ' + str(VALVE.getpos())

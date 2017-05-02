@@ -68,7 +68,7 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , cem_hv = 1400 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , has_plot_window = true ):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , has_plot_window = True ):
 		'''
 		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
 		
@@ -81,7 +81,7 @@ class rgams_SRS:
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches). 
 		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
-		has_plot_window (optional): flag to choose if a plot window should be opened for the rgams_SRS object (boolean)
+		has_plot_window (optional): flag to choose if a plot window should be opened for the rgams_SRS object (default: has_plot_window = True)
 
 		OUTPUT:
 		(none)
@@ -1420,8 +1420,8 @@ class rgams_SRS:
 		'''
 		
 		# close plot window (if it exists):
-		if hasattr(self,'_fig') # the _fig field exists
-			if plt.fignum_exists(self._fig.number) # the figure is still open
+		if hasattr(self,'_fig'): # the _fig field exists
+			if plt.fignum_exists(self._fig.number): # the figure is still open
 				plt.close(self._fig.number)
 
 		# turn off plotting:
