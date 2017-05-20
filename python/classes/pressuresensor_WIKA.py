@@ -143,7 +143,7 @@ class pressuresensor_WIKA:
 
 			plt.ion() # enables interactive mode
 
-			plt.pause(0.1) # allow some time to update the plot
+			# plt.pause(0.1) # allow some time to update the plot *** DON'T SHOW THE WINDOW YET, WAIT FOR DATA PLOTTING
 		
 		
 		print ('Successfully configured WIKA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport )
