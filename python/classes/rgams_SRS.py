@@ -158,7 +158,7 @@ class rgams_SRS:
 			plt.ion() # enables interactive mode
 			# plt.draw()
 			# plt.show()
-			plt.pause(0.1) # allow some time to update the plot
+			### plt.pause(0.1) # allow some time to update the plot *** DON'T UPDATE PLOT YET, KEEP IT HIDDEN. WILL BE UPDATED/SHOWN ONCE DATA GETS PLOTTED!   
 			
 			
 		print ('Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
