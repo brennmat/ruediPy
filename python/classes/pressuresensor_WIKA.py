@@ -127,7 +127,7 @@ class pressuresensor_WIKA:
 			# f.suptitle('SRS RGA DATA')
 			t = 'WIKA P30'
 			if self._label:
-				t = t + ' (' + self._label + ')'
+				t = t + ' (' + self.label() + ')'
 			self._fig.canvas.set_window_title(t)
 
 			# set up panel for pressure history plot:
@@ -341,9 +341,8 @@ class pressuresensor_WIKA:
                         self._pressbuffer_ax.set_xlabel('Time (s)')
                         self._pressbuffer_ax.set_ylabel('Pressure ('+self._pressbuffer_unit[0]+')')
 
-			#self._fig.tight_layout(pad=1.5)
 			plt.show() # update the plot
-			plt.pause(0.01) # allow some time to update the plot
+			plt.pause(0.015) # allow some time to update the plot
 
 
 	########################################################################################################
