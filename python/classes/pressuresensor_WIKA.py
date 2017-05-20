@@ -51,7 +51,6 @@ if havedisplay: # prepare plotting environment
 	import warnings
 	import matplotlib.cbook
 	warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-	
 	matplotlib.use('GTKAgg') # use this for faster plotting
 	import matplotlib.pyplot as plt
 
@@ -255,6 +254,7 @@ class pressuresensor_WIKA:
 		if add_to_pressbuffer:
 			self.pressbuffer_add(t,p,unit)
 
+		# write data to datafile
 		if not ( f == 'nofile' ):
 			f.write_pressure('PRESSURESENSOR_WIKA',self.label(),p,unit,t)
 			# self.warning('writing pressure value to data file is not yet implemented!')
