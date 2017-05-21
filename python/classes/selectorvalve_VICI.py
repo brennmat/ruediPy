@@ -40,7 +40,7 @@ from classes.misc	import misc
 
 class selectorvalve_VICI:
 	"""
-	ruediPy class for VICI valve control.
+	ruediPy class for VICI valve control. This assumes the serial protocol used with VICI's older "microlectric" actuators. For use with the newer "universal" actuators, they must be set to "legacy mode" using the "LG1" command (see page 8 of VICI document "Universal Electric Actuator Instruction Manual").
 	"""
 	
 	########################################################################################################
