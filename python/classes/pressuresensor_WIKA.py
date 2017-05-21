@@ -89,8 +89,8 @@ class pressuresensor_WIKA:
 			bytesize = serial.EIGHTBITS,
 			timeout  = 5.0
 		)
-		ser.flushInput() 	# make sure input is empty
 		ser.flushOutput() 	# make sure output is empty
+		ser.flushInput() 	# make sure input is empty
 		
 		self.ser = ser
 
