@@ -4,6 +4,21 @@
 \path{ruediPy/python/classes/rgams_SRS.py}\par
 ruediPy class for SRS RGA-MS control.\par
 
+\paragraph{Method \texttt{close_plot_window}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.close_plot_window()\newline
+\newline
+Close the plot window and disable plotting (this may be convenient if the plotting window is not used and just wastes too much screen space).\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{filament_off}}
 \vspace{1ex}
 \texttt{\newline
@@ -34,18 +49,54 @@ OUTPUT:\newline
 \newline
 }
 
-\paragraph{Method \texttt{get_RI}}
+\paragraph{Method \texttt{get_DI}}
 \vspace{1ex}
 \texttt{\newline
-x = rgams_SRS.get_RI(x)\newline
+x = rgams_SRS.get_DI(x)\newline
 \newline
-Get current RI parameter value (peak-position tuning at low mz range)\newline
+Get current DI parameter value (peak-width tuning at low mz range)\newline
 \newline
 INPUT:\newline
 (none)\newline
 \newline
 OUTPUT:\newline
-x: RI value\newline
+x: DI value (bit units)\newline
+\newline
+NOTE:\newline
+See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_DS}}
+\vspace{1ex}
+\texttt{\newline
+x = rgams_SRS.get_DS(x)\newline
+\newline
+Get current DS parameter value (peak-width tuning at high mz range)\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+x: DS value (bit/amu units)\newline
+\newline
+NOTE:\newline
+See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_RI}}
+\vspace{1ex}
+\texttt{\newline
+x = rgams_SRS.get_RI(x)\newline
+\newline
+Get current RI parameter value (peak-position tuning at low mz range / RF voltage output at 0 amu, in mV).\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+x: RI voltage (in mV)\newline
 \newline
 NOTE:\newline
 See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
@@ -57,13 +108,13 @@ See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
 \texttt{\newline
 x = rgams_SRS.get_RS(x)\newline
 \newline
-Get current RS parameter value (peak-position tuning at high mz range)\newline
+Get current RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)\newline
 \newline
 INPUT:\newline
 (none)\newline
 \newline
 OUTPUT:\newline
-x: RS value\newline
+x: RS voltage (in mV)\newline
 \newline
 NOTE:\newline
 See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
@@ -114,6 +165,37 @@ INPUT:\newline
 \newline
 OUTPUT:\newline
 val: filament current in mA\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_multiplier_default_hv}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.get_multiplier_default_hv()\newline
+\newline
+Return default value to be used for electron multiplier (CEM) high voltage (bias voltage).\newline
+NOTE: the value returned is NOT the value stored in the memory of the RGA head. This function is just a wrapper that returns the default high voltage value set in the RGA object (e.g., during initialisation of the object).\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: voltage\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_multiplier_hv}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.get_multiplier_hv()\newline
+\newline
+Return electron multiplier (CEM) high voltage (bias voltage).\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: voltage\newline
 \newline
 }
 
@@ -198,14 +280,15 @@ ans: answer / result returned from RGA\newline
 \paragraph{Method \texttt{peak}}
 \vspace{1ex}
 \texttt{\newline
-val,unit = rgams_SRS.peak(mz,gate,f)\newline
+val,unit = rgams_SRS.peak(mz,gate,f,add_to_peakbuffer=True)\newline
 \newline
 Read out detector signal at single mass (m/z value).\newline
 \newline
 INPUT:\newline
 mz: m/z value (integer)\newline
-gate: gate time (seconds)\newline
+gate: gate time (seconds) NOTE: gate time can be longer than the max. gate time supported by the hardware (2.4 seconds). If so, the multiple peak readings will be averaged to achieve the requested gate time.\newline
 f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+add_to_peakbuffer (optional): flag to choose if peak value is added to peakbuffer (default: add_to_peakbuffer=True)\newline
 \newline
 OUTPUT:\newline
 val: signal intensity (float)\newline
@@ -220,6 +303,29 @@ mass measurements in a set with the same type of detector\newline
 and at the same noise floor (NF) setting.\newline
 Fixed detector settings eliminate settling time problems\newline
 in the electrometer and in the CDEM's HV power supply.\newline
+\newline
+}
+
+\paragraph{Method \texttt{peak_zero_loop}}
+\vspace{1ex}
+\texttt{\newline
+peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False)\newline
+\newline
+Cycle PEAKS and ZERO readings given mz values.\newline
+\newline
+INPUT:\newline
+mz: list of tuples with peak m/z value (for PEAK) and delta-mz (for ZERO). If delta-mz == 0, no ZERO value is read.\newline
+detector: detector string ('F' or 'M')\newline
+gate: integration time\newline
+ND: number of data cycles recorded to the current data file\newline
+NC: number of cycles used for conditioning of the detector and electronics before recording the data (not written to datafile)\newline
+datafile: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+clear_peakbuf_cond: flag to set clearing of peakbuffer before conditioning cycles on/off (optional, default=True)\newline
+clear_peakbuf_main: flag to set clearing of peakbuffer before main cycles on/off (optional, default=True)\newline
+plot_cond: flag to set plotting of readings used for detector conditioning (inclusion of values in peakbuffer)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
 \newline
 }
 
@@ -251,6 +357,21 @@ Clear data in PEAKS data buffer\newline
 \newline
 INPUT:\newline
 (none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{peakbuffer_set_length}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.peakbuffer_set_length(N)\newline
+\newline
+Set max. length of peakbuffer\newline
+\newline
+INPUT:\newline
+N: number of PEAK values\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -291,6 +412,21 @@ OUTPUT:\newline
 \newline
 }
 
+\paragraph{Method \texttt{print_status}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.print_status()\newline
+\newline
+Print status of the RGA head.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{scan}}
 \vspace{1ex}
 \texttt{\newline
@@ -299,8 +435,8 @@ M,Y,unit = rgams_SRS.scan(low,high,step,gate,f)\newline
 Analog scan\newline
 \newline
 INPUT:\newline
-low: low m/z value\newline
-high: high m/z value\newline
+low: low m/z value (integer or decimal)\newline
+high: high m/z value (integer or decimal)\newline
 step: scan resolution (number of mass increment steps per amu)\newline
 step = integer number (10...25) --> use given number (high number equals small mass increments between steps)\newline
 step = '*' use default value (step = 10)\newline
@@ -321,10 +457,10 @@ unit: unit of Y (string)\newline
 \texttt{\newline
 rgams_SRS.set_RI(x)\newline
 \newline
-Set RI parameter value (peak-position tuning at low mz range)\newline
+Set RI parameter value (peak-position tuning at low mz range / RF voltage output at 0 amu, in mV)\newline
 \newline
 INPUT:\newline
-x: RI voltage\newline
+x: RI voltage (mV)\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -339,10 +475,10 @@ See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
 \texttt{\newline
 rgams_SRS.set_RS(x)\newline
 \newline
-Set RS parameter value (peak-position tuning at high mz range)\newline
+Set RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)\newline
 \newline
 INPUT:\newline
-x: RS value\newline
+x: RS voltage (mV)\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -355,9 +491,10 @@ See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
 \paragraph{Method \texttt{set_detector}}
 \vspace{1ex}
 \texttt{\newline
-rgams_SRS.set_detector()\newline
+rgams_SRS.set_detector(det)\newline
 \newline
 Set current detetector used by the MS (direct the ion beam to the Faraday or electron multiplier detector).\newline
+NOTE: To activate the electron multiplier (CEM), the default high voltage (bias voltage) as returned by self.get_multi_default_hv() is used (this is NOT necessarily the same as the default value stored in the RGA head).\newline
 \newline
 INPUT:\newline
 det: detecor (string):\newline
@@ -404,7 +541,7 @@ OUTPUT:\newline
 \texttt{\newline
 val = rgams_SRS.set_gate_time()\newline
 \newline
-Set noi floor (NF) parameter for RGA measurements according to desired gate time (by choosing the best-match NF value).\newline
+Set noise floor (NF) parameter for RGA measurements according to desired gate time (by choosing the best-match NF value).\newline
 \newline
 INPUT:\newline
 gate: gate time in (fractional) seconds\newline
@@ -438,6 +575,21 @@ NF	gate (seconds)\newline
 \newline
 }
 
+\paragraph{Method \texttt{set_multiplier_hv}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_multiplier_hv(val)\newline
+\newline
+Set electron multiplier (CEM) high voltage (bias voltage).\newline
+\newline
+INPUT:\newline
+val: voltage\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{set_noise_floor}}
 \vspace{1ex}
 \texttt{\newline
@@ -453,6 +605,36 @@ OUTPUT:\newline
 \newline
 }
 
+\paragraph{Method \texttt{set_peakbuffer_plot_max_y}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_peakbuffer_plot_max_y(val)\newline
+\newline
+Set upper limit of y range in peakbuffer plot.\newline
+\newline
+INPUT:\newline
+val: upper limit of y-axis range\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{set_peakbuffer_plot_min_y}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_peakbuffer_plot_min_y(val)\newline
+\newline
+Set lower limit of y range in peakbuffer plot.\newline
+\newline
+INPUT:\newline
+val: lower limit of y-axis range\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{tune_peak_position}}
 \vspace{1ex}
 \texttt{\newline
@@ -461,9 +643,12 @@ rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05)\newline
 Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters ard then adjusted to minimize the mz offsets (RI and RF, which define the peak positions at mz=0 and mz=128). This needs at least two distinct peak mz values at (one at a low and one at a high mz value). The procedure is repeated several times.\newline
 \newline
 INPUT:\newline
-mz: list of mz values where peaks are scanned\newline
-gate: list of gate times used in the scans\newline
-det: list of detectors to be used in the scans ('F' or 'M')\newline
+peaks: list of (mz,width,gate,detector) tuples, where peaks should be scanned and tuned\newline
+mz = mz value of peak (center of the scan)\newline
+width = width of the peak (relative to center mz value)\newline
+gate: gate time to be used for the scan\newline
+detector: detector to be used for the scan ('F' or 'M')\newline
+\newline
 max_iter (optional): max. number of repetitions of the tune procedure\newline
 maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offsets at mz=0 and mz=128 after tuning are less than maxdelta_z after tuning, the tuning procedure is stopped.\newline
 \newline
@@ -506,7 +691,7 @@ The detector signal is read at mz+mz_offset\newline
 INPUT:\newline
 mz: m/z value (integer)\newline
 mz_offset: offset relative m/z value (integer).\newline
-gate: gate time (seconds)\newline
+gate: gate time (seconds) NOTE: gate time can be longer than the max. gate time supported by the hardware (2.4 seconds). If so, the multiple zero readings will be averaged to achieve the requested gate time.\newline
 f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
 \newline
 OUTPUT:\newline
@@ -527,7 +712,7 @@ in the electrometer and in the CDEM's HV power supply.\newline
 
 \subsubsection{Class \texttt{selectorvalve_VICI}}
 \path{ruediPy/python/classes/selectorvalve_VICI.py}\par
-ruediPy class for VICI valve control.\par
+ruediPy class for VICI valve control. This assumes the serial protocol used with VICI's older "microlectric" actuators. For use with the newer "universal" actuators, they must be set to "legacy mode" using the "LG1" command (see page 8 of VICI document "Universal Electric Actuator Instruction Manual").\par
 
 \paragraph{Method \texttt{getpos}}
 \vspace{1ex}
@@ -598,15 +783,49 @@ label: label / name (string)\newline
 \newline
 }
 
+\paragraph{Method \texttt{plot_pressbuffer}}
+\vspace{1ex}
+\texttt{\newline
+pressuresensor_WIKA.plot_pressbuffer()\newline
+\newline
+Plot trend (or update plot) of values in pressure data buffer (e.g. after adding data)\newline
+NOTE: plotting may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{pressbuffer_add}}
+\vspace{1ex}
+\texttt{\newline
+pressuresensor_WIKA.pressbuffer_add(t,p,unit)\newline
+\newline
+Add data to pressure data buffer\newline
+\newline
+INPUT:\newline
+t: epoch time\newline
+p: pressure value\newline
+unit: unit of pressure value (char/string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{pressure}}
 \vspace{1ex}
 \texttt{\newline
-press,unit = pressuresensor_WIKA.pressure(f)\newline
+press,unit = pressuresensor_WIKA.pressure(f,add_to_pressbuffer=True)\newline
 \newline
 Read out current pressure value.\newline
 \newline
 INPUT:\newline
 f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+add_to_pressbuffer (optional): flag to indicate if data get appended to pressure buffer (default=True)\newline
 \newline
 OUTPUT:\newline
 press: pressure value in hPa (float)\newline
@@ -663,6 +882,39 @@ label: label / name (string)\newline
 \newline
 }
 
+\paragraph{Method \texttt{plot_tempbuffer}}
+\vspace{1ex}
+\texttt{\newline
+temperaturesensor_MAXIM.plot_tempbuffer()\newline
+\newline
+Plot trend (or update plot) of values in temperature data buffer (e.g. after adding data)\newline
+NOTE: plotting may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{tempbuffer_add}}
+\vspace{1ex}
+\texttt{\newline
+temperaturesensor_MAXIM.tempbuffer_add(t,T,unit)\newline
+\newline
+Add data to temperature data buffer\newline
+\newline
+INPUT:\newline
+t: epoch time\newline
+T: temperature value\newline
+unit: unit of pressure value (char/string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{temperature}}
 \vspace{1ex}
 \texttt{\newline
@@ -672,6 +924,7 @@ Read out current temperaure value.\newline
 \newline
 INPUT:\newline
 f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+add_to_tempbuffer (optional): flag to indicate if data get appended to temperature buffer (default=True)\newline
 \newline
 OUTPUT:\newline
 temp: temperature value (float)\newline
@@ -776,18 +1029,23 @@ n: ile name (string)\newline
 \paragraph{Method \texttt{next}}
 \vspace{1ex}
 \texttt{\newline
-datafile.next(,typ='',samplename='',std_species='',std_conc='',std_mz='')\newline
+datafile.next( typ='MISC' , samplename='' , standardconc=[] )\newline
 \newline
 Close then current data file (if it's still open) and start a new file.\newline
 \newline
 INPUT:\newline
-typ (optional): analysis type (string, default: typ = ''). The analysis type is written to the data file, and is appended to the file name. typ can be one of the following analysis types:\newline
+typ (optional): analysis type (string, default: typ = 'MISC'). The analysis type is written to the data file, and is appended to the file name. typ can be one of the following analysis types:\newline
 typ = 'SAMPLE' (for sample analyses)\newline
-typ = 'STANDARD' (for standard / calibration gas analyses)\newline
+typ = 'STANDARD' (for standard / calibration analyses)\newline
 typ = 'BLANK' (for blank analyses)\newline
-typ = 'UNKNOWN' (if analysis type is unknown)\newline
-typ = '' (if analysis type is unknown; nothing is added to the file name)\newline
-samplename (optional, only used if typ='SAMPLE'): description, name, or ID of sample\newline
+typ = 'MISC' (for miscellaneous analysis types, useful for testing, maintenance, or similar purposes)\newline
+samplename (optional, only used if typ='SAMPLE'): description, name, or ID of sample (string)\newline
+standardconc (optional, only used if typ='STANDARD'): standard gas information, list of 3-tuples, one tuple for each mz-value). Each tuple has the following 3 fields:\newline
+field-1: name of species (string)\newline
+field-2: volumetric species concentration in standard gas\newline
+field-3: mz value used for analysis of this species\newline
+\newline
+example for N2 and Ar-40 in air, analyzed on mz=28 and mz=40: standardconc = [ ('N2',0.781,28) , ('Ar-40',0.9303,40) ]\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -1004,6 +1262,21 @@ OUTPUT:\newline
 \path{ruediPy/python/classes/misc.py}\par
 ruediPy class with helper functions.\par
 
+\paragraph{Method \texttt{ask_for_value}}
+\vspace{1ex}
+\texttt{\newline
+x = misc.ask_for_value(msg='Enter value = ')\newline
+\newline
+Print a message asking the user to enter something, wait until the user presses the ENTER key, and return the value.\newline
+\newline
+INPUT:\newline
+msg (optional): message\newline
+\newline
+OUTPUT:\newline
+x: user value (string)\newline
+\newline
+}
+
 \paragraph{Method \texttt{now_UNIX}}
 \vspace{1ex}
 \texttt{\newline
@@ -1031,6 +1304,56 @@ INPUT:\newline
 \newline
 OUTPUT:\newline
 dt: date-time (string) in YYYY-MM-DD hh:mm:ss format\newline
+\newline
+}
+
+\paragraph{Method \texttt{sleep}}
+\vspace{1ex}
+\texttt{\newline
+misc.sleep( wait , msg='' )\newline
+\newline
+Wait for a specified time and print a message.\newline
+\newline
+INPUT:\newline
+wait: waiting time (seconds)\newline
+msg (optional): message\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{user_menu}}
+\vspace{1ex}
+\texttt{\newline
+x = misc.user_menu(menu,title='Choose an option')\newline
+\newline
+Show a "menu" for selection of different user options, return user choice based on key pressed by user.\newline
+\newline
+INPUT:\newline
+menu: menu entries (tuple of strings)\newline
+title (optional): title of the menu (default='Choose an option')\newline
+\newline
+OUTPUT:\newline
+x: number of menu choice\newline
+\newline
+EXAMPLE:\newline
+k = misc.user_menu( title='Choose dinner' , menu=('Chicken','Burger','Veggies') )\newline
+\newline
+}
+
+\paragraph{Method \texttt{wait_for_enter}}
+\vspace{1ex}
+\texttt{\newline
+misc.wait_for_enter(msg='Press ENTER to continue.')\newline
+\newline
+Print a message and wait until the user presses the ENTER key.\newline
+\newline
+INPUT:\newline
+msg (optional): message\newline
+\newline
+OUTPUT:\newline
+(none)\newline
 \newline
 }
 
