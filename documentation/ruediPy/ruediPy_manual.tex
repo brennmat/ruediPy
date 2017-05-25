@@ -82,10 +82,16 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \texttt{mkdir \path{~/data}}\\
 \texttt{mkdir \path{~/scripts}}
 
-\item Permanently add \ruediPy\ and the measurement scripts to the Python and Shell searchpaths:\par
-\texttt{echo export PYTHONPATH=\textsc{\char13}\$PYTHONPATH\textsc{\char13}:\path{~/ruediPy/python} >> \path{~/.profile}}\\
-\texttt{echo export PYTHONPATH=\textsc{\char13}\$PYTHONPATH\textsc{\char13}:\path{~/scripts} >> \path{~/.profile}}\\
-\texttt{echo export PATH=\textsc{\char13}\$PATH\textsc{\char13}:\path{~/scripts} >> \path{~/.profile}}
+\item Configure the Shell and Python searchpaths for \ruediPy\ and your measurement scripts by executing the following terminal commands:\par
+{\scriptsize
+\mbox{\texttt{echo PROJECT_SCRIPTS=\path{~/scripts/my_project_scripts} >> \path{~/rP_paths.txt}}}\\
+\mbox{\texttt{echo export PYTHONPATH=\path{~/ruediPy/python} >> \path{~/rP_paths.txt}}}\\
+\mbox{\texttt{echo export PYTHONPATH=\textsc{\char13}\$PYTHONPATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/rP_paths.txt}}}\\
+\mbox{\texttt{echo export PATH=\textsc{\char13}\$PATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/rP_paths.txt}}}\\
+\mbox{\texttt{echo source \textsc{\char13}\$HOME\textsc{\char13}\path{/rP_paths.txt} >> \path{~/.profile}}}
+}
+
+Adjust \texttt{my_project_scripts} in the \path{rP_paths.txt} file to reflect the folder where your measurement procedures (Python scripts) are, or will be.
 
 \end{enumerate}
 
@@ -122,3 +128,5 @@ These classes are continuously expanded and new classes are added to \ruediPy\ a
 \bibliography{ruediPyLit}
 
 \end{document}  
+\grid
+\grid
