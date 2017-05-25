@@ -82,7 +82,7 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \texttt{mkdir \path{~/data}}\\
 \texttt{mkdir \path{~/scripts}}
 
-\item Configure the Shell and Python searchpaths for \ruediPy\ and your measurement scripts by executing the following terminal commands:\par
+\item The Shell and Python searchpaths for use with \ruediPy\ are configured in a dedicated file (\path{rP_paths.txt} in your home directory). Execute the following terminal commands to set up this file and the searchpaths:\par
 {\scriptsize
 \mbox{\texttt{echo PROJECT_SCRIPTS=\path{~/scripts/my_project_scripts} >> \path{~/rP_paths.txt}}}\\
 \mbox{\texttt{echo export PYTHONPATH=\path{~/ruediPy/python} >> \path{~/rP_paths.txt}}}\\
@@ -91,7 +91,7 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \mbox{\texttt{echo source \textsc{\char13}\$HOME\textsc{\char13}\path{/rP_paths.txt} >> \path{~/.profile}}}
 }
 
-Adjust \texttt{my_project_scripts} in the \path{rP_paths.txt} file to reflect the folder where your measurement procedures (Python scripts) are, or will be.
+Adjust the \texttt{PROJECT_SCRIPTS} setting in the \path{rP_paths.txt} file to reflect the directory where your measurement scripts are (or will be) stored.\footnote{It is recommended to keep measurement scripts for different types of analysis or different projects in dedicated directories. Changing from one analysis type (or project) to another is achieved by adjusting \texttt{PROJECT_SCRIPTS} in the \path{rP_paths.txt} file accordingly. Then log out and back in so the change will take effect.}
 
 \end{enumerate}
 
