@@ -710,8 +710,8 @@ class rgams_SRS:
 
 	########################################################################################################
 
-
-        def peakbuffer_clear(self):
+	
+	def peakbuffer_clear(self):
                 """
                 rgams_SRS.peakbuffer_clear()
                 
@@ -727,8 +727,9 @@ class rgams_SRS:
                 self._peakbuffer_t          = self._peakbuffer_t[[]]
                 self._peakbuffer_mz         = self._peakbuffer_mz[[]]
                 self._peakbuffer_intens     = self._peakbuffer_intens[[]]
+ 		# empty lists:
 		self._peakbuffer_det = ['x'] * 0 # empty list
-                self._peakbuffer_unit = ['x'] * 0 # empty list
+                self._peakbuffer_unit       = ['x'] * 0
 
 
 

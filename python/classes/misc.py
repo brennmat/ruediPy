@@ -242,7 +242,7 @@ class misc:
 		do_menu = True;
 		while do_menu:
 			print ( '' )
-			print title + ':'
+			print ( title + ':' )
 			for i in range(N):
 				print ( '   ' + str(i+1) + ': ' + menu[i] )
 			if sys.version_info >= (3,0): # Python 3.0 or newer

@@ -51,19 +51,19 @@ DATAFILE  = datafile ( '~/data' )
 
 # start data file:
 DATAFILE.next() # start a new data file
-print 'Data output to ' + DATAFILE.name()
+print ( 'Data output to ' + DATAFILE.name() )
 
 # change valve positions:
 while True:
 	VALVE.setpos(1,DATAFILE)
-	print 'Valve position is ' + str(VALVE.getpos())
+	print ( 'Valve position is ' + str(VALVE.getpos()) )
 	VALVE.setpos(2,DATAFILE)
-	print 'Valve position is ' + str(VALVE.getpos())
+	print ( 'Valve position is ' + str(VALVE.getpos()) )
 	VALVE.setpos(5,DATAFILE)
-	print 'Valve position is ' + str(VALVE.getpos())
+	print ( 'Valve position is ' + str(VALVE.getpos()) )
 	VALVE.setpos(4,DATAFILE)
-	print 'Valve position is ' + str(VALVE.getpos())
+	print ( 'Valve position is ' + str(VALVE.getpos()) )
 	VALVE.setpos(2,DATAFILE)
-	print 'Valve position is ' + str(VALVE.getpos())
+	print ( 'Valve position is ' + str(VALVE.getpos()) )
 	VALVE.setpos(6,DATAFILE)
-	print 'Valve position is ' + str(VALVE.getpos())
+	print ( 'Valve position is ' + str(VALVE.getpos()) )
