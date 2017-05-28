@@ -202,9 +202,9 @@ class misc:
 					d = d + '. ' + str(l) + ' second left...'
 				
 				if do_bs: # print backspaces to delete previous wait message:
-					print bs,
+					print ( bs )
 				
-				print '\b' + d ,
+				print ( '\b' + d )
 				sys.stdout.flush() 
 				do_bs = True
 				
@@ -212,7 +212,7 @@ class misc:
 
 			time.sleep(1)
 			
-		print 'done.'
+		print ( 'done.' )
 
 
 
@@ -241,10 +241,10 @@ class misc:
 		N = len(menu);
 		do_menu = True;
 		while do_menu:
-			print ''
+			print ( '' )
 			print title + ':'
 			for i in range(N):
-				print '   ' + str(i+1) + ': ' + menu[i]
+				print ( '   ' + str(i+1) + ': ' + menu[i] )
 			if sys.version_info >= (3,0): # Python 3.0 or newer
 				ans = input( 'Enter number: ' )
 			else:
