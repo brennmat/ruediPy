@@ -83,7 +83,7 @@ class selectorvalve_VICI:
 
 		self._label = label
 		
-		print ('Successfully configured VICI selector valve on ' + serialport )
+		print ( 'Successfully configured VICI selector valve on ' + serialport )
 
 
 	########################################################################################################
