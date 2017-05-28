@@ -56,7 +56,7 @@ The Python classes for instrument control and data acquisition are designed to r
 
 The GNU Octave tools (m-files) are designed to work hand-in-hand with the data files produced by the data acquisition parts of the Python classes. \work{expand this: load raw data, process / calibrate data, etc.}
 
-\ruediPy\ is developed on Linux and Mac OS X systems, but should also work on any other system that runs Python and GNU Octave. \ruediPy\ has been reported to (partially) work on Windows. Linux is the recommended choice and is assumed throughout this manual.\par
+\ruediPy\ is developed on Linux and Mac OS X systems, but should also work on any other system that runs Python and GNU Octave. \ruediPy\ has been reported to (partially) work on Windows. Linux is the recommended choice and is assumed throughout this manual. Python 3.0 or newer is recommended.\par
 
 \section{Obtaining and installing \ruediPy}
 \ruediPy\ can be downloaded from \url{http://brennmat.github.io/ruediPy} either as a compressed archive file, or using Subversion or Git version control systems. \ruediPy\ can be installed to just about any directory on the computer that is used for instrument control -- but the user home directory  (\path{~/ruediPy}) may seem like a sensible choice, and that's what is assumed throughout the examples shown in this manual.
@@ -67,9 +67,9 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \item Update system software to latest versions and install basic software requirements for \ruediPy:\par
 \texttt{sudo apt-get update}\\
 \texttt{sudo apt-get upgrade}\\
-\texttt{sudo apt-get install octave subversion python-pip}\\
-\texttt{sudo apt-get install python-serial python-matplotlib python-scipy}\\
-\texttt{sudo pip install pydigitemp}\\
+\texttt{sudo apt-get install octave subversion python3-pip}\\
+\texttt{sudo apt-get install python3-serial python3-matplotlib python3-scipy}\\
+\texttt{sudo pip3 install pydigitemp}\\
 
 \item Download ruediPy:\par
 \texttt{svn co https://github.com/brennmat/ruediPy.git/trunk \path{~/ruediPy}}
@@ -82,16 +82,16 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \texttt{mkdir \path{~/data}}\\
 \texttt{mkdir \path{~/scripts}}
 
-\item The Shell and Python searchpaths for use with \ruediPy\ are configured in a dedicated file (\path{rP_paths.txt} in your home directory). Execute the following terminal commands to set up this file and the searchpaths:\par
+\item The Shell and Python searchpaths for use with \ruediPy\ are configured in a dedicated file (\path{ruediPy_paths.txt} in your home directory). Execute the following terminal commands to set up this file and the searchpaths (copy and paste to the Terminal prompt should work):\par
 {\scriptsize
-\mbox{\texttt{echo PROJECT_SCRIPTS=\path{~/scripts/my_project_scripts} >> \path{~/rP_paths.txt}}}\\
-\mbox{\texttt{echo export PYTHONPATH=\path{~/ruediPy/python} >> \path{~/rP_paths.txt}}}\\
-\mbox{\texttt{echo export PYTHONPATH=\textsc{\char13}\$PYTHONPATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/rP_paths.txt}}}\\
-\mbox{\texttt{echo export PATH=\textsc{\char13}\$PATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/rP_paths.txt}}}\\
-\mbox{\texttt{echo source \textsc{\char13}\$HOME\textsc{\char13}\path{/rP_paths.txt} >> \path{~/.profile}}}
+\mbox{\texttt{echo PROJECT_SCRIPTS=\path{~/scripts/my_project_scripts} >> \path{~/ruediPy_paths.txt}}}\\
+\mbox{\texttt{echo export PYTHONPATH=\path{~/ruediPy/python} >> \path{~/ruediPy_paths.txt}}}\\
+\mbox{\texttt{echo export PYTHONPATH=\textsc{\char13}\$PYTHONPATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/ruediPy_paths.txt}}}\\
+\mbox{\texttt{echo export PATH=\textsc{\char13}\$PATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/ruediPy_paths.txt}}}\\
+\mbox{\texttt{echo source \textsc{\char13}\$HOME\textsc{\char13}\path{/ruediPy_paths.txt} >> \path{~/.profile}}}
 }
 
-Adjust the \texttt{PROJECT_SCRIPTS} setting in the \path{rP_paths.txt} file to reflect the directory where your measurement scripts are (or will be) stored.\footnote{It is recommended to keep measurement scripts for different types of analysis or different projects in dedicated directories. Changing from one analysis type (or project) to another is achieved by adjusting \texttt{PROJECT_SCRIPTS} in the \path{rP_paths.txt} file accordingly. Then log out and back in so the change will take effect.}
+Adjust the \texttt{PROJECT_SCRIPTS} setting in the \path{ruediPy_paths.txt} file to reflect the directory where your measurement scripts are (or will be) stored.\footnote{It is recommended to keep measurement scripts for different types of analysis or different projects in dedicated directories. Changing from one analysis type (or project) to another is achieved by adjusting \texttt{PROJECT_SCRIPTS} in the \path{ruediPy_paths.txt} file accordingly. Then log out and back in so the change will take effect.}
 
 \end{enumerate}
 
