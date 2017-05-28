@@ -34,17 +34,21 @@
 #
 # Copyright 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 
-
+import sys
+import warnings
 import serial
 import time
 import struct
 import math
 import numpy
 import os
-import sys
 from scipy.interpolate import interp1d
 from classes.misc	import misc
-# from classes.plots	import plots
+
+# check Python version and print warning if we're running version < 3:
+if ( sys.version_info[0] < 3 ):
+	warnings.warn("ruediPy / rgams_SRS class is running on Python version < 3. Version 3.0 or newer is recommended!")
+
 havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
 	import matplotlib
@@ -86,7 +90,7 @@ class rgams_SRS:
 		OUTPUT:
 		(none)
 		'''
-		
+
 		# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
 		ser = serial.Serial(
 			port     = serialport,

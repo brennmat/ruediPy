@@ -35,6 +35,8 @@
 #
 # Copyright 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 
+import sys
+import warnings
 import numpy
 import os
 
@@ -42,6 +44,10 @@ from classes.misc	 import misc
 from digitemp.master import UART_Adapter
 from digitemp.device import AddressableDevice
 from digitemp.device import DS18B20
+
+# check Python version and print warning if we're running version < 3:
+if ( sys.version_info[0] < 3 ):
+	warnings.warn("ruediPy / temperaturesensor_MAXIM class is running on Python version < 3. Version 3.0 or newer is recommended!")
 
 havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment

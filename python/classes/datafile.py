@@ -34,12 +34,16 @@
 #
 # Copyright 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 
-# import time
+import sys
+import warnings
 import os
 from os.path 		import expanduser
 
 from classes.misc	import misc
 
+# check Python version and print warning if we're running version < 3:
+if ( sys.version_info[0] < 3 ):
+	warnings.warn("ruediPy / rams_SRS class is running on Python version < 3. Version 3.0 or newer is recommended!")
 
 class datafile:
 	"""
@@ -61,7 +65,7 @@ class datafile:
 		OUTPUT:
 		obj: dafafile object
 		"""
-		
+
 		# remove trailing whitespace (just in case):
 		pth = pth.strip()
 		

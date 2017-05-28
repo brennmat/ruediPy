@@ -34,9 +34,16 @@
 #
 # Copyright 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 
+import sys
+import warnings
 import serial
 import time
 from classes.misc	import misc
+
+# check Python version and print warning if we're running version < 3:
+if ( sys.version_info[0] < 3 ):
+	warnings.warn("ruediPy / selectorvalve_VICI class is running on Python version < 3. Version 3.0 or newer is recommended!")
+
 
 class selectorvalve_VICI:
 	"""
