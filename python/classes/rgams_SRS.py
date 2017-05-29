@@ -59,7 +59,7 @@ if havedisplay: # prepare plotting environment
 	import matplotlib.cbook
 	warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
 	
-	matplotlib.use('GTKAgg') # use this for faster plotting
+	## matplotlib.use('GTKAgg') # use this for faster plotting
 	import matplotlib.pyplot as plt
 
 
@@ -101,8 +101,9 @@ class rgams_SRS:
 			timeout  = 10.0
 		)
 		ser.flushOutput() 	# make sure output is empty
+		time.sleep(0.1)
 		ser.flushInput() 	# make sure input is empty
-
+		
 		self.ser = ser
 		
 		# object name label:
@@ -228,7 +229,7 @@ class rgams_SRS:
 			self.warning('**** DEBUGGING INFO: serial buffer not empty before executing command = ' + cmd + '.')
 
 		# send command to serial port:
-		self.ser.write(cmd + '\r\n')
+		self.ser.write((cmd + '\r\n').encode('ascii'))
 		
 		if ansreq:
 
@@ -253,7 +254,7 @@ class rgams_SRS:
 				self.warning('Execution of ' + cmd + ' did not produce a result (or took too long)!')
 			else:
 				while self.ser.inWaiting() > 0: # while there's something in the buffer...
-					ans = ans + self.ser.read() # read each byte
+					ans = ans + self.ser.read().decode('ascii') # read each byte
 				ans = ans.rstrip('\r\n') # remove newline characters at end
 		
 			# return the result:
@@ -261,7 +262,7 @@ class rgams_SRS:
 			
 		else: # check if serial buffer is empty (will be useful to catch errors):
 			if self.ser.inWaiting() > 0:
-				self.warning('**** DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd +'. First byte in buffer: ' + self.ser.read() )
+				self.warning('**** DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd +'. First byte in buffer: ' + self.ser.read().decode('ascii') )
 			
 	
 	########################################################################################################
@@ -491,13 +492,13 @@ class rgams_SRS:
 		(none)
 		
 		OUTPUT:
-		val: max. supported mz value 
+		val: max. supported mz value (int)
 		'''
 
 		if hasattr(self, '_mzmax') == 0: # never asked for mz_max before
 			x = self.param_IO('MF?',1) # get current MF value
 			self.param_IO('MF*',0) # set MF to default value, which equals M_MAX
-			self._mzmax = self.param_IO('MF?',1) # read back M_MAX value
+			self._mzmax = int ( self.param_IO('MF?',1) ) # read back M_MAX value
 			self.param_IO('MF' + x,0) # set back to previous MF value
 		return self._mzmax
 
@@ -708,28 +709,29 @@ class rgams_SRS:
 			self._peakbuffer_unit       = self._peakbuffer_unit[-N:]
 
 
+
 	########################################################################################################
 
-	
+
+
 	def peakbuffer_clear(self):
-                """
-                rgams_SRS.peakbuffer_clear()
-                
-                Clear data in PEAKS data buffer
-                                
-                INPUT:
-                (none)
+		"""
+		rgams_SRS.peakbuffer_clear()
 
-                OUTPUT:
-                (none)
-                """
+		Clear data in PEAKS data buffer
 
-                self._peakbuffer_t          = self._peakbuffer_t[[]]
-                self._peakbuffer_mz         = self._peakbuffer_mz[[]]
-                self._peakbuffer_intens     = self._peakbuffer_intens[[]]
- 		# empty lists:
+		INPUT:
+		(none)
+
+		OUTPUT:
+		(none)
+		"""
+
+		self._peakbuffer_t          = self._peakbuffer_t[[]]
+		self._peakbuffer_mz         = self._peakbuffer_mz[[]]
+		self._peakbuffer_intens     = self._peakbuffer_intens[[]]
 		self._peakbuffer_det = ['x'] * 0 # empty list
-                self._peakbuffer_unit       = ['x'] * 0
+		self._peakbuffer_unit       = ['x'] * 0 # empty list
 
 
 
@@ -737,20 +739,20 @@ class rgams_SRS:
 
 
 
-        def peakbuffer_set_length(self,N):
-                """
-                rgams_SRS.peakbuffer_set_length(N)
-                
-                Set max. length of peakbuffer
-                                
-                INPUT:
-                N: number of PEAK values
+	def peakbuffer_set_length(self,N):
+		"""
+		rgams_SRS.peakbuffer_set_length(N)
 
-                OUTPUT:
-                (none)
-                """
+		Set max. length of peakbuffer
 
-                self._peakbuffer_max_len = N
+		INPUT:
+		N: number of PEAK values
+
+		OUTPUT:
+		(none)
+		"""
+
+		self._peakbuffer_max_len = N
 
 
 
@@ -793,7 +795,7 @@ class rgams_SRS:
 			val = '-1'
 			unit = '(none)'
 			
-		elif mz > self.mz_max:
+		elif mz > self.mz_max():
 			self.warning ('mz value must be ' + self.mz_max + ' or less! Skipping peak measurement...')
 			val = '-1'
 			unit = '(none)'
@@ -813,17 +815,18 @@ class rgams_SRS:
 				self.set_gate_time(gt)
 				
 				# send command to RGA:
-				self.ser.write('MR' + str(mz) + '\r\n')
+				self.ser.write(('MR' + str(mz) + '\r\n').encode('ascii'))
 				
 				# get timestamp
 				t = misc.now_UNIX()
 				
 				# read back data:
-				u = self.ser.read()
-				u = u + self.ser.read()
-				u = u + self.ser.read()
-				u = u + self.ser.read()
-				
+				## u = self.ser.read()
+				## u = u + self.ser.read()
+				## u = u + self.ser.read()
+				## u = u + self.ser.read()
+				u = self.ser.read(4)
+
 				while self.ser.inWaiting() > 0:
 					self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
 	
@@ -910,16 +913,17 @@ class rgams_SRS:
 				self.set_gate_time(gt)
 
 				# send command to RGA:
-				self.ser.write('MR' + str(mz+mz_offset) + '\r\n')
+				self.ser.write(('MR' + str(mz+mz_offset) + '\r\n').encode('ascii'))
 
 				# get timestamp
 				t = misc.now_UNIX()
 
 				# read back data:
-				u = self.ser.read()
-				u = u + self.ser.read()
-				u = u + self.ser.read()
-				u = u + self.ser.read()
+				## u = self.ser.read()
+				## u = u + self.ser.read()
+				## u = u + self.ser.read()
+				## u = u + self.ser.read()
+				u = self.ser.read(4)
 
 				while self.ser.inWaiting() > 0:
 					self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
@@ -1000,22 +1004,21 @@ class rgams_SRS:
 			self.param_IO('MI' + str(low),0) # low end mz value
 		else: # set MI first 
 			self.param_IO('MI' + str(low),0) # low end mz value
-                        self.param_IO('MF' + str(high),0) # high end mz value
+			self.param_IO('MF' + str(high),0) # high end mz value
 		self.param_IO('SA' + str(step),0) # number of steps per amu
 
 		N = int(self.param_IO('AP?',1)) # number of data points in the scan
 
 		# start the scan:
-		self.ser.write('SC1\r\n')
+		self.ser.write('SC1\r\n'.encode('ascii'))
 
 		# get time stamp before scan
 		t1 = misc.now_UNIX()
 
 		# read back result from RGA:
 		Y = [] # init empty list
+
 		k = 0
-		nb = 0 # number of bytes read
-		u = ''
 		while ( k < N+1 ): # read data points. Note: after scanning, the RGA also measures the total pressure and returns this as an extra data point, giving N+1 data points in total. All N+1 data points need to be read in order to empty the data buffer.
 
 			# wait for data in buffer:
@@ -1035,18 +1038,17 @@ class rgams_SRS:
 			if doWait == -1:
 				self.warning('RGA did not produce scan result (or took too long)!')
 			else:
-				u = u + self.ser.read() # read next byte
-				nb = nb + 1 # increase byte-number counter
-				if nb == 4: # all four bytes for next value read, parse data
-					if k < N: # if this was not the final data point (total pressure)
-						u = struct.unpack('<i',u)[0] # unpack 4-byte data value
-						u = u * 1E-16 # divide by 1E-16 to convert to Amperes
-						Y.append(u) # append value to list 'ans'
+				# u = u + self.ser.read() # read next byte
+				# nb = nb + 1 # increase byte-number counter
+				u = self.ser.read(4)
 
-					# prepare for next value:
-					k = k + 1
-					u = ''
-					nb = 0
+				if k < N: # if this was not the final data point (total pressure)
+					u = struct.unpack('<i',u)[0] # unpack 4-byte data value
+					u = u * 1E-16 # divide by 1E-16 to convert to Amperes
+					Y.append(u) # append value to list 'ans'
+
+				# prepare for next value:
+				k = k + 1
 
 		# get time stamp after scan
 		t2 = misc.now_UNIX()
@@ -1117,9 +1119,9 @@ class rgams_SRS:
 			RI0 = self.get_RI()
 			RS0 = self.get_RS()
 			print ('\nBefore tuning (cycle ' + str(ii) +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
-
-	                # prepare lists for delta-m values determined from the various peaks:
-        	        delta_m = []
+			
+			# prepare lists for delta-m values determined from the various peaks:
+			delta_m = []
 
 			# scan peaks and find peak centers:
 			for k in range(0,N):
@@ -1195,7 +1197,7 @@ class rgams_SRS:
 			kk = ~numpy.isnan(delta_m)
 			nn = len(mmz)
 			x = [ mmz[i] for i in range(0,nn) if kk[i] ]
-                        y = [ delta_m[i] for i in range(0,nn) if kk[i] ]
+			y = [ delta_m[i] for i in range(0,nn) if kk[i] ]
 			fit = numpy.polyfit(x,y,1)
 			fit_fn = numpy.poly1d(fit)
 
@@ -1227,34 +1229,36 @@ class rgams_SRS:
 					print ( 'Tuning completed after ' + str(max_iter) + ' iterations.' )
 					doTune = False
 
+
+
 ########################################################################################################
 
 
 
-        def set_RI(self,x):
-                '''
-                rgams_SRS.set_RI(x)
+	def set_RI(self,x):
+		'''
+		rgams_SRS.set_RI(x)
 
-                Set RI parameter value (peak-position tuning at low mz range / RF voltage output at 0 amu, in mV)
+		Set RI parameter value (peak-position tuning at low mz range / RF voltage output at 0 amu, in mV)
 
-                INPUT:
-                x: RI voltage (mV)
+		INPUT:
+		x: RI voltage (mV)
 
-                OUTPUT:
-                (none)
+		OUTPUT:
+		(none)
 
-                NOTE:
-                See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
-                '''
+		NOTE:
+		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+		'''
 
 		if (x < -86.0) or ( x > 86.0):
 			error ('RI value out of allowed range (-86...+86V)')
-                if x >= 0:
-                	x = '+' + '{:.4f}'.format(x)
-                else:
-                	x = '{:.4f}'.format(x)
+		if x >= 0:
+			x = '+' + '{:.4f}'.format(x)
+		else:
+			x = '{:.4f}'.format(x)
 
-                self.param_IO('RI' + x,0)
+		self.param_IO('RI' + x,0)
 		print ('Set RI voltage to ' +  x + 'V')
 
 
@@ -1263,28 +1267,28 @@ class rgams_SRS:
 
 
 
-        def set_RS(self,x):
-                '''
-                rgams_SRS.set_RS(x)
+	def set_RS(self,x):
+		'''
+		rgams_SRS.set_RS(x)
 
-                Set RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)
+		Set RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)
 
-                INPUT:
-                x: RS voltage (mV)
+		INPUT:
+		x: RS voltage (mV)
 
-                OUTPUT:
-                (none)
+		OUTPUT:
+		(none)
 
-                NOTE:
-                See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
-                '''
+		NOTE:
+		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+		'''
 
-                if (x < 600.0) or ( x > 1600.0):
-                        error ('RS value out of allowed range (600...+1600V)')
+		if (x < 600.0) or ( x > 1600.0):
+			error ('RS value out of allowed range (600...+1600V)')
 
-                x = '{:.4f}'.format(x)
+		x = '{:.4f}'.format(x)
 
-                self.param_IO('RS' + x,0)
+		self.param_IO('RS' + x,0)
 		print ( 'Set RS voltage to ' + x + 'V' )
 
 
@@ -1293,84 +1297,26 @@ class rgams_SRS:
 
 
 
-        def get_RI(self):
-                '''
-                x = rgams_SRS.get_RI(x)
+	def get_RI(self):
+		'''
+		x = rgams_SRS.get_RI(x)
 
-                Get current RI parameter value (peak-position tuning at low mz range / RF voltage output at 0 amu, in mV).
+		Get current RI parameter value (peak-position tuning at low mz range / RF voltage output at 0 amu, in mV).
 
-                INPUT:
-		(none)
+		INPUT:
+				(none)
 
-		OUTPUT:
-                x: RI voltage (in mV)
+				OUTPUT:
+		x: RI voltage (in mV)
 
-                NOTE:
-                See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
-                '''
+		NOTE:
+		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+		'''
 
-                x = float(self.param_IO('RI?',1))
+		x = float(self.param_IO('RI?',1))
 
-                if ( x < -86.0 ) or ( x > 86.0 ) :
-                        error ('Could not determine current RI setting, or RI value returned was out of bounds (-86V...+86V)')
-
-		return x
-
-
-
-########################################################################################################
-
-
-
-        def get_RS(self):
-                '''
-                x = rgams_SRS.get_RS(x)
-
-                Get current RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)
-
-                INPUT:
-                (none)
-
-                OUTPUT:
-                x: RS voltage (in mV)
-
-                NOTE:
-                See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
-                '''
-
-                x = float(self.param_IO('RS?',1))
-
-                if ( x < 600.0 ) or ( x > 1600.0 ) :
-                        error ('Could not determine current RS setting, or RS value returned was out of bounds (600V...1600V)')
-
-                return x
-
-
-
-########################################################################################################
-
-
-
-        def get_DI(self):
-                '''
-                x = rgams_SRS.get_DI(x)
-
-                Get current DI parameter value (peak-width tuning at low mz range)
-
-                INPUT:
-		(none)
-
-		OUTPUT:
-                x: DI value (bit units)
-
-                NOTE:
-                See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
-                '''
-
-                x = float(self.param_IO('DI?',1))
-
-                if ( x < 0 ) or ( x > 255 ) :
-                        error ('Could not determine current DI setting, or DI value returned was out of bounds (0...255)')
+		if ( x < -86.0 ) or ( x > 86.0 ) :
+			error ('Could not determine current RI setting, or RI value returned was out of bounds (-86V...+86V)')
 
 		return x
 
@@ -1380,26 +1326,84 @@ class rgams_SRS:
 
 
 
-        def get_DS(self):
-                '''
-                x = rgams_SRS.get_DS(x)
+	def get_RS(self):
+		'''
+		x = rgams_SRS.get_RS(x)
 
-                Get current DS parameter value (peak-width tuning at high mz range)
+		Get current RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)
 
-                INPUT:
+		INPUT:
 		(none)
 
 		OUTPUT:
-                x: DS value (bit/amu units)
+		x: RS voltage (in mV)
 
-                NOTE:
-                See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
-                '''
+		NOTE:
+		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+		'''
 
-                x = float(self.param_IO('DS?',1))
+		x = float(self.param_IO('RS?',1))
 
-                if ( x < -2.55 ) or ( x > 2.55 ) :
-                        error ('Could not determine current DS setting, or DS value returned was out of bounds (-2.55...2.55)')
+		if ( x < 600.0 ) or ( x > 1600.0 ) :
+			error ('Could not determine current RS setting, or RS value returned was out of bounds (600V...1600V)')
+
+		return x
+
+
+
+########################################################################################################
+
+
+
+	def get_DI(self):
+		'''
+		x = rgams_SRS.get_DI(x)
+
+		Get current DI parameter value (peak-width tuning at low mz range)
+
+		INPUT:
+				(none)
+
+				OUTPUT:
+		x: DI value (bit units)
+
+		NOTE:
+		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+		'''
+
+		x = float(self.param_IO('DI?',1))
+
+		if ( x < 0 ) or ( x > 255 ) :
+			error ('Could not determine current DI setting, or DI value returned was out of bounds (0...255)')
+
+		return x
+
+
+
+########################################################################################################
+
+
+
+	def get_DS(self):
+		'''
+		x = rgams_SRS.get_DS(x)
+
+		Get current DS parameter value (peak-width tuning at high mz range)
+
+		INPUT:
+				(none)
+
+				OUTPUT:
+		x: DS value (bit/amu units)
+
+		NOTE:
+		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+		'''
+
+		x = float(self.param_IO('DS?',1))
+
+		if ( x < -2.55 ) or ( x > 2.55 ) :
+			error ('Could not determine current DS setting, or DS value returned was out of bounds (-2.55...2.55)')
 
 		return x
 
@@ -1493,8 +1497,8 @@ class rgams_SRS:
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
 			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ') at ' + t0)
-                        self._peakbuffer_ax.set_xlabel('Time (s)')
-                        self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
+			self._peakbuffer_ax.set_xlabel('Time (s)')
+			self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
 
 			from matplotlib.ticker import FuncFormatter
 			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
@@ -1589,8 +1593,8 @@ class rgams_SRS:
 				self._scan_ax.plot( cumsum_mz , cumsum_val , 'r.-' )
 				self._scan_ax.hold(False)
 
-                        self._scan_ax.set_xlabel('mz')
-                        self._scan_ax.set_ylabel('Intensity (' + unit +')')
+			self._scan_ax.set_xlabel('mz')
+			self._scan_ax.set_ylabel('Intensity (' + unit +')')
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
 			self._scan_ax.set_title('SCAN (' + self.label() + ')' + ' at ' + t0)
 			self._fig.tight_layout(pad=1.5)
@@ -1615,7 +1619,7 @@ class rgams_SRS:
 		'''
 
 		print ( 'SRS RGA status:' )
-		print ( '   MS max m/z range: ' + self.mz_max() )
+		print ( '   MS max m/z range: ' + str(self.mz_max()) )
 		print ( '   Ionizer electron energy: ' + self.get_electron_energy() + ' eV' )
 		print ( '   Filament current: ' + self.get_filament_current() + ' mA' )
 		if self.has_multiplier():

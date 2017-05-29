@@ -205,7 +205,7 @@ class datafile:
 			# close current data file
 			try:
 				self.fid.close()
-			except IOError, e:
+			except IOError as e:
 				self.warning ('could not close file ' + self.fid.name() + ': ' + e)
 	
 	
@@ -267,37 +267,35 @@ class datafile:
 		try:
 			self.fid = open(n, 'w')
 			    		
-		except IOError, e:
+		except IOError as e:
 			self.fid = -1;
 			self.warning ('could not open new file (' + n + '): ' + str(e))
 			return # exit
 
 		# write header with data format info:
-	   	self.write_comment(self.label(),'RUEDI data file created ' + misc.now_string() )
-	   	self.write_comment(self.label(),'Data format:')
-	   	self.write_comment(self.label(),'EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...')
-	   	self.write_comment(self.label(),'EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.')
+		self.write_comment(self.label(),'RUEDI data file created ' + misc.now_string() )
+		self.write_comment(self.label(),'Data format:')
+		self.write_comment(self.label(),'EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...')
+		self.write_comment(self.label(),'EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.')
 	   	
 	   	# write analysis type:
-	   	if typ == '':
-	   		typ = 'UNKNOWN'
+		if typ == '':
+			typ = 'UNKNOWN'
 		self.writeln( self.label() ,'','ANALYSISTYPE' , typ , misc.now_UNIX() )
 		
 		# write sample name:
-	   	if typ == 'SAMPLE':
-	   		if samplename == '':
-	   			self.warning('No sample name given!')
-	   		else:
+		if typ == 'SAMPLE':
+			if samplename == '':
+				self.warning('No sample name given!')
+			else:
 				self.writeln( self.label() ,'','SAMPLENAME' , samplename , misc.now_UNIX() )
 
 		# write standard gas information:
-	   	if typ == 'STANDARD':
-	   		if len(standardconc) == 0:
-	   			self.warning('Standard gas information missing!')
-	   		else:
-	   			# for i in range(0,len(std_species)):
-				# 	self.write_standard_conc(std_species[i],std_conc[i],std_mz[i])
-	   			for i in range(0,len(standardconc)):
+		if typ == 'STANDARD':
+			if len(standardconc) == 0:
+				self.warning('Standard gas information missing!')
+			else:
+				for i in range(0,len(standardconc)):
 					self.write_standard_conc(standardconc[i][0],standardconc[i][1],standardconc[i][2])
 
 
@@ -346,7 +344,7 @@ class datafile:
 		try:
 			self.fid.write(S)	# write line to data file
 			self.fid.flush()	# make sure data gets written to file now, don't wait for flushing file buffer
-		except IOError, e:
+		except IOError as e:
 			self.warning ('could not write to file ' + self.fid.name + ': ' + e)
 
 

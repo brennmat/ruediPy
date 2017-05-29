@@ -57,7 +57,7 @@ if havedisplay: # prepare plotting environment
 	import warnings
 	import matplotlib.cbook
 	warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-	matplotlib.use('GTKAgg') # use this for faster plotting
+	# matplotlib.use('GTKAgg') # use this for faster plotting
 	import matplotlib.pyplot as plt
 
 class pressuresensor_WIKA:
@@ -96,6 +96,7 @@ class pressuresensor_WIKA:
 			timeout  = 5.0
 		)
 		ser.flushOutput() 	# make sure output is empty
+		time.sleep(0.1)
 		ser.flushInput() 	# make sure input is empty
 		
 		self.ser = ser
@@ -103,15 +104,15 @@ class pressuresensor_WIKA:
 		self._label = label
 
 		# configure pressure sensor for single pressure readings on request ("polling mode")
-		cmd = 'SO\xFF' # command string to set polling mode
+		cmd = b'SO\xFF' # command string) (byte to set polling mode
 		cs = self.serial_checksum(cmd) # determine check sum
-		self.ser.write(cmd + chr(cs) + '\r') # send command with check sum to serial port
+		self.ser.write((cmd + chr(cs) + b'\r')) # send command with check sum to serial port
 		ans =  self.ser.read(5) # read out response to empty serial data buffer
 
 		# get serial number of pressure sensor
 		cmd = 'KN\x00' # command string to get serial number
 		cs = self.serial_checksum(cmd) # determine check sum
-		self.ser.write(cmd + chr(cs) + '\r') # send command with check sum to serial port
+		self.ser.write((cmd + chr(cs) + '\r').encode('ascii')) # send command with check sum to serial port
 		self.ser.read(1) # first byte (not used)
 		ans = self.ser.read(4) # four bytes of UNSIGNED32 number
 		self.ser.read(2) # 6th and 7th byte (not used)
@@ -174,6 +175,8 @@ class pressuresensor_WIKA:
 		k = 0
 		cs = 0
 
+		print (cmd)
+
 		while k < len(cmd):
 			cs = cs + ord(cmd[k])
 			k = k + 1
@@ -226,7 +229,7 @@ class pressuresensor_WIKA:
 
 		cmd = 'PZ\x00' # command string to set polling mode
 		cs = self.serial_checksum(cmd) # determine check sum
-		self.ser.write(cmd + chr(cs) + '\r') # send command with check sum to serial port
+		self.ser.write((cmd + chr(cs) + '\r').encode('ascii')) # send command with check sum to serial port
 		ans = self.ser.read(1) # first byte (not used)
 		ans = self.ser.read(4) # four bytes of IEEE754 float number
 		p = struct.unpack('<f',ans)[0] # convert to 4 bytes to float
@@ -344,8 +347,8 @@ class pressuresensor_WIKA:
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
 			self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ') at ' + t0)
-                        self._pressbuffer_ax.set_xlabel('Time (s)')
-                        self._pressbuffer_ax.set_ylabel('Pressure ('+self._pressbuffer_unit[0]+')')
+			self._pressbuffer_ax.set_xlabel('Time (s)')
+			self._pressbuffer_ax.set_ylabel('Pressure ('+self._pressbuffer_unit[0]+')')
 
 			plt.show() # update the plot
 			plt.pause(0.015) # allow some time to update the plot
