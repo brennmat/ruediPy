@@ -104,15 +104,16 @@ class pressuresensor_WIKA:
 		self._label = label
 
 		# configure pressure sensor for single pressure readings on request ("polling mode")
-		cmd = b'SO\xFF' # command string) (byte to set polling mode
+		cmd = 'SO\xFF' # command string) (byte to set polling mode
 		cs = self.serial_checksum(cmd) # determine check sum
-		self.ser.write((cmd + chr(cs) + b'\r')) # send command with check sum to serial port
+		
+		self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
 		ans =  self.ser.read(5) # read out response to empty serial data buffer
 
 		# get serial number of pressure sensor
 		cmd = 'KN\x00' # command string to get serial number
 		cs = self.serial_checksum(cmd) # determine check sum
-		self.ser.write((cmd + chr(cs) + '\r').encode('ascii')) # send command with check sum to serial port
+		self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
 		self.ser.read(1) # first byte (not used)
 		ans = self.ser.read(4) # four bytes of UNSIGNED32 number
 		self.ser.read(2) # 6th and 7th byte (not used)
@@ -175,8 +176,6 @@ class pressuresensor_WIKA:
 		k = 0
 		cs = 0
 
-		print (cmd)
-
 		while k < len(cmd):
 			cs = cs + ord(cmd[k])
 			k = k + 1
@@ -229,7 +228,7 @@ class pressuresensor_WIKA:
 
 		cmd = 'PZ\x00' # command string to set polling mode
 		cs = self.serial_checksum(cmd) # determine check sum
-		self.ser.write((cmd + chr(cs) + '\r').encode('ascii')) # send command with check sum to serial port
+		self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
 		ans = self.ser.read(1) # first byte (not used)
 		ans = self.ser.read(4) # four bytes of IEEE754 float number
 		p = struct.unpack('<f',ans)[0] # convert to 4 bytes to float
@@ -240,25 +239,26 @@ class pressuresensor_WIKA:
 		t = misc.now_UNIX()
 
 		# get unit:
-		if ans == '\xFF':
+		if ans == b'\xFF':
 			unit = 'bar'
-		elif ans == '\xFE':
+		elif ans == b'\xFE':
 			unit = 'bar-rel.'
-		elif ans == '\x1F':
+		elif ans == b'\x1F':
 			unit = 'Psi'
-		elif ans == '\x1E':
+		elif ans == b'\x1E':
 			unit = 'Psi-rel.'
-		elif ans == '\xAF':
+		elif ans == b'\xAF':
 			unit = 'MPa'
-		elif ans == '\xAE':
+		elif ans == b'\xAE':
 			unit = 'MPa-rel.'
-		elif ans == '\xBF':
+		elif ans == b'\xBF':
 			unit = 'kg/cm2'
-		elif ans == '\xBE':
+		elif ans == b'\xBE':
 			unit = 'kg/cm2-rel.'
 		else:
 			self.warning('WIKA pressure sensor returned unknown pressure unit')
-		
+			unit = '???'
+
 		# add data to peakbuffer
 		if add_to_pressbuffer:
 			self.pressbuffer_add(t,p,unit)

@@ -229,7 +229,7 @@ class rgams_SRS:
 			self.warning('**** DEBUGGING INFO: serial buffer not empty before executing command = ' + cmd + '.')
 
 		# send command to serial port:
-		self.ser.write((cmd + '\r\n').encode('ascii'))
+		self.ser.write((cmd + '\r\n').encode('utf-8'))
 		
 		if ansreq:
 
@@ -254,7 +254,7 @@ class rgams_SRS:
 				self.warning('Execution of ' + cmd + ' did not produce a result (or took too long)!')
 			else:
 				while self.ser.inWaiting() > 0: # while there's something in the buffer...
-					ans = ans + self.ser.read().decode('ascii') # read each byte
+					ans = ans + self.ser.read().decode('utf-8') # read each byte
 				ans = ans.rstrip('\r\n') # remove newline characters at end
 		
 			# return the result:
@@ -262,7 +262,7 @@ class rgams_SRS:
 			
 		else: # check if serial buffer is empty (will be useful to catch errors):
 			if self.ser.inWaiting() > 0:
-				self.warning('**** DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd +'. First byte in buffer: ' + self.ser.read().decode('ascii') )
+				self.warning('**** DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd +'. First byte in buffer: ' + self.ser.read().decode('utf-8') )
 			
 	
 	########################################################################################################
@@ -815,16 +815,12 @@ class rgams_SRS:
 				self.set_gate_time(gt)
 				
 				# send command to RGA:
-				self.ser.write(('MR' + str(mz) + '\r\n').encode('ascii'))
+				self.ser.write(('MR' + str(mz) + '\r\n').encode('utf-8'))
 				
 				# get timestamp
 				t = misc.now_UNIX()
 				
 				# read back data:
-				## u = self.ser.read()
-				## u = u + self.ser.read()
-				## u = u + self.ser.read()
-				## u = u + self.ser.read()
 				u = self.ser.read(4)
 
 				while self.ser.inWaiting() > 0:
@@ -913,16 +909,12 @@ class rgams_SRS:
 				self.set_gate_time(gt)
 
 				# send command to RGA:
-				self.ser.write(('MR' + str(mz+mz_offset) + '\r\n').encode('ascii'))
+				self.ser.write(('MR' + str(mz+mz_offset) + '\r\n').encode('utf-8'))
 
 				# get timestamp
 				t = misc.now_UNIX()
 
 				# read back data:
-				## u = self.ser.read()
-				## u = u + self.ser.read()
-				## u = u + self.ser.read()
-				## u = u + self.ser.read()
 				u = self.ser.read(4)
 
 				while self.ser.inWaiting() > 0:
@@ -1010,7 +1002,7 @@ class rgams_SRS:
 		N = int(self.param_IO('AP?',1)) # number of data points in the scan
 
 		# start the scan:
-		self.ser.write('SC1\r\n'.encode('ascii'))
+		self.ser.write('SC1\r\n'.encode('utf-8'))
 
 		# get time stamp before scan
 		t1 = misc.now_UNIX()
@@ -1038,8 +1030,6 @@ class rgams_SRS:
 			if doWait == -1:
 				self.warning('RGA did not produce scan result (or took too long)!')
 			else:
-				# u = u + self.ser.read() # read next byte
-				# nb = nb + 1 # increase byte-number counter
 				u = self.ser.read(4)
 
 				if k < N: # if this was not the final data point (total pressure)
