@@ -134,7 +134,7 @@ class selectorvalve_VICI:
 		curpos = self.getpos()
 		if not curpos == val: # check if valve is already at desired position
 			# send command to serial port:
-			self.ser.write('GO' + str(val) + '\r\n')
+			self.ser.write(('GO' + str(val) + '\r\n').encode('ascii'))
 		
 		# write to datafile
 		if not f == 'nofile':
@@ -160,11 +160,11 @@ class selectorvalve_VICI:
 		'''
 		
 		# make sure serial port buffer is empty:
-		self.ser.flushInput() 	# make sure input is empty
+		self.ser.flushInput() 	#pot make sure input is empty
 		self.ser.flushOutput() 	# make sure output is empty
 
 		# send command to serial port:
-		self.ser.write('CP\r\n')
+		self.ser.write('CP\r\n'.encode('ascii'))
 		
 		# wait for response
 		t = 0
@@ -185,8 +185,9 @@ class selectorvalve_VICI:
 		# read back result:
 		if (ans != '-1'):
 			while self.ser.inWaiting() > 0: # while there's something in the buffer...
-				ans = ans + self.ser.read() # read each byte
-	    	try:
+				ans = ans + self.ser.read().decode('ascii') # read each byte
+		
+		try:
 			# print ans
 			ans = ans.split('=')[1] # split answer in the form 'Position is  = 1'
 			ans = ans.strip() # strip away whitespace
