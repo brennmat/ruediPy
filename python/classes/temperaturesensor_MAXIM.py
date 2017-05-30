@@ -58,7 +58,7 @@ if havedisplay: # prepare plotting environment
 	import warnings
 	import matplotlib.cbook
 	warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-	matplotlib.use('GTKAgg') # use this for faster plotting
+	matplotlib.use('TkAgg')
 	import matplotlib.pyplot as plt
 
 class temperaturesensor_MAXIM:
