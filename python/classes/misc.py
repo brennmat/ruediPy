@@ -165,60 +165,7 @@ class misc:
 		
 
 	########################################################################################################
-	
-	
 
-	@staticmethod
-	def sleep_OLD( wait , msg='' ):
-		'''
-		misc.sleep( wait , msg='' )
-		
-		Wait for a specified time and print a message.
-		
-		INPUT:
-		wait: waiting time (seconds)
-		msg (optional): message
-		
-		OUTPUT:
-		(none)
-		'''
-		
-		dt = 1
-
-		start = time.time()
-		lastmessage = start - dt-1
-		bs  = '\b' * 1000   # backspaces
-		do_bs = False
-		
-		while time.time()-start < wait:
-			if time.time() > lastmessage + dt:
-				d = 'Waiting ' + str(wait) + ' seconds'
-				if msg:
-					d = d + ' (' + msg + ')'
-				l = int(round(wait-(time.time()-start)))
-				if l > 1:
-					d = d + '. ' + str(l) + ' seconds left...'
-				else:
-					d = d + '. ' + str(l) + ' second left...'
-				
-				if do_bs: # print backspaces to delete previous wait message:
-					print ( bs )
-				
-				print ( '\b' + d )
-				sys.stdout.flush() 
-				do_bs = True
-				
-				lastmessage = time.time()
-
-			time.sleep(1)
-			
-		print ( 'done.' )
-
-
-
-########################################################################################################
-	
-	
 
 	@staticmethod
 	def sleep( wait , msg='' ):
@@ -266,7 +213,7 @@ class misc:
 
 			time.sleep(1)
 			
-		print ( 'done.' )
+		print ( '\ndone.' )
 
 
 

@@ -1672,7 +1672,7 @@ class rgams_SRS:
 				print ( '\rConditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...        ' , end='\r' )
 				sys.stdout.flush()
 				pz_cycle (mz,gate,'nofile',plot_cond)
-			print ( 'done.' )
+			print ( '\ndone.' )
 
 		# reading data values:
 		if ND > 0:
@@ -1685,7 +1685,7 @@ class rgams_SRS:
 				print ( '\bReading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...        ' , end='\r' )
 				sys.stdout.flush()
 				pz_cycle (mz,gate,datafile)
-			print ( 'done.' )
+			print ( '\ndone.' )
 
 
 ####################################################################################################
