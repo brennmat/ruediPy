@@ -186,34 +186,32 @@ class misc:
 
 		start = time.time()
 		lastmessage = start - dt-1
-		bs  = '\b' * 1000   # backspaces
-		do_bs = False
+		finished = 'done'
 		
-		while time.time()-start < wait:
-			if time.time() > lastmessage + dt:
-				d = 'Waiting ' + str(wait) + ' seconds'
-				if msg:
-					d = d + ' (' + msg + ')'
-				l = int(round(wait-(time.time()-start)))
-				if l > 1:
-					d = d + '. ' + str(l) + ' seconds left...     '
-				else:
-					d = d + '. ' + str(l) + ' second left...      '
+		try:
+			while time.time()-start < wait:
+				if time.time() > lastmessage + dt:
+					d = 'Waiting ' + str(wait) + ' seconds'
+					if msg:
+						d = d + ' (' + msg + ')'
+					l = int(round(wait-(time.time()-start)))
+					if l > 1:
+						d = d + '. ' + str(l) + ' seconds left...     '
+					else:
+						d = d + '. ' + str(l) + ' second left...      '
+								
+					print(d, end = '\r')
+					sys.stdout.flush() 
 				
-				# if do_bs: # print backspaces to delete previous wait message:
-				#	print ( bs )
-				
-				print(d, end = '\r')
+					lastmessage = time.time()
 
-				# print ( '\b' + d )
-				sys.stdout.flush() 
-				# do_bs = True
-				
-				lastmessage = time.time()
-
-			time.sleep(1)
+				time.sleep(1)
 			
-		print ( '\ndone.' )
+		except KeyboardInterrupt:
+			finished = 'skipped'
+			pass
+
+		print ( d.rstrip() + finished + '.' )
 
 
 
