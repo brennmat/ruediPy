@@ -409,11 +409,11 @@ class rgams_SRS:
 		(none)
 		
 		OUTPUT:
-		val: filament current in mA
+		val: filament current in mA (float)
 		'''
 				
 		# send command to serial port:
-		ans = self.param_IO('FL?',1)
+		ans = float(self.param_IO('FL?',1))
 		return ans
 
 	
@@ -1610,7 +1610,7 @@ class rgams_SRS:
 		print ( 'SRS RGA status:' )
 		print ( '   MS max m/z range: ' + str(self.mz_max()) )
 		print ( '   Ionizer electron energy: ' + self.get_electron_energy() + ' eV' )
-		print ( '   Filament current: ' + self.get_filament_current() + ' mA' )
+		print ( '   Filament current: ' + str(self.get_filament_current()) + ' mA' )
 		if self.has_multiplier():
 			print ( '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)' )
 			print ( '   Currently active detector: ' + self.get_detector() )
