@@ -796,7 +796,7 @@ class rgams_SRS:
 			unit = '(none)'
 			
 		elif mz > self.mz_max():
-			self.warning ('mz value must be ' + self.mz_max + ' or less! Skipping peak measurement...')
+			self.warning ('mz value must be ' + self.mz_max() + ' or less! Skipping peak measurement...')
 			val = '-1'
 			unit = '(none)'
 			
@@ -887,8 +887,8 @@ class rgams_SRS:
 			val = '-1'
 			unit = '(none)'
 			
-		elif mz+mz_offset > self.mz_max:
-			self.warning ('mz+mz_offset value must be ' + self.mz_max + ' or less! Skipping zero measurement...')
+		elif mz+mz_offset > self.mz_max():
+			self.warning ('mz+mz_offset value must be ' + self.mz_max() + ' or less! Skipping zero measurement...')
 			val = '-1'
 			unit = '(none)'
 			
@@ -977,7 +977,7 @@ class rgams_SRS:
 			self.warning ('Scan must start at m/z=0 or higher! Starting at m/z=0...')
 			low = 0
 		if high > self.mz_max():
-			self.warning ('Scan must end at m/z=' + self.mz_max() + ' or lower! Ending at m/z= ' + self.mz_max + '...')
+			self.warning ('Scan must end at m/z=' + self.mz_max() + ' or lower! Ending at m/z= ' + self.mz_max() + '...')
 			low = self.mz_max()
 		if low >= high:
 			self.warning ('Scan m/z value at start must be lower than at end. Swapping values...')
@@ -1661,16 +1661,16 @@ class rgams_SRS:
 
 		# prepare:
 		self.set_detector(detector)
-		bs  = '\b' * 1000   # backspaces
+		## bs  = '\b' * 1000   # backspaces
 	
 		# conditioning detector and electronics:
 		if NC > 0:
 			if clear_peakbuf_cond:
 				self.peakbuffer_clear() # clear peakbuffer
 			for i in range(NC):
-				if i > 0:
-					print ( bs )
-				print ( '\bConditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...' )
+				##if i > 0:
+				##	print ( bs )
+				print ( '\rConditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...        ' , end='\r' )
 				sys.stdout.flush()
 				pz_cycle (mz,gate,'nofile',plot_cond)
 			print ( 'done.' )
@@ -1681,9 +1681,9 @@ class rgams_SRS:
 				self.peakbuffer_clear() # clear peakbuffer
 			# print 'Reading data using ' + detector + ' detector (' + str(ND) + ' cycles)...'
 			for i in range(ND):
-				if i > 0:
-					print ( bs )
-				print ( '\bReading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...' )
+				## if i > 0:
+				##	print ( bs )
+				print ( '\bReading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...        ' , end='\r' )
 				sys.stdout.flush()
 				pz_cycle (mz,gate,datafile)
 			print ( 'done.' )
