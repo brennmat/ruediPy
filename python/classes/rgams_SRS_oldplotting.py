@@ -133,12 +133,7 @@ class rgams_SRS:
 		
 		if self._has_display: # prepare plotting environment and figure
 
-			# mz values and colors
-			self._peakbufferplot_lines_mz = [] # empty list of mz values that are already in the plot (will be updated later)
-			self._peakbufferplot_colors = [(4,'c'),(15,'g'),(28,'k'),(32,'r'),(40,'y'),(44,'b'),(84,'m')] # fixed colors for the more common mz values
-
 			# set up plotting environment
-			plt.ion() 
 			self._fig = plt.figure(figsize=(fig_w,fig_h))
 			# f.suptitle('SRS RGA DATA')
 			t = 'SRS RGA'
@@ -153,12 +148,6 @@ class rgams_SRS:
 			plt.ylabel('Intensity')
 			self._peakbuffer_plot_min_y = peakbuffer_plot_min
 			self._peakbuffer_plot_max_y = peakbuffer_plot_max
-			# add (empty) line to plot (will be updated with data later):
-			self._pressbuffer_ax.plot( [], [] )
-
-			from matplotlib.ticker import FuncFormatter
-			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
-			self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
 
 			# set up lower panel for scans:
 			self._scan_ax = plt.subplot(2,1,2)
@@ -169,9 +158,9 @@ class rgams_SRS:
 			# get some space in between panels to avoid overlapping labels / titles
 			self._fig.tight_layout(pad=1.5)
 
-			# plt.ion() # enables interactive mode
+			plt.ion() # enables interactive mode
 			# plt.draw()
-			plt.show()
+			# plt.show()
 			### plt.pause(0.1) # allow some time to update the plot *** DON'T UPDATE PLOT YET, KEEP IT HIDDEN. WILL BE UPDATED/SHOWN ONCE DATA GETS PLOTTED!   
 			
 			
@@ -1458,27 +1447,24 @@ class rgams_SRS:
 			self.warning('Plotting of peakbuffer trend not possible (no display system available).')
 
 		else:
-
-			# remove all the lines that are currently in the plot:
-			self._peakbuffer_ax.lines = []
-
-			# redo the plot by plotting line by line (mz by mz and detector by detector):
-			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k') # some colors for use with all 'other' mz values
+			MZ = numpy.unique(self._peakbuffer_mz) # unique list of all mz values
+			COLORS = [(4,'c'),(15,'g'),(28,'k'),(32,'r'),(40,'y'),(44,'b'),(84,'m')] # fixed colors for the more common mz values
+			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k') # some colors for use with all other mz values
 			n = 0
 			leg = []
 			t0 = misc.now_UNIX()			
 			N = len(self._peakbuffer_mz)
-			for mz in numpy.unique(self._peakbuffer_mz): # loop through all mz values in the peak buffer
-				for det in [ 'F' , 'M' ]: # loop through all detectors (Faraday and Multiplier)
+			for mz in MZ:
+				for det in [ 'F' , 'M' ]:
 					k = [ i for i in range(N) if ((self._peakbuffer_mz[i] == mz) & (self._peakbuffer_det[i] == det)) ] # index to data with current mz / detector pair
 					if len(k) > 0: # if k is not empty
 						# col = colors[n%7]
 						intens0 = self._peakbuffer_intens[k[0]]
 						col = [c for c in COLORS if c[0] == mz]
-						if col:
-							col = col[0][1]
-						else:
+						if not col:
 							col = colors[n%7]
+						else:
+							col = col[0][1]
 						if det == 'F':
 							style = 'o-'
 						elif det == 'M':
@@ -1486,7 +1472,7 @@ class rgams_SRS:
 						else:
 							style = 'x-'
 						self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + style , markersize = 10 )
-						# self._peakbuffer_ax.hold(True)
+						self._peakbuffer_ax.hold(True)
 						val_min = self._peakbuffer_intens[k].min()
 						val_max = self._peakbuffer_intens[k].max()
 						min = "{:.2e}".format(val_min)
@@ -1494,6 +1480,9 @@ class rgams_SRS:
 						leg.append( 'mz=' + str(int(mz)) + ' det=' + det + ': ' + min + ' ... ' + max + ' ' + self._peakbuffer_unit[k[0]] )
 						n = n+1
 
+			self._peakbuffer_ax.hold( False )
+			# self._peakbuffer_ax.legend( leg , loc=2 , prop={'size':8})
+			self._peakbuffer_ax.legend( leg , loc=2 )
 			self._peakbuffer_ax.legend( leg , loc='best' , prop={'size':9} )
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
@@ -1501,9 +1490,9 @@ class rgams_SRS:
 			self._peakbuffer_ax.set_xlabel('Time (s)')
 			self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
 
-			### from matplotlib.ticker import FuncFormatter
-			### yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
-			### self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
+			from matplotlib.ticker import FuncFormatter
+			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
+			self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
 			
 			yy = list(self._peakbuffer_ax.get_ylim())
 			if yy[0] < self._peakbuffer_plot_min_y:
@@ -1513,25 +1502,9 @@ class rgams_SRS:
 				yy[1] = self._peakbuffer_plot_max_y
 				self._peakbuffer_ax.set_ylim(yy)
 			
-			# self._fig.tight_layout(pad=1.5)
-
-			# Scale axes:
-			self._pressbuffer_ax.relim()
-			self._pressbuffer_ax.autoscale_view()
-
-			# Update the plot:
-			# self._fig.canvas.draw()
-			self._fig.canvas.flush_events()
-
-
-
-
-
-
-
-
-			### plt.show() # update the plot
-			### plt.pause(0.01) # allow some time to update the plot
+			self._fig.tight_layout(pad=1.5)
+			plt.show() # update the plot
+			plt.pause(0.01) # allow some time to update the plot
 
 
 
