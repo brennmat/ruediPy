@@ -134,11 +134,10 @@ class rgams_SRS:
 		if self._has_display: # prepare plotting environment and figure
 
 			# mz values and colors
-			self._peakbufferplot_lines_mz = [] # empty list of mz values that are already in the plot (will be updated later)
+			### self._peakbufferplot_lines_mz = [] # empty list of mz values that are already in the plot (will be updated later)
 			self._peakbufferplot_colors = [(4,'c'),(15,'g'),(28,'k'),(32,'r'),(40,'y'),(44,'b'),(84,'m')] # fixed colors for the more common mz values
 
 			# set up plotting environment
-			plt.ion() 
 			self._fig = plt.figure(figsize=(fig_w,fig_h))
 			# f.suptitle('SRS RGA DATA')
 			t = 'SRS RGA'
@@ -154,7 +153,7 @@ class rgams_SRS:
 			self._peakbuffer_plot_min_y = peakbuffer_plot_min
 			self._peakbuffer_plot_max_y = peakbuffer_plot_max
 			# add (empty) line to plot (will be updated with data later):
-			self._pressbuffer_ax.plot( [], [] )
+			self._peakbuffer_ax.plot( [], [] )
 
 			from matplotlib.ticker import FuncFormatter
 			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
@@ -169,11 +168,8 @@ class rgams_SRS:
 			# get some space in between panels to avoid overlapping labels / titles
 			self._fig.tight_layout(pad=1.5)
 
-			# plt.ion() # enables interactive mode
-			# plt.draw()
-			plt.show()
-			### plt.pause(0.1) # allow some time to update the plot *** DON'T UPDATE PLOT YET, KEEP IT HIDDEN. WILL BE UPDATED/SHOWN ONCE DATA GETS PLOTTED!   
-			
+			self._figwindow_is_shown = False
+			plt.ion()			
 			
 		print ('Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 	
@@ -1459,6 +1455,11 @@ class rgams_SRS:
 
 		else:
 
+			if not self._figwindow_is_shown:
+				# show the window on screen
+				self._fig.show()
+				self._figwindow_is_shown = True
+				
 			# remove all the lines that are currently in the plot:
 			self._peakbuffer_ax.lines = []
 
@@ -1474,7 +1475,7 @@ class rgams_SRS:
 					if len(k) > 0: # if k is not empty
 						# col = colors[n%7]
 						intens0 = self._peakbuffer_intens[k[0]]
-						col = [c for c in COLORS if c[0] == mz]
+						col = [c for c in self._peakbufferplot_colors if c[0] == mz]
 						if col:
 							col = col[0][1]
 						else:
@@ -1486,52 +1487,39 @@ class rgams_SRS:
 						else:
 							style = 'x-'
 						self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + style , markersize = 10 )
-						# self._peakbuffer_ax.hold(True)
 						val_min = self._peakbuffer_intens[k].min()
 						val_max = self._peakbuffer_intens[k].max()
 						min = "{:.2e}".format(val_min)
 						max = "{:.2e}".format(val_max)
 						leg.append( 'mz=' + str(int(mz)) + ' det=' + det + ': ' + min + ' ... ' + max + ' ' + self._peakbuffer_unit[k[0]] )
 						n = n+1
-
-			self._peakbuffer_ax.legend( leg , loc='best' , prop={'size':9} )
-
-			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ') at ' + t0)
-			self._peakbuffer_ax.set_xlabel('Time (s)')
-			self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
-
-			### from matplotlib.ticker import FuncFormatter
-			### yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
-			### self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
 			
-			yy = list(self._peakbuffer_ax.get_ylim())
-			if yy[0] < self._peakbuffer_plot_min_y:
-				yy[0] = self._peakbuffer_plot_min_y
-				self._peakbuffer_ax.set_ylim(yy)
-			if yy[1] > self._peakbuffer_plot_max_y:
-				yy[1] = self._peakbuffer_plot_max_y
-				self._peakbuffer_ax.set_ylim(yy)
-			
-			# self._fig.tight_layout(pad=1.5)
+			if len(self._peakbuffer_ax.lines) > 0: # if the plot is not empty
+				
+				# set legend location:
+				self._peakbuffer_ax.legend( leg , loc='best' , prop={'size':9} )
 
-			# Scale axes:
-			self._pressbuffer_ax.relim()
-			self._pressbuffer_ax.autoscale_view()
+				# set title and axis labels:
+				t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
+				self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ') at ' + t0)
+				self._peakbuffer_ax.set_xlabel('Time (s)')
+				self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
+
+				# Set axis scaling (automatic):
+				self._peakbuffer_ax.relim()
+				self._peakbuffer_ax.autoscale_view()
+
+				# Make sure y-axis is scaled within allowed range:
+				yy = list(self._peakbuffer_ax.get_ylim())
+				if yy[0] < self._peakbuffer_plot_min_y:
+					yy[0] = self._peakbuffer_plot_min_y
+					self._peakbuffer_ax.set_ylim(yy)
+				if yy[1] > self._peakbuffer_plot_max_y:
+					yy[1] = self._peakbuffer_plot_max_y
+					self._peakbuffer_ax.set_ylim(yy)
 
 			# Update the plot:
-			# self._fig.canvas.draw()
 			self._fig.canvas.flush_events()
-
-
-
-
-
-
-
-
-			### plt.show() # update the plot
-			### plt.pause(0.01) # allow some time to update the plot
 
 
 
@@ -1600,23 +1588,34 @@ class rgams_SRS:
 			self.warning('Plotting of scan data not possible (no display system available).')
 
 		else:
-			self._scan_ax.hold(False)
+		
+			if not self._figwindow_is_shown:
+				# show the window on screen
+				self._fig.show()
+				self._figwindow_is_shown = True
+
+			# remove all the lines that are currently in the plot:
+			self._scan_ax.lines = []
+
 			self._scan_ax.plot( mz , intens , 'k.-' )
 			if cumsum_mz:
 				# normalize cumulative sum values to intens (to match plot scales):
 				cumsum_val = cumsum_val / max(cumsum_val) * max(intens)
 				# add cumulative sum data to plot:
-				self._scan_ax.hold(True)
 				self._scan_ax.plot( cumsum_mz , cumsum_val , 'r.-' )
-				self._scan_ax.hold(False)
 
 			self._scan_ax.set_xlabel('mz')
 			self._scan_ax.set_ylabel('Intensity (' + unit +')')
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
 			self._scan_ax.set_title('SCAN (' + self.label() + ')' + ' at ' + t0)
 			self._fig.tight_layout(pad=1.5)
-			plt.show() # tell it to update the plot
-			plt.pause(0.01) # allow some time to update the plot
+
+			# Set axis scaling (automatic):
+			self._scan_ax.relim()
+			self._scan_ax.autoscale_view()
+
+			# update the plot:
+			self._fig.canvas.flush_events()
 			
 			
 	########################################################################################################
