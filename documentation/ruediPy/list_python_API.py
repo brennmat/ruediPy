@@ -5,15 +5,15 @@ import inspect
 from classes.rgams_SRS		       		import rgams_SRS
 from classes.selectorvalve_VICI    		import selectorvalve_VICI
 from classes.pressuresensor_WIKA   		import pressuresensor_WIKA
-from classes.temperaturesensor_MAXIM   	import temperaturesensor_MAXIM
-from classes.datafile			   		import datafile
-from classes.misc			       		import misc
+from classes.temperaturesensor_MAXIM   		import temperaturesensor_MAXIM
+from classes.datafile			   	import datafile
+from classes.misc			       	import misc
 
 CLASSES = [ rgams_SRS , selectorvalve_VICI , pressuresensor_WIKA , temperaturesensor_MAXIM , datafile , misc ]
 
 outfile = open('python_API.tex', 'w')
 
-outfile.write ( '%% THIS NEEDS THE underscore PACKAGE: \usepackage[strings]{underscore}\n\n' )
+outfile.write( '%% THIS NEEDS THE underscore PACKAGE: \\usepackage[strings]{underscore}\n\n' )
 
 for X in CLASSES:
 	outfile.write ( '\subsubsection{Class \\texttt{' + X.__name__ + '}}\n' )
@@ -28,7 +28,7 @@ for X in CLASSES:
 	outfile.write ( '\n\n' )
 	
 	for name, data in inspect.getmembers(X):
-		if name == '__builtins__':
+		if name[0:2] == '__' :
 			continue
 		if name == '__doc__':
 			continue

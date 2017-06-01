@@ -274,8 +274,8 @@ class temperaturesensor_MAXIM:
 
 			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
 			self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ') at ' + t0)
-                        self._tempbuffer_ax.set_xlabel('Time (s)')
-                        self._tempbuffer_ax.set_ylabel('Temperature ('+self._tempbuffer_unit[0]+')')
+			self._tempbuffer_ax.set_xlabel('Time (s)')
+			self._tempbuffer_ax.set_ylabel('Temperature ('+self._tempbuffer_unit[0]+')')
 
 			plt.show() # update the plot
 			plt.pause(0.015) # allow some time to update the plot

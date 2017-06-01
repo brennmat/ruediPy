@@ -3,7 +3,7 @@
 import subprocess, sys
 
 # make tex file with ruediPy Python API:
-subprocess.call(["python", "list_python_API.py"])
+subprocess.call(["python3", "list_python_API.py"])
 
 mainfile = 'ruediPy_manual'
 

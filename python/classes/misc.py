@@ -172,7 +172,7 @@ class misc:
 		'''
 		misc.sleep( wait , msg='' )
 		
-		Wait for a specified time and print a message.
+		Wait for a specified time and print a countdown message. The user can skip the countdown by pressing CTRL-C.
 		
 		INPUT:
 		wait: waiting time (seconds)
