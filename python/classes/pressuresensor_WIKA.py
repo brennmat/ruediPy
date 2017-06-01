@@ -130,9 +130,11 @@ class pressuresensor_WIKA:
 		self._has_display = havedisplay
 		if self._has_display: # prepare plotting environment and figure
 
-			# set up plotting environment
+			# enable interactive mode:
+			plt.ion() 
+
+			# set up plot figure:
 			self._fig = plt.figure(figsize=(fig_w,fig_h))
-			# f.suptitle('SRS RGA DATA')
 			t = 'WIKA P30'
 			if self._label:
 				t = t + ' (' + self.label() + ')'
@@ -143,15 +145,11 @@ class pressuresensor_WIKA:
 			self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ')',loc="center")
 			plt.xlabel('Time')
 			plt.ylabel('Pressure')
-			self._pressbuffer_ax.hold(False)
-			
-			# get some space in between panels to avoid overlapping labels / titles
-			# self._fig.tight_layout(pad=1.5)
 
-			plt.ion() # enables interactive mode
+			# add (empty) line to plot (will be updated with data later):
+			self._pressbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
+			plt.show()
 
-			# plt.pause(0.1) # allow some time to update the plot *** DON'T SHOW THE WINDOW YET, WAIT FOR DATA PLOTTING
-		
 		
 		print ('Successfully configured WIKA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport )
 
@@ -342,16 +340,17 @@ class pressuresensor_WIKA:
 			self.warning('Plotting of pressbuffer trend not possible (no display system available).')
 
 		else:
+			# Set plot data:
 			t0 = misc.now_UNIX()
-			self._pressbuffer_ax.plot( self._pressbuffer_t - t0 , self._pressbuffer_p , 'ko-' , markersize = 10 )
+			self._pressbuffer_ax.lines[0].set_data( self._pressbuffer_t - t0 , self._pressbuffer_p )
 
-			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-			self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ') at ' + t0)
-			self._pressbuffer_ax.set_xlabel('Time (s)')
-			self._pressbuffer_ax.set_ylabel('Pressure ('+self._pressbuffer_unit[0]+')')
+			# Scale axes:
+			self._pressbuffer_ax.relim()
+			self._pressbuffer_ax.autoscale_view()
 
-			plt.show() # update the plot
-			plt.pause(0.015) # allow some time to update the plot
+			# Update the plot:
+			# self._fig.canvas.draw()
+			self._fig.canvas.flush_events()
 
 
 	########################################################################################################
