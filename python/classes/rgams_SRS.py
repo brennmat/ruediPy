@@ -1454,72 +1454,77 @@ class rgams_SRS:
 			self.warning('Plotting of peakbuffer trend not possible (no display system available).')
 
 		else:
-
-			if not self._figwindow_is_shown:
-				# show the window on screen
-				self._fig.show()
-				self._figwindow_is_shown = True
-				
-			# remove all the lines that are currently in the plot:
-			self._peakbuffer_ax.lines = []
-
-			# redo the plot by plotting line by line (mz by mz and detector by detector):
-			colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k') # some colors for use with all 'other' mz values
-			n = 0
-			leg = []
-			t0 = misc.now_UNIX()			
-			N = len(self._peakbuffer_mz)
-			for mz in numpy.unique(self._peakbuffer_mz): # loop through all mz values in the peak buffer
-				for det in [ 'F' , 'M' ]: # loop through all detectors (Faraday and Multiplier)
-					k = [ i for i in range(N) if ((self._peakbuffer_mz[i] == mz) & (self._peakbuffer_det[i] == det)) ] # index to data with current mz / detector pair
-					if len(k) > 0: # if k is not empty
-						# col = colors[n%7]
-						intens0 = self._peakbuffer_intens[k[0]]
-						col = [c for c in self._peakbufferplot_colors if c[0] == mz]
-						if col:
-							col = col[0][1]
-						else:
-							col = colors[n%7]
-						if det == 'F':
-							style = 'o-'
-						elif det == 'M':
-							style = 's-'
-						else:
-							style = 'x-'
-						self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + style , markersize = 10 )
-						val_min = self._peakbuffer_intens[k].min()
-						val_max = self._peakbuffer_intens[k].max()
-						min = "{:.2e}".format(val_min)
-						max = "{:.2e}".format(val_max)
-						leg.append( 'mz=' + str(int(mz)) + ' det=' + det + ': ' + min + ' ... ' + max + ' ' + self._peakbuffer_unit[k[0]] )
-						n = n+1
 			
-			if len(self._peakbuffer_ax.lines) > 0: # if the plot is not empty
+			try: # make sure data analysis does not fail due to a silly plotting issue
+
+				if not self._figwindow_is_shown:
+					# show the window on screen
+					self._fig.show()
+					self._figwindow_is_shown = True
 				
-				# set legend location:
-				self._peakbuffer_ax.legend( leg , loc='best' , prop={'size':9} )
+				# remove all the lines that are currently in the plot:
+				self._peakbuffer_ax.lines = []
 
-				# set title and axis labels:
-				t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-				self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ') at ' + t0)
-				self._peakbuffer_ax.set_xlabel('Time (s)')
-				self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
+				# redo the plot by plotting line by line (mz by mz and detector by detector):
+				colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k') # some colors for use with all 'other' mz values
+				n = 0
+				leg = []
+				t0 = misc.now_UNIX()			
+				N = len(self._peakbuffer_mz)
+				for mz in numpy.unique(self._peakbuffer_mz): # loop through all mz values in the peak buffer
+					for det in [ 'F' , 'M' ]: # loop through all detectors (Faraday and Multiplier)
+						k = [ i for i in range(N) if ((self._peakbuffer_mz[i] == mz) & (self._peakbuffer_det[i] == det)) ] # index to data with current mz / detector pair
+						if len(k) > 0: # if k is not empty
+							# col = colors[n%7]
+							intens0 = self._peakbuffer_intens[k[0]]
+							col = [c for c in self._peakbufferplot_colors if c[0] == mz]
+							if col:
+								col = col[0][1]
+							else:
+								col = colors[n%7]
+							if det == 'F':
+								style = 'o-'
+							elif det == 'M':
+								style = 's-'
+							else:
+								style = 'x-'
+							self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + style , markersize = 10 )
+							val_min = self._peakbuffer_intens[k].min()
+							val_max = self._peakbuffer_intens[k].max()
+							min = "{:.2e}".format(val_min)
+							max = "{:.2e}".format(val_max)
+							leg.append( 'mz=' + str(int(mz)) + ' det=' + det + ': ' + min + ' ... ' + max + ' ' + self._peakbuffer_unit[k[0]] )
+							n = n+1
+			
+				if len(self._peakbuffer_ax.lines) > 0: # if the plot is not empty
+				
+					# set legend location:
+					self._peakbuffer_ax.legend( leg , loc='best' , prop={'size':9} )
 
-				# Set axis scaling (automatic):
-				self._peakbuffer_ax.relim()
-				self._peakbuffer_ax.autoscale_view()
+					# set title and axis labels:
+					t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
+					self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ') at ' + t0)
+					self._peakbuffer_ax.set_xlabel('Time (s)')
+					self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
 
-				# Make sure y-axis is scaled within allowed range:
-				yy = list(self._peakbuffer_ax.get_ylim())
-				if yy[0] < self._peakbuffer_plot_min_y:
-					yy[0] = self._peakbuffer_plot_min_y
-					self._peakbuffer_ax.set_ylim(yy)
-				if yy[1] > self._peakbuffer_plot_max_y:
-					yy[1] = self._peakbuffer_plot_max_y
-					self._peakbuffer_ax.set_ylim(yy)
+					# Set axis scaling (automatic):
+					self._peakbuffer_ax.relim()
+					self._peakbuffer_ax.autoscale_view()
 
-			# Update the plot:
-			self._fig.canvas.flush_events()
+					# Make sure y-axis is scaled within allowed range:
+					yy = list(self._peakbuffer_ax.get_ylim())
+					if yy[0] < self._peakbuffer_plot_min_y:
+						yy[0] = self._peakbuffer_plot_min_y
+						self._peakbuffer_ax.set_ylim(yy)
+					if yy[1] > self._peakbuffer_plot_max_y:
+						yy[1] = self._peakbuffer_plot_max_y
+						self._peakbuffer_ax.set_ylim(yy)
+
+				# Update the plot:
+				self._fig.canvas.flush_events()
+
+			except:
+				self.warning( 'Error during plotting of peakbuffer trend (' + str(sys.exc_info()[0]) + ').' )
 
 
 

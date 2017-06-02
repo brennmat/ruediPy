@@ -130,9 +130,6 @@ class pressuresensor_WIKA:
 		self._has_display = havedisplay
 		if self._has_display: # prepare plotting environment and figure
 
-			# enable interactive mode:
-			plt.ion() 
-
 			# set up plot figure:
 			self._fig = plt.figure(figsize=(fig_w,fig_h))
 			t = 'WIKA P30'
@@ -143,14 +140,17 @@ class pressuresensor_WIKA:
 			# set up panel for pressure history plot:
 			self._pressbuffer_ax = plt.subplot(1,1,1)
 			self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ')',loc="center")
-			plt.xlabel('Time')
+			plt.xlabel('Time (s)')
 			plt.ylabel('Pressure')
 
 			# add (empty) line to plot (will be updated with data later):
 			self._pressbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
-			plt.show()
+			
+			# enable interactive mode:
+			plt.ion()
 
-		
+			self._figwindow_is_shown = False
+
 		print ('Successfully configured WIKA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport )
 
 	
@@ -340,17 +340,31 @@ class pressuresensor_WIKA:
 			self.warning('Plotting of pressbuffer trend not possible (no display system available).')
 
 		else:
-			# Set plot data:
-			t0 = misc.now_UNIX()
-			self._pressbuffer_ax.lines[0].set_data( self._pressbuffer_t - t0 , self._pressbuffer_p )
 
-			# Scale axes:
-			self._pressbuffer_ax.relim()
-			self._pressbuffer_ax.autoscale_view()
+			try: # make sure data analysis does not fail due to a silly plotting issue
 
-			# Update the plot:
-			# self._fig.canvas.draw()
-			self._fig.canvas.flush_events()
+				if not self._figwindow_is_shown:
+					# show the window on screen
+					self._fig.show()
+					self._figwindow_is_shown = True
+
+				# Set plot data:
+				t0 = misc.now_UNIX()
+				self._pressbuffer_ax.lines[0].set_data( self._pressbuffer_t - t0 , self._pressbuffer_p )
+
+				# Scale axes:
+				self._pressbuffer_ax.relim()
+				self._pressbuffer_ax.autoscale_view()
+				
+				# Get pressure units right:
+				self._pressbuffer_ax.set_ylabel('Pressure (' + str(self._pressbuffer_unit[0]) + ')' )
+
+				# Update the plot:
+				# self._fig.canvas.draw()
+				self._fig.canvas.flush_events()
+
+			except:
+				self.warning( 'Error during plotting of pressbuffer trend (' + str(sys.exc_info()[0]) + ').' )
 
 
 	########################################################################################################
