@@ -1665,7 +1665,8 @@ class rgams_SRS:
 				self.peak(m[i][0],g,f,add_to_peakbuffer) # read PEAK value
 				if not m[i][1] == 0:
 					self.zero(m[i][0],m[i][1],g,f) # read ZERO value
-			self.plot_peakbuffer()
+			if add_to_peakbuffer:
+				self.plot_peakbuffer()
 
 
 		# prepare:
