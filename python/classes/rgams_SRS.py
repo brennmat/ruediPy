@@ -1567,34 +1567,39 @@ class rgams_SRS:
 
 		else:
 		
-			if not self._figwindow_is_shown:
-				# show the window on screen
-				self._fig.show()
-				self._figwindow_is_shown = True
+			try: # make sure data analysis does not fail due to a silly plotting issue
 
-			# remove all the lines that are currently in the plot:
-			self._scan_ax.lines = []
+				if not self._figwindow_is_shown:
+					# show the window on screen
+					self._fig.show()
+					self._figwindow_is_shown = True
 
-			self._scan_ax.plot( mz , intens , 'k.-' )
-			if cumsum_mz:
-				# normalize cumulative sum values to intens (to match plot scales):
-				cumsum_val = cumsum_val / max(cumsum_val) * max(intens)
-				# add cumulative sum data to plot:
-				self._scan_ax.plot( cumsum_mz , cumsum_val , 'r.-' )
+				# remove all the lines that are currently in the plot:
+				self._scan_ax.lines = []
 
-			self._scan_ax.set_xlabel('mz')
-			self._scan_ax.set_ylabel('Intensity (' + unit +')')
-			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
-			self._scan_ax.set_title('SCAN (' + self.label() + ')' + ' at ' + t0)
-			self._fig.tight_layout(pad=1.5)
+				self._scan_ax.plot( mz , intens , 'k.-' )
+				if cumsum_mz:
+					# normalize cumulative sum values to intens (to match plot scales):
+					cumsum_val = cumsum_val / max(cumsum_val) * max(intens)
+					# add cumulative sum data to plot:
+					self._scan_ax.plot( cumsum_mz , cumsum_val , 'r.-' )
 
-			# Set axis scaling (automatic):
-			self._scan_ax.relim()
-			self._scan_ax.autoscale_view()
+				self._scan_ax.set_xlabel('mz')
+				self._scan_ax.set_ylabel('Intensity (' + unit +')')
+				t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(misc.now_UNIX()))
+				self._scan_ax.set_title('SCAN (' + self.label() + ')' + ' at ' + t0)
+				self._fig.tight_layout(pad=1.5)
 
-			# update the plot:
-			self._fig.canvas.flush_events()
-			
+				# Set axis scaling (automatic):
+				self._scan_ax.relim()
+				self._scan_ax.autoscale_view()
+
+				# update the plot:
+				self._fig.canvas.flush_events()
+
+			except:
+				self.warning( 'Error during plotting of scan data (' + str(sys.exc_info()[0]) + ').' )
+
 			
 	########################################################################################################
 
