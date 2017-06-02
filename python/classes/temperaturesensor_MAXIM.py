@@ -129,13 +129,18 @@ class temperaturesensor_MAXIM:
 			# set up panel for temperature history plot:
 			self._tempbuffer_ax = plt.subplot(1,1,1)
 			self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ')',loc="center")
-			plt.xlabel('Time')
+			plt.xlabel('Time (s)')
 			plt.ylabel('Temperature')
 			self._tempbuffer_ax.hold(False)
 			
-			plt.ion() # enables interactive mode
+			# add (empty) line to plot (will be updated with data later):
+			self._tempbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
+			
+			# enable interactive mode:
+			plt.ion()
 
-			# plt.pause(0.1) # allow some time to update the plot *** DON'T SHOW THE WINDOW YET, WAIT FOR DATA PLOTTING
+			self._figwindow_is_shown = False
+
 
 		if hasattr(self,'_sensor'):
 			print ( 'Successfully configured DS18B20 temperature sensor (ROM code ' + self._ROMcode + ')' )
@@ -215,9 +220,6 @@ class temperaturesensor_MAXIM:
 		misc.warnmessage (self.label(),msg)
 
 
-
-
-
 	########################################################################################################
 	
 
@@ -269,19 +271,31 @@ class temperaturesensor_MAXIM:
 			self.warning('Plotting of tempbuffer trend not possible (no display system available).')
 
 		else:
-			t0 = misc.now_UNIX()
-			self._tempbuffer_ax.plot( self._tempbuffer_t - t0 , self._tempbuffer_T , 'ko-' , markersize = 10 )
 
-			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-			self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ') at ' + t0)
-			self._tempbuffer_ax.set_xlabel('Time (s)')
-			self._tempbuffer_ax.set_ylabel('Temperature ('+self._tempbuffer_unit[0]+')')
+			try: # make sure data analysis does not fail due to a silly plotting issue
 
-			plt.show() # update the plot
-			plt.pause(0.015) # allow some time to update the plot
+				if not self._figwindow_is_shown:
+					# show the window on screen
+					self._fig.show()
+					self._figwindow_is_shown = True
+
+				# Set plot data:
+				t0 = misc.now_UNIX()
+				self._tempbuffer_ax.lines[0].set_data( self._tempbuffer_t - t0 , self._tempbuffer_T )
+
+				# Scale axes:
+				self._tempbuffer_ax.relim()
+				self._tempbuffer_ax.autoscale_view()
+				
+				# Get pressure units right:
+				self._tempbuffer_ax.set_ylabel('Temperature (' + str(self._tempbuffer_unit[0]) + ')' )
+
+				# Update the plot:
+				# self._fig.canvas.draw()
+				self._fig.canvas.flush_events()
+
+			except:
+				self.warning( 'Error during plotting of tempbuffer trend (' + str(sys.exc_info()[0]) + ').' )
 
 
 	########################################################################################################
-
-
-
