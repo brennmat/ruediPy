@@ -129,12 +129,12 @@ class misc:
 		'''
 		
 		print ('\a') # get user attention using the terminal bell
-		print ('')
+		# print ('')
 		if sys.version_info >= (3,0): # Python 3.0 or newer
 			input( msg )
 		else:
 			raw_input( msg )
-		print ('')
+		# fprint ('')
 
 
 	########################################################################################################
@@ -155,12 +155,12 @@ class misc:
 		'''
 		
 		print ('\a') # get user attention using the terminal bell
-		print ('')
+		# print ('')
 		if sys.version_info >= (3,0): # Python 3.0 or newer
 			x = input( msg )
 		else:
 			x = raw_input( msg )
-		print ('')
+		# print ('')
 		return x
 		
 
@@ -240,7 +240,7 @@ class misc:
 		N = len(menu);
 		do_menu = True;
 		while do_menu:
-			print ( '' )
+			# print ( '' )
 			print ( title + ':' )
 			for i in range(N):
 				print ( '   ' + str(i+1) + ': ' + menu[i] )
@@ -248,7 +248,7 @@ class misc:
 				ans = input( 'Enter number: ' )
 			else:
 				ans = raw_input( 'Enter number: ' )
-			print ('')
+			# print ('')
 			
 			try:
 				ans = int(ans) # try converting from string to integer number

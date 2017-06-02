@@ -1679,10 +1679,11 @@ class rgams_SRS:
 			for i in range(NC):
 				##if i > 0:
 				##	print ( bs )
-				print ( '\rConditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...        ' , end='\r' )
+				msg = 'Conditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...        '
+				print ( '\r' + msg , end='\r' )
 				sys.stdout.flush()
 				pz_cycle (mz,gate,'nofile',plot_cond)
-			print ( '\ndone.' )
+			print ( msg.rstrip() + 'done.' )
 
 		# reading data values:
 		if ND > 0:
@@ -1692,10 +1693,11 @@ class rgams_SRS:
 			for i in range(ND):
 				## if i > 0:
 				##	print ( bs )
-				print ( '\bReading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...        ' , end='\r' )
+				msg = 'Reading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...        '
+				print ( '\r' + msg , end='\r' )
 				sys.stdout.flush()
 				pz_cycle (mz,gate,datafile)
-			print ( '\ndone.' )
+			print ( msg.rstrip() + 'done.' )
 
 
 ####################################################################################################
