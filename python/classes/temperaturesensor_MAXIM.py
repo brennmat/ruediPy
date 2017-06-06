@@ -129,9 +129,9 @@ class temperaturesensor_MAXIM:
 			# set up panel for temperature history plot:
 			self._tempbuffer_ax = plt.subplot(1,1,1)
 			self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ')',loc="center")
-			plt.xlabel('Time (s)')
-			plt.ylabel('Temperature')
-			self._tempbuffer_ax.hold(False)
+			self._tempbuffer_ax.set_xlabel('Time (s)')
+			self._tempbuffer_ax.set_ylabel('Temperature')
+			# self._tempbuffer_ax.hold(False)
 			
 			# add (empty) line to plot (will be updated with data later):
 			self._tempbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )

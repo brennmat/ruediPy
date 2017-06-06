@@ -140,8 +140,8 @@ class pressuresensor_WIKA:
 			# set up panel for pressure history plot:
 			self._pressbuffer_ax = plt.subplot(1,1,1)
 			self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ')',loc="center")
-			plt.xlabel('Time (s)')
-			plt.ylabel('Pressure')
+			self._pressbuffer_ax.set_xlabel('Time (s)')
+			self._pressbuffer_ax.set_ylabel('Pressure')
 
 			# add (empty) line to plot (will be updated with data later):
 			self._pressbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )

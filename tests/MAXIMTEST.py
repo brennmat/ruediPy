@@ -57,3 +57,4 @@ print( 'Data output to ' + DATAFILE.name() )
 while 1:
 	T,unit = TSENS.temperature(DATAFILE)
 	print ( str(T) + ' ' + unit )
+	TSENS.plot_tempbuffer()
