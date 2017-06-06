@@ -46,12 +46,12 @@ from classes.temperaturesensor_MAXIM	import temperaturesensor_MAXIM
 from classes.datafile					import datafile
 
 # TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/pci-Prolific_Technology_Inc._USB-Serial_Controller-if00-port0' , label = 'TEMP-TEST' )
-TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FT9PL2F6-if00-port0' , label = 'TEMP-TEST' )
+TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller-if00-port0' , label = 'TEMP-TEST' )
 DATAFILE	= datafile ( '~/data' )
 
 # start data file:
 DATAFILE.next() # start a new data file
-print 'Data output to ' + DATAFILE.name()
+print( 'Data output to ' + DATAFILE.name() )
 
 # take temperature readings:
 while 1:
