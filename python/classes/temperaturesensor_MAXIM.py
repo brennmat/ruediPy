@@ -186,16 +186,17 @@ class temperaturesensor_MAXIM:
 		"""	
 
 		temp = self._sensor.get_temperature()
+		t = misc.now_UNIX()
 		unit = 'deg.C'
 		
 		# add data to peakbuffer
 		if add_to_tempbuffer:
-			self.tempbuffer_add(t,T,unit)
+			self.tempbuffer_add(t,temp,unit)
 
 		# write data to datafile
 		if not ( f == 'nofile' ):
 			# get timestamp
-			t = misc.now_UNIX()
+
 			f.write_temperature('TEMPERATURESENSOR_MAXIM',self.label(),temp,unit,t)
 
 		return temp,unit
