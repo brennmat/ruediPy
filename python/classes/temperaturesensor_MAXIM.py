@@ -134,6 +134,9 @@ class temperaturesensor_MAXIM:
 			
 			# add (empty) line to plot (will be updated with data later):
 			self._tempbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
+
+			# get some space in between panels to avoid overlapping labels / titles
+			self._fig.tight_layout()
 			
 			# enable interactive mode:
 			plt.ion()
