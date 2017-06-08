@@ -1628,8 +1628,8 @@ class rgams_SRS:
 		print ( '   Current mz-tuning:' )
 		print ( '      RI = ' + str(self.get_RI()) + ' mV (RF output at 0 amu)' )
 		print ( '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu)' )
-		print ( '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at 0 amu)' )
-		print ( '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter at mz > 0 amu)' )
+		print ( '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at m/z = 0)' )
+		print ( '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter for m/z > 0)' )
  
 
 
