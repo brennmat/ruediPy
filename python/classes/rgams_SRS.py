@@ -166,7 +166,7 @@ class rgams_SRS:
 			plt.ylabel('Intensity')
 
 			# get some space in between panels to avoid overlapping labels / titles
-			self._fig.tight_layout(pad=1.5)
+			self._fig.tight_layout(pad=4.0)
 
 			self._figwindow_is_shown = False
 			plt.ion()			
@@ -1629,7 +1629,7 @@ class rgams_SRS:
 		print ( '      RI = ' + str(self.get_RI()) + ' mV (RF output at 0 amu)' )
 		print ( '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu)' )
 		print ( '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at 0 amu)' )
-		print ( '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter high mz)' )
+		print ( '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter at mz > 0 amu)' )
  
 
 

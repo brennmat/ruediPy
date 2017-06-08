@@ -131,7 +131,6 @@ class temperaturesensor_MAXIM:
 			self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ')',loc="center")
 			self._tempbuffer_ax.set_xlabel('Time (s)')
 			self._tempbuffer_ax.set_ylabel('Temperature')
-			# self._tempbuffer_ax.hold(False)
 			
 			# add (empty) line to plot (will be updated with data later):
 			self._tempbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
