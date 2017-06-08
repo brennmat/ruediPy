@@ -39,6 +39,7 @@ import sys
 import warnings
 import numpy
 import os
+import time
 
 from classes.misc	 import misc
 from digitemp.master import UART_Adapter
@@ -290,6 +291,10 @@ class temperaturesensor_MAXIM:
 				self._tempbuffer_ax.relim()
 				self._tempbuffer_ax.autoscale_view()
 				
+				# set title and axis labels:
+				t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
+				self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ') at ' + t0)
+
 				# Get pressure units right:
 				self._tempbuffer_ax.set_ylabel('Temperature (' + str(self._tempbuffer_unit[0]) + ')' )
 

@@ -359,6 +359,10 @@ class pressuresensor_WIKA:
 				self._pressbuffer_ax.relim()
 				self._pressbuffer_ax.autoscale_view()
 				
+				# set title and axis labels:
+				t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
+				self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ') at ' + t0)
+
 				# Get pressure units right:
 				self._pressbuffer_ax.set_ylabel('Pressure (' + str(self._pressbuffer_unit[0]) + ')' )
 
