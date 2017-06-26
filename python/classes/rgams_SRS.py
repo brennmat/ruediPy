@@ -1504,7 +1504,7 @@ class rgams_SRS:
 
 
 
-	def set_peakbuffer_plot_min_y(self):
+	def set_peakbuffer_plot_min_y(self,val):
 		'''
 		rgams_SRS.set_peakbuffer_plot_min_y(val)
 
@@ -1525,7 +1525,7 @@ class rgams_SRS:
 
 
 
-	def set_peakbuffer_plot_max_y(self):
+	def set_peakbuffer_plot_max_y(self,val):
 		'''
 		rgams_SRS.set_peakbuffer_plot_max_y(val)
 
