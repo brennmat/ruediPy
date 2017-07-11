@@ -149,9 +149,9 @@ else % read file line by line:
     	L = unique (LABEL(j)); % list of labels available for the objects of type OBJ(j)
     	for k = 1:length(L)
     		l = find ( index(LABEL(j),L(k)) );
-    		    		
+    		
 			switch toupper(O{i})
-								
+				
 				case 'DATAFILE'
 					u = __parse_DATAFILE (TYPE(j(l)),DATA(j(l)),t(j(l)));
 					X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
@@ -316,7 +316,7 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 	for i = 1:length(T)
 		j = find (strcmp(TYPE,T{i})); % index to lines with type = T{i}
 		tt = t(j); TT = TYPE(j); DD = DATA(j);
-		
+				
 		% parse line by line
 		switch toupper(T{i})
 			
@@ -356,6 +356,7 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SCAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			case 'SCAN'
+			
 				for k = 1:length(TT)
 					
 					% timestamp:

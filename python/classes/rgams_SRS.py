@@ -1480,8 +1480,8 @@ class rgams_SRS:
 					self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
 
 					# Set axis scaling (automatic):
-					self._peakbuffer_ax.relim()
-					self._peakbuffer_ax.autoscale_view()
+					self._peakbuffer_ax.relim( visible_only=True )
+					self._peakbuffer_ax.autoscale_view(True,True,True)
 
 					# Make sure y-axis is scaled within allowed range:
 					yy = list(self._peakbuffer_ax.get_ylim())
