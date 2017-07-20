@@ -135,7 +135,7 @@ class rgams_SRS:
 
 			# mz values and colors
 			### self._peakbufferplot_lines_mz = [] # empty list of mz values that are already in the plot (will be updated later)
-			self._peakbufferplot_colors = [(4,'c'),(15,'g'),(28,'k'),(32,'r'),(40,'y'),(44,'b'),(84,'m')] # fixed colors for the more common mz values
+			self._peakbufferplot_colors = [(4,'c'),(14,'k'),(15,'g'),(28,'k'),(32,'r'),(40,'y'),(44,'b'),(84,'m')] # fixed colors for the more common mz values
 
 			# set up plotting environment
 			self._fig = plt.figure(figsize=(fig_w,fig_h))
