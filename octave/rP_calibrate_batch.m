@@ -141,7 +141,7 @@ for i = 1:length(RAW)
 	disp (sprintf('rP_calibrate_batch: parsing file %s...',RAW{i}.file))
 
 	info = rP_digest_step_DATAFILEINFO(RAW{i});
-	
+
 	ms = {};
 	sens = {};
 
@@ -354,7 +354,7 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 				if any(l) % skip if l is empty
 					pi = PRESS_standard(j) * X(iSTANDARD(j)).INFO.standard.conc(k); % partial pressure
 					if isnan (PRESS_standard(j))
-						warning (sprintf('Total gas pressure unknown for STANDARD step %s!',X(j).INFO.name))
+						warning (sprintf('Total gas pressure unknown for STANDARD!'))
 					end
 					S_val(i,j) = X(iSTANDARD(j)).MS.mean(l) / pi;
 					S_err(i,j) = X(iSTANDARD(j)).MS.mean_err(l) / pi;
