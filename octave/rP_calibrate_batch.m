@@ -353,6 +353,9 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 				l = find(strcmp( X(iSTANDARD(j)).MS.mz_det , mz_det{i})); % l is index to mz_det{i} combination in current step/measurement.
 				if any(l) % skip if l is empty
 					pi = PRESS_standard(j) * X(iSTANDARD(j)).INFO.standard.conc(k); % partial pressure
+					if isnan (PRESS_standard(j))
+						warning (sprintf('Total gas pressure unknown for STANDARD step %s!',X(j).INFO.name))
+					end
 					S_val(i,j) = X(iSTANDARD(j)).MS.mean(l) / pi;
 					S_err(i,j) = X(iSTANDARD(j)).MS.mean_err(l) / pi;
 				end % if l = ...
