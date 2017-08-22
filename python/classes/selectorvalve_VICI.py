@@ -47,7 +47,7 @@ if ( sys.version_info[0] < 3 ):
 
 class selectorvalve_VICI:
 	"""
-	ruediPy class for VICI valve control. This assumes the serial protocol used with VICI's older "microlectric" actuators. For use with the newer "universal" actuators, they must be set to "legacy mode" using the "LG1" command (see page 8 of VICI document "Universal Electric Actuator Instruction Manual").
+	ruediPy class for VICI valve control. This assumes the serial protocol used with VICI's older "microlectric" actuators. For use with the newer "universal" actuators, they must be set to "legacy mode" using the "LG1" command (see page 8 of VICI document "Universal Electric Actuator Instruction Manual"). The self.set_legacy command may be useful for this.
 	"""
 	
 	########################################################################################################
@@ -117,6 +117,27 @@ class selectorvalve_VICI:
 	########################################################################################################
 	
 
+	def set_legacy(self):
+		'''
+		selectorvalve_VICI.set_legacy(val,f)
+
+		Set communication protocol to LEGACY mode (useful to make the newer valve controlers compatible with the LEGACY protocol).
+
+		INPUT:
+		(none)
+   
+		OUTPUT:
+		(none)
+		'''
+		
+		self.ser.write(('LG1\r\n').encode('ascii'))
+		
+		time.sleep(0.5)
+
+
+	########################################################################################################
+	
+
 	def setpos(self,val,f):
 		'''
 		selectorvalve_VICI.setpos(val,f)
@@ -143,6 +164,7 @@ class selectorvalve_VICI:
 
 		# give the valve some time to actually do the switch:
 		time.sleep(0.5)
+
 
 	########################################################################################################
 	
