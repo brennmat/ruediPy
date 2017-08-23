@@ -119,7 +119,7 @@ class selectorvalve_VICI:
 
 	def set_legacy(self):
 		'''
-		selectorvalve_VICI.set_legacy(val,f)
+		selectorvalve_VICI.set_legacy()
 
 		Set communication protocol to LEGACY mode (useful to make the newer valve controlers compatible with the LEGACY protocol).
 
