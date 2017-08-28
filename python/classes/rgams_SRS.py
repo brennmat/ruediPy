@@ -71,9 +71,9 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , cem_hv = 1400 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , has_plot_window = True ):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , has_plot_window = True ):
 		'''
-		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
+		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
@@ -81,6 +81,8 @@ class rgams_SRS:
 		serialport: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
 		label (optional): label / name of the RGAMS object (string). Default: label = 'MS'
 		cem_hv (optional): default bias voltage to be used with the electron multiplier (CEM). Default value: cem_hv = 1400 V.
+		tune_default_RI (optional): default RI parameter value in m/z tuning. Default value: tune_RI = []
+		tune_default_RS (optional): default RS parameter value in m/z tuning. Default value: tune_RS = []
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches). 
 		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
@@ -115,7 +117,9 @@ class rgams_SRS:
 		
 		# cem bias / high voltage:
 		self._cem_hv = cem_hv
-		
+		self._tune_default_RI = tune_default_RI
+		self._tune_default_RS = tune_default_RS		
+
 		# data buffer for PEAK values:
 		self._peakbuffer_t = numpy.array([])
 		self._peakbuffer_mz = numpy.array([])
@@ -291,6 +295,50 @@ class rgams_SRS:
 		self.param_IO('EE' + str(val),1)
 
 	
+	########################################################################################################
+	
+
+	def get_default_RI(self):
+		'''
+		val = rgams_SRS.get_default_RI()
+		
+		Return default RI value.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: default RI value
+		'''
+
+		ans = self._tune_default_RI
+		if not ans:
+			self.warning ('Default RI value is not set!')
+		return ans
+
+	
+	########################################################################################################
+	
+
+	def get_default_RS(self):
+		'''
+		val = rgams_SRS.get_default_RS()
+		
+		Return default RS value.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: default RS value
+		'''
+		
+		ans = self._tune_default_RS
+		if not ans:
+			self.warning ('Default RS value is not set!')
+		return ans
+
+
 	########################################################################################################
 	
 
@@ -1073,11 +1121,11 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def tune_peak_position(self,peaks,max_iter=10,max_delta_mz=0.05):
+	def tune_peak_position(self,peaks,max_iter=10,max_delta_mz=0.05,use_defaults=False):
 		'''
-		rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05)
+		rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05,use_defaults=False)
 
-		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters are then adjusted to minimize the mz offsets (parameters RI and RF, which define the peak positions at mz=0 and mz=128). This needs at least two distinct peak mz values, one at a low and one at a high mz value. The procedure is repeated until either the peak position offsets at mz=0 and mz=128 are less than max_delta_mz or the number of iterations has reached max_iter.
+		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters are then adjusted to minimize the mz offsets (parameters RI and RF, which define the peak positions at mz=0 and mz=128). The procedure start with the currently set RI and RS values (if use_defaults = False) or the default values (if they are set and use_defaults = True). This needs at least two distinct peak mz values, one at a low and one at a high mz value. The procedure is repeated until either the peak position offsets at mz=0 and mz=128 are less than max_delta_mz or the number of iterations has reached max_iter.
 
 		INPUT:
 		peaks: list of (mz,width,gate,detector) tuples, where peaks should be scanned and tuned
@@ -1087,6 +1135,7 @@ class rgams_SRS:
 			detector: detector to be used for the scan ('F' or 'M')
 		max_iter (optional): max. number of repetitions of the tune procedure
 		maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offsets at mz=0 and mz=128 after tuning are less than maxdelta_z after tuning, the tuning procedure is stopped.
+		use_defaults: flag to set if default RI and RS values are used to start the tuning procedure. Default value: use_defaults = False
 
 		OUTPUT:
 		(none)
@@ -1111,8 +1160,23 @@ class rgams_SRS:
 		ii = 1 # first iteration
 		doTune = True
 		while doTune:
+			if ii == 1:
+				if use_defaults:
+					RI0 = self.get_default_RI()
+					if not RI0:
+						RI0 = self.get_RI()
+					else:
+						self.set_RI(RI0)
+
+					RS0 = self.get_default_RS()
+					if not RS0:
+						RS0 = self.get_RS()
+					else:
+						self.set_RS(RS0)
+
 			RI0 = self.get_RI()
 			RS0 = self.get_RS()
+
 			print ('\nBefore tuning (cycle ' + str(ii) +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
 			
 			# prepare lists for delta-m values determined from the various peaks:
