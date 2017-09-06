@@ -88,67 +88,75 @@ class temperaturesensor_MAXIM:
 		(none)
 		'''
 		
-		# configure 1-wire bus for communication with MAXIM temperature sensor chip
-		r = AddressableDevice(UART_Adapter(serialport)).get_connected_ROMs()
+
+		try:
+
+			# configure 1-wire bus for communication with MAXIM temperature sensor chip
+			r = AddressableDevice(UART_Adapter(serialport)).get_connected_ROMs()
 		
-		if r is None:
-			print ( 'Couldn not find any 1-wire devices on ' + serialport )
-		else:
-			bus = UART_Adapter(serialport)
-			if romcode == '':
-				if len(r) == 1:
-					# print ('Using 1-wire device ' + r[0] + '\n')
-					self._sensor = DS18B20(bus)
-					self._ROMcode = r[0]
-				else:
-					print ( 'Too many 1-wire devices to choose from! Try again with specific ROM code...' )
-					for i in range(1,len(r)):
-						print ( 'Device ' + i + ' ROM code: ' + r[i-1] +'\n' )
+			if r is None:
+				print ( 'Couldn not find any 1-wire devices on ' + serialport )
 			else:
-				self._sensor = DS18B20(bus, rom=romcode)
-				self._ROMcode = romcode
+				bus = UART_Adapter(serialport)
+				if romcode == '':
+					if len(r) == 1:
+						# print ('Using 1-wire device ' + r[0] + '\n')
+						self._sensor = DS18B20(bus)
+						self._ROMcode = r[0]
+					else:
+						print ( 'Too many 1-wire devices to choose from! Try again with specific ROM code...' )
+						for i in range(1,len(r)):
+							print ( 'Device ' + i + ' ROM code: ' + r[i-1] +'\n' )
+				else:
+					self._sensor = DS18B20(bus, rom=romcode)
+					self._ROMcode = romcode
 		
-		self._label = label
+			self._label = label
 
-		# data buffer for temperature values:
-		self._tempbuffer_t = numpy.array([])
-		self._tempbuffer_T = numpy.array([])
-		self._tempbuffer_unit = ['x'] * 0 # empty list
-		self._tempbuffer_max_len = max_buffer_points
+			# data buffer for temperature values:
+			self._tempbuffer_t = numpy.array([])
+			self._tempbuffer_T = numpy.array([])
+			self._tempbuffer_unit = ['x'] * 0 # empty list
+			self._tempbuffer_max_len = max_buffer_points
 	
-		# set up plotting environment
-		self._has_display = havedisplay
-		if self._has_display: # prepare plotting environment and figure
-
 			# set up plotting environment
-			self._fig = plt.figure(figsize=(fig_w,fig_h))
-			t = 'MAXIM DS1820'
-			if self._label:
-				t = t + ' (' + self.label() + ')'
-			self._fig.canvas.set_window_title(t)
+			self._has_display = havedisplay
+			if self._has_display: # prepare plotting environment and figure
 
-			# set up panel for temperature history plot:
-			self._tempbuffer_ax = plt.subplot(1,1,1)
-			self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ')',loc="center")
-			self._tempbuffer_ax.set_xlabel('Time (s)')
-			self._tempbuffer_ax.set_ylabel('Temperature')
+				# set up plotting environment
+				self._fig = plt.figure(figsize=(fig_w,fig_h))
+				t = 'MAXIM DS1820'
+				if self._label:
+					t = t + ' (' + self.label() + ')'
+				self._fig.canvas.set_window_title(t)
+
+				# set up panel for temperature history plot:
+				self._tempbuffer_ax = plt.subplot(1,1,1)
+				self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ')',loc="center")
+				self._tempbuffer_ax.set_xlabel('Time (s)')
+				self._tempbuffer_ax.set_ylabel('Temperature')
 			
-			# add (empty) line to plot (will be updated with data later):
-			self._tempbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
+				# add (empty) line to plot (will be updated with data later):
+				self._tempbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
 
-			# get some space in between panels to avoid overlapping labels / titles
-			self._fig.tight_layout()
+				# get some space in between panels to avoid overlapping labels / titles
+				self._fig.tight_layout()
 			
-			# enable interactive mode:
-			plt.ion()
+				# enable interactive mode:
+				plt.ion()
 
-			self._figwindow_is_shown = False
+				self._figwindow_is_shown = False
 
 
-		if hasattr(self,'_sensor'):
-			print ( 'Successfully configured DS18B20 temperature sensor (ROM code ' + self._ROMcode + ')' )
-		else:
-			self.warning( 'Could not initialize MAXIM DS1820 temperature sensor.' )
+			if hasattr(self,'_sensor'):
+				print ( 'Successfully configured DS18B20 temperature sensor (ROM code ' + self._ROMcode + ')' )
+			else:
+				self.warning( 'Could not initialize MAXIM DS1820 temperature sensor.' )
+
+
+		except:
+			print ( '\n**** WARNING: An error occured during configuration of the temperature sensor at serial interface ' + serialport + '. The temperature sensor cannot be used.\n' )
+
 
 	
 	########################################################################################################

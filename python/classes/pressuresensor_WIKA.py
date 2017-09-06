@@ -86,75 +86,83 @@ class pressuresensor_WIKA:
 		(none)
 		'''
 	
-		# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
-		ser = serial.Serial(
-			port     = serialport,
-			baudrate = 9600,
-			parity   = serial.PARITY_NONE,
-			stopbits = serial.STOPBITS_ONE,
-			bytesize = serial.EIGHTBITS,
-			timeout  = 5.0
-		)
-		ser.flushOutput() 	# make sure output is empty
-		time.sleep(0.1)
-		ser.flushInput() 	# make sure input is empty
+		try:
+			# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
+
+			ser = serial.Serial(
+				port     = serialport,
+				baudrate = 9600,
+				parity   = serial.PARITY_NONE,
+				stopbits = serial.STOPBITS_ONE,
+				bytesize = serial.EIGHTBITS,
+				timeout  = 5.0
+			)
 		
-		self.ser = ser
-
-		self._label = label
-
-		# configure pressure sensor for single pressure readings on request ("polling mode")
-		cmd = 'SO\xFF' # command string) (byte to set polling mode
-		cs = self.serial_checksum(cmd) # determine check sum
+			ser.flushOutput() 	# make sure output is empty
+			time.sleep(0.1)
+			ser.flushInput() 	# make sure input is empty
 		
-		self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
-		ans =  self.ser.read(5) # read out response to empty serial data buffer
+			self.ser = ser
 
-		# get serial number of pressure sensor
-		cmd = 'KN\x00' # command string to get serial number
-		cs = self.serial_checksum(cmd) # determine check sum
-		self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
-		self.ser.read(1) # first byte (not used)
-		ans = self.ser.read(4) # four bytes of UNSIGNED32 number
-		self.ser.read(2) # 6th and 7th byte (not used)
-		self._serial_number = struct.unpack('<I',ans)[0] # convert to 4 bytes to integer
+			self._label = label
+
+			# configure pressure sensor for single pressure readings on request ("polling mode")
+			cmd = 'SO\xFF' # command string) (byte to set polling mode
+			cs = self.serial_checksum(cmd) # determine check sum
+		
+			self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
+			ans =  self.ser.read(5) # read out response to empty serial data buffer
+
+			# get serial number of pressure sensor
+			cmd = 'KN\x00' # command string to get serial number
+			cs = self.serial_checksum(cmd) # determine check sum
+			self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
+			self.ser.read(1) # first byte (not used)
+			ans = self.ser.read(4) # four bytes of UNSIGNED32 number
+			self.ser.read(2) # 6th and 7th byte (not used)
+			self._serial_number = struct.unpack('<I',ans)[0] # convert to 4 bytes to integer
 	
 
-		# data buffer for PEAK values:
-		self._pressbuffer_t = numpy.array([])
-		self._pressbuffer_p = numpy.array([])
-		self._pressbuffer_unit = ['x'] * 0 # empty list
-		self._pressbuffer_max_len = max_buffer_points
+			# data buffer for PEAK values:
+			self._pressbuffer_t = numpy.array([])
+			self._pressbuffer_p = numpy.array([])
+			self._pressbuffer_unit = ['x'] * 0 # empty list
+			self._pressbuffer_max_len = max_buffer_points
 	
-		# set up plotting environment
-		self._has_display = havedisplay
-		if self._has_display: # prepare plotting environment and figure
+			# set up plotting environment
+			self._has_display = havedisplay
+			if self._has_display: # prepare plotting environment and figure
 
-			# set up plot figure:
-			self._fig = plt.figure(figsize=(fig_w,fig_h))
-			t = 'WIKA P30'
-			if self._label:
-				t = t + ' (' + self.label() + ')'
-			self._fig.canvas.set_window_title(t)
+				# set up plot figure:
+				self._fig = plt.figure(figsize=(fig_w,fig_h))
+				t = 'WIKA P30'
+				if self._label:
+					t = t + ' (' + self.label() + ')'
+				self._fig.canvas.set_window_title(t)
 
-			# set up panel for pressure history plot:
-			self._pressbuffer_ax = plt.subplot(1,1,1)
-			self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ')',loc="center")
-			self._pressbuffer_ax.set_xlabel('Time (s)')
-			self._pressbuffer_ax.set_ylabel('Pressure')
+				# set up panel for pressure history plot:
+				self._pressbuffer_ax = plt.subplot(1,1,1)
+				self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ')',loc="center")
+				self._pressbuffer_ax.set_xlabel('Time (s)')
+				self._pressbuffer_ax.set_ylabel('Pressure')
 
-			# add (empty) line to plot (will be updated with data later):
-			self._pressbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
+				# add (empty) line to plot (will be updated with data later):
+				self._pressbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
 
-			# get some space in between panels to avoid overlapping labels / titles
-			self._fig.tight_layout()
+				# get some space in between panels to avoid overlapping labels / titles
+				self._fig.tight_layout()
 			
-			# enable interactive mode:
-			plt.ion()
+				# enable interactive mode:
+				plt.ion()
 
-			self._figwindow_is_shown = False
+				self._figwindow_is_shown = False
 
-		print ('Successfully configured WIKA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport )
+			print ('Successfully configured WIKA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport )
+
+
+		except:
+			print ( '\n**** WARNING: An error occured during configuration of the pressure sensor at serial interface ' + serialport + '. The pressure sensor cannot be used.\n' )
+
 
 	
 	########################################################################################################
