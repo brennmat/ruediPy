@@ -1119,6 +1119,41 @@ class rgams_SRS:
 
 
 	########################################################################################################
+	
+
+	def calibrate_all(self):
+		'''
+		val = rgams_SRS.calibrate_all()
+		
+		Calibrate the internal coefficients for compensation of baseline offset offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command int SRS RGA manual.
+				
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		DET = self.get_detector() # get current detector
+		NF  = self.get_noise_floor() # get current noise floor setting
+
+		# start with zeroing the noise floor for the Faraday detector
+		self.set_detector('F')
+		for nf in range(0,8):
+			self.set_noise_floor(nf)
+			self.param_IO('CA',1)
+
+		# calibrate multiplier coefficients
+		if self.has_multiplier():
+			self.set_detector('M')
+			for nf in range(0,8):
+				self.set_noise_floor(nf)
+				self.param_IO('CA',1) 
+			self.set_detector(DET) # set detector back to initial setting
+		self.set_noise_floor(NF) # set noise floor back to initial setting
+
+
+########################################################################################################
 
 
 	def tune_peak_position(self,peaks,max_iter=10,max_delta_mz=0.05,use_defaults=False):
