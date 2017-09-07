@@ -1542,6 +1542,10 @@ class rgams_SRS:
 				leg = []
 				t0 = misc.now_UNIX()			
 				N = len(self._peakbuffer_mz)
+
+				Y_MIN = 1
+				Y_MAX = 1
+
 				for mz in numpy.unique(self._peakbuffer_mz): # loop through all mz values in the peak buffer
 					for det in [ 'F' , 'M' ]: # loop through all detectors (Faraday and Multiplier)
 						k = [ i for i in range(N) if ((self._peakbuffer_mz[i] == mz) & (self._peakbuffer_det[i] == det)) ] # index to data with current mz / detector pair
@@ -1559,12 +1563,21 @@ class rgams_SRS:
 								style = 's-'
 							else:
 								style = 'x-'
-							self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , self._peakbuffer_intens[k]/intens0 , col + style , markersize = 10 )
+							
+							yy = self._peakbuffer_intens[k]/intens0
+							self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , yy , col + style , markersize = 10 )
+
 							val_min = self._peakbuffer_intens[k].min()
 							val_max = self._peakbuffer_intens[k].max()
 							min = "{:.2e}".format(val_min)
 							max = "{:.2e}".format(val_max)
 							leg.append( 'mz=' + str(int(mz)) + ' det=' + det + ': ' + min + ' ... ' + max + ' ' + self._peakbuffer_unit[k[0]] )
+							
+							if yy.min() < Y_MIN:
+								Y_MIN = yy.min()
+							if yy.max() > Y_MAX:
+								Y_MAX =	yy.max()
+							
 							n = n+1
 			
 				if len(self._peakbuffer_ax.lines) > 0: # if the plot is not empty
@@ -1578,18 +1591,17 @@ class rgams_SRS:
 					self._peakbuffer_ax.set_xlabel('Time (s)')
 					self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
 
-					# Set axis scaling (automatic):
-					self._peakbuffer_ax.relim( visible_only=True )
-					self._peakbuffer_ax.autoscale_view(True,True,True)
-
-					# Make sure y-axis is scaled within allowed range:
-					yy = list(self._peakbuffer_ax.get_ylim())
-					if yy[0] < self._peakbuffer_plot_min_y:
-						yy[0] = self._peakbuffer_plot_min_y
-						self._peakbuffer_ax.set_ylim(yy)
-					if yy[1] > self._peakbuffer_plot_max_y:
-						yy[1] = self._peakbuffer_plot_max_y
-						self._peakbuffer_ax.set_ylim(yy)
+					# Set y-axis scaling:
+					if Y_MIN < self._peakbuffer_plot_min_y:
+						Y_MIN = self._peakbuffer_plot_min_y
+					if Y_MAX > self._peakbuffer_plot_max_y:
+						Y_MAX = self._peakbuffer_plot_max_y
+					
+					if Y_MIN < Y_MAX:
+						DY = 0.05*(Y_MAX-Y_MIN)
+					else:
+						DY = 0.001
+					self._peakbuffer_ax.set_ylim( [ Y_MIN-DY , Y_MAX+DY ] )
 
 				# Update the plot:
 				self._fig.canvas.flush_events()
