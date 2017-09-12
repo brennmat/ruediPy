@@ -1121,7 +1121,7 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def ionizer_degas(duration):
+	def ionizer_degas(self,duration):
 		'''
 		val = rgams_SRS.ionizer_degas(duration)
 		
@@ -1143,9 +1143,34 @@ class rgams_SRS:
 			self.warning('Degas time must be positive. Skipping degas procedure...')
 		
 		else:
-			print ('Running degas procedure...')
-			self.param_IO('DG'+str(duration),1)
-			print ('...degas done.')
+			if duration > 0:
+				print ('Starting degas procedure...')
+
+				# send degassing command:
+				cmd = 'DG'+str(duration)+'\r\n'
+				self.ser.write(cmd.encode('utf-8'))
+			
+				print ('...degas procedure running...')
+
+				# wait for response from degassing procedure:
+				t = 0
+				dt = 1
+				doWait = 1
+				while doWait > 0:
+					if self.ser.inWaiting() == 0: # wait
+						time.sleep(dt)
+						t = t + dt
+						if t > duration*60 + 10: # give up waiting
+							self.warning('Degassing taking longer than expected!')
+					else:
+						doWait = 0
+
+				# read back result:
+				u = self.ser.read(1)
+				if u == b'0':
+					print ('...degassing completed without error.')
+				else:
+					print ('...degassing completed with error byte: ' + str(u) )
 
 
 
