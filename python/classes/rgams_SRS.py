@@ -1121,6 +1121,38 @@ class rgams_SRS:
 	########################################################################################################
 	
 
+	def ionizer_degas(duration):
+		'''
+		val = rgams_SRS.ionizer_degas(duration)
+		
+		Run the ionizer degas procedure (see SRS RGA manual). Only run this with sufficiently good vacuum!
+						
+		INPUT:
+		duration: degas time in minutes (0...20 / integer)
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		duration = int(duration) # make sure it's an integer
+		
+		if duration > 20:
+			self.warning('Degas time must not be longer than 20 minutes. Using duration = 20 min...')
+		
+		if duration < 0:
+			self.warning('Degas time must be positive. Skipping degas procedure...')
+		
+		else:
+			print ('Running degas procedure...')
+			self.param_IO('DG'+str(duration),1)
+			print ('...degas done.')
+
+
+
+	########################################################################################################
+
+	
+
 	def calibrate_all(self):
 		'''
 		val = rgams_SRS.calibrate_all()
