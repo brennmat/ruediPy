@@ -1,8 +1,23 @@
 %% THIS NEEDS THE underscore PACKAGE: \usepackage[strings]{underscore}
 
 \subsubsection{Class \texttt{rgams_SRS}}
-\path{ruediPy/python/classes/rgams_SRS.py}\par
+\path{ruedi/ruediPy/python/classes/rgams_SRS.py}\par
 ruediPy class for SRS RGA-MS control.\par
+
+\paragraph{Method \texttt{calibrate_all}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.calibrate_all()\newline
+\newline
+Calibrate the internal coefficients for compensation of baseline offset offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command int SRS RGA manual.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
 
 \paragraph{Method \texttt{filament_off}}
 \vspace{1ex}
@@ -103,6 +118,36 @@ x: RS voltage (in mV)\newline
 \newline
 NOTE:\newline
 See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_default_RI}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.get_default_RI()\newline
+\newline
+Return default RI value.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: default RI value\newline
+\newline
+}
+
+\paragraph{Method \texttt{get_default_RS}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.get_default_RS()\newline
+\newline
+Return default RS value.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: default RS value\newline
 \newline
 }
 
@@ -211,6 +256,21 @@ INPUT:\newline
 \newline
 OUTPUT:\newline
 val: result flag, val = 0 --> MS has no multiplier, val <> 0: MS has multiplier\newline
+\newline
+}
+
+\paragraph{Method \texttt{ionizer_degas}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.ionizer_degas(duration)\newline
+\newline
+Run the ionizer degas procedure (see SRS RGA manual). Only run this with sufficiently good vacuum!\newline
+\newline
+INPUT:\newline
+duration: degas time in minutes (0...20 / integer)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
 \newline
 }
 
@@ -623,9 +683,9 @@ OUTPUT:\newline
 \paragraph{Method \texttt{tune_peak_position}}
 \vspace{1ex}
 \texttt{\newline
-rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05)\newline
+rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05,use_defaults=False)\newline
 \newline
-Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters are then adjusted to minimize the mz offsets (parameters RI and RF, which define the peak positions at mz=0 and mz=128). This needs at least two distinct peak mz values, one at a low and one at a high mz value. The procedure is repeated until either the peak position offsets at mz=0 and mz=128 are less than max_delta_mz or the number of iterations has reached max_iter.\newline
+Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters are then adjusted to minimize the mz offsets (parameters RI and RF, which define the peak positions at mz=0 and mz=128). The procedure start with the currently set RI and RS values (if use_defaults = False) or the default values (if they are set and use_defaults = True). This needs at least two distinct peak mz values, one at a low and one at a high mz value. The procedure is repeated until either the peak position offsets at mz=0 and mz=128 are less than max_delta_mz or the number of iterations has reached max_iter.\newline
 \newline
 INPUT:\newline
 peaks: list of (mz,width,gate,detector) tuples, where peaks should be scanned and tuned\newline
@@ -635,6 +695,7 @@ gate: gate time to be used for the scan\newline
 detector: detector to be used for the scan ('F' or 'M')\newline
 max_iter (optional): max. number of repetitions of the tune procedure\newline
 maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offsets at mz=0 and mz=128 after tuning are less than maxdelta_z after tuning, the tuning procedure is stopped.\newline
+use_defaults: flag to set if default RI and RS values are used to start the tuning procedure. Default value: use_defaults = False\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -695,7 +756,7 @@ in the electrometer and in the CDEM's HV power supply.\newline
 }
 
 \subsubsection{Class \texttt{selectorvalve_VICI}}
-\path{ruediPy/python/classes/selectorvalve_VICI.py}\par
+\path{ruedi/ruediPy/python/classes/selectorvalve_VICI.py}\par
 ruediPy class for VICI valve control. This assumes the serial protocol used with VICI's older "microlectric" actuators. For use with the newer "universal" actuators, they must be set to "legacy mode" using the "LG1" command (see page 8 of VICI document "Universal Electric Actuator Instruction Manual"). The self.set_legacy command may be useful for this.\par
 
 \paragraph{Method \texttt{getpos}}
@@ -764,7 +825,7 @@ OUTPUT:\newline
 No method description available.\par
 
 \subsubsection{Class \texttt{pressuresensor_WIKA}}
-\path{ruediPy/python/classes/pressuresensor_WIKA.py}\par
+\path{ruedi/ruediPy/python/classes/pressuresensor_WIKA.py}\par
 ruediPy class for WIKA pressure sensor control.\par
 
 \paragraph{Method \texttt{label}}
@@ -863,7 +924,7 @@ OUTPUT:\newline
 }
 
 \subsubsection{Class \texttt{temperaturesensor_MAXIM}}
-\path{ruediPy/python/classes/temperaturesensor_MAXIM.py}\par
+\path{ruedi/ruediPy/python/classes/temperaturesensor_MAXIM.py}\par
 ruediPy class for MAXIM DS1820 type temperature sensors (wrapper class for pydigitemp package).\par
 
 \paragraph{Method \texttt{label}}
@@ -947,7 +1008,7 @@ OUTPUT:\newline
 }
 
 \subsubsection{Class \texttt{datafile}}
-\path{ruediPy/python/classes/datafile.py}\par
+\path{ruedi/ruediPy/python/classes/datafile.py}\par
 ruediPy class for handling of data files.\par
 
 \paragraph{Method \texttt{basepath}}
@@ -1258,7 +1319,7 @@ OUTPUT:\newline
 }
 
 \subsubsection{Class \texttt{misc}}
-\path{ruediPy/python/classes/misc.py}\par
+\path{ruedi/ruediPy/python/classes/misc.py}\par
 ruediPy class with helper functions.\par
 
 \paragraph{Method \texttt{ask_for_value}}
