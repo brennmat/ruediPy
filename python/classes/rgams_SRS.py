@@ -1559,6 +1559,65 @@ class rgams_SRS:
 		return x
 
 
+########################################################################################################
+
+
+
+	def set_DI(self,x):
+		'''
+		rgams_SRS.set_DI(x)
+
+		Set DI parameter value (Peak width parameter at m/z = 0)
+
+		INPUT:
+		x: parameter value (bit units)
+
+		OUTPUT:
+		(none)
+
+		NOTE:
+		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+		'''
+
+		if (x < 0.0) or ( x > 255.0):
+			error ('DI value out of allowed range (0...255 bit units)')
+
+		x = '{:.4f}'.format(x)
+
+		self.param_IO('DI' + x,0)
+		print ( 'Set DI value to ' + x + ' bit units' )
+
+
+
+########################################################################################################
+
+
+
+	def set_DS(self,x):
+		'''
+		rgams_SRS.set_DS(x)
+
+		Set DS parameter value (Peak width parameter for m/z > 0)
+
+		INPUT:
+		x: parameter value (bit/amu units)
+
+		OUTPUT:
+		(none)
+
+		NOTE:
+		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
+		'''
+
+		if (x < -2.55) or ( x > 2.55):
+			error ('DS value out of allowed range (-2.55...2.55 bit/amu units)')
+
+		x = '{:.4f}'.format(x)
+
+		self.param_IO('DS' + x,0)
+		print ( 'Set DS value to ' + x + ' bit/amu' )
+
+
 
 ########################################################################################################
 
