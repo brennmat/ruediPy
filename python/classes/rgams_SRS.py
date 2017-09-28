@@ -1849,7 +1849,11 @@ class rgams_SRS:
 		print ( '   Filament current: ' + str(self.get_filament_current()) + ' mA' )
 		if self.has_multiplier():
 			print ( '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)' )
-			print ( '   Currently active detector: ' + self.get_detector() )
+			det = self.get_detector()
+			if det == 'M':
+				det = det + ' (bias voltage = ' + self.get_multiplier_hv() + ' V)'
+			print ( '   Currently active detector: ' + det )
+
 		else:
 			print ( '   MS does not have electron multiplier installed (Faraday only).' )
 		print ( '   Current mz-tuning:' )
