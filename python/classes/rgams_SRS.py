@@ -434,14 +434,14 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def set_filament_current(self,val):
+	def set_electron_emission(self,val):
 		'''
-		rgams_SRS.set_filament_current(val)
+		rgams_SRS.set_electron_emission(val)
 		
-		Set filament current.
+		Set electron emission current.
 		
 		INPUT:
-		val: current in mA
+		val: electron emission current in mA (0 ... 3.5 mA)
 		
 		OUTPUT:
 		(none)
@@ -454,17 +454,17 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def get_filament_current(self):
+	def get_electron_emission(self):
 		'''
-		val = rgams_SRS.get_filament_current()
+		val = rgams_SRS.get_electron_emission()
 		
-		Return filament current (in mA)
+		Return electron emission current (in mA)
 		
 		INPUT:
 		(none)
 		
 		OUTPUT:
-		val: filament current in mA (float)
+		val: electron emission current in mA (float)
 		'''
 				
 		# send command to serial port:
@@ -509,7 +509,7 @@ class rgams_SRS:
 		'''
 		
 		# turn off filament (set current to zero)
-		self.set_filament_current(0)
+		self.set_electron_emission(0)
 
 	
 	########################################################################################################
@@ -1846,7 +1846,7 @@ class rgams_SRS:
 		print ( 'SRS RGA status:' )
 		print ( '   MS max m/z range: ' + str(self.mz_max()) )
 		print ( '   Ionizer electron energy: ' + self.get_electron_energy() + ' eV' )
-		print ( '   Filament current: ' + str(self.get_filament_current()) + ' mA' )
+		print ( '   Electron emission current: ' + str(self.get_electron_emission()) + ' mA' )
 		if self.has_multiplier():
 			print ( '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)' )
 			det = self.get_detector()
