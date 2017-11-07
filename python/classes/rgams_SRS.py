@@ -477,7 +477,7 @@ class rgams_SRS:
 
 	def filament_on(self):
 		'''
-		rgams_SRS.filamenOn()
+		rgams_SRS.filament_on()
 		
 		Turn on filament current at default current value.
 		

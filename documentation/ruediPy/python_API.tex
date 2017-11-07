@@ -4,6 +4,21 @@
 \path{ruediPy/python/classes/rgams_SRS.py}\par
 ruediPy class for SRS RGA-MS control.\par
 
+\paragraph{Method \texttt{calibrate_all}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.calibrate_all()\newline
+\newline
+Calibrate the internal coefficients for compensation of baseline offset offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command int SRS RGA manual.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{filament_off}}
 \vspace{1ex}
 \texttt{\newline
@@ -22,7 +37,7 @@ OUTPUT:\newline
 \paragraph{Method \texttt{filament_on}}
 \vspace{1ex}
 \texttt{\newline
-rgams_SRS.filamenOn()\newline
+rgams_SRS.filament_on()\newline
 \newline
 Turn on filament current at default current value.\newline
 \newline
@@ -153,6 +168,21 @@ det='M' for electron Multiplier\newline
 \newline
 }
 
+\paragraph{Method \texttt{get_electron_emission}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.get_electron_emission()\newline
+\newline
+Return electron emission current (in mA)\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+val: electron emission current in mA (float)\newline
+\newline
+}
+
 \paragraph{Method \texttt{get_electron_energy}}
 \vspace{1ex}
 \texttt{\newline
@@ -165,21 +195,6 @@ INPUT:\newline
 \newline
 OUTPUT:\newline
 val: electron energy in eV\newline
-\newline
-}
-
-\paragraph{Method \texttt{get_filament_current}}
-\vspace{1ex}
-\texttt{\newline
-val = rgams_SRS.get_filament_current()\newline
-\newline
-Return filament current (in mA)\newline
-\newline
-INPUT:\newline
-(none)\newline
-\newline
-OUTPUT:\newline
-val: filament current in mA (float)\newline
 \newline
 }
 
@@ -241,6 +256,21 @@ INPUT:\newline
 \newline
 OUTPUT:\newline
 val: result flag, val = 0 --> MS has no multiplier, val <> 0: MS has multiplier\newline
+\newline
+}
+
+\paragraph{Method \texttt{ionizer_degas}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.ionizer_degas(duration)\newline
+\newline
+Run the ionizer degas procedure (see SRS RGA manual). Only run this with sufficiently good vacuum!\newline
+\newline
+INPUT:\newline
+duration: degas time in minutes (0...20 / integer)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
 \newline
 }
 
@@ -467,6 +497,42 @@ unit: unit of Y (string)\newline
 \newline
 }
 
+\paragraph{Method \texttt{set_DI}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_DI(x)\newline
+\newline
+Set DI parameter value (Peak width parameter at m/z = 0)\newline
+\newline
+INPUT:\newline
+x: parameter value (bit units)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+NOTE:\newline
+See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
+\paragraph{Method \texttt{set_DS}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_DS(x)\newline
+\newline
+Set DS parameter value (Peak width parameter for m/z > 0)\newline
+\newline
+INPUT:\newline
+x: parameter value (bit/amu units)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+NOTE:\newline
+See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"\newline
+\newline
+}
+
 \paragraph{Method \texttt{set_RI}}
 \vspace{1ex}
 \texttt{\newline
@@ -521,6 +587,21 @@ OUTPUT:\newline
 \newline
 }
 
+\paragraph{Method \texttt{set_electron_emission}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_electron_emission(val)\newline
+\newline
+Set electron emission current.\newline
+\newline
+INPUT:\newline
+val: electron emission current in mA (0 ... 3.5 mA)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{set_electron_energy}}
 \vspace{1ex}
 \texttt{\newline
@@ -530,21 +611,6 @@ Set electron energy of the ionizer.\newline
 \newline
 INPUT:\newline
 val: electron energy in eV\newline
-\newline
-OUTPUT:\newline
-(none)\newline
-\newline
-}
-
-\paragraph{Method \texttt{set_filament_current}}
-\vspace{1ex}
-\texttt{\newline
-rgams_SRS.set_filament_current(val)\newline
-\newline
-Set filament current.\newline
-\newline
-INPUT:\newline
-val: current in mA\newline
 \newline
 OUTPUT:\newline
 (none)\newline
