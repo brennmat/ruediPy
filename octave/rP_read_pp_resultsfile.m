@@ -1,8 +1,8 @@
-function X = rP_read_resultsfile (file)
+function X = rP_read_pp_resultsfile (file)
 
-% function X = rP_read_resultsfile (file)
+% function X = rP_read_pp_resultsfile (file)
 % 
-% Read and parse data in ruediPy results data file (see rP_calibrate_batch).
+% Read and parse partial pressure data in ruediPy results file (see rP_calibrate_batch).
 % 
 % INPUT:
 % file: name of results data file.
@@ -11,7 +11,7 @@ function X = rP_read_resultsfile (file)
 % X: struct object with data from file. Stuct fields correspond to the header / columns in the results file.
 %	- The first column is blindly assumed to be the sample name
 %	- All other columns are assued to be EPOCHTIME/VALUE/ERROR triples
-%	- Time/date is returned in Octave/Matlab datenum format
+%	- Time/date is returned as UNIX epoch time, which can be converted to Matlab/Octave datenum format using the rP_epochtime2datenum (...) function.
 %
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
@@ -101,7 +101,7 @@ else
 	
 	% parse data to struct
 	for i = 1:N
-		f = struct('TIME',rP_epochtime2datenum (x{3*i-1}),'VAL',x{3*i},'ERR',x{3*i+1},'UNIT',units{i});
+		f = struct('EPOCH',x{3*i-1},'VAL',x{3*i},'ERR',x{3*i+1},'UNIT',units{i});
 		eval (sprintf ('X.%s = f;',fields{i}))
 	end
 
