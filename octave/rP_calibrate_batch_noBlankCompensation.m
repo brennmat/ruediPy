@@ -343,7 +343,7 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 	u   = strsplit(mz_det{i},'_');
 	MZ  = str2num(u{1});
 	DET = u{2};	
-	for j = 1:length(iSTANDARD) % determine blank-corrected sensitivity S_val(i,j) and S_err(i,j) for mz_det{i} in step iSTANDARD(j)
+	for j = 1:length(iSTANDARD) % determine sensitivity S_val(i,j) and S_err(i,j) for mz_det{i} in step iSTANDARD(j)
 		k = find ( X(iSTANDARD(j)).INFO.standard.mz == MZ );
 		if ~isempty(k) % there is (at least) one standard entry for this MZ value
 			if length(k) > 1 % don't know how to treat this...
@@ -356,7 +356,7 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 					if isnan (PRESS_standard(j))
 						warning (sprintf('Total gas pressure unknown for STANDARD!'))
 					end
-					S_val(i,j) = ( X(iSTANDARD(j)).MS.mean(l) - Bmean(i) ) / pi;  % Use blank corrected mean value of (PEAK-ZERO) values, divided by corresponding partial pressure of the STANDARD step
+					S_val(i,j) = X(iSTANDARD(j)).MS.mean(l) / pi;
 					S_err(i,j) = X(iSTANDARD(j)).MS.mean_err(l) / pi;
 				end % if l = ...
 			end % if length(k) > 1
@@ -431,8 +431,8 @@ for i = 1:length(mz_det)
 		S_smpl_err = interp1 ( tS , Se , t_sample(i,:) );
 	
 		% sample partial pressures:	
-		P_val(i,:) = V_sample(i,:) ./ S_smpl_val ; % V_sample and S_smpl_val are both blank-corrected values
-		P_err(i,:) = sqrt ( (e_sample(i,:)./V_sample(i,:)).^2 + (S_smpl_err./S_smpl_val).^2 ) .* P_val(i,:) ; % error from counting statistics (NOT overall reproducibility of analyses!)
+		P_val(i,:) = v_sample(i,:) ./ S_smpl_val ;
+		P_err(i,:) = sqrt ( (e_sample(i,:)./v_sample(i,:)).^2 + (S_smpl_err./S_smpl_val).^2 ) .* P_val(i,:) ; % error from counting statistics (NOT overall reproducibility of analyses!)
 
 	end
 end % for i = ...
