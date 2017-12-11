@@ -315,3 +315,28 @@ class temperaturesensor_MAXIM:
 
 
 	########################################################################################################
+
+
+	def tempbuffer_clear(self):
+		"""
+		temperaturesensor_MAXIM.pressbuffer_clear()
+
+		Clear the buffer of temperature readings
+
+		INPUT:
+		(none)
+
+		OUTPUT:
+		(none)
+		"""
+
+		# data buffer for TEMPERATURE values:
+		self._tempbuffer_t = self._tempbuffer_t[[]]
+		self._tempbuffer_T = self._tempbuffer_T[[]]
+		self._tempbuffer_unit = ['x'] * 0 # empty list
+
+
+
+	########################################################################################################
+
+

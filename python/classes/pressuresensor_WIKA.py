@@ -385,4 +385,26 @@ class pressuresensor_WIKA:
 	########################################################################################################
 
 
+	def pressbuffer_clear(self):
+		"""
+		pressuresensor_WIKA.pressbuffer_clear()
+
+		Clear the buffer of pressure readings
+
+		INPUT:
+		(none)
+
+		OUTPUT:
+		(none)
+		"""
+
+		# data buffer for PRESSURE values:
+		self._pressbuffer_t = self._pressbuffer_t[[]]
+		self._pressbuffer_p = self._pressbuffer_p[[]]
+		self._pressbuffer_unit = ['x'] * 0 # empty list
+
+
+
+	########################################################################################################
+
 
