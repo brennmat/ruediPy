@@ -1213,9 +1213,9 @@ class rgams_SRS:
 ########################################################################################################
 
 
-	def tune_peak_position(self,peaks,max_iter=10,max_delta_mz=0.05,use_defaults=False):
+	def tune_peak_position(self,peaks,max_iter=10,max_delta_mz=0.05,use_defaults=False,resolution=25):
 		'''
-		rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05,use_defaults=False)
+		rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05,use_defaults=False,resolution=25)
 
 		Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters are then adjusted to minimize the mz offsets (parameters RI and RF, which define the peak positions at mz=0 and mz=128). The procedure start with the currently set RI and RS values (if use_defaults = False) or the default values (if they are set and use_defaults = True). This needs at least two distinct peak mz values, one at a low and one at a high mz value. The procedure is repeated until either the peak position offsets at mz=0 and mz=128 are less than max_delta_mz or the number of iterations has reached max_iter.
 
@@ -1228,6 +1228,7 @@ class rgams_SRS:
 		max_iter (optional): max. number of repetitions of the tune procedure
 		maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offsets at mz=0 and mz=128 after tuning are less than maxdelta_z after tuning, the tuning procedure is stopped.
 		use_defaults: flag to set if default RI and RS values are used to start the tuning procedure. Default value: use_defaults = False
+		resolution: m/z resolution used for the scans (10...25 points per amu). Default = 25 points per amu.
 
 		OUTPUT:
 		(none)
@@ -1285,7 +1286,7 @@ class rgams_SRS:
 				print ( 'Scanning peak at mz = ' + str(mz) + '...' )
 				self.set_detector(det)
 
-				MZ,Y,U = self.scan(mz-w,mz+w,25,gate,'nofile')
+				MZ,Y,U = self.scan(mz-w,mz+w,resolution,gate,'nofile')
 				
 				# subtract baseline
 				yL = (Y[0]+Y[1])/2
