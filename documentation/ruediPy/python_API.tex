@@ -719,7 +719,7 @@ OUTPUT:\newline
 \paragraph{Method \texttt{tune_peak_position}}
 \vspace{1ex}
 \texttt{\newline
-rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05,use_defaults=False)\newline
+rgams_SRS.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05,use_defaults=False,resolution=25)\newline
 \newline
 Automatically adjust peak positions in mass spectrum to make sure peaks show up at the correct mz values. This is done by scanning peaks at different mz values, and determining their offset in the mz spectrum. The mass spectromter parameters are then adjusted to minimize the mz offsets (parameters RI and RF, which define the peak positions at mz=0 and mz=128). The procedure start with the currently set RI and RS values (if use_defaults = False) or the default values (if they are set and use_defaults = True). This needs at least two distinct peak mz values, one at a low and one at a high mz value. The procedure is repeated until either the peak position offsets at mz=0 and mz=128 are less than max_delta_mz or the number of iterations has reached max_iter.\newline
 \newline
@@ -732,6 +732,7 @@ detector: detector to be used for the scan ('F' or 'M')\newline
 max_iter (optional): max. number of repetitions of the tune procedure\newline
 maxdelta_mz (optional): tolerance of mz offset at mz=0 and mz=128. If the absolute offsets at mz=0 and mz=128 after tuning are less than maxdelta_z after tuning, the tuning procedure is stopped.\newline
 use_defaults: flag to set if default RI and RS values are used to start the tuning procedure. Default value: use_defaults = False\newline
+resolution: m/z resolution used for the scans (10...25 points per amu). Default = 25 points per amu.\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -912,6 +913,21 @@ OUTPUT:\newline
 \newline
 }
 
+\paragraph{Method \texttt{pressbuffer_clear}}
+\vspace{1ex}
+\texttt{\newline
+pressuresensor_WIKA.pressbuffer_clear()\newline
+\newline
+Clear the buffer of pressure readings\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{pressure}}
 \vspace{1ex}
 \texttt{\newline
@@ -1005,6 +1021,21 @@ INPUT:\newline
 t: epoch time\newline
 T: temperature value\newline
 unit: unit of pressure value (char/string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{tempbuffer_clear}}
+\vspace{1ex}
+\texttt{\newline
+temperaturesensor_MAXIM.pressbuffer_clear()\newline
+\newline
+Clear the buffer of temperature readings\newline
+\newline
+INPUT:\newline
+(none)\newline
 \newline
 OUTPUT:\newline
 (none)\newline
