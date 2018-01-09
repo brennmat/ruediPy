@@ -1,6 +1,6 @@
-function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_sensor)
+function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_sensor, write_file)
 
-% function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_sensor)
+% function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_sensor, write_file)
 % 
 % Convert partial pressures data in P to dissolved gas concentrations. For each sample in P, do the following:
 % - calculate the sum of partial pressures (pp_sum)
@@ -13,6 +13,7 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % major_pp_species: name of species whose partial pressures are used to determine the sum of partial pressures 
 % TDGP_sensor: name of the sensor with the total dissolved gas pressure data used for normalisation of the partial pressures
 % TEMP_sensor: name of the sensor with the water temperature data used for Henry coefficient in GE-MIMS module
+% write_file (optional): flag to set if the results are written to a data file (default: write_file = true)
 % 
 % OUPUT:
 % C: struct object with dissolved gas concentrations and normalised partial pressures, using the same format as X; dissolved gas concentrations are in ccSTP/g (1 Mol = 22414 ccSTP)
@@ -55,7 +56,11 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % 
-% Copyright 2017, Matthias Brennwald (brennmat@gmail.com)
+% Copyright 2017, 2018, Matthias Brennwald (brennmat@gmail.com)
+
+
+warning ('rP_convert_pp_to_conc: THIS FUNCTION IS STILL EXPERIMENTAL AND MAY NEED MORE TESTING -- USE WITH EXTRA CARE !!!')
+
 
 % copy struct with partial pressures to new struct that will hold the concentrations:
 C = P;
@@ -73,11 +78,11 @@ Nitms = length (itms); % number of gas items
 
 % add fields for CONCENTRATIONS:
 u = repmat (NaN,Nsmpl,1);
-v = 'ccSTP_per_gram';
+conc_unit = 'ccSTP_per_gram';
 for i = 1:Nitms
 	eval(sprintf('C.%s_CONCENTRATION.VAL = u;',itms{i}))
 	eval(sprintf('C.%s_CONCENTRATION.ERR = u;',itms{i}))
-	eval(sprintf('C.%s_CONCENTRATION.UNIT = v;',itms{i}))
+	eval(sprintf('C.%s_CONCENTRATION.UNIT = conc_unit;',itms{i}))
 	eval(sprintf('C.%s_CONCENTRATION.EPOCH = C.%s_PARTIALPRESSURE.EPOCH;',itms{i},itms{i}))
 end % for
 
@@ -123,6 +128,7 @@ end
 
 
 % determine gas concenterations for each sample:
+unknown_henry_warn = true;
 for i = 1:Nsmpl
 
 	% determine sum of partial pressures (using the 'major' items as given at input):
@@ -185,7 +191,10 @@ for i = 1:Nsmpl
 			
 			otherwise
 				H = NA;
-    			warning (sprintf('rP_convert_pp_to_conc: Henry coefficient for %s is unknown. Setting %s concentration to NA...',itms{j},itms{j}))
+				if unknown_henry_warn
+	    			warning (sprintf('rP_convert_pp_to_conc: Henry coefficient for %s is unknown. Setting %s concentration to NA...',itms{j},itms{j}))
+				end
+				unknown_henry_warn = false;
     			
 		end % switch
 		
@@ -204,94 +213,70 @@ for i = 1:Nsmpl
 end % for i = ...
 
 
-%%%%%%  
-%%%%%%  
-%%%%%%  
-%%%%%%  
-%%%%%%  % write processed data to CSV data file
-%%%%%%  
-%%%%%%  %%%% 	species = partialpressures.species;
-%%%%%%  %%%% 	p_val   = partialpressures.val;
-%%%%%%  %%%% 	p_err   = partialpressures.err;
-%%%%%%  %%%% 	time    = partialpressures.time;
-%%%%%%  %%%% 	p_unit  = partialpressures.unit;
-%%%%%%  	
-%%%%%%  name = input ('Enter file name for processed data (or leave empty to skip): ','s');
-%%%%%%  
-%%%%%%  if isempty(name)
-%%%%%%      disp ('rP_convert_pp_to_conc: no file name given, not writing data to file.')
-%%%%%%  
-%%%%%%  else	
-%%%%%%      % open ASCII file for writing:
-%%%%%%      if strcmp(path(end),filesep)
-%%%%%%      	path = path(1:end-1);
-%%%%%%      end
-%%%%%%      [p,n,e] = fileparts (name);
-%%%%%%      if ~strcmp(e,'.csv')
-%%%%%%      	name = [ name '.csv' ];
-%%%%%%      end
-%%%%%%      path = sprintf ('%s%s%s',path,filesep,name);
-%%%%%%      [fid,msg] = fopen (path, 'wt');
-%%%%%%      if fid == -1
-%%%%%%      	error (sprintf('rP_convert_pp_to_conc: could not open file for writing (%s).',msg))
-%%%%%%      else
-%%%%%%      
-%%%%%%      	disp (sprintf('Writing data to %s...',path))
-%%%%%%      	
-%%%%%%      	
-%%%%%%      	
-%%%%%%      	
-%%%%%%      	
-%%%%%%      	%%%%% SAMPLE;N2 (28_F) TIME (EPOCH);N2 (28_F) PARTIALPRESSURE (hPa);N2 (28_F) PARTIALPRESSURE ERR (hPa);O2 (32_F) TIME (EPOCH);O2 (32_F) PARTIALPRESSURE (hPa);O2 (32_F) PARTIALPRESSURE ERR (hPa);Ar-40 (40_F) TIME (EPOCH);Ar-40 (40_F) PARTIALPRESSURE (hPa);Ar-40 (40_F) PARTIALPRESSURE ERR (hPa);CO2 (44_F) TIME (EPOCH);CO2 (44_F) PARTIALPRESSURE (hPa);CO2 (44_F) PARTIALPRESSURE ERR (hPa);He-4 (4_M) TIME (EPOCH);He-4 (4_M) PARTIALPRESSURE (hPa);He-4 (4_M) PARTIALPRESSURE ERR (hPa);Kr-84 (84_M) TIME (EPOCH);Kr-84 (84_M) PARTIALPRESSURE (hPa);Kr-84 (84_M) PARTIALPRESSURE ERR (hPa);TOTALPRESSURE_MEMBRANE TIME (EPOCH);TOTALPRESSURE_MEMBRANE (bar);TOTALPRESSURE_MEMBRANE ERR (bar);TEMP_MEMBRANE TIME (EPOCH);TEMP_MEMBRANE (deg.C);TEMP_MEMBRANE ERR (deg.C)
-%%%%%%  
-%%%%%%      	
-%%%%%%      	
-%%%%%%      	
-%%%%%%      	
-%%%%%%      	
-%%%%%%      	
-%%%%%%      	% write header:
-%%%%%%      	fprintf (fid,'SAMPLE')
-%%%%%%      	for j = 1:length(species)
-%%%%%%      		fprintf (fid,';%s TIME (EPOCH);%s CONCENTRATION (%s);%s CONCENTRATION ERR (%s)',species{j},species{j},c_unit,species{j},c_unit)
-%%%%%%      	end	
-%%%%%%      	if ~isempty(sensors)			
-%%%%%%      		nsens = length(sensors{1});
-%%%%%%      		for j = 1:nsens
-%%%%%%      			fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit)
-%%%%%%      		end
-%%%%%%      	end
-%%%%%%      	
-%%%%%%      				
-%%%%%%      	% write data:
-%%%%%%      	for i = 1:length(samples)
-%%%%%%      		fprintf (fid,'\n');
-%%%%%%      		
-%%%%%%      		% sample name:
-%%%%%%      		fprintf (fid,'%s',samples{i});
-%%%%%%      		
-%%%%%%      		% gas concentrations:
-%%%%%%      		for j = 1:length(species)				
-%%%%%%      			fprintf (fid,';%.2f;%g;%g',time(j,i),c_val(j,i),abs(c_err(j,i)))
-%%%%%%      		end
-%%%%%%  
-%%%%%%  			% sensor data (if any):
-%%%%%%  			if ~isempty(sensors)				
-%%%%%%  				for j = 1:nsens						
-%%%%%%  					fprintf (fid,';%.2f;%g;%g',sensors{i}{j}.mean_time,sensors{i}{j}.mean,sensors{i}{j}.mean_err)
-%%%%%%  				end
-%%%%%%  			end
-%%%%%%  
-%%%%%%      	end % for i = 
-%%%%%%  
-%%%%%%      	fclose (fid);
-%%%%%%  
-%%%%%%      end % if fid == -1
-%%%%%%  end % if isempty(name)
+% write data to file:
+
+if ~exist ('write_file','var')
+	write_file = true;
+end
+
+if write_file	% write results to file:
+
+	name = input ('Enter file name for processed data (or leave empty to skip): ','s');
+	if isempty(name)
+	    disp ('rP_convert_pp_to_conc: no file name given, not writing data to file.')
 	
-
-
-
-
+	else
+	
+		% prepare things:
+		species = {};	
+		for i = 1:Nitms
+			u = strsplit (itms{i},'_');
+			if length(u) > 3
+				u{1} = sprintf('%s-%s',u{1},u{2});
+				u{2} = u{3};
+				u{3} = u{4};
+			end
+			species{i} = sprintf('%s (%s_%s)',u{1},u{2},u{3});
+		end
+	
+	    % open ASCII file for writing:    
+	    [p,n,e] = fileparts (name);
+	    if ~strcmp(e,'.csv')
+	    	name = [ name '.csv' ];
+	    end
+		[fid,msg] = fopen (name, 'wt');
+		if fid == -1
+			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))
+		else    
+	    	disp (sprintf('Writing data to %s%s%s...',pwd,filesep,name))
+	    	
+	    	% write header:
+	    	fprintf (fid,'SAMPLE')    	
+	    	for j = 1:length(species)
+	    		fprintf (fid,';%s TIME (EPOCH);%s CONCENTRATION (%s);%s CONCENTRATION ERR (%s)',species{j},species{j},conc_unit,species{j},conc_unit)
+	    	end	
+			
+			% write data values:
+			for i = 1:Nsmpl
+				fprintf (fid,'\n'); % start new line
+				
+				% sample name:
+				fprintf (fid,C.SAMPLES{i});
+				
+				% gas concentrations pressures:
+				for j = 1:Nitms				
+					u = getfield(C,sprintf('%s_CONCENTRATION',itms{j}));
+					fprintf (fid,';%.2f;%g;%g',u.EPOCH(i),u.VAL(i),u.ERR(i))
+				end % for j = ...
+			end % for i = ...
+	
+			% done writing the file, close file: 
+	    	fclose (fid);
+	    	
+	    	disp ('...done.')
+	
+	    end % if fid == -1
+	end % if isempty(name)
+end % if ~no_file
 
 end % function
