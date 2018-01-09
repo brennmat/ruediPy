@@ -57,9 +57,7 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % 
 % Copyright 2017, Matthias Brennwald (brennmat@gmail.com)
 
-
-warning ('This function is under development -- ask a magician to fully implement it! The function is still highly experimental. Error propagation is not yet implemented at all.')
-
+% copy struct with partial pressures to new struct that will hold the concentrations:
 C = P;
 
 % determine gas items in the data set:
@@ -94,21 +92,29 @@ if any(u = find(isnan(kPP)))
 	error (sprintf('rP_convert_pp_to_conc: could not find item %s in the data! Aborting...',major_pp_species{u(1)}))
 end
 
-
 % GE-MIMS temperature values (sensor):
 TEMP = getfield (getfield(C,TEMP_sensor),'VAL');
+TEMP_ERR = getfield (getfield(C,TEMP_sensor),'ERR');
+u = getfield (getfield(C,TEMP_sensor),'UNIT');
+switch toupper(u) % check unit
+    case 'DEG.C'
+    	% do nothing, be happy
+    otherwise
+    	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat temperature with unit %s! Aborting...',u))
+end	
 
 % Total gas pressure values (sensor):
-TDGP = getfield (getfield(C,TDGP_sensor),'VAL');
-switch toupper(P.TOTALPRESSURE_MEMBRANE.UNIT) % convert TDGP to hPa
+TDGP     = getfield (getfield(C,TDGP_sensor),'VAL');
+TDGP_ERR = getfield (getfield(C,TDGP_sensor),'ERR');
+u = getfield (getfield(C,TDGP_sensor),'UNIT');
+switch toupper(u) % deal with unit, convert to hPa if necessary
     case 'BAR'
     	TDGP = 1000 * TDGP;
     otherwise
     	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat total gas pressures with unit %s! Aborting...',P.TOTALPRESSURE_MEMBRANE.UNIT))
-end	
+end
 
-% Check units of partial pressures
-for i = Nitms
+for i = Nitms % Check units of partial pressures
 	eval(sprintf('u = C.%s_PARTIALPRESSURE.UNIT;',itms{i}));
 	if ~strcmp(u,'hPa')
     	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat gas partial pressures with unit %s! Aborting...',u))
@@ -119,23 +125,25 @@ end
 % determine gas concenterations for each sample:
 for i = 1:Nsmpl
 
-	% determine sum of partial pressures:
-	pp_sum = 0;
+	% determine sum of partial pressures (using the 'major' items as given at input):
+	pp_sum =     0;
+	pp_sum_err = 0;
 	for j = kPP
 		eval(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
+		eval(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))		
 	end
-
+	pp_sum_err = sqrt (pp_sum_err);
+	
 	% normalize partial pressures to TDGP:
 	for j = 1:Nitms
-		eval(sprintf('C.%s_PARTIALPRESSURE.VAL(i) = TDGP(i) / pp_sum * C.%s_PARTIALPRESSURE.VAL(i);',itms{j},itms{j}))
+		eval(sprintf('pnew     = TDGP(i) / pp_sum * C.%s_PARTIALPRESSURE.VAL(i);',itms{j}));
+		eval(sprintf('pnew_err = sqrt ( (pp_sum_err/pp_sum)^2 + (C.%s_PARTIALPRESSURE.ERR(i)/C.%s_PARTIALPRESSURE.VAL(i))^2 );',itms{j},itms{j}));
+		pnew_err = pnew * pnew_err; % convert relative error to absolute error		
+		eval(sprintf('C.%s_PARTIALPRESSURE.VAL(i) = pnew;',itms{j}))
+		eval(sprintf('C.%s_PARTIALPRESSURE.ERR(i) = pnew_err;',itms{j}))
 	end
 
-
-
-
-
-	
-	% determine concentraions:
+	% apply Henry's Law to determine concentraions:
 	for j = 1:Nitms
 		
 		% find Henry's Law coefficient:
@@ -145,39 +153,145 @@ for i = 1:Nsmpl
 			
 			case 'N2'
 				[c,v,d,m,H] = nf_atmos_gas ('N2',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = nf_atmos_gas ('N2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
 			case 'O2'
 				[c,v,d,m,H] = nf_atmos_gas ('O2',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = nf_atmos_gas ('O2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 
 			case 'HE'
 				[c,v,d,m,H] = nf_atmos_gas ('He',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = nf_atmos_gas ('He',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
 			case 'NE'
 				[c,v,d,m,H] = nf_atmos_gas ('Ne',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = nf_atmos_gas ('Ne',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
 			case 'AR'
 				[c,v,d,m,H] = nf_atmos_gas ('Ar',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = nf_atmos_gas ('Ar',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
-			case 'Kr'
+			case 'KR'
 				[c,v,d,m,H] = nf_atmos_gas ('Kr',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = nf_atmos_gas ('Kr',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+			
+			case 'XE'
+				[c,v,d,m,H] = nf_atmos_gas ('Xe',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = nf_atmos_gas ('Xe',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+			
+			case 'CH4'
+				[c,v,d,m,H] = nf_atmos_gas ('CH4',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = nf_atmos_gas ('CH4',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
 			otherwise
 				H = NA;
-    			warning (sprintf('rP_convert_pp_to_conc: I do not know the Henry coefficient for %s. Setting to NA...',itms{j}))
+    			warning (sprintf('rP_convert_pp_to_conc: Henry coefficient for %s is unknown. Setting %s concentration to NA...',itms{j},itms{j}))
     			
 		end % switch
 		
-		eval(sprintf('C.%s_CONCENTRATION.VAL(i) = C.%s_PARTIALPRESSURE.VAL(i) / H;',itms{j},itms{j})); % Henry's Law
+		eval (sprintf('pp     = C.%s_PARTIALPRESSURE.VAL(i);',itms{j}));
+		eval (sprintf('pp_err = C.%s_PARTIALPRESSURE.ERR(i);',itms{j}));
+		cc     = pp / H;
+		cc_err = sqrt ( ( pp / (H+dH) - cc )^2 + ( pp_err / pp * cc )^2 );
 		
-		warning ('rP_convert_pp_to_conc: NEED TO IMPLENENT ERROR PROPAGATION!!!')
-		
+		eval(sprintf('C.%s_CONCENTRATION.VAL(i) = cc;'     ,itms{j},itms{j}));
+		eval(sprintf('C.%s_CONCENTRATION.ERR(i) = cc_err;' ,itms{j},itms{j}));
+				
 	end
 	
 	
 	
-	
-	
-	
 end % for i = ...
+
+
+%%%%%%  
+%%%%%%  
+%%%%%%  
+%%%%%%  
+%%%%%%  % write processed data to CSV data file
+%%%%%%  
+%%%%%%  %%%% 	species = partialpressures.species;
+%%%%%%  %%%% 	p_val   = partialpressures.val;
+%%%%%%  %%%% 	p_err   = partialpressures.err;
+%%%%%%  %%%% 	time    = partialpressures.time;
+%%%%%%  %%%% 	p_unit  = partialpressures.unit;
+%%%%%%  	
+%%%%%%  name = input ('Enter file name for processed data (or leave empty to skip): ','s');
+%%%%%%  
+%%%%%%  if isempty(name)
+%%%%%%      disp ('rP_convert_pp_to_conc: no file name given, not writing data to file.')
+%%%%%%  
+%%%%%%  else	
+%%%%%%      % open ASCII file for writing:
+%%%%%%      if strcmp(path(end),filesep)
+%%%%%%      	path = path(1:end-1);
+%%%%%%      end
+%%%%%%      [p,n,e] = fileparts (name);
+%%%%%%      if ~strcmp(e,'.csv')
+%%%%%%      	name = [ name '.csv' ];
+%%%%%%      end
+%%%%%%      path = sprintf ('%s%s%s',path,filesep,name);
+%%%%%%      [fid,msg] = fopen (path, 'wt');
+%%%%%%      if fid == -1
+%%%%%%      	error (sprintf('rP_convert_pp_to_conc: could not open file for writing (%s).',msg))
+%%%%%%      else
+%%%%%%      
+%%%%%%      	disp (sprintf('Writing data to %s...',path))
+%%%%%%      	
+%%%%%%      	
+%%%%%%      	
+%%%%%%      	
+%%%%%%      	
+%%%%%%      	%%%%% SAMPLE;N2 (28_F) TIME (EPOCH);N2 (28_F) PARTIALPRESSURE (hPa);N2 (28_F) PARTIALPRESSURE ERR (hPa);O2 (32_F) TIME (EPOCH);O2 (32_F) PARTIALPRESSURE (hPa);O2 (32_F) PARTIALPRESSURE ERR (hPa);Ar-40 (40_F) TIME (EPOCH);Ar-40 (40_F) PARTIALPRESSURE (hPa);Ar-40 (40_F) PARTIALPRESSURE ERR (hPa);CO2 (44_F) TIME (EPOCH);CO2 (44_F) PARTIALPRESSURE (hPa);CO2 (44_F) PARTIALPRESSURE ERR (hPa);He-4 (4_M) TIME (EPOCH);He-4 (4_M) PARTIALPRESSURE (hPa);He-4 (4_M) PARTIALPRESSURE ERR (hPa);Kr-84 (84_M) TIME (EPOCH);Kr-84 (84_M) PARTIALPRESSURE (hPa);Kr-84 (84_M) PARTIALPRESSURE ERR (hPa);TOTALPRESSURE_MEMBRANE TIME (EPOCH);TOTALPRESSURE_MEMBRANE (bar);TOTALPRESSURE_MEMBRANE ERR (bar);TEMP_MEMBRANE TIME (EPOCH);TEMP_MEMBRANE (deg.C);TEMP_MEMBRANE ERR (deg.C)
+%%%%%%  
+%%%%%%      	
+%%%%%%      	
+%%%%%%      	
+%%%%%%      	
+%%%%%%      	
+%%%%%%      	
+%%%%%%      	% write header:
+%%%%%%      	fprintf (fid,'SAMPLE')
+%%%%%%      	for j = 1:length(species)
+%%%%%%      		fprintf (fid,';%s TIME (EPOCH);%s CONCENTRATION (%s);%s CONCENTRATION ERR (%s)',species{j},species{j},c_unit,species{j},c_unit)
+%%%%%%      	end	
+%%%%%%      	if ~isempty(sensors)			
+%%%%%%      		nsens = length(sensors{1});
+%%%%%%      		for j = 1:nsens
+%%%%%%      			fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit)
+%%%%%%      		end
+%%%%%%      	end
+%%%%%%      	
+%%%%%%      				
+%%%%%%      	% write data:
+%%%%%%      	for i = 1:length(samples)
+%%%%%%      		fprintf (fid,'\n');
+%%%%%%      		
+%%%%%%      		% sample name:
+%%%%%%      		fprintf (fid,'%s',samples{i});
+%%%%%%      		
+%%%%%%      		% gas concentrations:
+%%%%%%      		for j = 1:length(species)				
+%%%%%%      			fprintf (fid,';%.2f;%g;%g',time(j,i),c_val(j,i),abs(c_err(j,i)))
+%%%%%%      		end
+%%%%%%  
+%%%%%%  			% sensor data (if any):
+%%%%%%  			if ~isempty(sensors)				
+%%%%%%  				for j = 1:nsens						
+%%%%%%  					fprintf (fid,';%.2f;%g;%g',sensors{i}{j}.mean_time,sensors{i}{j}.mean,sensors{i}{j}.mean_err)
+%%%%%%  				end
+%%%%%%  			end
+%%%%%%  
+%%%%%%      	end % for i = 
+%%%%%%  
+%%%%%%      	fclose (fid);
+%%%%%%  
+%%%%%%      end % if fid == -1
+%%%%%%  end % if isempty(name)
+	
+
+
+
+
 
 end % function
