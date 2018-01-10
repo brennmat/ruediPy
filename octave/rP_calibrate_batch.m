@@ -357,7 +357,7 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 						warning (sprintf('Total gas pressure unknown for STANDARD!'))
 					end
 					S_val(i,j) = ( X(iSTANDARD(j)).MS.mean(l) - Bmean(i) ) / pi;  % Use blank corrected mean value of (PEAK-ZERO) values, divided by corresponding partial pressure of the STANDARD step
-					S_err(i,j) = X(iSTANDARD(j)).MS.mean_err(l) / pi;
+					S_err(i,j) = sqrt ( X(iSTANDARD(j)).MS.mean_err(l)^2 + Berr(i)^2 ) / pi;
 				end % if l = ...
 			end % if length(k) > 1
 		end % if ~isempty(k)
