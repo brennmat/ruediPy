@@ -3,8 +3,8 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_sensor, write_file)
 % 
 % Convert partial pressures data in P to dissolved gas concentrations. For each sample in P, do the following:
-% - calculate the sum of partial pressures (pp_sum)
-% - normalize all partial pressures multipling them by the ratio TDGP/pp_sum (where TDGP is the toal dissolved gas pressure as measured in the GE-MIMS module)
+% - calculate the sum of partial pressures (pp_sum) of the species in major_pp_species and the water vapour pressure (determined from the temperature sensor value)
+% - normalize all partial pressures multipling them by the ratio TDGP/pp_sum, where TDGP is the total gas pressure (sensor value) including the water vapour pressure
 % - determine the Henry coefficient of each species at the water temperature measured in the GE-MIMS module)
 % - apply Henry's Law to determine the the dissolved gas concentrations for each species using the normalized partial pressures and the Henry coefficients for all species
 % 
@@ -140,7 +140,13 @@ for i = 1:Nsmpl
 	end
 	pp_sum_err = sqrt (pp_sum_err);
 	
-	% normalize partial pressures to TDGP:
+	% add water vapour pressure to pp_sum:
+	pWater     = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+273.15)-4.8489.*log((TEMP(i)+273.15)/100));  % water vapour pressure (in hPa)
+	pWater_err = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+TEMP_ERR(i)+273.15)-4.8489.*log((TEMP(i)+TEMP_ERR(i)+273.15)/100)); pWater_err = abs (pWater_err - pWater);
+	pp_sum = pp_sum + pWater;
+	pp_sum_err = sqrt ( pp_sum_err^2 + pWater_err^2);
+	
+	% normalize partial pressures to TDGP (note: TDGP reading includes water vapour pressure):
 	for j = 1:Nitms
 		eval(sprintf('pnew     = TDGP(i) / pp_sum * C.%s_PARTIALPRESSURE.VAL(i);',itms{j}));
 		eval(sprintf('pnew_err = sqrt ( (pp_sum_err/pp_sum)^2 + (C.%s_PARTIALPRESSURE.ERR(i)/C.%s_PARTIALPRESSURE.VAL(i))^2 );',itms{j},itms{j}));
@@ -160,7 +166,7 @@ for i = 1:Nsmpl
 			case 'N2'
 				[c,v,d,m,H] = nf_atmos_gas ('N2',TEMP(i),0,1013.25);
 				[c,v,d,m,dH] = nf_atmos_gas ('N2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
-			
+							
 			case 'O2'
 				[c,v,d,m,H] = nf_atmos_gas ('O2',TEMP(i),0,1013.25);
 				[c,v,d,m,dH] = nf_atmos_gas ('O2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
@@ -207,7 +213,6 @@ for i = 1:Nsmpl
 		eval(sprintf('C.%s_CONCENTRATION.ERR(i) = cc_err;' ,itms{j},itms{j}));
 				
 	end
-	
 	
 	
 end % for i = ...
