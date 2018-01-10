@@ -1682,7 +1682,8 @@ class rgams_SRS:
 								style = 'x-'
 							
 							yy = self._peakbuffer_intens[k]/intens0
-							self._peakbuffer_ax.plot( self._peakbuffer_t[k] - t0 , yy , col + style , markersize = 10 )
+							tt = self._peakbuffer_t[k] - t0
+							self._peakbuffer_ax.plot( tt , yy , col + style , markersize = 10 )
 
 							val_min = self._peakbuffer_intens[k].min()
 							val_max = self._peakbuffer_intens[k].max()
@@ -1713,6 +1714,12 @@ class rgams_SRS:
 						Y_MIN = self._peakbuffer_plot_min_y
 					if Y_MAX > self._peakbuffer_plot_max_y:
 						Y_MAX = self._peakbuffer_plot_max_y
+					
+					# Set x-axis scaling:
+					DX = 0.05*(tt.max()-tt.min());
+					if DX == 0:
+						DX = 5
+					self._peakbuffer_ax.set_Xlim( [ tt.min()-DX , tt.max()+DX ] )
 					
 					if Y_MIN < Y_MAX:
 						DY = 0.05*(Y_MAX-Y_MIN)
