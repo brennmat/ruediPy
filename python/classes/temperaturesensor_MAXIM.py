@@ -88,12 +88,14 @@ class temperaturesensor_MAXIM:
 		(none)
 		'''
 		
+		self._label = label
+		self._has_display = havedisplay
 
 		try:
 
 			# configure 1-wire bus for communication with MAXIM temperature sensor chip
 			r = AddressableDevice(UART_Adapter(serialport)).get_connected_ROMs()
-		
+
 			if r is None:
 				print ( 'Couldn not find any 1-wire devices on ' + serialport )
 			else:
@@ -111,8 +113,6 @@ class temperaturesensor_MAXIM:
 					self._sensor = DS18B20(bus, rom=romcode)
 					self._ROMcode = romcode
 		
-			self._label = label
-
 			# data buffer for temperature values:
 			self._tempbuffer_t = numpy.array([])
 			self._tempbuffer_T = numpy.array([])
@@ -120,7 +120,6 @@ class temperaturesensor_MAXIM:
 			self._tempbuffer_max_len = max_buffer_points
 	
 			# set up plotting environment
-			self._has_display = havedisplay
 			if self._has_display: # prepare plotting environment and figure
 
 				# set up plotting environment
@@ -196,13 +195,18 @@ class temperaturesensor_MAXIM:
 		unit: unit of temperature value (string)
 		"""	
 
-		temp = self._sensor.get_temperature()
+		temp = None;
+		unit = '?';
 		t = misc.now_UNIX()
-		unit = 'deg.C'
+		if not(hasattr(self,'_sensor')):
+			self.warning( 'sensor is not initialised, could not read data.' )
+		else:
+			temp = self._sensor.get_temperature()
+			unit = 'deg.C'
 		
-		# add data to peakbuffer
-		if add_to_tempbuffer:
-			self.tempbuffer_add(t,temp,unit)
+			# add data to peakbuffer
+			if add_to_tempbuffer:
+				self.tempbuffer_add(t,temp,unit)
 
 		# write data to datafile
 		if not ( f == 'nofile' ):
