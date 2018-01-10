@@ -86,7 +86,14 @@ class pressuresensor_WIKA:
 		(none)
 		'''
 	
+		self._label = label
+		self._has_display = havedisplay
+
 		try:
+
+
+
+
 			# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
 
 			ser = serial.Serial(
@@ -103,8 +110,6 @@ class pressuresensor_WIKA:
 			ser.flushInput() 	# make sure input is empty
 		
 			self.ser = ser
-
-			self._label = label
 
 			# configure pressure sensor for single pressure readings on request ("polling mode")
 			cmd = 'SO\xFF' # command string) (byte to set polling mode
@@ -130,7 +135,6 @@ class pressuresensor_WIKA:
 			self._pressbuffer_max_len = max_buffer_points
 	
 			# set up plotting environment
-			self._has_display = havedisplay
 			if self._has_display: # prepare plotting environment and figure
 
 				# set up plot figure:
@@ -235,47 +239,56 @@ class pressuresensor_WIKA:
 		unit: unit of pressure value (string)
 		"""	
 
-		cmd = 'PZ\x00' # command string to set polling mode
-		cs = self.serial_checksum(cmd) # determine check sum
-		self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
-		ans = self.ser.read(1) # first byte (not used)
-		ans = self.ser.read(4) # four bytes of IEEE754 float number
-		p = struct.unpack('<f',ans)[0] # convert to 4 bytes to float
-		ans = self.ser.read(1) # unit
-		self.ser.read(2) # last two bytes (not used)
-		
-		# get timestamp
+		p = None;
+		unit = '?';
 		t = misc.now_UNIX()
-
-		# get unit:
-		if ans == b'\xFF':
-			unit = 'bar'
-		elif ans == b'\xFE':
-			unit = 'bar-rel.'
-		elif ans == b'\x1F':
-			unit = 'Psi'
-		elif ans == b'\x1E':
-			unit = 'Psi-rel.'
-		elif ans == b'\xAF':
-			unit = 'MPa'
-		elif ans == b'\xAE':
-			unit = 'MPa-rel.'
-		elif ans == b'\xBF':
-			unit = 'kg/cm2'
-		elif ans == b'\xBE':
-			unit = 'kg/cm2-rel.'
+		if not(hasattr(self,'ser')):
+			self.warning( 'sensor is not initialised, could not read data.' )
 		else:
-			self.warning('WIKA pressure sensor returned unknown pressure unit')
-			unit = '???'
+			try:
+				cmd = 'PZ\x00' # command string to set polling mode
+				cs = self.serial_checksum(cmd) # determine check sum
+				self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
+				ans = self.ser.read(1) # first byte (not used)
+				ans = self.ser.read(4) # four bytes of IEEE754 float number
+				p = struct.unpack('<f',ans)[0] # convert to 4 bytes to float
+				ans = self.ser.read(1) # unit
+				self.ser.read(2) # last two bytes (not used)
+		
+				# get timestamp
+				t = misc.now_UNIX()
 
-		# add data to peakbuffer
-		if add_to_pressbuffer:
-			self.pressbuffer_add(t,p,unit)
+				# get unit:
+				if ans == b'\xFF':
+					unit = 'bar'
+				elif ans == b'\xFE':
+					unit = 'bar-rel.'
+				elif ans == b'\x1F':
+					unit = 'Psi'
+				elif ans == b'\x1E':
+					unit = 'Psi-rel.'
+				elif ans == b'\xAF':
+					unit = 'MPa'
+				elif ans == b'\xAE':
+					unit = 'MPa-rel.'
+				elif ans == b'\xBF':
+					unit = 'kg/cm2'
+				elif ans == b'\xBE':
+					unit = 'kg/cm2-rel.'
+				else:
+					self.warning('WIKA pressure sensor returned unknown pressure unit')
+					unit = '???'
+
+				# add data to peakbuffer
+				if add_to_pressbuffer:
+					self.pressbuffer_add(t,p,unit)
+
+			except:
+				self.warning( 'could not read sensor!' )
 
 		# write data to datafile
 		if not ( f == 'nofile' ):
 			f.write_pressure('PRESSURESENSOR_WIKA',self.label(),p,unit,t)
-			# self.warning('writing pressure value to data file is not yet implemented!')
 
 		return p,unit
 
