@@ -201,12 +201,15 @@ class temperaturesensor_MAXIM:
 		if not(hasattr(self,'_sensor')):
 			self.warning( 'sensor is not initialised, could not read data.' )
 		else:
-			temp = self._sensor.get_temperature()
-			unit = 'deg.C'
+			try:
+				temp = self._sensor.get_temperature()
+				unit = 'deg.C'
 		
-			# add data to peakbuffer
-			if add_to_tempbuffer:
-				self.tempbuffer_add(t,temp,unit)
+				# add data to peakbuffer
+				if add_to_tempbuffer:
+					self.tempbuffer_add(t,temp,unit)
+			except:
+				self.warning( 'could not read sensor!' )
 
 		# write data to datafile
 		if not ( f == 'nofile' ):
