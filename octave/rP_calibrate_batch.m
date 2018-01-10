@@ -298,7 +298,7 @@ end % for
 Bmean = Berr = repmat (0,length(mz_det),1);
 for i = 1:length(mz_det)
 	Bmean(i) = mean (v_blank(i,:));							% mean blank
-	Berr(i)  = std (v_blank(i,:)) / sqrt(length(mz_det)-1);	% uncertainty of the mean blank
+	Berr(i)  = std (v_blank(i,:)) / sqrt(length(v_blank(i,:))-1);	% uncertainty of the mean blank
 	
 	% blank-corrected standards:
 	V_standard(i,:) = v_standard(i,:) - Bmean(i);
