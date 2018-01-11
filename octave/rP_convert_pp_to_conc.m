@@ -3,15 +3,17 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_sensor, write_file)
 % 
 % Convert partial pressures data in P to dissolved gas concentrations. For each sample in P, do the following:
-% - calculate the sum of partial pressures (pp_sum) of the species in major_pp_species and the water vapour pressure (determined from the temperature sensor value)
-% - normalize all partial pressures multipling them by the ratio TDGP/pp_sum, where TDGP is the total gas pressure (sensor value) including the water vapour pressure
-% - determine the Henry coefficient of each species at the water temperature measured in the GE-MIMS module)
-% - apply Henry's Law to determine the the dissolved gas concentrations for each species using the normalized partial pressures and the Henry coefficients for all species
+% (1*) calculate the sum of partial pressures (pp_sum) of the species in major_pp_species and the water vapour pressure (determined from the temperature sensor value)
+% (2*) normalize all partial pressures multipling them by the ratio TDGP/pp_sum, where TDGP is the total gas pressure (sensor value) including the water vapour pressure
+% (3) determine the Henry coefficient of each species at the water temperature measured in the GE-MIMS module)
+% (4) apply Henry's Law to determine the the dissolved gas concentrations for each species using the normalized partial pressures and the Henry coefficients for all species
+%
+% (*) The normalisation steps (1) and (2) are omitted if either major_pp_species or TDGP_sensor are empty (i.e., major_pp_species = {} or TDGP_sensor = '').
 % 
 % INPUT:
 % P: partial pressure data (see rP_read_pp_resultsfile.m)
-% major_pp_species: name of species whose partial pressures are used to determine the sum of partial pressures 
-% TDGP_sensor: name of the sensor with the total dissolved gas pressure data used for normalisation of the partial pressures
+% major_pp_species: name of species whose partial pressures are used to determine the sum of partial pressures. major_pp_species = {} can be used to skip the pressure normalisation.
+% TDGP_sensor: name of the sensor with the total dissolved gas pressure data used for normalisation of the partial pressures. TDGP_sensor = '' can be used to skip the pressure normalisation.
 % TEMP_sensor: name of the sensor with the water temperature data used for Henry coefficient in GE-MIMS module
 % write_file (optional): flag to set if the results are written to a data file (default: write_file = true)
 % 
@@ -87,14 +89,18 @@ for i = 1:Nitms
 end % for
 
 % determine index to major gas items used to determine sum of partial pressures:
-kPP = repmat (NaN,size(major_pp_species));
-for i = 1:length(major_pp_species)
-	if ( any(k = find (strcmpi(major_pp_species{i},itms))) )
-		kPP(i) = k;
+if length(major_pp_species) == 0 % no species given for sum of partial pressures
+	kPP = [];
+else
+	kPP = repmat (NaN,size(major_pp_species));
+	for i = 1:length(major_pp_species)
+		if ( any(k = find (strcmpi(major_pp_species{i},itms))) )
+			kPP(i) = k;
+		end
+	end % for
+	if any(u = find(isnan(kPP)))
+		error (sprintf('rP_convert_pp_to_conc: could not find item %s in the data! Aborting...',major_pp_species{u(1)}))
 	end
-end % for
-if any(u = find(isnan(kPP)))
-	error (sprintf('rP_convert_pp_to_conc: could not find item %s in the data! Aborting...',major_pp_species{u(1)}))
 end
 
 % GE-MIMS temperature values (sensor):
@@ -109,50 +115,74 @@ switch toupper(u) % check unit
 end	
 
 % Total gas pressure values (sensor):
-TDGP     = getfield (getfield(C,TDGP_sensor),'VAL');
-TDGP_ERR = getfield (getfield(C,TDGP_sensor),'ERR');
-u = getfield (getfield(C,TDGP_sensor),'UNIT');
-switch toupper(u) % deal with unit, convert to hPa if necessary
-    case 'BAR'
-    	TDGP = 1000 * TDGP;
-    otherwise
-    	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat total gas pressures with unit %s! Aborting...',P.TOTALPRESSURE_MEMBRANE.UNIT))
+if strcmp (TDGP_sensor,'') % no TDGP sensor given
+	TDGP = [];
+else
+	TDGP     = getfield (getfield(C,TDGP_sensor),'VAL');
+	TDGP_ERR = getfield (getfield(C,TDGP_sensor),'ERR');
+	u = getfield (getfield(C,TDGP_sensor),'UNIT');
+	switch toupper(u) % deal with unit, convert to hPa if necessary
+	    case 'BAR'
+	    	TDGP = 1000 * TDGP;
+	    otherwise
+	    	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat total gas pressures with unit %s! Aborting...',P.TOTALPRESSURE_MEMBRANE.UNIT))
+	end
+	for i = Nitms % Check units of partial pressures
+		eval(sprintf('u = C.%s_PARTIALPRESSURE.UNIT;',itms{i}));
+		if ~strcmp(u,'hPa')
+	    	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat gas partial pressures with unit %s! Aborting...',u))
+	    end
+	end
 end
-
-for i = Nitms % Check units of partial pressures
-	eval(sprintf('u = C.%s_PARTIALPRESSURE.UNIT;',itms{i}));
-	if ~strcmp(u,'hPa')
-    	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat gas partial pressures with unit %s! Aborting...',u))
-    end
-end
-
 
 % determine gas concenterations for each sample:
 unknown_henry_warn = true;
+no_normalisation_warn = true;
 for i = 1:Nsmpl
 
-	% determine sum of partial pressures (using the 'major' items as given at input):
-	pp_sum =     0;
-	pp_sum_err = 0;
-	for j = kPP
-		eval(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
-		eval(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))		
-	end
-	pp_sum_err = sqrt (pp_sum_err);
-	
-	% add water vapour pressure to pp_sum:
-	pWater     = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+273.15)-4.8489.*log((TEMP(i)+273.15)/100));  % water vapour pressure (in hPa)
-	pWater_err = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+TEMP_ERR(i)+273.15)-4.8489.*log((TEMP(i)+TEMP_ERR(i)+273.15)/100)); pWater_err = abs (pWater_err - pWater);
-	pp_sum = pp_sum + pWater;
-	pp_sum_err = sqrt ( pp_sum_err^2 + pWater_err^2);
-	
-	% normalize partial pressures to TDGP (note: TDGP reading includes water vapour pressure):
-	for j = 1:Nitms
-		eval(sprintf('pnew     = TDGP(i) / pp_sum * C.%s_PARTIALPRESSURE.VAL(i);',itms{j}));
-		eval(sprintf('pnew_err = sqrt ( (pp_sum_err/pp_sum)^2 + (C.%s_PARTIALPRESSURE.ERR(i)/C.%s_PARTIALPRESSURE.VAL(i))^2 );',itms{j},itms{j}));
-		pnew_err = pnew * pnew_err; % convert relative error to absolute error		
-		eval(sprintf('C.%s_PARTIALPRESSURE.VAL(i) = pnew;',itms{j}))
-		eval(sprintf('C.%s_PARTIALPRESSURE.ERR(i) = pnew_err;',itms{j}))
+	if ~any(kPP) % don't normalize partial pressures
+		if no_normalisation_warn
+			warning ('rP_convert_pp_to_conc: no species given to be used for sum of partial pressure -- not normalizing the partial pressures to total dissolved gas pressure!')
+		end
+		no_normalisation_warn = false;
+
+	elseif ~any(TDGP) % don't normalize partial pressures
+		if no_normalisation_warn
+			warning ('rP_convert_pp_to_conc: no total dissolved gas pressure given -- not normalizing the partial pressures to total dissolved gas pressure!')
+		end
+		no_normalisation_warn = false;
+
+
+
+
+
+
+
+
+
+	else % determine sum of partial pressures (using the 'major' items as given at input), then normalise partial pressures:
+		pp_sum =     0;
+		pp_sum_err = 0;
+		for j = kPP
+			eval(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
+			eval(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))		
+		end
+		pp_sum_err = sqrt (pp_sum_err);
+		
+		% add water vapour pressure to pp_sum:
+		pWater     = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+273.15)-4.8489.*log((TEMP(i)+273.15)/100));  % water vapour pressure (in hPa)
+		pWater_err = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+TEMP_ERR(i)+273.15)-4.8489.*log((TEMP(i)+TEMP_ERR(i)+273.15)/100)); pWater_err = abs (pWater_err - pWater);
+		pp_sum = pp_sum + pWater;
+		pp_sum_err = sqrt ( pp_sum_err^2 + pWater_err^2);
+		
+		% normalize partial pressures to TDGP (note: TDGP reading includes water vapour pressure):
+		for j = 1:Nitms
+			eval(sprintf('pnew     = TDGP(i) / pp_sum * C.%s_PARTIALPRESSURE.VAL(i);',itms{j}));
+			eval(sprintf('pnew_err = sqrt ( (pp_sum_err/pp_sum)^2 + (C.%s_PARTIALPRESSURE.ERR(i)/C.%s_PARTIALPRESSURE.VAL(i))^2 );',itms{j},itms{j}));
+			pnew_err = pnew * pnew_err; % convert relative error to absolute error		
+			eval(sprintf('C.%s_PARTIALPRESSURE.VAL(i) = pnew;',itms{j}))
+			eval(sprintf('C.%s_PARTIALPRESSURE.ERR(i) = pnew_err;',itms{j}))
+		end
 	end
 
 	% apply Henry's Law to determine concentraions:
