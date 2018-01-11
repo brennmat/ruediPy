@@ -236,7 +236,7 @@ class rgams_SRS:
 	
 		# check if serial buffer (input) is empty (just in case, will be useful to catch errors):
 		if self.ser.inWaiting() > 0:
-			self.warning('**** DEBUGGING INFO: serial buffer not empty before executing command = ' + cmd + '.')
+			self.warning('DEBUGGING INFO: serial buffer not empty before executing command = ' + cmd + '.')
 
 		# send command to serial port:
 		self.ser.write((cmd + '\r\n').encode('utf-8'))
@@ -272,7 +272,7 @@ class rgams_SRS:
 			
 		else: # check if serial buffer is empty (will be useful to catch errors):
 			if self.ser.inWaiting() > 0:
-				self.warning('**** DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd +'. First byte in buffer: ' + self.ser.read().decode('utf-8') )
+				self.warning('DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd +'. First byte in buffer: ' + self.ser.read().decode('utf-8') )
 			
 	
 	########################################################################################################
@@ -878,7 +878,7 @@ class rgams_SRS:
 				u = self.ser.read(4)
 
 				while self.ser.inWaiting() > 0:
-					self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
+					self.warning('DEBUGGING INFO: serial buffer not empty after PEAK reading!')
 	
 				# parse result:
 				u = struct.unpack('<i',u)[0] # unpack 4-byte data value
@@ -972,7 +972,7 @@ class rgams_SRS:
 				u = self.ser.read(4)
 
 				while self.ser.inWaiting() > 0:
-					self.warning('**** DEBUGGING INFO: serial buffer not empty after PEAK reading!')
+					self.warning('DEBUGGING INFO: serial buffer not empty after PEAK reading!')
 
 				# parse result:
 				u = struct.unpack('<i',u)[0] # unpack 4-byte data value

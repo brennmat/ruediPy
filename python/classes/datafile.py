@@ -75,7 +75,7 @@ class datafile:
 				
 		# check if path exists and is accessible for writing:		
 		if not os.access(pth, os.W_OK):
-			misc.warnmessage ('DATAFILE','path \'' + pth + '\' is not accessible for writing!')
+			self.warning ('path \'' + pth + '\' is not accessible for writing!')
 		
 		# remember base path:
 		self._basepath = pth

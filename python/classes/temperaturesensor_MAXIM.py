@@ -154,8 +154,8 @@ class temperaturesensor_MAXIM:
 
 
 		except:
-			print ( '\n**** WARNING: An error occured during configuration of the temperature sensor at serial interface ' + serialport + '. The temperature sensor cannot be used.\n' )
-
+			# print ( '\n**** WARNING: An error occured during configuration of the temperature sensor at serial interface ' + serialport + '. The temperature sensor cannot be used.\n' )
+			self.warning ('An error occured during configuration of the temperature sensor at serial interface ' + serialport + '. The temperature sensor cannot be used.')
 
 	
 	########################################################################################################

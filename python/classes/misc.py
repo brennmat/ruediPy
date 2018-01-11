@@ -37,6 +37,7 @@
 import sys
 import warnings
 import time
+from termcolor import colored
 
 # check Python version and print warning if we're running version < 3:
 if ( sys.version_info[0] < 3 ):
@@ -107,8 +108,8 @@ class misc:
 		'''
 		
 		print ('\a') # get user attention using the terminal bell
-		M = '***** WARNING from ' + unit + ' at ' + misc.now_string() + ': ' + msg
-		print (M)
+		M = '***** WARNING from ' + unit + ' at ' + misc.now_string() + ': ' + msg + '\n'
+		print (colored(M,'red'))
 		
 
 	########################################################################################################
