@@ -1660,6 +1660,9 @@ class rgams_SRS:
 				t0 = misc.now_UNIX()			
 				N = len(self._peakbuffer_mz)
 
+				X_MIN = None
+				X_MAX = None
+
 				Y_MIN = 1
 				Y_MAX = 1
 
@@ -1691,6 +1694,15 @@ class rgams_SRS:
 							max = "{:.2e}".format(val_max)
 							leg.append( 'mz=' + str(int(mz)) + ' det=' + det + ': ' + min + ' ... ' + max + ' ' + self._peakbuffer_unit[k[0]] )
 							
+							if X_MIN == None:
+								X_MIN = tt.min()
+							if X_MAX == None:
+								X_MAX = tt.min()
+							if tt.min() < X_MIN:
+								X_MIN = tt.min()
+							if tt.max() > X_MAX:
+								X_MAX = tt.max()
+	
 							if yy.min() < Y_MIN:
 								Y_MIN = yy.min()
 							if yy.max() > Y_MAX:
@@ -1709,18 +1721,17 @@ class rgams_SRS:
 					self._peakbuffer_ax.set_xlabel('Time (s)')
 					self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
 
+					# Set x-axis scaling:
+					DX = 0.05*(X_MAX-X_MIN);
+					if DX == 0:
+						DX = 5
+					self._peakbuffer_ax.set_xlim( [ X_MIN-DX , X_MAX+DX ] )
+
 					# Set y-axis scaling:
 					if Y_MIN < self._peakbuffer_plot_min_y:
 						Y_MIN = self._peakbuffer_plot_min_y
 					if Y_MAX > self._peakbuffer_plot_max_y:
-						Y_MAX = self._peakbuffer_plot_max_y
-					
-					# Set x-axis scaling:
-					DX = 0.05*(tt.max()-tt.min());
-					if DX == 0:
-						DX = 5
-					self._peakbuffer_ax.set_Xlim( [ tt.min()-DX , tt.max()+DX ] )
-					
+						Y_MAX = self._peakbuffer_plot_max_y					
 					if Y_MIN < Y_MAX:
 						DY = 0.05*(Y_MAX-Y_MIN)
 					else:
