@@ -37,7 +37,12 @@
 import sys
 import warnings
 import time
-from termcolor import colored
+try:
+	from termcolor import colored
+	do_color_term = True
+except ImportError:
+	do_color_term = False
+	print ('*** NOTE: Please install the python termcolor package for colored warning messages! ***')
 
 # check Python version and print warning if we're running version < 3:
 if ( sys.version_info[0] < 3 ):
@@ -109,8 +114,11 @@ class misc:
 		
 		print ('\a') # get user attention using the terminal bell
 		M = '***** WARNING from ' + unit + ' at ' + misc.now_string() + ': ' + msg + '\n'
-		print (colored(M,'red'))
-		
+		if do_color_term:
+			print (colored(M,'red'))
+		else:
+			print (M)	
+
 
 	########################################################################################################
 	
