@@ -299,6 +299,9 @@ Bmean = Berr = repmat (0,length(mz_det),1);
 for i = 1:length(mz_det)
 	Bmean(i) = mean (v_blank(i,:));							% mean blank
 	Berr(i)  = std (v_blank(i,:)) / sqrt(length(v_blank(i,:))-1);	% uncertainty of the mean blank
+	if length(v_blank(i,:))-1 <= 0
+		warning (sprintf('rP_calibrate_batch: not enough BLANKs to determine uncertainty of BLANKs for %s.',mz_det{i}))
+	end
 	
 	% blank-corrected standards:
 	V_standard(i,:) = v_standard(i,:) - Bmean(i);
@@ -356,8 +359,11 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 					if isnan (PRESS_standard(j))
 						warning (sprintf('Total gas pressure unknown for STANDARD!'))
 					end
-					S_val(i,j) = ( X(iSTANDARD(j)).MS.mean(l) - Bmean(i) ) / pi;  % Use blank corrected mean value of (PEAK-ZERO) values, divided by corresponding partial pressure of the STANDARD step
-					S_err(i,j) = sqrt ( X(iSTANDARD(j)).MS.mean_err(l)^2 + Berr(i)^2 ) / pi;
+					
+					% Use blank corrected value and its error divided by corresponding partial pressure of the STANDARD step:
+					S_val(i,j) = V_standard(i,j) / pi; 
+					S_err(i,j) = E_standard(i,j) / pi;
+										
 				end % if l = ...
 			end % if length(k) > 1
 		end % if ~isempty(k)
@@ -517,7 +523,6 @@ for i = 1:length(iSAMPLE)
 	SENSORS{i} = X(iSAMPLE(i)).SENSORS; 
 end
 
-
 __write_datafile (...
 	SAMPLES,...
 	PARTIALPRESSURES,...
@@ -656,11 +661,15 @@ function __write_datafile (samples,partialpressures,sensors,path)
 	if isempty(name)
 		disp ('rP_calibrate_batch: no file name given, not writing data to file.')
 	
-	else	
+	else
+	
 		% open ASCII file for writing:
+		if length(path) == 0
+			path = pwd;
+		end
 		if strcmp(path(end),filesep)
 			path = path(1:end-1);
-		end
+		end		
 		[p,n,e] = fileparts (name);
 		if ~strcmp(e,'.csv')
 			name = [ name '.csv' ];
