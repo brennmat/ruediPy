@@ -1176,13 +1176,35 @@ class rgams_SRS:
 
 	########################################################################################################
 
+
+	
+	def calibrate_electrometer(self):
+		'''
+		val = rgams_SRS.calibrate_electrometer()
+		
+		Calibrate the electrometer I-V response curve (lookup table). See also the "CL" command in the SRS RGA manual.
+				
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# execute the CA command:
+		self.param_IO('CA',1) 
+
+
+
+	########################################################################################################
+
 	
 
 	def calibrate_all(self):
 		'''
 		val = rgams_SRS.calibrate_all()
 		
-		Calibrate the internal coefficients for compensation of baseline offset offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command int SRS RGA manual.
+		Calibrate the internal coefficients for compensation of baseline offset offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command in the SRS RGA manual.
 				
 		INPUT:
 		(none)
@@ -1921,7 +1943,7 @@ class rgams_SRS:
 		# prepare:
 		self.set_detector(detector)
 		## bs  = '\b' * 1000   # backspaces
-	
+
 		# conditioning detector and electronics:
 		if NC > 0:
 			if clear_peakbuf_cond:
