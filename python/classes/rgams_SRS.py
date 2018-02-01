@@ -218,7 +218,7 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def param_IO(self,cmd,ansreq):
+	def param_IO(self,cmd,ansreq,timeout=10):
 		'''
 		ans = rgams_SRS.param_IO(cmd,ansreq)
 		
@@ -229,7 +229,8 @@ class rgams_SRS:
 		ansreq: flag indicating if answer from RGA is expected:
 			ansreq = 1: answer expected, check for answer
 			ansreq = 0: no answer expected, don't check for answer
-		
+		timeout (optional): max. wait time for answer from RGA (seconds), default: timeout = 10 seconds
+
 		OUTPUT:
 		ans: answer / result returned from RGA
 		'''
@@ -251,7 +252,7 @@ class rgams_SRS:
 				if self.ser.inWaiting() == 0: # wait
 					time.sleep(dt)
 					t = t + dt
-					if t > 10: # give up waiting
+					if t > timeout: # give up waiting
 						doWait = 0
 						self.warning('could not determine parameter value or status (no response from RGA, command: ' + cmd + ')')
 						ans = -1
@@ -1191,8 +1192,8 @@ class rgams_SRS:
 		(none)
 		'''
 
-		# execute the CA command:
-		self.param_IO('CA',1) 
+		# execute the CL command:
+		self.param_IO('CL',1,75) 
 
 
 
