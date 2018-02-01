@@ -9,7 +9,22 @@ ruediPy class for SRS RGA-MS control.\par
 \texttt{\newline
 val = rgams_SRS.calibrate_all()\newline
 \newline
-Calibrate the internal coefficients for compensation of baseline offset offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command int SRS RGA manual.\newline
+Calibrate the internal coefficients for compensation of baseline offset offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command in the SRS RGA manual.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{calibrate_electrometer}}
+\vspace{1ex}
+\texttt{\newline
+val = rgams_SRS.calibrate_electrometer()\newline
+\newline
+Calibrate the electrometer I-V response curve (lookup table). See also the "CL" command in the SRS RGA manual.\newline
 \newline
 INPUT:\newline
 (none)\newline
@@ -316,6 +331,7 @@ cmd: command string that is sent to RGA (see RGA manual for commands and syntax)
 ansreq: flag indicating if answer from RGA is expected:\newline
 ansreq = 1: answer expected, check for answer\newline
 ansreq = 0: no answer expected, don't check for answer\newline
+timeout (optional): max. wait time for answer from RGA (seconds), default: timeout = 10 seconds\newline
 \newline
 OUTPUT:\newline
 ans: answer / result returned from RGA\newline
