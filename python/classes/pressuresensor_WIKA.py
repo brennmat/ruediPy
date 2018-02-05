@@ -412,13 +412,14 @@ class pressuresensor_WIKA:
 		(none)
 		"""
 
-		# data buffer for PRESSURE values:
-		self._pressbuffer_t = self._pressbuffer_t[[]]
-		self._pressbuffer_p = self._pressbuffer_p[[]]
-		self._pressbuffer_unit = ['x'] * 0 # empty list
+		# clear data buffer for PRESSURE values:
+		if not(hasattr(self,'ser')):
+			self.warning( 'sensor is not initialised, could not clear data buffer.' )
+		else:
+			self._pressbuffer_t = self._pressbuffer_t[[]]
+			self._pressbuffer_p = self._pressbuffer_p[[]]
+			self._pressbuffer_unit = ['x'] * 0 # empty list
 
 
 
 	########################################################################################################
-
-
