@@ -338,8 +338,9 @@ class temperaturesensor_MAXIM:
 		"""
 
 		# clear data buffer for TEMPERATURE values:
-		if not(hasattr(self,'ser')):
-			self.warning( 'sensor is not initialised, could not read data.' )
+
+		if not(hasattr(self,'_sensor')):
+			self.warning( 'sensor is not initialised, could not clear data buffer.' )
 		else:
 			self._tempbuffer_t = self._tempbuffer_t[[]]
 			self._tempbuffer_T = self._tempbuffer_T[[]]
