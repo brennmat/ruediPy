@@ -64,10 +64,18 @@ else
 	columns = strsplit (header,';');
 	f = repmat (' %f',1,length(columns)-1);
 	f = [ '%s' f ];
-	frewind (fid);
-	x = textscan (fid,f,'delimiter',';','HeaderLines',1,'EmptyValue',NA);	
-	
+	% frewind (fid);
+
+	% don't use this, because if will not work well with 'NA' entries in the data file:	
+	% x = textscan (fid,f,'delimiter',';','HeaderLines',1,'EmptyValue',NA);	
+	% fclose (fid);
+
 	fclose (fid);
+
+	u = fileread(file); % read file into string (u)
+	u = strrep(u, 'NA', 'NaN'); % replace NA entries by NaN (otherwise the conversion below may not work ok)
+	x = textscan (u,f,'delimiter',';','HeaderLines',1); % parse string (u) to formatted data (x), replacing empty fields with NA.
+
 	clear f
 	
 	if length (x) == 0
