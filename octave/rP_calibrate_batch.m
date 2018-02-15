@@ -495,7 +495,6 @@ drawnow
 % Write SAMPLE results to data file
 % *************************************************
 
-
 PARTIALPRESSURES.species = SPECIES;
 PARTIALPRESSURES.val     = P_val;
 PARTIALPRESSURES.err     = P_err;
@@ -690,7 +689,24 @@ function __write_datafile (samples,partialpressures,sensors,path)
 			if ~isempty(sensors)			
 				nsens = length(sensors{1});
 				for j = 1:nsens
-					fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit)
+
+					sns_unit = '???';
+					k = 1;
+					while k <= length(samples)
+						if ischar(sensors{k}{j}.mean_unit)
+							if ~strcmp(sensors{k}{j}.mean_unit,'NA')
+								sns_unit = sensors{k}{j}.mean_unit;
+								k = length(samples) + 1;
+							end
+						end
+						k = k+1;
+					end
+					if strcmp (sns_unit,'???')
+						warning (sprintf('rP_calibrate_batch: could not determine units of %s sensor data.',sensors{1}{j}))
+					end
+					fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sns_unit,sensors{1}{j}.sensor,sns_unit)
+
+					% fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit)
 				end
 			end
 			
