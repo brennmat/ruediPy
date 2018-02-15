@@ -83,6 +83,11 @@ else
 	end
 
 	X.SAMPLES = x{1,1};
+
+	% workaround for issue that first column (sample names) is sometimes longer than it should be
+	if length(X.SAMPLES) > length(x{1,2}) 
+		X.SAMPLES = X.SAMPLES(1:length(x{1,2}));
+	end
 	
 	N = ( length(columns) -1) / 3; % number of data items (time/value/error columns)
 	

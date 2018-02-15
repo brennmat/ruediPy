@@ -152,23 +152,19 @@ for i = 1:Nsmpl
 		end
 		no_normalisation_warn = false;
 
-
-
-
-
-
-
-
-
 	else % determine sum of partial pressures (using the 'major' items as given at input), then normalise partial pressures:
 		pp_sum =     0;
 		pp_sum_err = 0;
+
 		for j = kPP
+			disp(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
 			eval(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
-			eval(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))		
+
+			eval(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))
+			disp(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))
 		end
 		pp_sum_err = sqrt (pp_sum_err);
-		
+
 		% add water vapour pressure to pp_sum:
 		pWater     = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+273.15)-4.8489.*log((TEMP(i)+273.15)/100));  % water vapour pressure (in hPa)
 		pWater_err = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+TEMP_ERR(i)+273.15)-4.8489.*log((TEMP(i)+TEMP_ERR(i)+273.15)/100)); pWater_err = abs (pWater_err - pWater);
@@ -184,6 +180,7 @@ for i = 1:Nsmpl
 			eval(sprintf('C.%s_PARTIALPRESSURE.ERR(i) = pnew_err;',itms{j}))
 		end
 	end
+
 
 	% apply Henry's Law to determine concentraions:
 	for j = 1:Nitms
@@ -243,7 +240,6 @@ for i = 1:Nsmpl
 		eval(sprintf('C.%s_CONCENTRATION.ERR(i) = cc_err;' ,itms{j},itms{j}));
 				
 	end
-	
 	
 end % for i = ...
 
