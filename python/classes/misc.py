@@ -250,7 +250,7 @@ class misc:
 		do_menu = True;
 		while do_menu:
 			# print ( '' )
-			print ( title + ':' )
+			print ( '\n' + title + ':' )
 			for i in range(N):
 				print ( '   ' + str(i+1) + ': ' + menu[i] )
 			if sys.version_info >= (3,0): # Python 3.0 or newer
@@ -268,7 +268,7 @@ class misc:
 				do_menu = False
 
 			if do_menu:
-				print ('Invalid input. Try again...')
+				print ('\nInvalid input. Try again...')
 		
 		return ans					
 									
