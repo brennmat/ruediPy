@@ -101,6 +101,7 @@ class rgams_SRS:
 			bytesize = serial.EIGHTBITS,
 			timeout  = 10.0
 		)
+
 		ser.flushOutput() 	# make sure output is empty
 		time.sleep(0.1)
 		ser.flushInput() 	# make sure input is empty
