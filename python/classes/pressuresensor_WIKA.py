@@ -94,7 +94,7 @@ class pressuresensor_WIKA:
 
 
 
-			# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
+			# open and configure serial port for communication with WIKA pressure sensor (9600 baud, 8 data bits, no parity, 1 stop bit
 
 			ser = serial.Serial(
 				port     = serialport,
