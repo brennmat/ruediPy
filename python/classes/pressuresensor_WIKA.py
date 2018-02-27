@@ -90,10 +90,6 @@ class pressuresensor_WIKA:
 		self._has_display = havedisplay
 
 		try:
-
-
-
-
 			# open and configure serial port for communication with WIKA pressure sensor (9600 baud, 8 data bits, no parity, 1 stop bit
 
 			ser = serial.Serial(
