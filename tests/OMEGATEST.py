@@ -51,8 +51,12 @@ from classes.datafile			import datafile
 # PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2257101-if00-port0' , label = 'TOTALPRESSURE' , max_buffer_points = 500)
 
 
-# for Mac OS X (use SiLabs USB driver):
-PSENS		= pressuresensor_OMEGA ( serialport = '/dev/cu.usbserial-487740' , label = 'TOTALPRESSURE' )
+# for Mac OS X:
+# PSENS		= pressuresensor_OMEGA ( serialport = '/dev/cu.usbserial-487740' , label = 'TOTALPRESSURE' )
+
+PSENS		= pressuresensor_OMEGA ( serialport = '/dev/serial/by-id/usb-Omega_Engineering_USBPX2_487740-if00-port0' , label = 'TOTALPRESSURE' )
+
+
 
 # start data file:
 DATAFILE	= datafile ( '~/data' )
@@ -66,4 +70,4 @@ while 1:
 	p,unit = PSENS.pressure(DATAFILE)
 	print ( str(p) + ' ' + unit )
 	PSENS.plot_pressbuffer()
-	time.sleep (5)
+	time.sleep (1)
