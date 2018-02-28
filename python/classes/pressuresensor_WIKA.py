@@ -50,15 +50,21 @@ from classes.misc	import misc
 
 havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
-	import matplotlib
-	matplotlib.rcParams['legend.numpoints'] = 1
-	matplotlib.rcParams['axes.formatter.useoffset'] = False
-	# suppress mplDeprecation warning:
-	import warnings
-	import matplotlib.cbook
-	warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-	matplotlib.use('TkAgg')
-	import matplotlib.pyplot as plt
+	try:
+		import matplotlib
+		matplotlib.rcParams['legend.numpoints'] = 1
+		matplotlib.rcParams['axes.formatter.useoffset'] = False
+		# suppress mplDeprecation warning:
+		import warnings
+		import matplotlib.cbook
+		warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
+		matplotlib.use('TkAgg')
+		import matplotlib.pyplot as plt
+	except:
+		misc.warnmessage ('WIKA-PRESSURE init','Could not set up display environment.')
+		havedisplay = False
+
+
 
 class pressuresensor_WIKA:
 	"""
