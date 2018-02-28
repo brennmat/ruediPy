@@ -51,15 +51,19 @@ from classes.misc	import misc
 
 havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
-	import matplotlib
-	matplotlib.rcParams['legend.numpoints'] = 1
-	matplotlib.rcParams['axes.formatter.useoffset'] = False
-	# suppress mplDeprecation warning:
-	import warnings
-	import matplotlib.cbook
-	warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-	matplotlib.use('TkAgg')
-	import matplotlib.pyplot as plt
+	try:
+		import matplotlib
+		matplotlib.rcParams['legend.numpoints'] = 1
+		matplotlib.rcParams['axes.formatter.useoffset'] = False
+		# suppress mplDeprecation warning:
+		import warnings
+		import matplotlib.cbook
+		warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
+		matplotlib.use('TkAgg')
+		import matplotlib.pyplot as plt
+	except:
+		misc.warnmessage ('OMEGA-PRESSURE init','Could not set up display environment.')
+		havedisplay = False
 
 class pressuresensor_OMEGA:
 	"""
@@ -111,8 +115,9 @@ class pressuresensor_OMEGA:
 
 			# get serial number of pressure sensor
 			self.ser.write(('SNR\r').encode('utf-8')) # send command with check sum to serial port
-			ans = self.ser.readline() # read response
-			self._serial_number = int(ans.decode('utf-8').rstrip().split('=')[1]) # parse response to integer number
+			ans = self.ser.readline().decode('utf-8') # read response and decode ASCII	
+			ser.flushInput() 	# make sure input is empty
+			self._serial_number = int(ans.rstrip().split('=')[1]) # parse response to integer number
 
 			# data buffer for PEAK values:
 			self._pressbuffer_t = numpy.array([])
@@ -204,15 +209,10 @@ class pressuresensor_OMEGA:
 			try:
 				# get pressure reading from the sensor:
 				self.ser.write(('P\r').encode('utf-8')) # send command to serial port
-				ans =  self.ser.readline() # read response
-				ans = ans.decode('utf-8').split(' ')
-				
-				p = ans[0]
-				if p[0] == '>':
-					# remove trailing '>' (whatever that was supposed to mean):
-					p = p[1:]
-				p = float( p ) # convert string to float
-				
+				ans =  self.ser.readline().decode('utf-8') # read response and decode ASCII
+				self.ser.flushInput() 	# make sure input is empty
+				ans = ans.split(' ')
+				p = float( ans[0] ) # convert string to float
 				unit = ans[1]
 				if unit != 'bar':
 					raise ValueError( 'OMEGA pressure sensor returned unit = ' + unit + ', not bar!')
