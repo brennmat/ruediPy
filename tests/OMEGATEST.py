@@ -66,4 +66,4 @@ while 1:
 	p,unit = PSENS.pressure(DATAFILE)
 	print ( str(p) + ' ' + unit )
 	PSENS.plot_pressbuffer()
-	time.sleep (0.1)
+	time.sleep (5)
