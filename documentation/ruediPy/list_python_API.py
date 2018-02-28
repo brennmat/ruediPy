@@ -1,15 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import inspect
 
 from classes.rgams_SRS		       		import rgams_SRS
 from classes.selectorvalve_VICI    		import selectorvalve_VICI
 from classes.pressuresensor_WIKA   		import pressuresensor_WIKA
+from classes.pressuresensor_OMEGA   		import pressuresensor_OMEGA
 from classes.temperaturesensor_MAXIM   		import temperaturesensor_MAXIM
 from classes.datafile			   	import datafile
 from classes.misc			       	import misc
 
-CLASSES = [ rgams_SRS , selectorvalve_VICI , pressuresensor_WIKA , temperaturesensor_MAXIM , datafile , misc ]
+CLASSES = [ rgams_SRS , selectorvalve_VICI , pressuresensor_WIKA , pressuresensor_OMEGA , temperaturesensor_MAXIM , datafile , misc ]
 
 outfile = open('python_API.tex', 'w')
 

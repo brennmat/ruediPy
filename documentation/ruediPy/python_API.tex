@@ -991,6 +991,105 @@ OUTPUT:\newline
 \newline
 }
 
+\subsubsection{Class \texttt{pressuresensor_OMEGA}}
+\path{ruediPy/python/classes/pressuresensor_OMEGA.py}\par
+ruediPy class for OMEGA pressure sensor control.\par
+
+\paragraph{Method \texttt{label}}
+\vspace{1ex}
+\texttt{\newline
+label = pressuresensor_OMEGA.label()\newline
+\newline
+Return label / name of the PRESSURESENSOR object\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+label: label / name (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{plot_pressbuffer}}
+\vspace{1ex}
+\texttt{\newline
+pressuresensor_OMEGA.plot_pressbuffer()\newline
+\newline
+Plot trend (or update plot) of values in pressure data buffer (e.g. after adding data)\newline
+NOTE: plotting may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{pressbuffer_add}}
+\vspace{1ex}
+\texttt{\newline
+pressuresensor_OMEGA.pressbuffer_add(t,p,unit)\newline
+\newline
+Add data to pressure data buffer\newline
+\newline
+INPUT:\newline
+t: epoch time\newline
+p: pressure value\newline
+unit: unit of pressure value (char/string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{pressbuffer_clear}}
+\vspace{1ex}
+\texttt{\newline
+pressuresensor_OMEGA.pressbuffer_clear()\newline
+\newline
+Clear the buffer of pressure readings\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{pressure}}
+\vspace{1ex}
+\texttt{\newline
+press,unit = pressuresensor_OMEGA.pressure(f,add_to_pressbuffer=True)\newline
+\newline
+Read out current pressure value.\newline
+\newline
+INPUT:\newline
+f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+add_to_pressbuffer (optional): flag to indicate if data get appended to pressure buffer (default=True)\newline
+\newline
+OUTPUT:\newline
+press: pressure value in hPa (float)\newline
+unit: unit of pressure value (string)\newline
+\newline
+}
+
+\paragraph{Method \texttt{warning}}
+\vspace{1ex}
+\texttt{\newline
+pressuresensor_OMEGA.warning(msg)\newline
+\newline
+Issue warning about issues related to operation of pressure sensor.\newline
+\newline
+INPUT:\newline
+msg: warning message (string)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \subsubsection{Class \texttt{temperaturesensor_MAXIM}}
 \path{ruediPy/python/classes/temperaturesensor_MAXIM.py}\par
 ruediPy class for MAXIM DS1820 type temperature sensors (wrapper class for pydigitemp package).\par
