@@ -210,7 +210,11 @@ class pressuresensor_OMEGA:
 				# get pressure reading from the sensor:
 				self.ser.write(('P\r').encode('utf-8')) # send command to serial port
 				ans =  self.ser.readline().decode('utf-8') # read response and decode ASCII
+				if ans[0] == '>':
+					# fix > character dangling in the serial buffer from previous reading
+					ans = ans[1:]
 				self.ser.flushInput() 	# make sure input is empty
+				
 				ans = ans.split(' ')
 				p = float( ans[0] ) # convert string to float
 				unit = ans[1]
