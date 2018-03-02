@@ -66,26 +66,34 @@ class selectorvalve_VICI:
 		OUTPUT:
 		(none)
 		'''
-	
-		# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
-		ser = serial.Serial(
-			port     = serialport,
-			baudrate = 9600,
-			parity   = serial.PARITY_NONE,
-			stopbits = serial.STOPBITS_ONE,
-			bytesize = serial.EIGHTBITS,
-			timeout  = 5.0
-		)
-		ser.flushOutput() 	# make sure output is empty
-		time.sleep(0.1)
-		ser.flushInput() 	# make sure input is empty
-		
-		self.ser = ser;
 
-		self._label = label
+		try:
+			# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
+			ser = serial.Serial(
+				port     = serialport,
+				baudrate = 9600,
+				parity   = serial.PARITY_NONE,
+				stopbits = serial.STOPBITS_ONE,
+				bytesize = serial.EIGHTBITS,
+				timeout  = 5.0
+			)
+			ser.flushOutput() 	# make sure output is empty
+			time.sleep(0.1)
+			ser.flushInput() 	# make sure input is empty
 		
-		print ( 'Successfully configured VICI selector valve on ' + serialport )
+			self.ser = ser;
 
+			self._label = label
+		
+			print ( 'Successfully configured VICI selector valve on ' + serialport )
+
+		except serial.SerialException as e:
+			print( 'Could not establish connection to VICI selectorvalve:' , e )
+			sys.exit(1)
+
+		except:
+			print( 'Unexpected error during initialisation of VICI selectorvalve:', sys.exc_info()[0] )
+			sys.exit(1)
 
 	########################################################################################################
 	

@@ -182,13 +182,16 @@ class rgams_SRS:
 				self._figwindow_is_shown = False
 				plt.ion()			
 			
-			print ('Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
-
-		except FileNotFoundError as e:	
-			print ('Could not establish connection to SRS RGA:' , e)	
+			print( 'Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 
 		except serial.SerialException as e:
-			print ('Could not establish connection to SRS RGA:' , e)	
+			print( 'Could not establish connection to SRS RGA:' , e )
+			sys.exit(1)
+
+		except:
+			print( 'Unexpected error during initialisation of SRS RGA:', sys.exc_info()[0] )
+			sys.exit(1)
+
 	########################################################################################################
 	
 
