@@ -390,9 +390,13 @@ if flag_plot_sensitivity
 	end
 	k = find (m<0);
 	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(S_val,2)); scal(k,:) = -scal(k,:);
-	plot (x',y'./scal','.-','markersize',MS);
-	datetick;
-	xlabel ('Time (UTC)');
+	% plot (x',y'./scal','.-','markersize',MS);
+	% datetick;
+	% xlabel ('Time (UTC)');
+	x0 = min(min(x));
+	hours = (x-x0)*24;
+	plot (hours',y'./scal','.-','markersize',MS);
+	xlabel (sprintf('Time (hours after %s)',datestr(x0)));
 	ylabel (sprintf('Sensitivity (A/%s)',unit))
 	leg = strrep(SPECIES,'_','');
 	for i = 1:length(leg)
@@ -404,7 +408,8 @@ if flag_plot_sensitivity
 			end
 		end
 	end
-	legend (leg,'location','northoutside','orientation','horizontal');
+	legend (leg,'location','southoutside','orientation','horizontal');
+	title ('MS sensitivity vs. time')
 end
 
 
@@ -414,7 +419,7 @@ for i = 1:length(mz_det)
 	
 	tS = t_standard(i,:);
 	Sv  = S_val(i,:);
-	Se  = S_err(i,:);
+		Se  = S_err(i,:);
 	k = find (~isnan(Sv)); tS = tS(k); Sv = Sv(k); Se = Se(k); % remove NA and NaN entries
 	if length(Sv) == 0
 		warning (sprintf('rP_calibrate_batch: no valid STANDARDs data for %s. Skipping...',mz_det{i}))
@@ -468,9 +473,14 @@ if flag_plot_partialpressure
 	end
 	k = find (m<0);
 	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(P_val,2)); scal(k,:) = -scal(k,:);
-	plot (x',y'./scal','.-','markersize',MS);
-	datetick;
-	xlabel ('Time (UTC)');
+	% plot (x',y'./scal','.-','markersize',MS);
+	% datetick;
+	% xlabel ('Time (UTC)');
+	x0 = min(min(x));
+	hours = (x-x0)*24;
+	plot (hours',y'./scal','.-','markersize',MS);
+	xlabel (sprintf('Time (hours after %s)',datestr(x0)));
+	
 	ylabel (sprintf('Partial pressure (%s)',unit));
 	leg = strrep(SPECIES,'_','');
 	for i = 1:length(leg)
@@ -482,7 +492,8 @@ if flag_plot_partialpressure
 			end
 		end
 	end
-	legend (leg,'location','northoutside','orientation','horizontal');
+	legend (leg,'location','southoutside','orientation','horizontal');
+	title ('Partial pressures vs. time')
 end
 
 % update plots / figures:

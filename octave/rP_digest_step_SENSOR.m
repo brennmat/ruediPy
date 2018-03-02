@@ -116,7 +116,9 @@ else
 	if length(SENSOR_val) > 1
 		X.mean_err	= std (SENSOR_val) / sqrt(length(SENSOR_val)-1);
 	else
-		warning (sprintf('rP_digest_step_SENSOR: found only single SENSOR value for ''%s''; cannot determine error of the mean!',sensor_name))
+		if ~isnan(X.mean)
+			warning (sprintf('rP_digest_step_SENSOR: not enough data from SENSOR ''%s'' to determine error of the mean!',sensor_name))
+		end		
 		X.mean_err	= NaN;
 	end
 	
@@ -133,6 +135,11 @@ else
 	
 	X.mean_time = mean (SENSOR_time);
 	
+	% clean up NaN vs NA (if any):
+	if isnan(X.mean) X.mean = NA; end
+	if isnan(X.mean_err) X.mean_err = NA; end
+	if isnan(X.mean_time) X.mean_time = NA; end
+
 	if printsummary % print digest summary			
 	    disp (sprintf('Mean %s value = %g +/- %g %s (%s UTC)',...
 	   		sensor_name,...
