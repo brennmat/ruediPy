@@ -97,92 +97,98 @@ class rgams_SRS:
 		(none)
 		'''
 
-		# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
-		ser = serial.Serial(
-			port     = serialport,
-			baudrate = 28800,
-			parity   = serial.PARITY_NONE,
-			stopbits = serial.STOPBITS_TWO,
-			bytesize = serial.EIGHTBITS,
-			timeout  = 10.0
-		)
+		try:
+			# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
+			ser = serial.Serial(
+				port     = serialport,
+				baudrate = 28800,
+				parity   = serial.PARITY_NONE,
+				stopbits = serial.STOPBITS_TWO,
+				bytesize = serial.EIGHTBITS,
+				timeout  = 10.0
+			)
 
-		ser.flushOutput() 	# make sure output is empty
-		time.sleep(0.1)
-		ser.flushInput() 	# make sure input is empty
+			ser.flushOutput() 	# make sure output is empty
+			time.sleep(0.1)
+			ser.flushInput() 	# make sure input is empty
 		
-		self.ser = ser
+			self.ser = ser
 		
-		# object name label:
-		self._label = label
+			# object name label:
+			self._label = label
 		
-		# get ID / serial number of SRS RGA:
-		sn = self.param_IO('ID?',1)
-		sn = sn.split('.')
-		self._serial_number = sn[1]
+			# get ID / serial number of SRS RGA:
+			sn = self.param_IO('ID?',1)
+			sn = sn.split('.')
+			self._serial_number = sn[1]
 		
-		# cem bias / high voltage:
-		self._cem_hv = cem_hv
-		self._tune_default_RI = tune_default_RI
-		self._tune_default_RS = tune_default_RS		
+			# cem bias / high voltage:
+			self._cem_hv = cem_hv
+			self._tune_default_RI = tune_default_RI
+			self._tune_default_RS = tune_default_RS		
 
-		# data buffer for PEAK values:
-		self._peakbuffer_t = numpy.array([])
-		self._peakbuffer_mz = numpy.array([])
-		self._peakbuffer_intens = numpy.array([])
-		self._peakbuffer_det = ['x'] * 0 # empty list
-		self._peakbuffer_unit = ['x'] * 0 # empty list
-		self._peakbuffer_max_len = max_buffer_points
+			# data buffer for PEAK values:
+			self._peakbuffer_t = numpy.array([])
+			self._peakbuffer_mz = numpy.array([])
+			self._peakbuffer_intens = numpy.array([])
+			self._peakbuffer_det = ['x'] * 0 # empty list
+			self._peakbuffer_unit = ['x'] * 0 # empty list
+			self._peakbuffer_max_len = max_buffer_points
 		
-		# set up plotting environment
-		self._has_display = has_plot_window # try opening a plot window
-		if has_plot_window: # should have a plot window
-			self._has_display = havedisplay # don't tryp opening a plot window if there is no plotting environment
-		else: # no plot window
-			self._has_display = False
-		
-		if self._has_display: # prepare plotting environment and figure
-
-			# mz values and colors
-			### self._peakbufferplot_lines_mz = [] # empty list of mz values that are already in the plot (will be updated later)
-			self._peakbufferplot_colors = [(4,'c'),(14,'k'),(15,'g'),(28,'k'),(32,'r'),(40,'y'),(44,'b'),(84,'m')] # fixed colors for the more common mz values
-
 			# set up plotting environment
-			self._fig = plt.figure(figsize=(fig_w,fig_h))
-			# f.suptitle('SRS RGA DATA')
-			t = 'SRS RGA'
-			if self._label:
-				t = t + ' (' + self._label + ')'
-			self._fig.canvas.set_window_title(t)
+			self._has_display = has_plot_window # try opening a plot window
+			if has_plot_window: # should have a plot window
+				self._has_display = havedisplay # don't tryp opening a plot window if there is no plotting environment
+			else: # no plot window
+				self._has_display = False
+		
+			if self._has_display: # prepare plotting environment and figure
 
-			# set up upper panel for peak history plot:
-			self._peakbuffer_ax = plt.subplot(2,1,1)
-			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ')',loc="center")
-			plt.xlabel('Time')
-			plt.ylabel('Intensity')
-			self._peakbuffer_plot_min_y = peakbuffer_plot_min
-			self._peakbuffer_plot_max_y = peakbuffer_plot_max
-			# add (empty) line to plot (will be updated with data later):
-			self._peakbuffer_ax.plot( [], [] )
+				# mz values and colors
+				### self._peakbufferplot_lines_mz = [] # empty list of mz values that are already in the plot (will be updated later)
+				self._peakbufferplot_colors = [(4,'c'),(14,'k'),(15,'g'),(28,'k'),(32,'r'),(40,'y'),(44,'b'),(84,'m')] # fixed colors for the more common mz values
 
-			from matplotlib.ticker import FuncFormatter
-			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
-			self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
+				# set up plotting environment
+				self._fig = plt.figure(figsize=(fig_w,fig_h))
+				# f.suptitle('SRS RGA DATA')
+				t = 'SRS RGA'
+				if self._label:
+					t = t + ' (' + self._label + ')'
+				self._fig.canvas.set_window_title(t)
 
-			# set up lower panel for scans:
-			self._scan_ax = plt.subplot(2,1,2)
-			self._scan_ax.set_title('SCAN (' + self.label() + ')',loc="center")
-			plt.xlabel('mz')
-			plt.ylabel('Intensity')
+				# set up upper panel for peak history plot:
+				self._peakbuffer_ax = plt.subplot(2,1,1)
+				self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ')',loc="center")
+				plt.xlabel('Time')
+				plt.ylabel('Intensity')
+				self._peakbuffer_plot_min_y = peakbuffer_plot_min
+				self._peakbuffer_plot_max_y = peakbuffer_plot_max
+				# add (empty) line to plot (will be updated with data later):
+				self._peakbuffer_ax.plot( [], [] )
 
-			# get some space in between panels to avoid overlapping labels / titles
-			self._fig.tight_layout(pad=4.0)
+				from matplotlib.ticker import FuncFormatter
+				yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
+				self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
 
-			self._figwindow_is_shown = False
-			plt.ion()			
+				# set up lower panel for scans:
+				self._scan_ax = plt.subplot(2,1,2)
+				self._scan_ax.set_title('SCAN (' + self.label() + ')',loc="center")
+				plt.xlabel('mz')
+				plt.ylabel('Intensity')
+
+				# get some space in between panels to avoid overlapping labels / titles
+				self._fig.tight_layout(pad=4.0)
+
+				self._figwindow_is_shown = False
+				plt.ion()			
 			
-		print ('Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
-	
+			print ('Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
+
+		except FileNotFoundError as e:	
+			print ('Could not establish connection to SRS RGA:' , e)	
+
+		except serial.SerialException as e:
+			print ('Could not establish connection to SRS RGA:' , e)	
 	########################################################################################################
 	
 
