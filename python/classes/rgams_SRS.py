@@ -633,7 +633,7 @@ class rgams_SRS:
 					det = 'F'
 				else:
 					det = 'M'
-			except ValuageeError:
+			except ValueError:
 				det = '?'
 				print ( 'Could not determine electron multiplier high voltage (could not convert string to float). RGA-MS returned HV = ' + hv )
 			except:
