@@ -713,7 +713,7 @@ function __write_datafile (samples,partialpressures,sensors,path)
 						k = k+1;
 					end
 					if strcmp (sns_unit,'???')
-						warning (sprintf('rP_calibrate_batch: could not determine units of %s sensor data.',sensors{1}{j}))
+						warning (sprintf('rP_calibrate_batch: could not determine units of %s sensor data.',sensors{1}{j}.sensor))
 					end
 					fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sns_unit,sensors{1}{j}.sensor,sns_unit)
 
