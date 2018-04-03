@@ -3,8 +3,8 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_sensor, write_file)
 % 
 % Convert partial pressures data in P to dissolved gas concentrations. For each sample in P, do the following:
-% (1*) calculate the sum of partial pressures (pp_sum) of the species in major_pp_species and the water vapour pressure (determined from the temperature sensor value)
-% (2*) normalize all partial pressures multipling them by the ratio TDGP/pp_sum, where TDGP is the total gas pressure (sensor value) including the water vapour pressure
+% (1*) calculate the sum of partial pressures (pp_sum) of the species in major_pp_species (not including the water vapour pressure)
+% (2*) normalize all partial pressures multipling them by the ratio TDGP/pp_sum, where TDGP is the total dry-gas gas pressure (sensor value minus the the water vapour pressure)
 % (3) determine the Henry coefficient of each species at the water temperature measured in the GE-MIMS module)
 % (4) apply Henry's Law to determine the the dissolved gas concentrations for each species using the normalized partial pressures and the Henry coefficients for all species
 %
@@ -114,7 +114,7 @@ switch toupper(u) % check unit
     	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat temperature with unit %s! Aborting...',u))
 end	
 
-% Total gas pressure values (sensor):
+% Total gas pressure values (sensor, including vapour pressure):
 if strcmp (TDGP_sensor,'') % no TDGP sensor given
 	TDGP = [];
 else
@@ -124,6 +124,7 @@ else
 	switch toupper(u) % deal with unit, convert to hPa if necessary
 	    case 'BAR'
 	    	TDGP = 1000 * TDGP;
+	    	TDGP_ERR = 1000 * TDGP_ERR;
 	    otherwise
 	    	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat total gas pressures with unit %s! Aborting...',P.TOTALPRESSURE_MEMBRANE.UNIT))
 	end
@@ -138,6 +139,7 @@ end
 % determine gas concenterations for each sample:
 unknown_henry_warn = true;
 no_normalisation_warn = true;
+
 for i = 1:Nsmpl
 
 	if ~any(kPP) % don't normalize partial pressures
@@ -157,25 +159,24 @@ for i = 1:Nsmpl
 		pp_sum_err = 0;
 
 		for j = kPP
-			disp(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
+			%% disp(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
+			%% disp(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))
 			eval(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
-
 			eval(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))
-			disp(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))
 		end
 		pp_sum_err = sqrt (pp_sum_err);
 
-		% add water vapour pressure to pp_sum:
+		% subtract water vapour pressure from TDGP (need dry-gas TDGP for normalisation):
 		pWater     = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+273.15)-4.8489.*log((TEMP(i)+273.15)/100));  % water vapour pressure (in hPa)
-		pWater_err = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+TEMP_ERR(i)+273.15)-4.8489.*log((TEMP(i)+TEMP_ERR(i)+273.15)/100)); pWater_err = abs (pWater_err - pWater);
-		pp_sum = pp_sum + pWater;
-		pp_sum_err = sqrt ( pp_sum_err^2 + pWater_err^2);
-		
-		% normalize partial pressures to TDGP (note: TDGP reading includes water vapour pressure):
+		pWater_err = 1013.25 * exp(24.4543-67.4509*100/(TEMP(i)+TEMP_ERR(i)+273.15)-4.8489.*log((TEMP(i)+TEMP_ERR(i)+273.15)/100)); pWater_err = abs (pWater_err - pWater);		
+		TDGP(i) = TDGP(i) - pWater;
+		TDGP_ERR(i) = sqrt ( TDGP_ERR(i)^2 + pWater_err^2 );		
+
+		% normalize partial pressures to TDGP (note: TDGP relates to dry gas now!):
 		for j = 1:Nitms
 			eval(sprintf('pnew     = TDGP(i) / pp_sum * C.%s_PARTIALPRESSURE.VAL(i);',itms{j}));
-			eval(sprintf('pnew_err = sqrt ( (pp_sum_err/pp_sum)^2 + (C.%s_PARTIALPRESSURE.ERR(i)/C.%s_PARTIALPRESSURE.VAL(i))^2 );',itms{j},itms{j}));
-			pnew_err = pnew * pnew_err; % convert relative error to absolute error		
+			eval(sprintf('pnew_err = sqrt ( (C.%s_PARTIALPRESSURE.ERR(i)/C.%s_PARTIALPRESSURE.VAL(i))^2 + (pp_sum_err/pp_sum)^2 + (TDGP_ERR(i)/TDGP(i))^2 );',itms{j},itms{j})); % relative error
+			pnew_err = pnew * pnew_err; % convert relative error to absolute error
 			eval(sprintf('C.%s_PARTIALPRESSURE.VAL(i) = pnew;',itms{j}))
 			eval(sprintf('C.%s_PARTIALPRESSURE.ERR(i) = pnew_err;',itms{j}))
 		end
@@ -242,6 +243,8 @@ for i = 1:Nsmpl
 	end
 	
 end % for i = ...
+
+warning ( 'on' , 'noblefit:atmos_gas_implementation' )
 
 
 % write data to file:
