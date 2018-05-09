@@ -105,7 +105,8 @@ class rgams_SRS:
 				parity   = serial.PARITY_NONE,
 				stopbits = serial.STOPBITS_TWO,
 				bytesize = serial.EIGHTBITS,
-				timeout  = 10.0
+				timeout  = 10.0,
+				exclusive = True
 			)
 
 			ser.flushOutput() 	# make sure output is empty
