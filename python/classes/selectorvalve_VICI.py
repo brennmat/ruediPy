@@ -75,7 +75,8 @@ class selectorvalve_VICI:
 				parity   = serial.PARITY_NONE,
 				stopbits = serial.STOPBITS_ONE,
 				bytesize = serial.EIGHTBITS,
-				timeout  = 5.0
+				timeout  = 5.0,
+				exclusive = True
 			)
 			ser.flushOutput() 	# make sure output is empty
 			time.sleep(0.1)
