@@ -76,7 +76,7 @@ class temperaturesensor_MAXIM:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
+	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
 		'''
 		temperaturesensor_MAXIM.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 )
 		
@@ -137,14 +137,14 @@ class temperaturesensor_MAXIM:
 				self._fig = plt.figure(figsize=(fig_w,fig_h))
 				t = 'MAXIM DS1820'
 				if self._plot_title:
-					t = t + ' (' + self._plot_title() + ')'
+					t = t + ' (' + self._plot_title + ')'
 				self._fig.canvas.set_window_title(t)
 
 				# set up panel for temperature history plot:
 				self._tempbuffer_ax = plt.subplot(1,1,1)
 				t = 'TEMPBUFFER'
 				if self._plot_title:
-					t = t + ' (' + self._plot_title() + ')'
+					t = t + ' (' + self._plot_title + ')'
 				self._tempbuffer_ax.set_title(t,loc="center")
 				self._tempbuffer_ax.set_xlabel('Time (s)')
 				self._tempbuffer_ax.set_ylabel('Temperature')
