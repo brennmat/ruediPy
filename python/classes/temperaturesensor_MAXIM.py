@@ -78,14 +78,15 @@ class temperaturesensor_MAXIM:
 	
 	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
 		'''
-		temperaturesensor_MAXIM.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 )
+		temperaturesensor_MAXIM.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 )
 		
 		Initialize TEMPERATURESENSOR object (MAXIM), configure serial port / 1-wire bus for connection to DS18B20 temperature sensor chip
 		
 		INPUT:
 		serialport: device name of the serial port for 1-wire connection to the temperature sensor, e.g. serialport = '/dev/ttyUSB3'
 		romcode: ROM code of the temperature sensor chip (you can find the ROM code using the digitemp program or using the pydigitemp package). If there is only a single temperature sensor connected to the 1-wire bus on the given serial port, romcode can be left empty.
-		label (optional): label / name of the TEMPERATURESENSOR object (string). Default: label = 'TEMPERATURESENSOR'
+		label (optional): label / name of the TEMPERATURESENSOR object (string) for data output. Default: label = 'TEMPERATURESENSOR'
+		plot_title (optional): title string for use in plot window. If plot_title = None, the sensor label is used. Default: label = None
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
 		
@@ -95,6 +96,11 @@ class temperaturesensor_MAXIM:
 		
 		self._label = label
 		self._has_display = havedisplay
+		
+		if plot_title == None:
+			self._plot_title = self._label
+		else:
+			self._plot_title = plot_title
 
 		try:
 
@@ -130,13 +136,16 @@ class temperaturesensor_MAXIM:
 				# set up plotting environment
 				self._fig = plt.figure(figsize=(fig_w,fig_h))
 				t = 'MAXIM DS1820'
-				if self._label:
-					t = t + ' (' + self.label() + ')'
+				if self._plot_title:
+					t = t + ' (' + self._plot_title() + ')'
 				self._fig.canvas.set_window_title(t)
 
 				# set up panel for temperature history plot:
 				self._tempbuffer_ax = plt.subplot(1,1,1)
-				self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ')',loc="center")
+				t = 'TEMPBUFFER'
+				if self._plot_title:
+					t = t + ' (' + self._plot_title() + ')'
+				self._tempbuffer_ax.set_title(t,loc="center")
 				self._tempbuffer_ax.set_xlabel('Time (s)')
 				self._tempbuffer_ax.set_ylabel('Temperature')
 			
