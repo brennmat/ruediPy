@@ -112,7 +112,7 @@ switch toupper(u) % check unit
     	% do nothing, be happy
     otherwise
     	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat temperature with unit %s! Aborting...',u))
-end	
+end
 
 % Total gas pressure values (sensor, including vapour pressure):
 if strcmp (TDGP_sensor,'') % no TDGP sensor given
@@ -120,19 +120,21 @@ if strcmp (TDGP_sensor,'') % no TDGP sensor given
 else
 	TDGP     = getfield (getfield(C,TDGP_sensor),'VAL');
 	TDGP_ERR = getfield (getfield(C,TDGP_sensor),'ERR');
-	u = getfield (getfield(C,TDGP_sensor),'UNIT');
-	switch toupper(u) % deal with unit, convert to hPa if necessary
+	TDGP_UNIT = getfield (getfield(C,TDGP_sensor),'UNIT');
+	switch toupper(TDGP_UNIT) % deal with unit, convert to hPa if necessary
 	    case 'BAR'
 	    	TDGP = 1000 * TDGP;
 	    	TDGP_ERR = 1000 * TDGP_ERR;
 	    otherwise
-	    	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat total gas pressures with unit %s! Aborting...',P.TOTALPRESSURE_MEMBRANE.UNIT))
+		if ~strcmp(toupper(TDGP_UNIT),'HPA')
+		    	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat total gas pressures with unit %s! Aborting...',TDGP_UNIT))
+		end
 	end
 	for i = Nitms % Check units of partial pressures
 		eval(sprintf('u = C.%s_PARTIALPRESSURE.UNIT;',itms{i}));
 		if ~strcmp(u,'hPa')
-	    	error (sprintf('rP_convert_pp_to_conc: I do not know how to treat gas partial pressures with unit %s! Aborting...',u))
-	    end
+	    		error (sprintf('rP_convert_pp_to_conc: I do not know how to treat gas partial pressures with unit %s! Aborting...',u))
+	        end
 	end
 end
 
