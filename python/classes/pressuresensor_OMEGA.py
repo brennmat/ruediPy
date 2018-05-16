@@ -74,15 +74,16 @@ class pressuresensor_OMEGA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
 		'''
-		pressuresensor_OMEGA.__init__( serialport , label = 'PRESSURESENSOR' , max_buffer_points = 500 , fig_w = 3 , fig_h = 2 )
+		pressuresensor_OMEGA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 3 , fig_h = 2 )
 		
 		Initialize PRESSURESENSOR object (OMEGA), configure serial port connection
 		
 		INPUT:
 		serialport: device name of the serial port, e.g. serialport = '/dev/ttyUSB3'
-		label (optional): label / name of the PRESSURESENSOR object (string). Default: label = 'PRESSURESENSOR'
+		label (optional): label / name of the PRESSURESENSOR object for data output (string). Default: label = 'PRESSURESENSOR'
+		plot_title (optional): title string for use in plot window. If plot_title = None, the sensor label is used. Default: label = None
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
 
@@ -93,6 +94,11 @@ class pressuresensor_OMEGA:
 	
 		self._label = label
 		self._has_display = havedisplay
+
+		if plot_title == None:
+			self._plot_title = self._label
+		else:
+			self._plot_title = plot_title
 
 		try:
 
@@ -132,13 +138,16 @@ class pressuresensor_OMEGA:
 				# set up plot figure:
 				self._fig = plt.figure(figsize=(fig_w,fig_h))
 				t = 'OMEGA PXM409'
-				if self._label:
-					t = t + ' (' + self.label() + ')'
+				if self._plot_title:
+					t = t + ' (' + self._plot_title + ')'
 				self._fig.canvas.set_window_title(t)
 
 				# set up panel for pressure history plot:
 				self._pressbuffer_ax = plt.subplot(1,1,1)
-				self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ')',loc="center")
+				t = 'PRESSBUFFER'
+				if self._plot_title:
+					t = t + ' (' + self._plot_title + ')'
+				self._pressbuffer_ax.set_title(t,loc="center")
 				self._pressbuffer_ax.set_xlabel('Time (s)')
 				self._pressbuffer_ax.set_ylabel('Pressure')
 
@@ -331,10 +340,13 @@ class pressuresensor_OMEGA:
 				# Scale axes:
 				self._pressbuffer_ax.relim()
 				self._pressbuffer_ax.autoscale_view()
-				
+
 				# set title and axis labels:
 				t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-				self._pressbuffer_ax.set_title('PRESSBUFFER (' + self.label() + ') at ' + t0)
+				t = 'PRESSBUFFER'
+				if self._plot_title:
+					t = t + ' (' + self._plot_title + ')'
+				self._pressbuffer_ax.set_title(t + ' at ' + t0)
 
 				# Get pressure units right:
 				self._pressbuffer_ax.set_ylabel('Pressure (' + str(self._pressbuffer_unit[0]) + ')' )

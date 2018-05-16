@@ -322,9 +322,12 @@ class temperaturesensor_MAXIM:
 				
 				# set title and axis labels:
 				t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-				self._tempbuffer_ax.set_title('TEMPBUFFER (' + self.label() + ') at ' + t0)
+				t = 'TEMPBUFFER'
+				if self._plot_title:
+					t = t + ' (' + self._plot_title + ')'
+				self._tempbuffer_ax.set_title(t + ' at ' + t0)
 
-				# Get pressure units right:
+				# Get temperature units right:
 				self._tempbuffer_ax.set_ylabel('Temperature (' + str(self._tempbuffer_unit[0]) + ')' )
 
 				# Update the plot:
