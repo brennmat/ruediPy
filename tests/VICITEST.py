@@ -37,7 +37,7 @@
 
 # make shure Python knows where to look for the RUEDI Python code
 # http://stackoverflow.com/questions/4580101/python-add-pythonpath-during-command-line-module-run
-# Example (bash): export PYTHONPATH=~/ruedi/python
+# Example (bash): export PYTHONPATH=$HOME/ruediPy/python
 
 # import general purpose Python classes:
 
@@ -46,7 +46,7 @@ from classes.selectorvalve_VICI	import selectorvalve_VICI
 from classes.datafile		import datafile
 
 # set up ruediPy objects:
-VALVE     = selectorvalve_VICI ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2374672-if00-port0', label = 'INLETSELECTOR' )
+VALVE     = selectorvalve_VICI ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2304832-if00-port0', label = 'INLETSELECTOR' )
 DATAFILE  = datafile ( '~/data' )
 
 # start data file:
