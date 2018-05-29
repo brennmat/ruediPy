@@ -2,7 +2,7 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 
 % function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch (data,MS_names,SENSOR_names,varargin)
 % 
-% Calibrate a batch of ruediPy analysis steps by combining data from samples, calibrations, and blanks. Write results to CSV data file.
+% Calibrate a batch of ruediPy analysis steps by combining data from samples, calibrations, and blanks. Write results to CSV data file. Note that even if data from a total gas pressure sensor is available, the partial pressures are NOT normalised to the total gas pressure. 
 %
 % INPUT:
 % data: files to be processed (string with file/path pattern)
