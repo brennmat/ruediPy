@@ -16,13 +16,10 @@ function X = rP_read_datafile (file)
 % file: file name. Either the full path to the file must be specified or the file name only. If only the filename is given, then the first file in the search path matching this file name is used. If file contains a wildcard, all files matching the pattern are loaded.
 % 
 % OUPUT:
-% X: struct object with data from file (or cell array of data objects if multiple files are processed). Stuct fields correspond to OBJECT and TYPE keys found in the data file.
+% X: struct object with data from file (or cell array of data objects if multiple files are processed). Stuct fields correspond to OBJECT and TYPE keys found in the data file. All OBJECT structs have an extra field called 'FIELDTYPE' that indicates the field type (useful to determine type of data stored in the field).
 % 
-% EXAMPLE 1 (read datafile ~/ruedi_data/2016-03-30_13-27-02.txt, where the RGAMS object was called 'RGA-MS' and the SELECTORVALVE object was called 'INLETSELECTVALVE'):
-% DAT = rP_read_datafile('~/ruedi_data/2016-03-30_13-27-02.txt',{'RGA-MS' 'SRSRGA' ; 'INLETSELECTVALVE' 'SELECTORVALVE'})
-%
-% EXAMPLE 2 (read datafiles from March 2016):
-% x = rP_read_datafile('~/ruedi_data/2016-03-*.txt',{'RGA-MS' 'SRSRGA' ; 'INLETSELECTVALVE' 'SELECTORVALVE'});
+% EXAMPLE (read datafile ~/ruedi_data/2016-03-30_13-27-02.txt:
+% DAT = rP_read_datafile('~/ruedi_data/2016-03-30_13-27-02.txt')
 %
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
@@ -154,22 +151,27 @@ else % read file line by line:
 				
 				case 'DATAFILE'
 					u = __parse_DATAFILE (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					u.FIELDTYPE = 'DATAFILE';
 					X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
 				
 				case 'RGA_SRS'
 					u = __parse_SRSRGA (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					u.FIELDTYPE = 'RGA_SRS';
 					X = setfield (X,L{k},u); % add SRSRGA[LABEL-k] data
 					
 				case 'SELECTORVALVE_VICI'
 					u = __parse_SELECTORVALVE (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					u.FIELDTYPE = 'SELECTORVALVE';
 					X = setfield (X,L{k},u); % add SELECTORVALVE[LABEL-k] data
 				
 				case 'TEMPERATURESENSOR_MAXIM'
 					u = __parse_TEMPERATURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					u.FIELDTYPE = 'TEMPERATURESENSOR';
 					X = setfield (X,L{k},u); % add TEMPERATURESENSOR[LABEL-k] data
 				
 				case 'PRESSURESENSOR_WIKA'
 					u = __parse_PRESSURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
+					u.FIELDTYPE = 'PRESSURESENSOR';
 					X = setfield (X,L{k},u); % add PRESSURESENSOR[LABEL-k] data
 				
 				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
