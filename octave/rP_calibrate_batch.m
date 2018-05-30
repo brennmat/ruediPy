@@ -6,9 +6,8 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 %
 % INPUT:
 % data: files to be processed (string with file/path pattern)
-% MS_names: names / labels of mass spectrometers for which data should be processed (cellstring)
-% SENSOR_names: names / labels of sensors (e.g., pressure, temperature, etc.) for which data should be processed (cellstring).
-%	If there is no pressure or temperature data in the data file, use PRESS_names = {} or TEMP_names = {}. Pressure / temperature values will then be set to N/A.
+% MS_names: names / labels of mass spectrometers for which data should be processed (cellstring). Use MS_names = {} to automatically use the data from all RGA MS objects (if any).
+% SENSOR_names: names / labels of sensors (e.g., pressure, temperature, etc.) for which data should be processed (cellstring). Use MS_names = {} to automatically use the data from all SENSOR objects (if any).
 % 
 % OUTPUT:
 % P_val: partial pressures of samples (matrix)
@@ -24,9 +23,13 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 %	- 'standardgas_pressure',X,unit: use this gas inlet pressure for all standard analyses (X: number, unit: string)
 %	- 'wait_exit': wait for key press by user before exiting this function (useful for interactive use from shell scripts)
 %
-% EXAMPLE:
-% Process 'ruediMS' data in *.txt files stored in 'mydata' directory, don't plot PEAK and ZERO data, and assume 970 hPa inlet pressure for all standard analyses:
-% > [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch ("mydata/*.txt","ruediMS","no_peak_zero_plot","standardgas_pressure",970,"hPa")
+% EXAMPLE 1:
+% process data in *.txt files stored in 'mydata' directory, automatically detect names of RGA/MS and SENSOR objects in the data set, assume 970 hPa inlet pressure for all standard analyses:
+% > [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch ("mydata/*.txt",{},{},"standardgas_pressure",970,"hPa")
+%
+% EXAMPLE 2:
+% Similar to above, but only process data from ruediMS (RGA object) and T_sens (SENSOR object), don't plot PEAK and ZERO data, and assume 970 hPa inlet pressure for all standard analyses:
+% > [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch ("mydata/*.txt","ruediMS","T_sens","no_peak_zero_plot","standardgas_pressure",970,"hPa")
 %
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
@@ -72,12 +75,6 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 % ************************************
 % ************************************
 
-if ~iscellstr(MS_names)
-	MS_names = cellstr (MS_names);
-end
-if ~iscellstr(SENSOR_names)
-	SENSOR_names = cellstr (SENSOR_names);
-end
 
 % option defaults (plotting etc.):
 flag_plot_peak_zero = true;
@@ -134,6 +131,63 @@ end
 % load raw data from files:
 RAW = rP_read_datafile (data);
 
+% check if MS names are given explicitly, otherwise determine from data set:
+if exist ('MS_names','var')
+	if ~iscellstr(MS_names)
+		MS_names = cellstr (MS_names);
+	end
+else
+	MS_names = {};
+end
+if isempty(MS_names)
+	disp ('Scanning for RGA objects...')
+	MS_names = {};
+	for i = 1:length(RAW)
+		if any( k = find(strcmp(RAW{i}.fieldtypes,'RGA_SRS')) )
+			MS_names{end+1} = fieldnames (RAW{i}){k};
+		end
+	end
+	MS_names = unique (MS_names);
+	if length (MS_names) == 0
+		disp ('...no RGA objects found.')
+	else
+		for i = 1:length(MS_names)
+			disp (sprintf('Found RGA object: %s',MS_names{i}))
+		end
+	end
+end
+
+
+% check if MS names are given explicitly, otherwise determine from data set:
+if exist ('SENSOR_names','var')
+	if ~iscellstr(SENSOR_names)
+		SENSOR_names = cellstr (SENSOR_names);
+	end
+else
+	SENSOR_names = {};
+end
+if isempty(SENSOR_names)
+	disp ('Scanning for SENSOR objects...')
+	SENSOR_names = {};
+	for i = 1:length(RAW)
+		if any( k = find(strcmp(RAW{i}.fieldtypes,'TEMPERATURESENSOR')) )
+			SENSOR_names{end+1} = fieldnames (RAW{i}){k};
+		end
+		if any( k = find(strcmp(RAW{i}.fieldtypes,'PRESSURESENSOR')) )
+			SENSOR_names{end+1} = fieldnames (RAW{i}){k};
+		end
+	end
+	SENSOR_names = unique (SENSOR_names);
+	if length (SENSOR_names) == 0
+		disp ('...no SENSOR objects found.')
+	else
+		for i = 1:length(SENSOR_names)
+			disp (sprintf('Found SENSOR object: %s',SENSOR_names{i}))
+		end
+	end
+end
+
+
 % digest data and store results in array (X):
 X = [];
 for i = 1:length(RAW)
@@ -174,58 +228,6 @@ for i = 1:length(RAW)
 	    X = [ X ; xx ];
 	end
 	
-%	if ~isempty(ms) % otherwise skip parsing the rest of this file
-%			% find pressure data from specified sensors
-%			for k = 1:length(PRESS_names)
-%				u = rP_digest_step_PRESSURESENSOR_WIKA (RAW{i},PRESS_names{k}); % digest PRESSURESENSOR_WIKA data
-%				if ~isempty(u.mean) % only keep data if digesting was successful
-%					p{length(p)+1} = u;
-%				end
-%			end
-%			if length(p) > 1
-%				error ("rP_calibrate_batch: there are data from different pressure sensors in the same step. Don't know how to handle this...")
-%			elseif length(p) == 0
-%				keyboard
-%				error ("rP_calibrate_batch: found no pressure sensor data for specified PRESSURE_WIKA names...")
-%			else
-%				p = p{1};
-%			end
-%			if length(p) >= 1	% there is data from at least one pressure sensor
-%				
-%			end
-%		end
-%
-%
-%		% digest TEMPERATURE data:
-%		if isempty(TEMP_names) % no temperature sensors specified, use t.mean = []
-%			t.mean = [];
-%			t.mean_unit = '--';
-%		else % find temperature data from specified sensors
-%			for k = 1:length(TEMP_names)
-%				u = rP_digest_step_TEMPERATURESENSOR_MAXIM (RAW{i},TEMP_names{k}); % digest TEMPERATURESENSOR_MAXIM data
-%				if ~isempty(u.mean) % only keep data if digesting was successful
-%					t{length(t)+1} = u;
-%				end
-%			end
-%			if length(t) > 1
-%				error ("rP_calibrate_batch: there are data from different temperature sensors in the same step. Don't know how to handle this...")
-%%%%			elseif length(t) == 0
-%%%%				error ("rP_calibrate_batch: found no temperature sensor data for specified TEMPERATURESENSOR_MAXIM names...")
-%			else
-%				t = t{1};
-%			end
-%		end
-%
-%		clear u;
-%
-%		xx.INFO        = info;
-%		xx.MS          = ms;
-%		xx.PRESSURE    = p;
-%		xx.TEMPERATURE = t;
-%	
-%		X = [ X ; xx ];
-%	
-%	end % ~isempty(ms)
 
 end % for
 
@@ -512,21 +514,6 @@ PARTIALPRESSURES.err     = P_err;
 PARTIALPRESSURES.time    = TIME;
 PARTIALPRESSURES.unit    = unit;
 
-% S1.name = 'Wika pressure thingy';
-% S1.unit = 'bar';
-% S1.time  = repmat (123456789.01,length(SAMPLES),1);;
-% S1.val  = repmat (123456789.01,length(SAMPLES),1);;
-% S1.err  = repmat (0.123,length(SAMPLES),1);;
-% S2.name = 'Maxim temperature thingy';
-% S2.unit = 'deg.C';
-% S2.time  = repmat (123456789.01,length(SAMPLES),1);;
-% S2.val  = repmat (123456789.01,length(SAMPLES),1);;
-% S2.err  = repmat (0.123,length(SAMPLES),1);;
-
-% SENSORS{1} = S1;
-% SENSORS{2} = S2;
-
-
 % SENSORS data from samples:
 SENSORS = {};
 for i = 1:length(iSAMPLE)
@@ -717,7 +704,6 @@ function __write_datafile (samples,partialpressures,sensors,path)
 					end
 					fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sns_unit,sensors{1}{j}.sensor,sns_unit)
 
-					% fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit,sensors{1}{j}.sensor,sensors{1}{j}.mean_unit)
 				end
 			end
 			

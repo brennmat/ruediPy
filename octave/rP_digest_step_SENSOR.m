@@ -112,7 +112,11 @@ else
 	end
 		
 	%%%% % determine mean and error-of-the-mean of PRESSURE values
-	X.mean 		= mean (SENSOR_val);
+	if length (SENSOR_val) > 0
+		X.mean 		= mean (SENSOR_val);
+	else
+		X.mean = NaN;
+	end
 	if length(SENSOR_val) > 1
 		X.mean_err	= std (SENSOR_val) / sqrt(length(SENSOR_val)-1);
 	else

@@ -81,9 +81,9 @@ else % read file line by line:
 	
 	% tic
 	
-	t = OBJ = LABEL = TYPE = DATA = {};
+	t = OBJ = LABEL = TYPE = DATA = FIELDTYPES = {};
 	line = fgetl (fid); k = 1;
-		
+	
 	while line != -1
 		
 		% parse line (format: "TIMESTAMP OBJECT-KEY TYPE-KEY: ...DATA...")
@@ -126,9 +126,8 @@ else % read file line by line:
 	
 	% tic();
 
-	% parse file data into struct object, parse data for each object type
-	X.file = file;
-		
+	% parse file data into struct object, parse data for each object type	
+	X  = [];
 	O  = unique (OBJ);
 	NO = length (O); % number of object types in the data file
 			
@@ -151,27 +150,27 @@ else % read file line by line:
 				
 				case 'DATAFILE'
 					u = __parse_DATAFILE (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					u.FIELDTYPE = 'DATAFILE';
+					FIELDTYPES{end+1} = 'DATAFILE';
 					X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
 				
 				case 'RGA_SRS'
 					u = __parse_SRSRGA (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					u.FIELDTYPE = 'RGA_SRS';
+					FIELDTYPES{end+1} = 'RGA_SRS';
 					X = setfield (X,L{k},u); % add SRSRGA[LABEL-k] data
 					
 				case 'SELECTORVALVE_VICI'
 					u = __parse_SELECTORVALVE (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					u.FIELDTYPE = 'SELECTORVALVE';
+					FIELDTYPES{end+1} = 'SELECTORVALVE';
 					X = setfield (X,L{k},u); % add SELECTORVALVE[LABEL-k] data
 				
 				case 'TEMPERATURESENSOR_MAXIM'
 					u = __parse_TEMPERATURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					u.FIELDTYPE = 'TEMPERATURESENSOR';
+					FIELDTYPES{end+1} = 'TEMPERATURESENSOR';
 					X = setfield (X,L{k},u); % add TEMPERATURESENSOR[LABEL-k] data
 				
 				case 'PRESSURESENSOR_WIKA'
 					u = __parse_PRESSURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					u.FIELDTYPE = 'PRESSURESENSOR';
+					FIELDTYPES{end+1} = 'PRESSURESENSOR';
 					X = setfield (X,L{k},u); % add PRESSURESENSOR[LABEL-k] data
 				
 				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -181,6 +180,9 @@ else % read file line by line:
 			end % switch
 		end % for k = ...			
 	end % for i = ...
+
+	X.file = file;
+	X.fieldtypes = FIELDTYPES;
 
 	% u = toc();
 	% disp (sprintf('   Parsing file line by line took %f seconds.',u))
