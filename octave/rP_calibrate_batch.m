@@ -22,6 +22,7 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 %	- 'no_plots','noplots': don't plot anything
 %	- 'standardgas_pressure',X,unit: use this gas inlet pressure for all standard analyses (X: number, unit: string)
 %	- 'wait_exit': wait for key press by user before exiting this function (useful for interactive use from shell scripts)
+%	- 'output_file': file name to use for writing results. If not specified, the code will ask for a file name.
 %
 % EXAMPLE 1:
 % process data in *.txt files stored in 'mydata' directory, automatically detect names of RGA/MS and SENSOR objects in the data set, assume 970 hPa inlet pressure for all standard analyses:
@@ -84,6 +85,7 @@ MS = 12; % default marker size
 standardgas_pressure_val = NA;
 standardgas_pressure_unit = '?';
 wait_exit = false;
+out_file_name = '';
 
 % parse options:
 i = 0;
@@ -113,7 +115,11 @@ while i < length(varargin) % parse options
 			standardgas_pressure_unit = varargin{i+2};
 			i = i+2;
 			disp (sprintf('rP_calibrate_batch: using %g %s as inlet pressure for all STANDARDs.',standardgas_pressure_val,standardgas_pressure_unit))
-			
+
+		case 'output_file'
+			out_file_name = varargin{i+1};
+			i = i+1;
+
 		case 'wait_exit'
 			disp ('rP_calibrate_batch: will wait for user confirmation after completion.')
 			wait_exit = true;
@@ -520,11 +526,13 @@ for i = 1:length(iSAMPLE)
 	SENSORS{i} = X(iSAMPLE(i)).SENSORS; 
 end
 
+
 __write_datafile (...
 	SAMPLES,...
 	PARTIALPRESSURES,...
 	SENSORS,...
-	fileparts(data)...
+	fileparts(data),...
+	out_file_name
 	)
 
 if wait_exit
@@ -644,7 +652,7 @@ endfunction
 %%% endfunction
 
 
-function __write_datafile (samples,partialpressures,sensors,path)
+function __write_datafile (samples,partialpressures,sensors,path,name)
 % write processed data to CSV data file
 
 	species = partialpressures.species;
@@ -652,9 +660,11 @@ function __write_datafile (samples,partialpressures,sensors,path)
 	p_err   = partialpressures.err;
 	time    = partialpressures.time;
 	p_unit  = partialpressures.unit;
-	
-	name = input ('Enter file name for processed data (or leave empty to skip): ','s');
-	
+
+	if isempty (name)
+		name = input ('Enter file name for processed data (or leave empty to skip): ','s');
+	end
+
 	if isempty(name)
 		disp ('rP_calibrate_batch: no file name given, not writing data to file.')
 	
@@ -666,7 +676,7 @@ function __write_datafile (samples,partialpressures,sensors,path)
 		end
 		if strcmp(path(end),filesep)
 			path = path(1:end-1);
-		end		
+		end
 		[p,n,e] = fileparts (name);
 		if ~strcmp(e,'.csv')
 			name = [ name '.csv' ];
