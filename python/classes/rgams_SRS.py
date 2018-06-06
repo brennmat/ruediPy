@@ -99,6 +99,10 @@ class rgams_SRS:
 
 		try:
 			# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
+			exclusive_access = None;
+			if float(serial.__version__) >= 3.3 :
+				exclusive_access = True;
+			
 			ser = serial.Serial(
 				port     = serialport,
 				baudrate = 28800,
@@ -106,7 +110,7 @@ class rgams_SRS:
 				stopbits = serial.STOPBITS_TWO,
 				bytesize = serial.EIGHTBITS,
 				timeout  = 10.0,
-				exclusive = True
+				exclusive = exclusive_access
 			)
 
 			ser.flushOutput() 	# make sure output is empty
