@@ -100,6 +100,7 @@ class rgams_SRS:
 		try:
 		
 			# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
+			# use exclusive access mode if possible (available with serial module version 3.3 and later)
 			time_out = 10
 			baud_rate = 28800
 			from pkg_resources import parse_version
