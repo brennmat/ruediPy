@@ -114,7 +114,7 @@ class rgams_SRS:
 					timeout  = time_out,
 					exclusive = True
 				)
-			else
+			else:
 				# open port (can't ask for exclusive access):
 				ser = serial.Serial(
 					port     = serialport,
