@@ -118,7 +118,6 @@ class rgams_SRS:
 				)
 			else:
 				# open port (can't ask for exclusive access):
-				print ('hello')
 				ser = serial.Serial(
 					port     = serialport,
 					baudrate = baud_rate,
