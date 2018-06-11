@@ -101,8 +101,9 @@ class rgams_SRS:
 		
 			# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
 			# use exclusive access mode if possible (available with serial module version 3.3 and later)
-			time_out = 10
+
 			baud_rate = 28800
+			time_out = 10			
 			from pkg_resources import parse_version
 			if parse_version(serial.__version__) >= parse_version('3.3') :
 				# open port with exclusive access:
@@ -117,6 +118,7 @@ class rgams_SRS:
 				)
 			else:
 				# open port (can't ask for exclusive access):
+				print ('hello')
 				ser = serial.Serial(
 					port     = serialport,
 					baudrate = baud_rate,
@@ -125,8 +127,7 @@ class rgams_SRS:
 					bytesize = serial.EIGHTBITS,
 					timeout  = time_out
 				)
-			end
-			
+
 			ser.flushOutput() 	# make sure output is empty
 			time.sleep(0.1)
 			ser.flushInput() 	# make sure input is empty
@@ -140,7 +141,7 @@ class rgams_SRS:
 			sn = self.param_IO('ID?',1)
 			sn = sn.split('.')
 			self._serial_number = sn[1]
-		
+
 			# cem bias / high voltage:
 			self._cem_hv = cem_hv
 			self._tune_default_RI = tune_default_RI
