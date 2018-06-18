@@ -224,7 +224,12 @@ for i = 1:Nsmpl
 			case 'CH4'
 				[c,v,d,m,H] = nf_atmos_gas ('CH4',TEMP(i),0,1013.25);
 				[c,v,d,m,dH] = nf_atmos_gas ('CH4',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
-			
+
+			case 'CO2'
+				[c,v,d,m,H] = nf_atmos_gas ('CO2',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = nf_atmos_gas ('CO2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				warning ('rP_convert_pp_to_conc: Henry coefficient for CO2 relates to DISSOLVED CO2 only!!! Chemical partitioning of CO2 with other species is not taken into account!!!')
+
 			otherwise
 				H = NA;
 				if unknown_henry_warn
