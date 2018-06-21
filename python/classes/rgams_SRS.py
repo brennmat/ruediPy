@@ -1239,7 +1239,7 @@ class rgams_SRS:
 		'''
 		val = rgams_SRS.calibrate_all()
 		
-		Calibrate the internal coefficients for compensation of baseline offset offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command in the SRS RGA manual.
+		Calibrate the internal coefficients for compensation of baseline offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command in the SRS RGA manual.
 				
 		INPUT:
 		(none)

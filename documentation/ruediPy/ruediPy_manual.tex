@@ -78,34 +78,36 @@ As an example, here's a step-by-step list of terminal commands to install \ruedi
 \item Set permission to access the serial ports:\par
 \texttt{sudo usermod -a -G dialout mRdemo}
 
-\item Prepare directories for \ruediPy\ data files and measurement scripts:\par
+\item Prepare directories for \ruediPy\ data files and your measurement scripts:\par
 \texttt{mkdir \path{~/data}}\\
 \texttt{mkdir \path{~/scripts}}
 
-\item The Shell and Python searchpaths for use with \ruediPy\ are configured in a dedicated file (\path{ruediPy_paths.txt} in your home directory). Execute the following terminal commands to set up this file and the searchpaths (copy and paste to the Terminal prompt should work):\par
+\item \emph{Optional:} If you intend to run your own custom Python scripts, you may need to set the Shell and Python searchpaths. To this end, you may want to configure the paths using a dedicated file in your home directory (e.g., \path{ruediPy_paths.txt}). Execute the following terminal commands to set up this file and the searchpaths (copy and paste to the Terminal prompt should work):\par
 {\scriptsize
-\mbox{\texttt{echo PROJECT_SCRIPTS=\path{~/scripts/my_project_scripts} >> \path{~/ruediPy_paths.txt}}}\\
-\mbox{\texttt{echo export PYTHONPATH=\path{~/ruediPy/python} >> \path{~/ruediPy_paths.txt}}}\\
-\mbox{\texttt{echo export PYTHONPATH=\textsc{\char13}\$PYTHONPATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/ruediPy_paths.txt}}}\\
-\mbox{\texttt{echo export PATH=\textsc{\char13}\$PATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/ruediPy_paths.txt}}}\\
+\mbox{\texttt{echo PROJECT_SCRIPTS=\path{~/scripts/my_project_scripts} >> \path{~/ruediPy_paths.txt}}}\\[-1.5ex]
+\mbox{\texttt{echo export PYTHONPATH=\path{~/ruediPy/python} >> \path{~/ruediPy_paths.txt}}}\\[-1.5ex]
+\mbox{\texttt{echo export PYTHONPATH=\textsc{\char13}\$PYTHONPATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/ruediPy_paths.txt}}}\\[-1.5ex]
+\mbox{\texttt{echo export PATH=\textsc{\char13}\$PATH\textsc{\char13}:\textsc{\char13}\$PROJECT_SCRIPTS\textsc{\char13} >> \path{~/ruediPy_paths.txt}}}\\[-1.5ex]
 \mbox{\texttt{echo source \textsc{\char13}\$HOME\textsc{\char13}\path{/ruediPy_paths.txt} >> \path{~/.profile}}}
 }
 
-Adjust the \texttt{PROJECT_SCRIPTS} setting in the \path{ruediPy_paths.txt} file to reflect the directory where your measurement scripts are (or will be) stored.\footnote{It is recommended to keep measurement scripts for different types of analysis or different projects in dedicated directories. Changing from one analysis type (or project) to another is achieved by adjusting \texttt{PROJECT_SCRIPTS} in the \path{ruediPy_paths.txt} file accordingly. Then log out and back in so the change will take effect.}
+Adjust the \texttt{PROJECT_SCRIPTS} setting in the \path{ruediPy_paths.txt} file to reflect the directory where your measurement scripts are (or will be) stored. It is recommended to keep measurement scripts for different analyis types or different projects in dedicated directories. Changing from one analysis type (or project) to another is achieved by adjusting \texttt{PROJECT_SCRIPTS} in the \path{ruediPy_paths.txt} file accordingly.
 
 \end{enumerate}
 
-Log out and log back in to make the above changes active.\par
+You should also consider setting up the computer to avoid going to `sleep' mode, because this might interrupt the measurement procedure. You may also want to turn off `sleep' mode when the laptop lid is closed (with the Gnome-3 desktop enviornment, use Gnome Tweak Tool to turn this off).\par
 
-You should also consider setting up the computer to avoid going to `sleep' mode, because this might interrupt the measurement procedure:\par
+%{\scriptsize
+%\mbox{\texttt{gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action \textsc{\char13}nothing\textsc{\char13}}}\\
+%\mbox{\texttt{gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action \textsc{\char13}nothing\textsc{\char13}}}
+%}
 
-{\scriptsize
-\mbox{\texttt{gsettings set org.gnome.settings-daemon.plugins.power lid-close-ac-action \textsc{\char13}nothing\textsc{\char13}}}\\
-\mbox{\texttt{gsettings set org.gnome.settings-daemon.plugins.power lid-close-battery-action \textsc{\char13}nothing\textsc{\char13}}}
-}
+\enlargethispage{2\baselineskip}
 
 Finally, it may be useful to increase the size of the cursor if it's hard to see on the screen during poor light conditions during field work. This can be achieved using the following command (for the GNOME desktop environment):\par
 \mbox{\texttt{dconf write /org/gnome/desktop/interface/cursor-size 64}}
+
+Restart the computer to make the above changes active.\par
 
 
 \section{Python classes}
