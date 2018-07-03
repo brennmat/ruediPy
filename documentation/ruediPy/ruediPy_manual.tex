@@ -125,8 +125,8 @@ Currently, the following classes are implemented:
 \end{itemize}
 
 
-The Python class files are located at \path{~/ruediPy/python/classes/}. To make sure Python knows where to find the \ruediPy\ Python classes, set your \texttt{PYTHONPATH} environment variable accordingly.\footnote{A convenient method to achieve this on Linux or similar UNIXy systems is to put the following line to the \texttt{.profile} file: 
- \texttt{export PYTHONPATH=\path{~/ruediPy/python}}}
+The Python class files are located at \path{~/ruediPy/python/classes/}. To make sure Python knows where to find the \ruediPy\ Python classes, set your \texttt{PYTHONPATH} environment variable accordingly. A convenient method to achieve this on Linux or similar UNIXy systems is to put the following line to the \texttt{.profile} file: 
+ \texttt{export PYTHONPATH=\path{~/ruediPy/python}}
 
 These classes are continuously expanded and new classes are added to \ruediPy\ as required by new needs or developments of the RUEDI instruments. The various methods / functions included are documented in the class files. Due to the ongoing development of the code, it seems futile to keep an up-to-date copy of the methods / functions documentation in this manual. Please refer to the detailed documentation in the class files directly.
 
@@ -134,10 +134,9 @@ These classes are continuously expanded and new classes are added to \ruediPy\ a
 \input{python_API.tex}
 
 \section{GNU Octave tools}
-\work{add content}
+The Octave tools (m-files) are located at \path{~/ruediPy/octave}. To make sure Octave knows where to find the \ruediPy\ Octave tools, set your Octave search path accordingly. A convenient method to achieve this is to include the corresponding \texttt{addpath(...)} commands in your \texttt{.octaverc} file.
 
-\section{Examples}
-\work{add content}
+The documentation and usage examples for the different \ruediPy\ Octave tools is available via the Octave \texttt{help} command.
 
 \bibliography{ruediPyLit}
 
