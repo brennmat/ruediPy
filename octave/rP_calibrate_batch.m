@@ -246,6 +246,7 @@ end % for
 iSTANDARD = iBLANK = iSAMPLE = [];
 mz_det = {};	% list of all mz/detector combinations in the data set
 for i = 1:length(X)
+
 	switch X(i).INFO.type
 		case 'STANDARD'
 			iSTANDARD = [ iSTANDARD , i ];
@@ -254,7 +255,7 @@ for i = 1:length(X)
 		case 'SAMPLE'
 			iSAMPLE   = [ iSAMPLE , i ];
 		otherwise
-			warning (sprintf("rP_calibrate_batch: unknown analysis type \'%s\' in file %s. Ignoring this step...",X(i).type,RAW(i).file))
+			warning (sprintf("rP_calibrate_batch: unknown analysis type \'%s\' in file %s. Ignoring this step...",X(i).INFO.type,RAW{i}.file))
 	end % switch
 
 	mz_det = { mz_det{:} X(i).MS.mz_det{:} };
