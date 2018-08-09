@@ -104,16 +104,30 @@ class pressuresensor_WIKA:
 		try:
 			# open and configure serial port for communication with WIKA pressure sensor (9600 baud, 8 data bits, no parity, 1 stop bit
 
-			ser = serial.Serial(
-				port     = serialport,
-				baudrate = 9600,
-				parity   = serial.PARITY_NONE,
-				stopbits = serial.STOPBITS_ONE,
-				bytesize = serial.EIGHTBITS,
-				timeout  = 5.0,
-				exclusive = True
-			)
-		
+			from pkg_resources import parse_version
+			if parse_version(serial.__version__) >= parse_version('3.3') :
+				# open port with exclusive access:
+				ser = serial.Serial(
+					port     = serialport,
+					baudrate = 9600,
+					parity   = serial.PARITY_NONE,
+					stopbits = serial.STOPBITS_ONE,
+					bytesize = serial.EIGHTBITS,
+					timeout  = 5,
+					exclusive = True
+				)
+
+			else:
+				# open port (can't ask for exclusive access):
+				ser = serial.Serial(
+					port     = serialport,
+					baudrate = 9600,
+					parity   = serial.PARITY_NONE,
+					stopbits = serial.STOPBITS_ONE,
+					bytesize = serial.EIGHTBITS,
+					timeout  = 5
+				)
+
 			ser.flushOutput() 	# make sure output is empty
 			time.sleep(0.1)
 			ser.flushInput() 	# make sure input is empty
