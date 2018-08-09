@@ -37,7 +37,7 @@
 
 # make shure Python knows where to look for the RUEDI Python code
 # http://stackoverflow.com/questions/4580101/python-add-pythonpath-during-command-line-module-run
-# Example (bash): export PYTHONPATH=~/ruedi/python
+# Example (bash): export PYTHONPATH=~/ruediPy/python
 
 import time
 
@@ -46,9 +46,7 @@ from classes.pressuresensor_WIKA	import pressuresensor_WIKA
 from classes.datafile			import datafile
 
 # for Linux (use device 'file' by ID to avoid confusion of com ports):
-# PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2257101-if00-port0' , label = 'TOTALPRESSURE' , max_buffer_points = 500)
-
-PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2258495-if00-port0' , label = 'TOTALPRESSURE' , max_buffer_points = 500)
+PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2264352-if00-port0' , label = 'TOTALPRESSURE' , max_buffer_points = 500)
 
 
 # for Mac OS X (use SiLabs USB driver):

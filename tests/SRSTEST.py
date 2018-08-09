@@ -37,7 +37,7 @@
 
 # make shure Python knows where to look for the RUEDI Python code
 # http://stackoverflow.com/questions/4580101/python-add-pythonpath-during-command-line-module-run
-# Example (bash): export PYTHONPATH=~/ruedi/python
+# Example (bash): export PYTHONPATH=~/ruediPy/python
 
 # import general purpose Python classes:
 import time
