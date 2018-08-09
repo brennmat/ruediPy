@@ -71,29 +71,28 @@ class selectorvalve_VICI:
 			# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
 			# use exclusive access mode if possible (available with serial module version 3.3 and later)
 
-			baud_rate = 9600
-			time_out = 5.0		
 			from pkg_resources import parse_version
 			if parse_version(serial.__version__) >= parse_version('3.3') :
 				# open port with exclusive access:
 				ser = serial.Serial(
 					port     = serialport,
-					baudrate = baud_rate,
+					baudrate = 9600,
 					parity   = serial.PARITY_NONE,
 					stopbits = serial.STOPBITS_ONE,
 					bytesize = serial.EIGHTBITS,
-					timeout  = time_out,
+					timeout  = 5.0,
 					exclusive = True
 				)
+
 			else:
 				# open port (can't ask for exclusive access):
 				ser = serial.Serial(
 					port     = serialport,
-					baudrate = baud_rate,
+					baudrate = 9600,
 					parity   = serial.PARITY_NONE,
 					stopbits = serial.STOPBITS_ONE,
 					bytesize = serial.EIGHTBITS,
-					timeout  = time_out
+					timeout  = 5.0
 				)
 
 			ser.flushOutput() 	# make sure output is empty
