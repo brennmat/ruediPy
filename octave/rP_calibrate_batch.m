@@ -394,11 +394,19 @@ if flag_plot_sensitivity
 		x = [ tt repmat(NA,size(tt)) ];
 	else
 		y = S_val;
-		m = mean(S_val')';
+		m = repmat (NA,1,size(S_val,2));
+		for k = 1:size(S_val,1)
+			u = S_val(k,:);
+			u = u(~isnan(u));
+			if length(u) > 0
+				m(k) = mean(u);
+			end
+		end
+		% m = mean(S_val(~isnan(S_val))')';
 		x = tt;
 	end
 	k = find (m<0);
-	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(S_val,2)); scal(k,:) = -scal(k,:);
+	expon = round(log10(abs(m'))); scal = repmat (10.^expon,1,size(S_val,2)); scal(k,:) = -scal(k,:);
 	% plot (x',y'./scal','.-','markersize',MS);
 	% datetick;
 	% xlabel ('Time (UTC)');
