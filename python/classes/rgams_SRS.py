@@ -76,9 +76,10 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , has_plot_window = True ):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , peak_position_compensate_interval = 1200 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , has_plot_window = True ):
+
 		'''
-		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
+		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , peak_position_compensate_interval = 3600 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
@@ -88,6 +89,7 @@ class rgams_SRS:
 		cem_hv (optional): default bias voltage to be used with the electron multiplier (CEM). Default value: cem_hv = 1400 V.
 		tune_default_RI (optional): default RI parameter value in m/z tuning. Default value: tune_RI = []
 		tune_default_RS (optional): default RS parameter value in m/z tuning. Default value: tune_RS = []
+		peak_position_compensate_interval (optional): time interval (seconds) after which a scan is done before running the PEAK+ZERO cycle in order to trigger the internal compensation of the RGA m/z scale. Default value: peak_position_compensate_interval = 1200 (20 minutes)
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches). 
 		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
@@ -142,8 +144,13 @@ class rgams_SRS:
 
 			# cem bias / high voltage:
 			self._cem_hv = cem_hv
+
+			# m/z tune defaults:
 			self._tune_default_RI = tune_default_RI
-			self._tune_default_RS = tune_default_RS		
+			self._tune_default_RS = tune_default_RS
+
+			self._peak_position_compensate_interval = peak_position_compensate_interval
+			self._peak_position_last_compensated = 0
 
 			# data buffer for PEAK values:
 			self._peakbuffer_t = numpy.array([])
@@ -1144,6 +1151,9 @@ class rgams_SRS:
 		Y = [ Y[i] for i in range(len(M)) if (M[i] >= llow) & (M[i] <= hhigh) ]
 		M = [ m for m in M if (m >= llow) & (m <= hhigh) ]
 
+		# set time stamp of last compensaton of m/z scale (RGA internal compensation of m/z drift)
+		self._peak_position_last_compensated = misc.now_UNIX()
+
 		# write to data file:
 		if not ( f == 'nofile' ):
 			det = self.get_detector()
@@ -1948,6 +1958,7 @@ class rgams_SRS:
 		peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False)
 		
 		Cycle PEAKS and ZERO readings given mz values.
+		Before runnig the PEAK and ZERO readings, a peak scan may be triggered according to the self.peak_position_compensate_interval setting of the RGA in order to compensate for (small) drifts of the m/z scale internal using the internal calibration parametersas of the RGA as described in the SRS RGA manual (page 7-9). This scan is done at MZ0 +/- 0.5amu, where MZ0 corresponds to the PEAK m/z value of the first element in the mz input argument.
 		
 		INPUT:
 		mz: list of tuples with peak m/z value (for PEAK) and delta-mz (for ZERO). If delta-mz == 0, no ZERO value is read.
@@ -1978,6 +1989,11 @@ class rgams_SRS:
 		self.set_detector(detector)
 		## bs  = '\b' * 1000   # backspaces
 
+		# check if it's time to do a scan in order to update the compensation of the m/z postion calibration (RGA internal compensation for temperature drifts, see RGA manual on page 7-9)
+		if misc.now_UNIX() > self._peak_position_last_compensated + self._peak_position_compensate_interval:
+			print ('Triggering RGA internal compensation for m/z scale: scanning from m/z=' + str(mz[0][0]-0.5) + ' to ' + str(mz[0][0]+0.5) +'...' )
+			self.scan(mz[0][0]-0.5,mz[0][0]+0.5,25,gate,'nofile') # run scan to trigger internal compensation (the scan will update the time-stamp of the last compensation)
+		
 		# conditioning detector and electronics:
 		if NC > 0:
 			if clear_peakbuf_cond:
