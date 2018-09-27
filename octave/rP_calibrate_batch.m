@@ -406,13 +406,19 @@ if flag_plot_sensitivity
 		x = tt;
 	end
 	k = find (m<0);
-	expon = round(log10(abs(m'))); scal = repmat (10.^expon,1,size(S_val,2)); scal(k,:) = -scal(k,:);
+
+	expon = round(log10(abs(m')));
+	% scal = repmat (10.^expon,1,size(S_val,2));
+	scal = repmat (10.^expon,1,size(S_val,1));
+	scal(k,:) = -scal(k,:);
 	% plot (x',y'./scal','.-','markersize',MS);
 	% datetick;
 	% xlabel ('Time (UTC)');
 	x0 = min(min(x));
 	hours = (x-x0)*24;
-	plot (hours',y'./scal','.-','markersize',MS);
+
+	% plot (hours',y'./scal','.-','markersize',MS);
+	plot (hours',y'./scal,'.-','markersize',MS);
 	xlabel (sprintf('Time (hours after %s)',datestr(x0)));
 	ylabel (sprintf('Sensitivity (A/%s)',unit))
 	leg = strrep(SPECIES,'_','');
