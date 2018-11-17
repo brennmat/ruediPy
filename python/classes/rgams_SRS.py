@@ -167,7 +167,7 @@ class rgams_SRS:
 
 				# mz values and colors
 				### self._peakbufferplot_lines_mz = [] # empty list of mz values that are already in the plot (will be updated later)
-				self._peakbufferplot_colors = [(4,'c'),(14,'k'),(15,'g'),(28,'k'),(32,'r'),(40,'y'),(44,'b'),(84,'m')] # fixed colors for the more common mz values
+				self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (14,'k') , (15,'g') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # fixed colors for the more common mz values
 
 				# set up plotting environment
 				self._fig = plt.figure(figsize=(fig_w,fig_h))
@@ -1737,15 +1737,16 @@ class rgams_SRS:
 							else:
 								col = colors[n%7]
 							if det == 'F':
-								style = 'o-'
+								style = 'o'
 							elif det == 'M':
-								style = 's-'
+								style = 's'
 							else:
-								style = 'x-'
+								style = 'x'
 							
 							yy = self._peakbuffer_intens[k]/intens0
 							tt = self._peakbuffer_t[k] - t0
-							self._peakbuffer_ax.plot( tt , yy , col + style , markersize = 10 )
+
+							self._peakbuffer_ax.plot( tt , yy , color=col, marker=style , linestyle='-' , linewidth=1 , markersize=10) 
 
 							val_min = self._peakbuffer_intens[k].min()
 							val_max = self._peakbuffer_intens[k].max()
