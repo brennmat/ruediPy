@@ -409,7 +409,8 @@ if flag_plot_sensitivity
 
 	expon = round(log10(abs(m')));
 	% scal = repmat (10.^expon,1,size(S_val,2));
-	scal = repmat (10.^expon,1,size(S_val,1));
+	scal = repmat (10.^expon,1,size(S_val,2))';
+	% scal = repmat (10.^expon,1,size(S_val,1));
 	scal(k,:) = -scal(k,:);
 	% plot (x',y'./scal','.-','markersize',MS);
 	% datetick;
