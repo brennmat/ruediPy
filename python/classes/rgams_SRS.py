@@ -1951,7 +1951,6 @@ class rgams_SRS:
 		peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False)
 		
 		Cycle PEAKS and ZERO readings given mz values.
-		Before runnig the PEAK and ZERO readings, a peak scan may be triggered according to the self.peak_position_compensate_interval setting of the RGA in order to compensate for (small) drifts of the m/z scale internal using the internal calibration parametersas of the RGA as described in the SRS RGA manual (page 7-9). This scan is done at MZ0 +/- 0.5amu, where MZ0 corresponds to the PEAK m/z value of the first element in the mz input argument.
 		
 		INPUT:
 		mz: list of tuples with peak m/z value (for PEAK) and delta-mz (for ZERO). If delta-mz == 0, no ZERO value is read.
