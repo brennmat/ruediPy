@@ -76,10 +76,10 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , peak_position_compensate_interval = 1200 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , has_plot_window = True ):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , has_plot_window = True ):
 
 		'''
-		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , peak_position_compensate_interval = 3600 , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
+		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
@@ -89,7 +89,6 @@ class rgams_SRS:
 		cem_hv (optional): default bias voltage to be used with the electron multiplier (CEM). Default value: cem_hv = 1400 V.
 		tune_default_RI (optional): default RI parameter value in m/z tuning. Default value: tune_RI = []
 		tune_default_RS (optional): default RS parameter value in m/z tuning. Default value: tune_RS = []
-		peak_position_compensate_interval (optional): time interval (seconds) after which a scan is done before running the PEAK+ZERO cycle in order to trigger the internal compensation of the RGA m/z scale. Default value: peak_position_compensate_interval = 1200 (20 minutes)
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches). 
 		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
@@ -148,9 +147,6 @@ class rgams_SRS:
 			# m/z tune defaults:
 			self._tune_default_RI = tune_default_RI
 			self._tune_default_RS = tune_default_RS
-
-			self._peak_position_compensate_interval = peak_position_compensate_interval
-			self._peak_position_last_compensated = 0
 
 			# data buffer for PEAK values:
 			self._peakbuffer_t = numpy.array([])
@@ -1151,9 +1147,6 @@ class rgams_SRS:
 		Y = [ Y[i] for i in range(len(M)) if (M[i] >= llow) & (M[i] <= hhigh) ]
 		M = [ m for m in M if (m >= llow) & (m <= hhigh) ]
 
-		# set time stamp of last compensaton of m/z scale (RGA internal compensation of m/z drift)
-		self._peak_position_last_compensated = misc.now_UNIX()
-
 		# write to data file:
 		if not ( f == 'nofile' ):
 			det = self.get_detector()
@@ -1990,9 +1983,9 @@ class rgams_SRS:
 		## bs  = '\b' * 1000   # backspaces
 
 		# check if it's time to do a scan in order to update the compensation of the m/z postion calibration (RGA internal compensation for temperature drifts, see RGA manual on page 7-9)
-		if misc.now_UNIX() > self._peak_position_last_compensated + self._peak_position_compensate_interval:
-			print ('Triggering RGA internal compensation for m/z scale: scanning from m/z=' + str(mz[0][0]-0.5) + ' to ' + str(mz[0][0]+0.5) +'...' )
-			self.scan(mz[0][0]-0.5,mz[0][0]+0.5,25,gate,'nofile') # run scan to trigger internal compensation (the scan will update the time-stamp of the last compensation)
+		# if misc.now_UNIX() > self._peak_position_last_compensated + self._peak_position_compensate_interval:
+		#	print ('Triggering RGA internal compensation for m/z scale: scanning from m/z=' + str(mz[0][0]-0.5) + ' to ' + str(mz[0][0]+0.5) +'...' )
+		#	self.scan(mz[0][0]-0.5,mz[0][0]+0.5,25,gate,'nofile') # run scan to trigger internal compensation (the scan will update the time-stamp of the last compensation)
 		
 		# conditioning detector and electronics:
 		if NC > 0:
