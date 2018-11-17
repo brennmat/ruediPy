@@ -388,18 +388,20 @@ if flag_plot_sensitivity
 	tt2 = max(max(tt));
 	dtt = (tt2-tt1)/20; tt1 = tt1-dtt; tt2 = tt2+dtt;
 
+	% S_val: sensitivities, size(S_val,1) = number of mz-detector combinations, size(S_val,2) = number of standards
+
 	if size(S_val,2) == 1
 		y = [ S_val repmat(NA,size(S_val)) ];
 		m = S_val;
 		x = [ tt repmat(NA,size(tt)) ];
 	else
 		y = S_val;
-		m = repmat (NA,1,size(S_val,2));
-		for k = 1:size(S_val,1)
+		m = repmat (NA,1,size(S_val,1));
+		for k = 1:size(S_val,1) % loop through all mz-detector combinations
 			u = S_val(k,:);
 			u = u(~isnan(u));
 			if length(u) > 0
-				m(k) = mean(u);
+				m(k) = mean(u); % mean sensitivity for k-th mz-detector combination
 			end
 		end
 		% m = mean(S_val(~isnan(S_val))')';
@@ -408,18 +410,13 @@ if flag_plot_sensitivity
 	k = find (m<0);
 
 	expon = round(log10(abs(m')));
-	% scal = repmat (10.^expon,1,size(S_val,2));
-	scal = repmat (10.^expon,1,size(S_val,2))';
-	% scal = repmat (10.^expon,1,size(S_val,1));
+	scal = repmat (10.^expon,1,size(S_val,2));
 	scal(k,:) = -scal(k,:);
-	% plot (x',y'./scal','.-','markersize',MS);
-	% datetick;
-	% xlabel ('Time (UTC)');
+
 	x0 = min(min(x));
 	hours = (x-x0)*24;
 
-	% plot (hours',y'./scal','.-','markersize',MS);
-	plot (hours',y'./scal,'.-','markersize',MS);
+	plot (hours',y'./scal','.-','markersize',MS);
 	xlabel (sprintf('Time (hours after %s)',datestr(x0)));
 	ylabel (sprintf('Sensitivity (A/%s)',unit))
 	leg = strrep(SPECIES,'_','');
