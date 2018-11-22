@@ -76,7 +76,7 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , has_plot_window = True ):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , has_plot_window = True ):
 
 		'''
 		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
@@ -92,6 +92,7 @@ class rgams_SRS:
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches). 
 		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
+		peakbuffer_plot_yscale (optional) = y-axis scaling for peakbuffer plot (default: 'linear', use 'log' for log scaling)
 		has_plot_window (optional): flag to choose if a plot window should be opened for the rgams_SRS object (default: has_plot_window = True)
 
 		OUTPUT:
@@ -177,6 +178,9 @@ class rgams_SRS:
 					t = t + ' (' + self._label + ')'
 				self._fig.canvas.set_window_title(t)
 
+				# y-axis scaling for peakbuffer plot:
+				self._peakbufferplot_yscale = peakbuffer_plot_yscale
+
 				# set up upper panel for peak history plot:
 				self._peakbuffer_ax = plt.subplot(2,1,1)
 				self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ')',loc="center")
@@ -186,6 +190,8 @@ class rgams_SRS:
 				self._peakbuffer_plot_max_y = peakbuffer_plot_max
 				# add (empty) line to plot (will be updated with data later):
 				self._peakbuffer_ax.plot( [], [] )
+
+				self._peakbuffer_ax.set_yscale(self._peakbufferplot_yscale)
 
 				from matplotlib.ticker import FuncFormatter
 				yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
@@ -1722,8 +1728,13 @@ class rgams_SRS:
 				X_MIN = None
 				X_MAX = None
 
-				Y_MIN = 1
-				Y_MAX = 1
+				if self._peakbufferplot_yscale == 'log':
+					Y_MIN = 0.1
+					Y_MAX = 10
+
+				else:
+					Y_MIN = 1
+					Y_MAX = 1
 
 				for mz in numpy.unique(self._peakbuffer_mz): # loop through all mz values in the peak buffer
 					for det in [ 'F' , 'M' ]: # loop through all detectors (Faraday and Multiplier)
@@ -1791,12 +1802,18 @@ class rgams_SRS:
 					if Y_MIN < self._peakbuffer_plot_min_y:
 						Y_MIN = self._peakbuffer_plot_min_y
 					if Y_MAX > self._peakbuffer_plot_max_y:
-						Y_MAX = self._peakbuffer_plot_max_y					
-					if Y_MIN < Y_MAX:
-						DY = 0.05*(Y_MAX-Y_MIN)
-					else:
-						DY = 0.001
-					self._peakbuffer_ax.set_ylim( [ Y_MIN-DY , Y_MAX+DY ] )
+						Y_MAX = self._peakbuffer_plot_max_y
+
+					if self._peakbufferplot_yscale == 'log':
+						self._peakbuffer_ax.set_ylim( [ Y_MIN , Y_MAX ] )
+
+					else:		
+						if Y_MIN < Y_MAX:
+							DY = 0.05*(Y_MAX-Y_MIN)
+						else:
+							DY = 0.001
+						self._peakbuffer_ax.set_ylim( [ Y_MIN-DY , Y_MAX+DY ] )
+
 
 				# Update the plot:
 				self._fig.canvas.flush_events()
