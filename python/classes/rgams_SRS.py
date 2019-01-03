@@ -1015,7 +1015,7 @@ class rgams_SRS:
 				u = self.ser.read(4)
 
 				while self.ser.inWaiting() > 0:
-					self.warning('DEBUGGING INFO: serial buffer not empty after PEAK reading!')
+					self.warning('DEBUGGING INFO: serial buffer not empty after ZERO reading!')
 
 				# parse result:
 				u = struct.unpack('<i',u)[0] # unpack 4-byte data value
