@@ -194,40 +194,40 @@ for i = 1:Nsmpl
 		switch toupper(u{1})
 			
 			case 'N2'
-				[c,v,d,m,H] = nf_atmos_gas ('N2',TEMP(i),0,1013.25);
-				[c,v,d,m,dH] = nf_atmos_gas ('N2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				[c,v,d,m,H] = rP_atmos_gas ('N2',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('N2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 							
 			case 'O2'
-				[c,v,d,m,H] = nf_atmos_gas ('O2',TEMP(i),0,1013.25);
-				[c,v,d,m,dH] = nf_atmos_gas ('O2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				[c,v,d,m,H] = rP_atmos_gas ('O2',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('O2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 
 			case 'HE'
-				[c,v,d,m,H] = nf_atmos_gas ('He',TEMP(i),0,1013.25);
-				[c,v,d,m,dH] = nf_atmos_gas ('He',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				[c,v,d,m,H] = rP_atmos_gas ('He',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('He',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
 			case 'NE'
-				[c,v,d,m,H] = nf_atmos_gas ('Ne',TEMP(i),0,1013.25);
-				[c,v,d,m,dH] = nf_atmos_gas ('Ne',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				[c,v,d,m,H] = rP_atmos_gas ('Ne',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('Ne',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
 			case 'AR'
-				[c,v,d,m,H] = nf_atmos_gas ('Ar',TEMP(i),0,1013.25);
-				[c,v,d,m,dH] = nf_atmos_gas ('Ar',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				[c,v,d,m,H] = rP_atmos_gas ('Ar',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('Ar',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
 			case 'KR'
-				[c,v,d,m,H] = nf_atmos_gas ('Kr',TEMP(i),0,1013.25);
-				[c,v,d,m,dH] = nf_atmos_gas ('Kr',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				[c,v,d,m,H] = rP_atmos_gas ('Kr',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('Kr',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
 			case 'XE'
-				[c,v,d,m,H] = nf_atmos_gas ('Xe',TEMP(i),0,1013.25);
-				[c,v,d,m,dH] = nf_atmos_gas ('Xe',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				[c,v,d,m,H] = rP_atmos_gas ('Xe',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('Xe',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
 			case 'CH4'
-				[c,v,d,m,H] = nf_atmos_gas ('CH4',TEMP(i),0,1013.25);
-				[c,v,d,m,dH] = nf_atmos_gas ('CH4',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				[c,v,d,m,H] = rP_atmos_gas ('CH4',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('CH4',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 
 			case 'CO2'
-				[c,v,d,m,H] = nf_atmos_gas ('CO2',TEMP(i),0,1013.25);
-				[c,v,d,m,dH] = nf_atmos_gas ('CO2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+				[c,v,d,m,H] = rP_atmos_gas ('CO2',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('CO2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 				warning ('rP_convert_pp_to_conc: Henry coefficient for CO2 relates to DISSOLVED CO2 only!!! Chemical partitioning of CO2 with other species is not taken into account!!!')
 
 			otherwise
