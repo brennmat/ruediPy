@@ -5,6 +5,8 @@ function [C_atm,v_atm,D,M_mol,H] = rP_atmos_gas (gas,T,S,p_atm,year,hemisphere)
 % Returns dissolved gas concentrations in air-saturated water, volumetric gas content in dry air and molecular diffusivity in water.
 % Concentrations are calculated as gas amount (ccSTP) per mass of water (g) at temperature T and salinity S
 %
+% NOTE: this file was forked from nf_atmos_gas.m in the noblefit package on 14 Jan. 2019
+%
 % INPUT:
 % T:        temperature of water in deg. C
 % S:        salinity in per mille (g/kg)
