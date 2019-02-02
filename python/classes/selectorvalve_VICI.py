@@ -95,15 +95,55 @@ class selectorvalve_VICI:
 					timeout  = 5.0
 				)
 
-			ser.flushOutput() 	# make sure output is empty
+			# make sure serial buffers are empty:
+			ser.flushOutput()
 			time.sleep(0.1)
-			ser.flushInput() 	# make sure input is empty
-		
-			self.ser = ser;
+			ser.flushInput()
 
+			self.ser = ser;
 			self._label = label
-		
-			print ( 'Successfully configured VICI selector valve on ' + serialport )
+
+			# determine number of valve positions:
+			self.ser.write('NP\r\n'.encode('ascii')) # send NP command to valve controller
+
+			# wait for response
+			t = 0
+			dt = 0.1
+			doWait = 1
+			while doWait:
+				if self.ser.inWaiting() == 0: # wait
+					time.sleep(dt)
+					t = t + dt
+					if t > 5: # give up waiting
+						doWait = 0
+						self.warning('could not determine number of valve postions (no response from valve)')
+						ans = '-1'
+				else:
+					doWait = 0
+					ans = ''
+			
+			# read back result:
+			if (ans != '-1'):
+				while self.ser.inWaiting() > 0: # while there's something in the buffer...
+					ans = ans + self.ser.read().decode('ascii') # read each byte
+
+			try:
+				# print ans
+				ans = ans.split('=')[1] # split answer in the form 'NP = 6'
+				ans = ans.strip() # strip away whitespace
+			except:
+				self.warning('could not parse response from valve: ans = ' + ans)
+				ans = '?'
+		    	
+		    # check result:
+			if not ans.isdigit():
+				self.warning('could not determine number of valve positions.')
+				ans = '-1'
+
+			# store number of positions:
+			self._num_positions = int(ans)
+			
+			print ( 'Successfully configured VICI selector valve on ' + serialport + ', number of positions = ' + str(self._num_positions) )
 
 		except serial.SerialException as e:
 			print( 'Could not establish connection to VICI selectorvalve:' , e )
@@ -132,6 +172,26 @@ class selectorvalve_VICI:
 		return self._label
 
 	
+########################################################################################################
+	
+
+	def getnumpos(self):
+		"""
+		positions = selectorvalve_VICI.getnumpos()
+
+		Return number of positions of the SELECTORVALVE object
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		positions: number of positions (int)
+		"""
+		
+		return self._num_positions
+
+	
+########################################################################################################
 	
 
 	def warning(self,msg):
@@ -179,17 +239,24 @@ class selectorvalve_VICI:
 		'''
 		
 		val = int(val)
-		curpos = self.getpos()
-		if not curpos == val: # check if valve is already at desired position
-			# send command to serial port:
-			self.ser.write(('GO' + str(val) + '\r\n').encode('ascii'))
 		
-		# write to datafile
-		if not f == 'nofile':
-			f.write_valve_pos('SELECTORVALVE_VICI',self.label(),val,misc.now_UNIX())
+		if val > self.getnumpos():
+			self.warning( 'Cannot set valve position to ' + str(val) + ': number of valve positions = ' + str(self.getnumpos()) + '. Skipping...' )
+		
+		if val < 1:
+			self.warning( 'Cannot set valve position to ' + str(val) + '. Skipping...' )
+		else:
+			curpos = self.getpos()
+			if not curpos == val: # check if valve is already at desired position
+				# send command to serial port:
+				self.ser.write(('GO' + str(val) + '\r\n').encode('ascii'))
+			
+			# write to datafile
+			if not f == 'nofile':
+				f.write_valve_pos('SELECTORVALVE_VICI',self.label(),val,misc.now_UNIX())
 
-		# give the valve some time to actually do the switch:
-		time.sleep(0.5)
+			# give the valve some time to actually do the switch:
+			time.sleep(0.5)
 
 
 	########################################################################################################
