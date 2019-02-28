@@ -190,12 +190,7 @@ class rgams_SRS:
 				self._peakbuffer_plot_max_y = peakbuffer_plot_max
 				# add (empty) line to plot (will be updated with data later):
 				self._peakbuffer_ax.plot( [], [] )
-
-				self._peakbuffer_ax.set_yscale(self._peakbufferplot_yscale)
-
-				from matplotlib.ticker import FuncFormatter
-				yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
-				self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
+				self.set_peakbuffer_scale(self._peakbufferplot_yscale)
 
 				# set up lower panel for scans:
 				self._scan_ax = plt.subplot(2,1,2)
@@ -255,6 +250,37 @@ class rgams_SRS:
 		'''
 		
 		misc.warnmessage (self.label(),msg)
+
+	
+	########################################################################################################
+
+	
+	def set_peakbuffer_scale(self,scale='linear'):
+		'''
+		rgams_SRS.set_peakbuffer_scale(scale)
+		
+		Set scale of y-axis in peakbuffer plot (linear or log).
+
+		INPUT:
+		scale: scale (string, either 'linear' or 'log, default: scale = 'linear')
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		# change scale
+		scale = scale.upper()
+		if scale == 'LINEAR':
+			self._peakbufferplot_yscale = 'linear'
+		elif scale == 'LOG':
+			self._peakbufferplot_yscale = 'log'
+		else:
+			self.warning('Unknown peakbuffer sccale: ' + scale )
+		self._peakbuffer_ax.set_yscale(self._peakbufferplot_yscale)
+
+		from matplotlib.ticker import FuncFormatter
+		yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
+		self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
 
 	
 	########################################################################################################
