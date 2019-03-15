@@ -166,9 +166,8 @@ class rgams_SRS:
 		
 			if self._has_display: # prepare plotting environment and figure
 
-				# mz values and colors
-				### self._peakbufferplot_lines_mz = [] # empty list of mz values that are already in the plot (will be updated later)
-				self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (14,'k') , (15,'g') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # fixed colors for the more common mz values
+				# mz values and colors (defaults):
+				self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (14,'k') , (15,'g') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
 
 				# set up plotting environment
 				self._fig = plt.figure(figsize=(fig_w,fig_h))
@@ -1892,6 +1891,41 @@ class rgams_SRS:
 
 
 	########################################################################################################
+
+
+
+	def set_peakbuffer_mz_color(self,mz,col):
+		'''
+		rgams_SRS.set_peakbuffer_mz_color(mz,col)
+
+		Set color to be used for given m/z value in peakbuffer plot.
+
+		INPUT:
+		mz: m/z value
+		col: color (string), for example col = 'r', col = 'darkgray', or col = ''#eeefff'; see Python/Matplotlib documentation for details.
+
+		OUTPUT:
+		(none)
+		'''
+
+		mz = round(mz) # just in case mz was not an integer
+		found = False
+
+		# check for existing entry for this m/z, and replace color:
+		for k in range(len(self._peakbufferplot_colors)-1):
+			if u[k][0] == mz:
+				uself._peakbufferplot_colors[k][1] = col
+				found = True
+				break
+		
+		if !found:
+			# append new mz/color combo if it did not yet exist:
+			self._peakbufferplot_colors.append((mz,col))
+
+
+
+	########################################################################################################
+
 
 
 	def plot_scan(self,mz,intens,unit,cumsum_mz=[],cumsum_val=[]):
