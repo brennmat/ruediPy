@@ -1918,7 +1918,7 @@ class rgams_SRS:
 				found = True
 				break
 		
-		if !found:
+		if found == False:
 			# append new mz/color combo if it did not yet exist:
 			self._peakbufferplot_colors.append((mz,col))
 
