@@ -1914,7 +1914,7 @@ class rgams_SRS:
 		# check for existing entry for this m/z, and replace color:
 		for k in range(len(self._peakbufferplot_colors)-1):
 			if self._peakbufferplot_colors[k][0] == mz:
-				self._peakbufferplot_colors[k][1] = col
+				self._peakbufferplot_colors[k] = (mz,col)
 				found = True
 				break
 		
