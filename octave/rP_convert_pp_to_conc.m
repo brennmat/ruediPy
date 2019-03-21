@@ -15,7 +15,10 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % major_pp_species: name of species whose partial pressures are used to determine the sum of partial pressures. major_pp_species = {} can be used to skip the pressure normalisation.
 % TDGP_sensor: name of the sensor with the total dissolved gas pressure data used for normalisation of the partial pressures. TDGP_sensor = '' can be used to skip the pressure normalisation.
 % TEMP_sensor: name of the sensor with the water temperature data used for Henry coefficient in GE-MIMS module
-% write_file (optional): flag to set if the results are written to a data file (default: write_file = true)
+% write_file (optional): flag to set if the results are written to a data file (default: write_file = true):
+%	write_file = true: ask user for file name on terminal / command line, create the file, and save results in this file
+%	write_file = 1: same as write_file = true
+%	write_file = 2: same as write_file = true, but use Zenity/GUI dialog to determine new file name
 % 
 % OUPUT:
 % C: struct object with dissolved gas concentrations and normalised partial pressures, using the same format as X; dissolved gas concentrations are in ccSTP/g (1 Mol = 22414 ccSTP)
@@ -59,10 +62,6 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % 
 % Copyright 2017, 2018, Matthias Brennwald (brennmat@gmail.com)
-
-
-warning ('rP_convert_pp_to_conc: THIS FUNCTION IS STILL EXPERIMENTAL AND MAY NEED MORE TESTING -- USE WITH EXTRA CARE !!!')
-
 
 % copy struct with partial pressures to new struct that will hold the concentrations:
 C = P;
@@ -262,7 +261,21 @@ end
 
 if write_file	% write results to file:
 
-	name = input ('Enter file name for processed data (or leave empty to skip): ','s');
+	if write_file == true
+		write_file = 1;
+	end
+	if ischar (write_file)
+		write_file = str2num (write_file);
+	end
+
+	switch write_file
+		case 2
+			disp ('Select new file for processed data...');
+			[status, name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite");
+		otherwise
+			name = input ('Enter file name for processed data (or leave empty to skip): ','s');
+	end
+
 	if isempty(name)
 	    disp ('rP_convert_pp_to_conc: no file name given, not writing data to file.')
 	
@@ -282,14 +295,16 @@ if write_file	% write results to file:
 	
 	    % open ASCII file for writing:    
 	    [p,n,e] = fileparts (name);
+	    e = tolower(e);
 	    if ~strcmp(e,'.csv')
-	    	name = [ name '.csv' ];
+	    	e = '.csv';
 	    end
+		name = [p filesep n e];
 		[fid,msg] = fopen (name, 'wt');
 		if fid == -1
 			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))
 		else    
-	    	disp (sprintf('Writing data to %s%s%s...',pwd,filesep,name))
+	    	disp (sprintf('Writing data to %s...',name))
 	    	
 	    	% write header:
 	    	fprintf (fid,'SAMPLE')    	
