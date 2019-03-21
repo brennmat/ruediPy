@@ -23,6 +23,7 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 %	- 'standardgas_pressure',X,unit: use this gas inlet pressure for all standard analyses (X: number, unit: string)
 %	- 'wait_exit': wait for key press by user before exiting this function (useful for interactive use from shell scripts)
 %	- 'output_file': file name to use for writing results. If not specified, the code will ask for a file name.
+%	- 'use_zenity': use Zenity/GUI to ask stuff from user instead of command-line terminal.
 %
 % EXAMPLE 1:
 % process data in *.txt files stored in 'mydata' directory, automatically detect names of RGA/MS and SENSOR objects in the data set, assume 970 hPa inlet pressure for all standard analyses:
@@ -84,6 +85,7 @@ standardgas_pressure_val = NA;
 standardgas_pressure_unit = '?';
 wait_exit = false;
 out_file_name = '';
+use_zenity = false;
 
 % parse options:
 i = 0;
@@ -117,6 +119,10 @@ while i < length(varargin) % parse options
 		case 'output_file'
 			out_file_name = varargin{i+1};
 			i = i+1;
+
+		case 'use_zenity'
+			% disp ('rP_calibrate_batch: using Zenity/GUI for user interaction.')
+			use_zenity = true;
 
 		case 'wait_exit'
 			disp ('rP_calibrate_batch: will wait for user confirmation after completion.')
@@ -543,7 +549,8 @@ __write_datafile (...
 	PARTIALPRESSURES,...
 	SENSORS,...
 	fileparts(data),...
-	out_file_name
+	out_file_name,...
+	use_zenity
 	)
 
 if wait_exit
@@ -663,7 +670,7 @@ endfunction
 %%% endfunction
 
 
-function __write_datafile (samples,partialpressures,sensors,path,name)
+function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity)
 % write processed data to CSV data file
 
 	species = partialpressures.species;
@@ -673,7 +680,12 @@ function __write_datafile (samples,partialpressures,sensors,path,name)
 	p_unit  = partialpressures.unit;
 
 	if isempty (name)
-		name = input ('Enter file name for processed data (or leave empty to skip): ','s');
+		if use_zenity
+			disp ('Select new file for processed data...');
+			[status, name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite");
+		else
+			name = input ('Enter file name for processed data (or leave empty to skip): ','s');
+		end
 	end
 
 	if isempty(name)
@@ -689,10 +701,13 @@ function __write_datafile (samples,partialpressures,sensors,path,name)
 			path = path(1:end-1);
 		end
 		[p,n,e] = fileparts (name);
+		e = tolower(e);
 		if ~strcmp(e,'.csv')
-			name = [ name '.csv' ];
+			e = '.csv';
 		end
-		path = sprintf ('%s%s%s',path,filesep,name);
+		path = [p filesep n e];
+		path = strrep(path,"\n",""); % just in case: remove newlines
+
 		[fid,msg] = fopen (path, 'wt');
 		if fid == -1
 			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))

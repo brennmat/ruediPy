@@ -293,12 +293,13 @@ if write_file	% write results to file:
 			species{i} = sprintf('%s (%s_%s)',u{1},u{2},u{3});
 		end
 	
-	    % open ASCII file for writing:    
+	    % open ASCII file for writing:
+	    name = strrep(name,"\n",""); % just in case: remove newlines
 	    [p,n,e] = fileparts (name);
 	    e = tolower(e);
 	    if ~strcmp(e,'.csv')
 	    	e = '.csv';
-	    end
+	    end2
 		name = [p filesep n e];
 		[fid,msg] = fopen (name, 'wt');
 		if fid == -1
