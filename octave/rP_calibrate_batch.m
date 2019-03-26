@@ -134,6 +134,7 @@ while i < length(varargin) % parse options
 end
 
 
+
 % ************************************
 % Load and digest raw data from files:
 % ************************************
@@ -705,6 +706,10 @@ function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity
 		if ~strcmp(e,'.csv')
 			e = '.csv';
 		end
+		if isempty(p)
+			p = path;
+		end
+
 		path = [p filesep n e];
 		path = strrep(path,"\n",""); % just in case: remove newlines
 
