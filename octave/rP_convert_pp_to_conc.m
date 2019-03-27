@@ -271,7 +271,7 @@ if write_file	% write results to file:
 	switch write_file
 		case 2
 			disp ('Select new file for processed data...');
-			[status, name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite");
+			[status, name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite 2> /dev/null");
 		otherwise
 			name = input ('Enter file name for processed data (or leave empty to skip): ','s');
 	end
@@ -299,7 +299,7 @@ if write_file	% write results to file:
 	    e = tolower(e);
 	    if ~strcmp(e,'.csv')
 	    	e = '.csv';
-	    end2
+	    end
 		name = [p filesep n e];
 		[fid,msg] = fopen (name, 'wt');
 		if fid == -1

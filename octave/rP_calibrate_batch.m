@@ -683,7 +683,7 @@ function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity
 	if isempty (name)
 		if use_zenity
 			disp ('Select new file for processed data...');
-			[status, name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite");
+			[status, name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite 2> /dev/null");
 		else
 			name = input ('Enter file name for processed data (or leave empty to skip): ','s');
 		end
