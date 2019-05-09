@@ -1555,8 +1555,9 @@ class rgams_SRS:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
 
-		x = float(self.param_IO('RI?',1))
-
+		u = self.param_IO('RI?',1)
+		x = float(u)
+		
 		if ( x < -86.0 ) or ( x > 86.0 ) :
 			error ('Could not determine current RI setting, or RI value returned was out of bounds (-86V...+86V)')
 
@@ -1583,8 +1584,8 @@ class rgams_SRS:
 		NOTE:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
-
-		x = float(self.param_IO('RS?',1))
+		u = self.param_IO('RS?',1)
+		x = float(u)
 
 		if ( x < 600.0 ) or ( x > 1600.0 ) :
 			error ('Could not determine current RS setting, or RS value returned was out of bounds (600V...1600V)')
