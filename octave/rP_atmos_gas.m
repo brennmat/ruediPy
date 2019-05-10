@@ -23,6 +23,8 @@ function [C_atm,v_atm,D,M_mol,H] = rP_atmos_gas (gas,T,S,p_atm,year,hemisphere)
 %           'N2', 'N2-28, 'N2-29', 'N2-30'
 %           'CH4' (no atmospheric partial pressures or aqueous concentrations, just Henry's Law coefficient from Sander (1999) data compilation. Diffusivity not yet implemented.
 %           'CO2' (no atmospheric partial pressures or aqueous concentrations, just Henry's Law coefficient from Sander (1999) data compilation. Diffusivity not yet implemented.
+%           'C3H8' propane (no atmospheric partial pressures or aqueous concentrations, just Henry's Law coefficient from Sander (1999) data compilation. Diffusivity not yet implemented.
+%
 % year:     year of gas exchange with atmosphere (calendar year, with decimals; example: 1975.0 corresponds to 1. Jan of 1975.098 corresponds to 5. Feb. 1975, etc.). This is only relevant for those gases with time-variable partial pressures in the atmosphere (e.g. CFCs, SF6)
 % hemisphere: string indicating hemisphere (one of 'north', 'south', or 'global'). If the hemisphere argument is not specified, hemisphere = 'global' is used.
 %
@@ -302,14 +304,28 @@ case {'CH4'}
     %   k°H = Inverse Henry's law constant for solubility in water at 298.15 K, in (mol/L)/atm
     %   d(ln(kH))/d(1/T) = Temperature dependence constant, in K 
     %   kH(T) = k°H * exp( d(ln(kH))/d(1/T) * (1/T - 1/298.15 K) )  Inverse Henry's Law coefficient, in (mol/L)/atm
-    
     kH0 = mean ([ 0.0014 0.0013 0.0013 0.0014 ]);   % kH0 at 298.15 K, in (mol/L)/atm
     uT  = mean ([ 1600 1900 1800 1700 ]);           % uT = ln(kH)/d(1/T) = Temperature dependence constant, in K
     kH  = kH0 * exp( uT .* (1./TKELV - 1/298.15) ); % inverse Henry's Law coefficient in (mol/L)/atm [VALUES FROM THIS WERE CONFIRMED TO BE CONSISTENT WITH INVERSE HENRY COEFFICIENTS GIVEN HYDROSPHÄRE LECTURE NOTES BY DIETER IMBODEN FOR 0:5:25 DEG.C.]
     H = 1./kH; % Henry's Law coefficient in atm/(mol/L)
     H = H * 1013.25 * 1000; %Henry's Law coefficient in hPa/(mol/g)
     H = H / mol_2_ccSTP; % convert from mol/g to ccSTP/g
-        
+
+case{'C3H8'} % propane
+    C_atm = v_atm = NA; % no universal number here!
+    D = NA; %%% warning ( "atmos_gas_implementation" , "atmos_gas: diffusivity of C3H8 (methane) not yet implemented." )
+    M_mol = 44.097; % from https://www.chemicalaid.com/tools/molarmass.php?formula=C3H8 08.05.2019
+    % Inverse Henry's Law constant, using formulae and data from review/compilation by Rolf Sander (1999), with T in Kelvin:
+    %   k°H = Inverse Henry's law constant for solubility in water at 298.15 K, in (mol/L)/atm
+    %   d(ln(kH))/d(1/T) = Temperature dependence constant, in K 
+    %   kH(T) = k°H * exp( d(ln(kH))/d(1/T) * (1/T - 1/298.15 K) )  Inverse Henry's Law coefficient, in (mol/L)/atm
+    kH0 = mean ([ 0.0014 0.0015 0.0014 0.0015 0.0014 ]);   % kH0 at 298.15 K, in (mol/L)/atm
+    uT  = 2700;           % uT = ln(kH)/d(1/T) = Temperature dependence constant, in K
+    kH  = kH0 * exp( uT .* (1./TKELV - 1/298.15) ); % inverse Henry's Law coefficient in (mol/L)/atm
+    H = 1./kH; % Henry's Law coefficient in atm/(mol/L)
+    H = H * 1013.25 * 1000; % Henry's Law coefficient in hPa/(mol/g)
+    H = H / mol_2_ccSTP; % convert from mol/g to ccSTP/g
+
 case {'SF6'}
     M_mol = 146.0559;
     v_atm = __SF6_air (year,hemisphere); % volumetric fraction of SF6 in air in the year given
