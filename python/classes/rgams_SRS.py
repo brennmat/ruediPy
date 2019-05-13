@@ -316,7 +316,7 @@ class rgams_SRS:
 			dt = 0.1
 			doWait = 1
 			while doWait:
-				if self.ser.inWaiting() == 0: # wait
+				if self.ser.inWaiting() == 0: # nothing in the queue yet, wait
 					time.sleep(dt)
 					t = t + dt
 					if t > timeout: # give up waiting
