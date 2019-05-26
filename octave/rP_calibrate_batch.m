@@ -8,14 +8,9 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 % data: files to be processed (string with file/path pattern)
 % MS_names: names / labels of mass spectrometers for which data should be processed (cellstring). Use MS_names = {} to automatically use the data from all RGA MS objects (if any).
 % SENSOR_names: names / labels of sensors (e.g., pressure, temperature, etc.) for which data should be processed (cellstring). Use MS_names = {} to automatically use the data from all SENSOR objects (if any).
-% 
-% OUTPUT:
-% P_val: partial pressures of samples (matrix)
-% P_err: uncertainties of partial pressures, taking into account ONLY the counting statistics of the data, not the overall reproducibility of the measurements (matrix)
-% SPECIES: species names (cell string)
-% SAMPLES: sample names (cell string)
-% TIME: sample time stamps (epoch times as returned by rP_digest_RGA_SRS_step) (matrix)
-% options: optional parameters:
+%
+% Optinal INPUTS:
+%	- 'digest_method',MZ_DET,M: method to use for digesting peak-height data from mass spectrometer. MZ_DET and M are strings (for single item) or cellstring (for multiple items). Available methods are M = 'MEAN' and M = 'MEDIAN'. If not specified, MEAN is used by default. See example below.
 %	- 'no_peak_zero_plot': don't plot PEAK and ZERO values
 %	- 'no_sensitivity_plot': don't plot sensitivities
 %	- 'no_partialpressure_plot': don't plot partial pressures
@@ -24,6 +19,13 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 %	- 'wait_exit': wait for key press by user before exiting this function (useful for interactive use from shell scripts)
 %	- 'output_file': file name to use for writing results. If not specified, the code will ask for a file name.
 %	- 'use_zenity': use Zenity/GUI to ask stuff from user instead of command-line terminal.
+% 
+% OUTPUT:
+% P_val: partial pressures of samples (matrix)
+% P_err: uncertainties of partial pressures, taking into account ONLY the counting statistics of the data, not the overall reproducibility of the measurements (matrix)
+% SPECIES: species names (cell string)
+% SAMPLES: sample names (cell string)
+% TIME: sample time stamps (epoch times as returned by rP_digest_RGA_SRS_step) (matrix)
 %
 % EXAMPLE 1:
 % process data in *.txt files stored in 'mydata' directory, automatically detect names of RGA/MS and SENSOR objects in the data set, assume 970 hPa inlet pressure for all standard analyses:
@@ -32,6 +34,10 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 % EXAMPLE 2:
 % Similar to above, but only process data from ruediMS (RGA object) and T_sens (SENSOR object), don't plot PEAK and ZERO data, and assume 970 hPa inlet pressure for all standard analyses:
 % > [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch ("mydata/*.txt","ruediMS","T_sens","no_peak_zero_plot","standardgas_pressure",970,"hPa")
+%
+% EXAMPLE 3:
+% Similar to EXAMPLE 1, but use MEDIAN peak hights instead of MEAN for CH4 (m/z=15) and Kr (m/z=84) measured on M detector:
+% > [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch ("mydata/*.txt",{},{},"standardgas_pressure",970,"hPa","digest_method",{"15_M","84_M"},{"MEDIAN","MEDIAN"})
 %
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
@@ -77,6 +83,8 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 
 
 % option defaults (plotting etc.):
+digest_mz_det = {};
+digest_meth = {};
 flag_plot_peak_zero = true;
 flag_plot_sensitivity = true;
 flag_plot_partialpressure = true;
@@ -109,6 +117,21 @@ while i < length(varargin) % parse options
 			flag_plot_partialpressure = false;
 			disp ('rP_calibrate_batch: plotting turned off.')
 		
+		% digest methods:
+		case 'digest_method'
+			digest_mz_det = varargin{i+1};
+			digest_meth   = toupper ( varargin{i+2} );
+			i = i+2;
+			if ~iscell(digest_mz_det)
+				digest_mz_det = cellstr (digest_mz_det);
+			end
+			if ~iscell(digest_meth)
+				digest_meth = cellstr (digest_meth);
+			end
+			if length(digest_mz_det) ~= length(digest_meth)
+				error ('rP_calibrate_batch: length of cell strings used to specify digest methods (mz_det and method strings) must be the same!')
+			end
+
 		% other options:
 		case 'standardgas_pressure'
 			standardgas_pressure_val = varargin{i+1};
@@ -132,7 +155,6 @@ while i < length(varargin) % parse options
 			warning (sprintf("rP_calibrate_batch: unknown option '%s'. Ignoring...",varargin{i}))
 	end
 end
-
 
 
 % ************************************
@@ -288,20 +310,32 @@ t_standard = t_blank = t_sample = []; % time stamps
 
 for i = 1:length(mz_det)
 
+	% determine digesting method:
+	method = 'MEAN'; % default
+	if length(digest_mz_det) > 0
+		k = strcmp(mz_det(i),digest_mz_det);
+		if any(k)
+			method = digest_meth{k};
+		end
+	end
+	method = toupper (method);
+
+	disp (sprintf('rP_calibrate_batch: using %s peak heights for %s...',method,mz_det{i}))
+
 	% standards:
-	[v,e,t]    = __filter_by_MZ_DET ( X(iSTANDARD) , mz_det{i} );
+	[v,e,t]    = __filter_by_MZ_DET ( X(iSTANDARD) , mz_det{i} , method );
 	v_standard = [ v_standard ; v ];
 	e_standard = [ e_standard ; e ];
 	t_standard = [ t_standard ; t ];
 	
 	% blanks:
-	[v,e,t]    = __filter_by_MZ_DET ( X(iBLANK)    , mz_det{i} );
+	[v,e,t]    = __filter_by_MZ_DET ( X(iBLANK)    , mz_det{i} , method );
 	v_blank    = [ v_blank ; v ];
 	e_blank    = [ e_blank ; e ];
 	t_blank    = [ t_blank ; t ];
    
 	% samples:
-	[v,e,t]    = __filter_by_MZ_DET ( X(iSAMPLE)   , mz_det{i} );
+	[v,e,t]    = __filter_by_MZ_DET ( X(iSAMPLE)   , mz_det{i} , method );
 	v_sample   = [ v_sample ; v ];
 	e_sample   = [ e_sample ; e ];
 	t_sample   = [ t_sample ; t ];
@@ -499,6 +533,7 @@ if flag_plot_partialpressure
 	end
 	k = find (m<0);
 	expon = round(log10(abs(m))); scal = repmat (10.^expon,1,size(P_val,2)); scal(k,:) = -scal(k,:);
+
 	% plot (x',y'./scal','.-','markersize',MS);
 	% datetick;
 	% xlabel ('Time (UTC)');
@@ -578,9 +613,10 @@ endfunction % main function
 % ************************************
 % ************************************
 
-function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
+function [val,err,t] = __filter_by_MZ_DET (steps,mz_det,method)
 % return time series of data measured on specified mz/detector combination (value, error, and datetime)
 	val = err = t = [];
+	method = toupper(method);
 	for j = 1:length(steps)
 		k = find(strcmp(steps(j).MS.mz_det,mz_det)); % find index to specified mz_det combination
 		if isempty(k)
@@ -589,86 +625,20 @@ function [val,err,t] = __filter_by_MZ_DET (steps,mz_det)
 			err = [ err , NA ];
 			t   = [ t   , NA ];
 		else
-			val = [ val , steps(j).MS.mean(k)      ];
-			err = [ err , steps(j).MS.mean_err(k)  ];
-			t   = [ t   , steps(j).MS.mean_time(k) ];
+			switch method
+				case "MEAN"
+					val = [ val , steps(j).MS.mean(k)      ];
+					err = [ err , steps(j).MS.mean_err(k)  ];
+				case "MEDIAN"
+					val = [ val , steps(j).MS.median(k)      ];
+					err = [ err , steps(j).MS.median_err(k)  ];
+				otherwise
+					error (sprintf('rP_calibrate_batch: unknown digesting method %s',method))
+			end
+			t = [ t   , steps(j).MS.time(k) ];
 		end % if isempty(k)
 	end % for	
 endfunction
-
-
-%%% function [p,unit] = __get_totalpressure (steps,do_not_ask)
-%%% % return total gas pressure from steps (TOTALPRESSUE field value, or ask user if TOTALPRESSURE is not available)
-%%% 	default_p = 1013.25;
-%%% 	p = repmat (NA,1,length(steps));
-%%% 	
-%%% 	for j = 1:length(steps)
-%%% 		
-%%% 		% ...check for TOTALPRESSURE field/value in steps(i) here (not yet implemented)...
-%%% 		
-%%% 		if ~isempty(steps(j).PRESSURE.mean)
-%%% 			p(j) = steps(j).PRESSURE.mean;
-%%% 			unit = steps(j).PRESSURE.mean_unit;
-%%% 			
-%%% 		else % if no pressure sensors were specified, or pressure data were not available for specified sensor(s)
-%%% 		
-%%% 			if ~do_not_ask % ask user for pressure:
-%%% 				unit = 'hPa';
-%%% 				u = input ( sprintf( 'Enter total gas pressure in %s at capillary inlet for step %s [or leave empty to use %g %s]:' , unit , steps(j).INFO.file , default_p , unit ));
-%%% 				if isempty (u) % use default value
-%%% 					u = default_p;
-%%% 				else % use u value for next default
-%%% 					default_p = u;
-%%% 				end
-%%% 				p(j) = u;
-%%% 
-%%% 			else % we don't know the pressure
-%%% 				p(j) = NA;
-%%% 				unit = '--';
-%%% 				
-%%% 			end % if ~do_not_ask
-%%% 			
-%%% 		end % ~isempty
-%%% 		
-%%% 	end % for
-%%% 
-%%% endfunction
-
-
-%%% function [t,unit] = __get_temperature (steps,do_not_ask)
-%%% % return temperature from steps (e.g., water temperature for GE-MIMS)
-%%% 	default_t = 10;
-%%% 	t = repmat (NA,1,length(steps));
-%%% 	
-%%% 	for j = 1:length(steps)
-%%% 				
-%%% 		if ~isempty(steps(j).TEMPERATURE.mean)
-%%% 			t(j) = steps(j).TEMPERATURE.mean;
-%%% 			unit = steps(j).TEMPERATURE.mean_unit;
-%%% 			
-%%% 		else % if no temperature sensors were specified, or temperature data were not available for specified sensor(s)
-%%% 		
-%%% 			if ~do_not_ask % ask user for temperature:
-%%% 				unit = 'deg.C';
-%%% 				u = input ( sprintf( 'Enter temperature in %s for step %s [or leave empty to use %g %s]:' , unit , steps(j).INFO.file , default_t , unit ));
-%%% 				if isempty (u) % use default value
-%%% 					u = default_t;
-%%% 				else % use u value for next default
-%%% 					default_t = u;
-%%% 				end
-%%% 				t(j) = u;
-%%% 
-%%% 			else % we don't know the temperature
-%%% 				t(j) = NA;
-%%% 				unit = '--';
-%%% 				
-%%% 			end % if ~do_not_ask
-%%% 			
-%%% 		end % ~isempty
-%%% 		
-%%% 	end % for
-%%% 
-%%% endfunction
 
 
 function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity)
