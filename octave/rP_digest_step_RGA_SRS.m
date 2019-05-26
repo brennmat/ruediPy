@@ -18,8 +18,10 @@ function X = rP_digest_step_RGA_SRS (RAW,MS_name,opt)
 %	X.mz_det: mz/detector combination of the digested PEAK-ZERO data (cell string)
 %	X.mean: means of PEAK-ZERO values (for each X.mz value)
 %	X.mean_err: errors of X.inens.val data (errors of the means)
-%	X.mean_unit: units of X.mean and X.mean_err (cell string)
-%	X.mean_time: epoch time corresponding to X.mean (mean of PEAK timestamps)
+%	X.median: medians of PEAK-ZERO values (for each X.mz value)
+%	X.median_err: errors of X.inens.val data (errors of the medians)
+%	X.unit: unit of X.mean and X.median and their errors (cell string)
+%	X.time: epoch time corresponding to X.mean and X.median (mean of PEAK timestamps)
 %
 % DISCLAIMER:
 % This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
@@ -64,8 +66,11 @@ end
 X.mz_det = {};
 X.mean = [];
 X.mean_err = [];
-X.mean_time = [];
-X.mean_unit = {};
+X.median = [];
+X.median_err = [];
+X.time = [];
+X.unit = {};
+
 % X.std = [];
 % X.std_unit = {};
 
@@ -192,20 +197,22 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 			end
 						
 			% store results:
-			X.mean 		       = [ X.mean ; mean(h) ];
-			X.mean_err 	       = [ X.mean_err ; e ];
-			X.mean_unit{end+1} = PEAK_unit{p(1)};
-			X.mean_time        = [ X.mean_time ; mean(tp) ] ;
-			X.mz_det{end+1}    = sprintf('%i_%s',M(iM),D{iD});
-			
+			X.mz_det{end+1}		= sprintf('%i_%s',M(iM),D{iD});
+			X.mean			= [ X.mean ; mean(h) ];
+			X.mean_err 		= [ X.mean_err ; e ];
+			X.median		= [ X.median ; median(h) ];
+			X.median_err		= [ X.median_err ; 1.253*e ];
+			X.time			= [ X.time ; mean(tp) ] ;
+			X.unit{end+1}		= PEAK_unit{p(1)};
+
 			if printsummary % print digest summary			
 				disp (sprintf('mz=%i, detector=%s: MEAN = %g +/- %g %s (%s UTC)',...
 						M(iM),...
 						D{iD},...
 						X.mean(end),...
 						X.mean_err(end),...
-						X.mean_unit{end},...
-						datestr(datenum (1970,1,1,0,0) + X.mean_time(end)/86400)))
+						X.unit{end},...
+						datestr(datenum (1970,1,1,0,0) + X.time(end)/86400)))
 			end
 			
 			if showplot	% plot results
@@ -220,19 +227,24 @@ for iM = 1:length(M) % find all data with mz = M(iM) and process them
 				subplot (3,1,1);
 				plot (tp-t1,peaks,'r.','markersize',12);
 				axis ([-dt t2-t1+dt]);
-				ylabel (sprintf('PEAK (%s)',X.mean_unit{end}))
+				ylabel (sprintf('PEAK (%s)',X.unit{end}))
 				title (sprintf('PEAKs and ZEROs at mz=%i / detector=%s',M(iM),D{iD}))
 				subplot (3,1,2);
 				plot (TZ-t1,ZZ,'b.','markersize',12);
 				axis ([-dt t2-t1+dt]);
-				ylabel (sprintf('ZERO (%s)',X.mean_unit{end}))
+				ylabel (sprintf('ZERO (%s)',X.unit{end}))
 				subplot (3,1,3);
 				plot (tp-t1,h,'k.','markersize',12 , [-dt t2-t1+dt],[X.mean(end) X.mean(end)],'k-');
 				axis ([-dt t2-t1+dt]);
-				ylabel (sprintf('PEAK-ZERO (%s)',X.mean_unit{end}))
+				ylabel (sprintf('PEAK-ZERO (%s)',X.unit{end}))
 				xlabel ('Time (s)')
 			end
 			
 		end % if any(p)
 	end % for iD = ...
 end % for iM = ...
+
+
+% for backward compatibility:
+X.mean_time = X.time;
+X.mean_unit = X.unit;
