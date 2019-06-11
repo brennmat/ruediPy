@@ -939,6 +939,9 @@ class rgams_SRS:
 				# send command to RGA:
 				self.ser.write(('MR' + str(mz) + '\r\n').encode('utf-8'))
 				
+				# wait a bit to make sure that serial command is sent
+				time.sleep(0.02)
+
 				# get timestamp
 				t = misc.now_UNIX()
 				
@@ -1035,6 +1038,9 @@ class rgams_SRS:
 
 				# send command to RGA:
 				self.ser.write(('MR' + str(mz+mz_offset) + '\r\n').encode('utf-8'))
+
+				# wait a bit to make sure that serial command is sent
+				time.sleep(0.02)
 
 				# get timestamp
 				t = misc.now_UNIX()
