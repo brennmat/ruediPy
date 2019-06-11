@@ -944,6 +944,9 @@ class rgams_SRS:
 				
 				# read back data:
 				u = self.ser.read(4)
+				
+				# wait a bit to make sure that serial buffers are up to date
+				time.sleep(0.02)
 
 				while self.ser.inWaiting() > 0:
 					self.warning('DEBUGGING INFO: serial buffer not empty after PEAK reading!')
@@ -1038,6 +1041,9 @@ class rgams_SRS:
 
 				# read back data:
 				u = self.ser.read(4)
+
+				# wait a bit to make sure that serial buffers are up to date
+				time.sleep(0.02)
 
 				while self.ser.inWaiting() > 0:
 					self.warning('DEBUGGING INFO: serial buffer not empty after ZERO reading!')
