@@ -932,15 +932,26 @@ class rgams_SRS:
 			else:
 				N = 1
 				gt = gate
+			# configure RGA (gate time):
+			self.set_gate_time(gt)
+
+			# make sure serial port buffers are empty:
+			self.ser.flushOutput()
+			self.ser.flushInput()
+
 			for k in range(N):
-				# configure RGA (gate time):
-				self.set_gate_time(gt)
 				
 				# send command to RGA:
 				self.ser.write(('MR' + str(mz) + '\r\n').encode('utf-8'))
 				
 				# wait a bit to make sure that serial command is sent
 				time.sleep(0.02)
+
+				# make sure the serial out buffer is empty:
+				while self.ser.outWaiting() > 0:
+					self.warning('DEBUGGING INFO: serial output buffer not empty before PEAK reading!')
+					self.ser.flushOutput()
+					time.sleep(0.02)
 
 				# get timestamp
 				t = misc.now_UNIX()
@@ -951,8 +962,11 @@ class rgams_SRS:
 				# wait a bit to make sure that serial buffers are up to date
 				time.sleep(0.02)
 
+				# make sure the serial in buffer is empty:
 				while self.ser.inWaiting() > 0:
-					self.warning('DEBUGGING INFO: serial buffer not empty after PEAK reading!')
+					self.warning('DEBUGGING INFO: serial input buffer not empty after PEAK reading!')
+					self.ser.flushInput()
+					time.sleep(0.02)
 	
 				# parse result:
 				u = struct.unpack('<i',u)[0] # unpack 4-byte data value
@@ -1030,17 +1044,26 @@ class rgams_SRS:
 			else:
 				N = 1
 				gt = gate
+			# configure RGA (gate time):
+			self.set_gate_time(gt)
+
+			# make sure serial port buffers are empty:
+			self.ser.flushOutput()
+			self.ser.flushInput()
 
 			for k in range(N):
-			
-				# configure RGA (gate time):
-				self.set_gate_time(gt)
 
 				# send command to RGA:
 				self.ser.write(('MR' + str(mz+mz_offset) + '\r\n').encode('utf-8'))
 
 				# wait a bit to make sure that serial command is sent
 				time.sleep(0.02)
+
+				# make sure the serial out buffer is empty:
+				while self.ser.outWaiting() > 0:
+					self.warning('DEBUGGING INFO: serial output buffer not empty before ZERO reading!')
+					self.ser.flushOutput()
+					time.sleep(0.02)
 
 				# get timestamp
 				t = misc.now_UNIX()
@@ -1051,8 +1074,11 @@ class rgams_SRS:
 				# wait a bit to make sure that serial buffers are up to date
 				time.sleep(0.02)
 
+				# make sure the serial in buffer is empty:
 				while self.ser.inWaiting() > 0:
-					self.warning('DEBUGGING INFO: serial buffer not empty after ZERO reading!')
+					self.warning('DEBUGGING INFO: serial input buffer not empty after ZERO reading!')
+					self.ser.flushInput()
+					time.sleep(0.02)
 
 				# parse result:
 				u = struct.unpack('<i',u)[0] # unpack 4-byte data value
