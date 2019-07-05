@@ -947,12 +947,6 @@ class rgams_SRS:
 				# wait a bit to make sure that serial command is sent
 				time.sleep(0.02)
 
-				# make sure the serial out buffer is empty:
-				while self.ser.outWaiting() > 0:
-					self.warning('DEBUGGING INFO: serial output buffer not empty before PEAK reading!')
-					self.ser.flushOutput()
-					time.sleep(0.02)
-
 				# get timestamp
 				t = misc.now_UNIX()
 				
@@ -1058,12 +1052,6 @@ class rgams_SRS:
 
 				# wait a bit to make sure that serial command is sent
 				time.sleep(0.02)
-
-				# make sure the serial out buffer is empty:
-				while self.ser.outWaiting() > 0:
-					self.warning('DEBUGGING INFO: serial output buffer not empty before ZERO reading!')
-					self.ser.flushOutput()
-					time.sleep(0.02)
 
 				# get timestamp
 				t = misc.now_UNIX()
