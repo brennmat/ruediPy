@@ -191,168 +191,119 @@ for i = 1:length(RAW)
 end % for
 
 
+
+
+
 % *************************************************
 % Write SAMPLE results to data file
 % *************************************************
 
-...WRITE RESULTS DO DATAIFLE HERE...
-
-...BELOW CODE MAY BE USEFUL AS A TEMPLATE...
-
-
-
-
-
-
-
-PARTIALPRESSURES.species = SPECIES;
-PARTIALPRESSURES.val     = P_val;
-PARTIALPRESSURES.err     = P_err;
-PARTIALPRESSURES.time    = TIME;
-PARTIALPRESSURES.unit    = unit;
-
-% SENSORS data from samples:
-SENSORS = {};
-for i = 1:length(iSAMPLE)
-	SENSORS{i} = X(iSAMPLE(i)).SENSORS; 
-end
-
-
-__write_datafile (...
-	SAMPLES,...
-	PARTIALPRESSURES,...
-	SENSORS,...
-	fileparts(data),...
-	out_file_name,...
-	use_zenity
-	)
-
-if wait_exit
-	input ("Processing complete! Press ENTER to exit...", "s");
-else
-	disp ("Processing complete!")
-end
-
-
-
-endfunction % main function
-
-
-
-
-% ************************************************************************************************************************************************
-
-
-
-
-% ************************************
-% ************************************
-% helper functions:
-% ************************************
-% ************************************
-
-function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity)
-% write processed data to CSV data file
-
-	species = partialpressures.species;
-	p_val   = partialpressures.val;
-	p_err   = partialpressures.err;
-	time    = partialpressures.time;
-	p_unit  = partialpressures.unit;
-
-	if isempty (name)
-		if use_zenity
-			disp ('Select new file for processed data...');
-			[status, name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite 2> /dev/null");
-		else
-			name = input ('Enter file name for processed data (or leave empty to skip): ','s');
-		end
-	end
-
-	if isempty(name)
-		disp ('rP_calibrate_batch: no file name given, not writing data to file.')
-	
+if isempty (out_file_name)
+	if use_zenity
+		disp ('Select new file for data output...');
+		[status, out_file_name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite 2> /dev/null");
 	else
+		out_file_name = input ('Enter file name for output: ','s');
+	end
+end
+
+if isempty(out_file_name)
+	disp ('rP_rawextract: no file name given, not writing data to file.')
+else
 	
-		% open ASCII file for writing:
-		if length(path) == 0
-			path = pwd;
-		end
-		if strcmp(path(end),filesep)
-			path = path(1:end-1);
-		end
-		[p,n,e] = fileparts (name);
-		e = tolower(e);
-		if ~strcmp(e,'.csv')
-			e = '.csv';
-		end
-		if isempty(p)
-			p = path;
-		end
-
-		path = [p filesep n e];
-		path = strrep(path,"\n",""); % just in case: remove newlines
-
-		[fid,msg] = fopen (path, 'wt');
-		if fid == -1
-			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))
-		else
+	% open ASCII file for writing:
+	out_file_name = strrep(out_file_name,"\n",""); % just in case: remove newlines
+	[p,n,e] = fileparts (out_file_name);
+	e = tolower(e);
+	if ~strcmp(e,'.csv')
+		e = '.csv';
+		out_file_name = [ out_file_name e ];
+	end
+	[fid,msg] = fopen (out_file_name, 'wt');
+	if fid == -1
+		error (sprintf('rP_rawextract: could not open file for writing (%s).',msg))
+	else
+		disp (sprintf('Writing data to %s...',out_file_name))
 		
-			disp (sprintf('Writing data to %s...',path))
-			
-			% write header:
-			fprintf (fid,'SAMPLE')
-			for j = 1:length(species)
-				fprintf (fid,';%s TIME (EPOCH);%s PARTIALPRESSURE (%s);%s PARTIALPRESSURE ERR (%s)',species{j},species{j},p_unit,species{j},p_unit)
-			end	
-			if ~isempty(sensors)			
-				nsens = length(sensors{1});
-				for j = 1:nsens
 
-					sns_unit = '???';
-					k = 1;
-					while k <= length(samples)
-						if ischar(sensors{k}{j}.mean_unit)
-							if ~strcmp(sensors{k}{j}.mean_unit,'NA')
-								sns_unit = sensors{k}{j}.mean_unit;
-								k = length(samples) + 1;
-							end
-						end
-						k = k+1;
-					end
-					if strcmp (sns_unit,'???')
-						warning (sprintf('rP_calibrate_batch: could not determine units of %s sensor data.',sensors{1}{j}.sensor))
-					end
-					fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sns_unit,sensors{1}{j}.sensor,sns_unit)
+		% write header:
 
+		fprintf (fid,'FILE;TYPE;SAMPLE')
+
+		items = {};
+		sens  = {};
+		for i = 1:length(X)
+			if isstruct (X(i).MS)
+				items = unique ( { items{:}  X(i).MS.mz_det{:} } ) ;
+			end
+			if isfield (X(i),'SENSORS')
+				for j = 1:length(X(i).SENSORS)
+					sens = unique ( { sens{:} X(i).SENSORS{j}.sensor } );
 				end
 			end
-			
-						
-			% write data:
-			for i = 1:length(samples)
-				fprintf (fid,'\n');
-				
-				% sample name:
-				fprintf (fid,'%s',samples{i});
-				
-				% gas partial pressures:
-				for j = 1:length(species)				
-					fprintf (fid,';%.2f;%g;%g',time(j,i),p_val(j,i),abs(p_err(j,i)))
-				end
+		end
 
-				% sensor data (if any):
-				if ~isempty(sensors)				
-					for j = 1:nsens						
-						fprintf (fid,';%.2f;%g;%g',sensors{i}{j}.mean_time,sensors{i}{j}.mean,sensors{i}{j}.mean_err)
+		for i = 1:length(items)
+			fprintf (fid,';%s TIME (EPOCH);%s (MEAN);%s (MEAN-ERR)',items{i},items{i},items{i})	
+		end
+
+		for i = 1:length(sens)
+			fprintf (fid,';%s TIME (EPOCH);%s (MEAN);%s (MEAN-ERR)',sens{i},sens{i},sens{i})	
+		end
+
+
+		% write data:
+
+		for i = 1:length(X)
+			fprintf (fid,'\n')
+
+			% get MS numbers:
+			item_EPOCH = item_MEAN = item_MEANERR = repmat (NA,size(items));
+			if isstruct (X(i).MS)
+				for j = 1:length(items)
+					k = strmatch (items{j},X(i).MS.mz_det,"exact");
+					if ~isempty(k)
+						item_EPOCH(j) = X(i).MS.mean_time(k);
+						item_MEAN(j) = X(i).MS.mean(k);
+						item_MEANERR(j) = X(i).MS.mean_err(k);
 					end
 				end
+			end
 
-			end % for i = 
+			% get SENSORS numbers:
+			sens_EPOCH = sens_MEAN = sens_MEANERR = repmat (NA,size(sens));
+			if isfield (X(i),'SENSORS')
+				for j = 1:length(X(i).SENSORS)
+					k = strmatch (X(i).SENSORS{j}.sensor,sens,"exact");
+					if ~isempty(k)
+						sens_EPOCH(k) = X(i).SENSORS{j}.mean_time;
+						sens_MEAN(k) = X(i).SENSORS{j}.mean;
+						sens_MEANERR(k) = X(i).SENSORS{j}.mean_err;
+					end
+				end
+			end
 
-			fclose (fid);
+			% write info columns:
+			if strcmp(toupper(X(i).INFO.type),'SAMPLE')
+				label = X(i).INFO.name.name;
+			else
+				label = '';
+			end
+			fprintf (fid,'%s;%s;%s',X(i).INFO.file,X(i).INFO.type,label);
+			
+			% write MS data columns:
+			for j = 1:length(item_EPOCH)
+				fprintf (fid,';%.2f;%g;%g',item_EPOCH(j),item_MEAN(j),item_MEANERR(j));
+			end
 
-		end % if fid == -1
-	end % if isempty(name)
-	
-endfunction
+			% write SENSORS data columns:
+			for j = 1:length(sens_EPOCH)
+				fprintf (fid,';%.2f;%g;%g',sens_EPOCH(j),sens_MEAN(j),sens_MEANERR(j));
+			end
+
+		end
+
+
+		fclose (fid);
+	end
+end
