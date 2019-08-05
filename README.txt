@@ -1,4 +1,4 @@
-ruediPy: instrument control and data processing for RUEDI gas analyzers
+rruediPy: instrument control and data processing for RUEDI gas analyzers
 
 ruediPy is a collection of Python programs to control RUEDI instruments, and collection of GNU Octave (or Matlab) tools to load, process, and manipulate RUEDI data acquired with ruediPy.
 
