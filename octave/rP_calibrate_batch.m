@@ -579,7 +579,6 @@ for i = 1:length(iSAMPLE)
 	SENSORS{i} = X(iSAMPLE(i)).SENSORS; 
 end
 
-
 __write_datafile (...
 	SAMPLES,...
 	PARTIALPRESSURES,...
@@ -671,19 +670,22 @@ function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity
 		if strcmp(path(end),filesep)
 			path = path(1:end-1);
 		end
+
+
+		% open ASCII file for writing:
+		name = strrep(name,"\n",""); % just in case: remove newlines
 		[p,n,e] = fileparts (name);
 		e = tolower(e);
 		if ~strcmp(e,'.csv')
-			e = '.csv';
-		end
-		if isempty(p)
-			p = path;
+			warntext = 'rP_calibrate_batch: saving CSV file without CSV file extension!';
+			if use_zenity
+				system (sprintf("zenity --warning --width=300 --height=150 --text \"%s\"",warntext));
+			else
+				warning (warntext)
+			end
 		end
 
-		path = [p filesep n e];
-		path = strrep(path,"\n",""); % just in case: remove newlines
-
-		[fid,msg] = fopen (path, 'wt');
+		[fid,msg] = fopen (name, 'wt');
 		if fid == -1
 			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))
 		else

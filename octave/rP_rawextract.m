@@ -216,9 +216,14 @@ else
 	[p,n,e] = fileparts (out_file_name);
 	e = tolower(e);
 	if ~strcmp(e,'.csv')
-		e = '.csv';
-		out_file_name = [ out_file_name e ];
+		warntext = 'rP_rawextract: saving CSV file without CSV file extension!';
+		if use_zenity
+			system (sprintf("zenity --warning --width=300 --height=150 --text \"%s\"",warntext));
+		else
+			warning (warntext)
+		end
 	end
+
 	[fid,msg] = fopen (out_file_name, 'wt');
 	if fid == -1
 		error (sprintf('rP_rawextract: could not open file for writing (%s).',msg))

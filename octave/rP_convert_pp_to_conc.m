@@ -296,18 +296,24 @@ if write_file	% write results to file:
 			end
 			species{i} = sprintf('%s (%s_%s)',u{1},u{2},u{3});
 		end
-	
-	    % open ASCII file for writing:
-	    name = strrep(name,"\n",""); % just in case: remove newlines
-	    [p,n,e] = fileparts (name);
-	    e = tolower(e);
-	    if ~strcmp(e,'.csv')
-	    	e = '.csv';
-	    end
-		name = [p filesep n e];
+
+		% open ASCII file for writing:
+		name = strrep(name,"\n",""); % just in case: remove newlines
+		[p,n,e] = fileparts (name);
+		e = tolower(e);
+		if ~strcmp(e,'.csv')
+			warntext = 'rP_convert_pp_to_conc: saving CSV file without CSV file extension!';
+			switch write_file
+				case 2
+					system (sprintf("zenity --warning --width=300 --height=150 --text \"%s\"",warntext));
+				otherwise
+					warning (warntext)
+			end
+		end
+
 		[fid,msg] = fopen (name, 'wt');
 		if fid == -1
-			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))
+			error (sprintf('rP_convert_pp_to_conc: could not open file for writing (%s).',msg))
 		else    
 	    	disp (sprintf('Writing data to %s...',name))
 	    	
