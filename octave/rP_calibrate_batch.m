@@ -650,12 +650,7 @@ function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity
 	p_unit  = partialpressures.unit;
 
 	if isempty (name)
-		if use_zenity
-			disp ('Select new file for processed data...');
-			[status, name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite 2> /dev/null");
-		else
-			name = input ('Enter file name for processed data (or leave empty to skip): ','s');
-		end
+		name = rP_get_output_filename (use_zenity,'Data file for partial pressure data','CSV');
 	end
 
 	if isempty(name)
@@ -673,18 +668,6 @@ function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity
 
 
 		% open ASCII file for writing:
-		name = strrep(name,"\n",""); % just in case: remove newlines
-		[p,n,e] = fileparts (name);
-		e = tolower(e);
-		if ~strcmp(e,'.csv')
-			warntext = 'rP_calibrate_batch: saving CSV file without CSV file extension!';
-			if use_zenity
-				system (sprintf("zenity --warning --width=300 --height=150 --text \"%s\"",warntext));
-			else
-				warning (warntext)
-			end
-		end
-
 		[fid,msg] = fopen (name, 'wt');
 		if fid == -1
 			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))

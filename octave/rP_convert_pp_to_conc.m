@@ -272,13 +272,8 @@ if write_file	% write results to file:
 		write_file = str2num (write_file);
 	end
 
-	switch write_file
-		case 2
-			disp ('Select new file for processed data...');
-			[status, name] = system ("zenity --file-selection --title='Output file' --save --confirm-overwrite 2> /dev/null");
-		otherwise
-			name = input ('Enter file name for processed data (or leave empty to skip): ','s');
-	end
+	use_zenity = ( write_file == 2);
+	name = rP_get_output_filename (use_zenity,'Data file for concentraion data','CSV');
 
 	if isempty(name)
 	    disp ('rP_convert_pp_to_conc: no file name given, not writing data to file.')
