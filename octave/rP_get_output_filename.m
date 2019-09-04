@@ -39,44 +39,57 @@ while do_file
 	else
 		name = input (sprintf('%s: ',label),'s');
 	end
-
-	name = strrep (name,"\n",""); % remove newlines (just in case)
-
-	[DIR, NAME, EXT] = fileparts (name);
-	EXT = strrep (EXT,'.','');
-
-	% check for CSV file extension:
-	if ~isempty (extension)
-		if ~strcmp (toupper(EXT),toupper(extension))
-			% add file extension:
-			name = [ name '.' extension ];
-		end
-	end % if ~isempty (...)
-
-	% check if file already exists (even with Zenity, because the added extension changed things):
-	if ~exist (name,'file')
-		% file does not yet exist, we're done
+	
+	if isempty (name)
+		% user didn't choose a file name, we are done.
 		do_file = false;
-
+	
 	else
-		% file already exists, ask what to do:
 
-		msg = sprintf ('Do you want to overwrite the existing file %s',name);
+		name = strrep (name,"\n",""); % remove newlines (just in case)
 
-		if use_zenity
-			answer = system (sprintf("zenity --question --text=\"%s?\"",msg));
-			yes = ( answer == 0);
-		else
-			answer = input (sprintf('%s [Y/N]?',msg),'s');
-			yes = strcmp (toupper(answer),'Y');
-		end
+		[DIR, NAME, EXT] = fileparts (name);
+		EXT = strrep (EXT,'.','');
 
-		yes
+		% check for file extension:
+		extension_added = false;
+		if ~isempty (extension)
+			if ~strcmp (toupper(EXT),toupper(extension))
+				% add file extension:
+				name = [ name '.' extension ];
+				extension_added = true;
+			end
+		end % if ~isempty (...)
 
-		if yes
-			% user wants to overwrite existing file, so we're done:
+		% check if file already exists (even with Zenity, because the added extension changed things):
+		if ~exist (name,'file')
+			% file does not yet exist, we're done
 			do_file = false;
-		end
-	end % exist (...)
+
+		else
+			% file already exists, ask what to do:
+
+			msg = sprintf ('Do you want to overwrite the existing file %s',name);
+
+			if use_zenity
+				if extension_added
+					% if extension was added to the file name, ask for overwrite:
+					answer = system (sprintf("zenity --question --ellipsize --default-cancel --text=\"%s?\"",msg));
+					yes = ( answer == 0);
+				else
+					yes = true;
+				end
+			else
+				answer = input (sprintf('%s [Y/N]?',msg),'s');
+				yes = strcmp (toupper(answer),'Y');
+			end
+
+			if yes
+				% user wants to overwrite existing file, so we're done:
+				do_file = false;
+			end
+		end % exist (...)
+
+	end % if isempty (name)
 
 end % while
