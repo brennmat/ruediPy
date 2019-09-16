@@ -121,11 +121,6 @@ else % read file line by line:
 
 	t = sscanf(sprintf('%s\n',t{:}),'%f');
 
-	% u = toc();	
-	% disp (sprintf('   Reading file line by line took %f seconds.',u))
-	
-	% tic();
-
 	% parse file data into struct object, parse data for each object type	
 	X  = [];
 	O  = unique (OBJ);
@@ -133,61 +128,57 @@ else % read file line by line:
 			
 	for i = 1:NO % get data for each of the requested object types
 		j = find (strcmp(OBJ,O{i})); % find index to lines with object-type = O{i}
-    	
-    	% try to assure Octave compatible label names:
-    	LABEL = strrep (LABEL,'--','_');
-    	LABEL = strrep (LABEL,'-','_');
-    	LABEL = strrep (LABEL,'*','_');
-    	LABEL = strrep (LABEL,'/','_');
-    	
-    	% disp (sprintf('*** DEBUG INFO: parsing object-label=%s *** object-type=%s...',O{i},OTYPE))
-    	
-    	L = unique (LABEL(j)); % list of labels available for the objects of type OBJ(j)
-    	for k = 1:length(L)
-    		l = find ( index(LABEL(j),L(k)) );
-    		
-			switch toupper(O{i})
-				
-				case 'DATAFILE'
-					u = __parse_DATAFILE (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					FIELDTYPES{end+1} = 'DATAFILE';
-					X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
-				
-				case 'RGA_SRS'
-					u = __parse_SRSRGA (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					FIELDTYPES{end+1} = 'RGA_SRS';
-					X = setfield (X,L{k},u); % add SRSRGA[LABEL-k] data
+
+	    	% try to assure Octave compatible label names:
+	    	LABEL = strrep (LABEL,'--','_');
+	    	LABEL = strrep (LABEL,'-','_');
+	    	LABEL = strrep (LABEL,'*','_');
+	    	LABEL = strrep (LABEL,'/','_');
+	    	
+	    	L = unique (LABEL(j)); % list of labels available for the objects of type OBJ(j)
+	    	for k = 1:length(L)
+
+	    		l = find ( index(LABEL(j),L(k)) );
+	    		
+				switch toupper(O{i})
 					
-				case 'SELECTORVALVE_VICI'
-					u = __parse_SELECTORVALVE (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					FIELDTYPES{end+1} = 'SELECTORVALVE';
-					X = setfield (X,L{k},u); % add SELECTORVALVE[LABEL-k] data
-				
-				case 'TEMPERATURESENSOR_MAXIM'
-					u = __parse_TEMPERATURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					FIELDTYPES{end+1} = 'TEMPERATURESENSOR';
-					X = setfield (X,L{k},u); % add TEMPERATURESENSOR[LABEL-k] data
-				
-				case 'PRESSURESENSOR_WIKA'
-					u = __parse_PRESSURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
-					FIELDTYPES{end+1} = 'PRESSURESENSOR';
-					X = setfield (X,L{k},u); % add PRESSURESENSOR[LABEL-k] data
-				
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				otherwise
-					warning (sprintf('rP_read_datafile: Unknown object type %s, skipping...',O{i}))
-				
-			end % switch
-		end % for k = ...			
-	end % for i = ...
+					case 'DATAFILE'
+						u = __parse_DATAFILE (TYPE(j(l)),DATA(j(l)),t(j(l)));
+						FIELDTYPES{end+1} = 'DATAFILE';
+						X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
+					
+					case 'RGA_SRS'
+						u = __parse_SRSRGA (TYPE(j(l)),DATA(j(l)),t(j(l)));
+						FIELDTYPES{end+1} = 'RGA_SRS';
+						X = setfield (X,L{k},u); % add SRSRGA[LABEL-k] data
+						
+					case 'SELECTORVALVE_VICI'
+						u = __parse_SELECTORVALVE (TYPE(j(l)),DATA(j(l)),t(j(l)));
+						FIELDTYPES{end+1} = 'SELECTORVALVE';
+						X = setfield (X,L{k},u); % add SELECTORVALVE[LABEL-k] data
+					
+					case 'TEMPERATURESENSOR_MAXIM'
+						u = __parse_TEMPERATURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
+						FIELDTYPES{end+1} = 'TEMPERATURESENSOR';
+						X = setfield (X,L{k},u); % add TEMPERATURESENSOR[LABEL-k] data
+					
+					case 'PRESSURESENSOR_WIKA'
+						u = __parse_PRESSURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
+						FIELDTYPES{end+1} = 'PRESSURESENSOR';
+						X = setfield (X,L{k},u); % add PRESSURESENSOR[LABEL-k] data
+					
+					%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+					otherwise
+						warning (sprintf('rP_read_datafile: Unknown object type %s, skipping...',O{i}))
+					
+				end % switch
+			end % for k = ...			
+		end % for i = ...
 
-	X.file = file;
-	X.fieldtypes = FIELDTYPES;
+		X.file = file;
+		X.fieldtypes = FIELDTYPES;
 
-	% u = toc();
-	% disp (sprintf('   Parsing file line by line took %f seconds.',u))
-
-end % if / else
+	end % for ...
 end % function
 
 
@@ -320,7 +311,7 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 	for i = 1:length(T)
 		j = find (strcmp(TYPE,T{i})); % index to lines with type = T{i}
 		tt = t(j); TT = TYPE(j); DD = DATA(j);
-				
+		
 		% parse line by line
 		switch toupper(T{i})
 			
@@ -334,10 +325,17 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					X.PEAK(j).epochtime      = tt(j);
 					X.PEAK(j).mz             = a(1,j);
 					X.PEAK(j).intensity.val  = a(2,j);
-					X.PEAK(j).intensity.unit = char (a(3,j));
-					X.PEAK(j).detector       = char (a(4,j));
 					X.PEAK(j).gate.val       = a(5,j);
-					X.PEAK(j).gate.unit      = char (a(6,j));
+
+					% X.PEAK(j).intensity.unit = char (a(3,j));
+					% X.PEAK(j).detector       = char (a(4,j));
+					% X.PEAK(j).gate.unit      = char (a(6,j));
+					
+					% avoid multiple calls to "char(...)"; calling it once on all chars is faster:
+					u = char([a(3,j) a(4,j) a(6,j)]);
+					X.PEAK(j).intensity.unit = u(1);
+					X.PEAK(j).detector       = u(2);
+					X.PEAK(j).gate.unit      = u(3);
 									
 				end % for j = ..
 								
@@ -351,10 +349,17 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					X.ZERO(j).mz             = a(1,j);
 					X.ZERO(j).mz_offset      = a(2,j);
 					X.ZERO(j).intensity.val  = a(3,j);
-					X.ZERO(j).intensity.unit = char (a(4,j));
-					X.ZERO(j).detector       = char (a(5,j));
 					X.ZERO(j).gate.val       = a(6,j);
-					X.ZERO(j).gate.unit      = char (a(7,j));
+
+					% X.ZERO(j).intensity.unit = char (a(4,j));
+					% X.ZERO(j).detector       = char (a(5,j));
+					% X.ZERO(j).gate.unit      = char (a(7,j));
+
+					% avoid multiple calls to "char(...)"; calling it once on all chars is faster:
+					u = char([a(3,j) a(4,j) a(6,j)]);
+					X.ZERO(j).intensity.unit = u(1);
+					X.ZERO(j).detector       = u(2);
+					X.ZERO(j).gate.unit      = u(3);
 					
 				end % for j = ..
 
@@ -427,6 +432,7 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 
 		end % switch
 	end % for i = ...
+
 end % function
 
 
