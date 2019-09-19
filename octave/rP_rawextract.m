@@ -66,14 +66,6 @@ function [X] = rP_rawextract(data,varargin)
 % ************************************
 
 
-
-disp ('**** rP_rawextract is under construction ****')
-disp ('**** rP_rawextract is under construction ****')
-disp ('**** rP_rawextract is under construction ****')
-disp ('**** rP_rawextract is under construction ****')
-
-
-
 % option defaults (plotting etc.):4
 out_file_name = '';
 use_zenity = false;
