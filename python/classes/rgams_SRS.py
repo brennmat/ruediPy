@@ -2044,7 +2044,99 @@ class rgams_SRS:
 		print ( '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu)' )
 		print ( '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at m/z = 0)' )
 		print ( '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter for m/z > 0)' )
- 
+
+		# check for MS/RGA errors:
+		status = int(self.param_IO('ER?',1))
+		print ('\nChecking SRS-RGA for errors...')
+		if status == 0:
+			print ('...no errors found.')
+		else:
+			# Found an error with the MS/RGA! Determine and show error information
+
+			if status & 0b00000001:
+			# RS232 communication problem
+				err = int(self.param_IO('EC?',1))
+				msg = 'unknown error'
+				if err & 0b00000001:
+					msg = 'bad command received'
+				if err & 0b00000010:
+					msg = 'bad parameter received'
+				if err & 0b00000100:
+					msg = 'command-too-long'
+				if err & 0b00001000:
+					msg = 'overwrite in receiving'
+				if err & 0b00010000:
+					msg = 'transmit buffer overwrite'
+				if err & 0b00100000:
+					msg = 'jumper protection violation'
+				if err & 0b01000000:
+					msg = 'parameter conflict'
+				print ('*** Communications error: ' + msg + '.')
+
+			if status & 0b00000010:
+			# Filament problem
+				err = int(self.param_IO('EF?',1))
+				msg = 'unknown error'
+				if err & 0b00000001:
+					msg = 'single filament operation'
+				if err & 0b00100000:
+					msg = 'vacuum chamber pressure too high'
+				if err & 0b01000000:
+					msg = 'unable to set the requested emission current'
+				if err & 0b10000000:
+					msg = 'no filament detected'
+				print ('*** Filament error: ' + msg + '.')
+
+			if status & 0b00001000:
+			# CEM problem
+				err = int(self.param_IO('EM?',1))
+				msg = 'unknown error'
+				if err & 0b10000000:
+					msg = 'no electron multiplier option installed'
+				print ('*** Electron multiplier error: ' + msg + '.')
+
+			if status & 0b00010000:
+			# Quadrupole filter problem
+				err = int(self.param_IO('EQ?',1))
+				msg = 'unknown error'
+				if err & 0b00010000:
+					msg = 'power supply in current limited mode'
+				if err & 0b01000000:
+					msg = 'primary current exceeds 2.0A'
+				if err & 0b10000000:
+					msg = 'RF_CT exceeds (V_EXT-2V) at M_MAX'
+				print ('*** Quadrupole mass filter error: ' + msg + '.')
+
+			if status & 0b00100000:
+			# Electrometer problem
+				err = int(self.param_IO('ED?',1))
+				msg = 'unknown error'
+				if err & 0b00000010:
+					msg = 'op-amp input offset voltage out of range'
+				if err & 0b00001000:
+					msg = 'compensate fails to read -5nA input current'
+				if err & 0b00010000:
+					msg = 'compensate fails to read +5nA input current'
+				if err & 0b00100000:
+					msg = 'detect fails to read -5nA input current'
+				if err & 0b01000000:
+					msg = 'detect fails to read +5nA input current'
+				if err & 0b10000000:
+					msg = 'ADC16 test failure'
+				print ('*** Electrometer error: ' + msg + '.')
+
+			if status & 0b01000000:
+			# External PSU problem
+				err = int(self.param_IO('EP?',1))
+				msg = 'unknown error'
+				if err & 0b01000000:
+					msg = 'external 24V PS voltage <22V'
+				if err & 0b10000000:
+					msg = 'external 24V PS voltage >26V'
+				print ('*** 24V external PSU error: ' + msg + '.')
+
+		print ('')
+
 
 
 ####################################################################################################
