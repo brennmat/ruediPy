@@ -2071,7 +2071,7 @@ class rgams_SRS:
 					msg = 'jumper protection violation'
 				if err & 0b01000000:
 					msg = 'parameter conflict'
-				print ('*** Communications error: ' + msg + '.')
+				self.warning('RGA communications error: ' + msg + '.')
 
 			if status & 0b00000010:
 			# Filament problem
@@ -2085,7 +2085,7 @@ class rgams_SRS:
 					msg = 'unable to set the requested emission current'
 				if err & 0b10000000:
 					msg = 'no filament detected'
-				print ('*** Filament error: ' + msg + '.')
+				self.warning('RGA filament error: ' + msg + '.')
 
 			if status & 0b00001000:
 			# CEM problem
@@ -2093,7 +2093,7 @@ class rgams_SRS:
 				msg = 'unknown error'
 				if err & 0b10000000:
 					msg = 'no electron multiplier option installed'
-				print ('*** Electron multiplier error: ' + msg + '.')
+				self.warning('RGA electron multiplier error: ' + msg + '.')
 
 			if status & 0b00010000:
 			# Quadrupole filter problem
@@ -2105,7 +2105,7 @@ class rgams_SRS:
 					msg = 'primary current exceeds 2.0A'
 				if err & 0b10000000:
 					msg = 'RF_CT exceeds (V_EXT-2V) at M_MAX'
-				print ('*** Quadrupole mass filter error: ' + msg + '.')
+				self.warning('RGA quadrupole mass filter error: ' + msg + '.')
 
 			if status & 0b00100000:
 			# Electrometer problem
@@ -2123,7 +2123,7 @@ class rgams_SRS:
 					msg = 'detect fails to read +5nA input current'
 				if err & 0b10000000:
 					msg = 'ADC16 test failure'
-				print ('*** Electrometer error: ' + msg + '.')
+				self.warning('RGA electrometer error: ' + msg + '.')
 
 			if status & 0b01000000:
 			# External PSU problem
@@ -2133,7 +2133,7 @@ class rgams_SRS:
 					msg = 'external 24V PS voltage <22V'
 				if err & 0b10000000:
 					msg = 'external 24V PS voltage >26V'
-				print ('*** 24V external PSU error: ' + msg + '.')
+				self.warning('RGA 24V external PSU error: ' + msg + '.')
 
 		print ('')
 
