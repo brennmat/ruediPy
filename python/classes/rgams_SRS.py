@@ -2047,7 +2047,7 @@ class rgams_SRS:
 
 		# check for MS/RGA errors:
 		status = int(self.param_IO('ER?',1))
-		print ('\nChecking SRS-RGA for errors...')
+		print ('\nChecking SRS-RGA...')
 		if status == 0:
 			print ('...no errors found.')
 		else:
