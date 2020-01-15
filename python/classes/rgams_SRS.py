@@ -167,7 +167,7 @@ class rgams_SRS:
 			if self._has_display: # prepare plotting environment and figure
 
 				# mz values and colors (defaults):
-				self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (14,'dimgray') , (15,'green') , (16,'tomato') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
+				self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
 
 				# set up plotting environment
 				self._fig = plt.figure(figsize=(fig_w,fig_h))
