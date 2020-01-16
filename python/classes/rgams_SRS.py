@@ -285,7 +285,7 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def param_IO(self,cmd,ansreq,timeout=10):
+	def param_IO(self,cmd,ansreq,timeout=10,wait_between_bytes=0.02):
 		'''
 		ans = rgams_SRS.param_IO(cmd,ansreq)
 		
@@ -297,6 +297,7 @@ class rgams_SRS:
 			ansreq = 1: answer expected, check for answer
 			ansreq = 0: no answer expected, don't check for answer
 		timeout (optional): max. wait time for answer from RGA (seconds), default: timeout = 10 seconds
+		wait_between_bytes (optional): wait time between reads of single response bytes (seconds), default = 0.02 seconds. If reading answer from RGA, it may be required to wait a short time between reading each single byte. If the data is coming too slowly, the data reading might empty the input buffer before all the data is transferred for the RGA to the buffer, and the code would then assume it is done with reading all the data. Adding a small wait time in between the single reads of each byte helps to avoid this problem.
 
 		OUTPUT:
 		ans: answer / result returned from RGA
@@ -316,7 +317,7 @@ class rgams_SRS:
 			dt = 0.1
 			doWait = 1
 			while doWait:
-				if self.ser.inWaiting() == 0: # nothing in the queue yet, wait
+				if self.ser.inWaiting() == 0: # nothing in the buffer yet, wait
 					time.sleep(dt)
 					t = t + dt
 					if t > timeout: # give up waiting
@@ -333,6 +334,9 @@ class rgams_SRS:
 			else:
 				while self.ser.inWaiting() > 0: # while there's something in the buffer...
 					ans = ans + self.ser.read().decode('utf-8') # read each byte
+					if wait_between_bytes > 0.0:
+						time.sleep(wait_between_bytes) # allow some time before quering for the next byte
+
 				ans = ans.rstrip('\r\n') # remove newline characters at end
 		
 			# return the result:
@@ -447,7 +451,8 @@ class rgams_SRS:
 		# check if CEM option is installed:
 		if self.has_multiplier():
 			# send command to serial port:
-			self.param_IO('HV' + str(val),1)
+			self.param_IO(cmd='HV' + str(val),ansreq=1) # note that setting the HV value seems to be slow, and the RGA response to the serial buffer may be slow. Therefore wait_between_bytes > 0.0
+
 		else:
 			self.warning ('Cannot set multiplier (CEM) high voltage, because CEM option is not installed.')
 
@@ -647,10 +652,16 @@ class rgams_SRS:
 		# send command to serial port:
 		if det == 'F':
 			self.param_IO('HV0',1)
+			# time.sleep(0.05)
+			# self.ser.flushInput()
+
 		elif det == 'M':
 			if self.has_multiplier():
 				# self.param_IO('HV*',1)  <--- this uses the factory default value (HV = 1400 V)
 				self.set_multiplier_hv(self.get_multiplier_default_hv())
+				# time.sleep(0.05)
+				# self.ser.flushInput()
+
 			else:
 				self.warning ('RGA has no electron multiplier installed!')
 		else:
@@ -923,7 +934,7 @@ class rgams_SRS:
 			unit = '(none)'
 			
 		else: # proceed with measurement
-			
+
 			# deal with gate times longer than 2.4 seconds (max. allowed with SRS-RGA):
 			v = 0.0;
 			if gate > 2.4:
@@ -936,6 +947,7 @@ class rgams_SRS:
 			self.set_gate_time(gt)
 
 			# make sure serial port buffers are empty:
+			time.sleep(0.02) # wait a bit to make sure that any ongoing data transfer to the RGA serial buffers is done
 			self.ser.flushOutput()
 			self.ser.flushInput()
 
@@ -944,19 +956,14 @@ class rgams_SRS:
 				# send command to RGA:
 				self.ser.write(('MR' + str(mz) + '\r\n').encode('utf-8'))
 				
-				# wait a bit to make sure that serial command is sent
-				time.sleep(0.02)
-
 				# get timestamp
 				t = misc.now_UNIX()
 				
 				# read back data:
-				u = self.ser.read(4)
+				u = self.ser.read(4) # this will wait until all 4 bytes are received
 				
-				# wait a bit to make sure that serial buffers are up to date
-				time.sleep(0.02)
-
 				# make sure the serial in buffer is empty:
+				time.sleep(0.02) # wait a bit to make sure that serial buffers are up to date (although there should be no more than 4 data bytes in the input buffer, which are all read out by the command above
 				while self.ser.inWaiting() > 0:
 					self.warning('DEBUGGING INFO: serial input buffer not empty after PEAK reading!')
 					self.ser.flushInput()
@@ -1286,7 +1293,7 @@ class rgams_SRS:
 		'''
 
 		# execute the CL command:
-		self.param_IO('CL',1,75) 
+		self.param_IO('CL',1,timeout=75) 
 
 
 
