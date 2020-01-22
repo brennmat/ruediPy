@@ -2173,22 +2173,30 @@ class rgams_SRS:
 
 
 		def pz_cycle (m,g,f,add_to_peakbuffer=True):
-			for i in range(len(m)):
-				self.peak(m[i][0],g,f,add_to_peakbuffer) # read PEAK value
-				if not m[i][1] == 0:
-					self.zero(m[i][0],m[i][1],g,f) # read ZERO value
+
+			if isinstance(m[0],int):
+				# m is s singe 2-tuple, containing only one pair of peak and zero offset m/z values
+				L = 1
+			else:
+				# m is a tuple of 2-tuples
+				L = len(m)
+
+			for i in range(L):
+				if L > 1:
+					mz_p = m[i][0]
+					mz_z = m[i][1]
+				else:
+					mz_p = m[0]
+					mz_z = m[1]
+
+				self.peak(mz_p,g,f,add_to_peakbuffer,peaktype=datatype) # read PEAK value
+				if not mz_z == 0:
+					self.zero(mz_p,mz_z,g,f,zerotype=datatype) # read ZERO value
 			if add_to_peakbuffer:
 				self.plot_peakbuffer()
 
-
 		# prepare:
 		self.set_detector(detector)
-		## bs  = '\b' * 1000   # backspaces
-
-		# check if it's time to do a scan in order to update the compensation of the m/z postion calibration (RGA internal compensation for temperature drifts, see RGA manual on page 7-9)
-		# if misc.now_UNIX() > self._peak_position_last_compensated + self._peak_position_compensate_interval:
-		#	print ('Triggering RGA internal compensation for m/z scale: scanning from m/z=' + str(mz[0][0]-0.5) + ' to ' + str(mz[0][0]+0.5) +'...' )
-		#	self.scan(mz[0][0]-0.5,mz[0][0]+0.5,25,gate,'nofile') # run scan to trigger internal compensation (the scan will update the time-stamp of the last compensation)
 		
 		# conditioning detector and electronics:
 		if NC > 0:
