@@ -327,11 +327,6 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					X.PEAK(j).intensity.val  = a(2,j);
 					X.PEAK(j).gate.val       = a(5,j);
 
-					% X.PEAK(j).intensity.unit = char (a(3,j));
-					% X.PEAK(j).detector       = char (a(4,j));
-					% X.PEAK(j).gate.unit      = char (a(6,j));
-					
-					% avoid multiple calls to "char(...)"; calling it once on all chars is faster:
 					u = char([a(3,j) a(4,j) a(6,j)]);
 					X.PEAK(j).intensity.unit = u(1);
 					X.PEAK(j).detector       = u(2);
@@ -351,12 +346,7 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					X.ZERO(j).intensity.val  = a(3,j);
 					X.ZERO(j).gate.val       = a(6,j);
 
-					% X.ZERO(j).intensity.unit = char (a(4,j));
-					% X.ZERO(j).detector       = char (a(5,j));
-					% X.ZERO(j).gate.unit      = char (a(7,j));
-
-					% avoid multiple calls to "char(...)"; calling it once on all chars is faster:
-					u = char([a(3,j) a(4,j) a(6,j)]);
+					u = char([a(4,j) a(5,j) a(7,j)]);
 					X.ZERO(j).intensity.unit = u(1);
 					X.ZERO(j).detector       = u(2);
 					X.ZERO(j).gate.unit      = u(3);
