@@ -893,9 +893,10 @@ class rgams_SRS:
 
 
 
-	def peak(self,mz,gate,f,add_to_peakbuffer=True):
+
+	def peak(self,mz,gate,f,add_to_peakbuffer=True,peaktype=None):
 		'''
-		val,unit = rgams_SRS.peak(mz,gate,f,add_to_peakbuffer=True)
+		val,unit = rgams_SRS.peak(mz,gate,f,add_to_peakbuffer=True,peaktype=None)
 		
 		Read out detector signal at single mass (m/z value).
 		
@@ -904,6 +905,7 @@ class rgams_SRS:
 		gate: gate time (seconds) NOTE: gate time can be longer than the max. gate time supported by the hardware (2.4 seconds). If so, the multiple peak readings will be averaged to achieve the requested gate time.
 		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
 		add_to_peakbuffer (optional): flag to choose if peak value is added to peakbuffer (default: add_to_peakbuffer=True)
+		peaktype (optional): string to indicate the "type" of the PEAK reading (default: type=None). Specifying type will add the type string the the PEAK identifier in the data file in order to tell the processing tool(s) to use the PEAK_xyz reading for a specific purpose. Example: type='DECONV' will change the PEAK identifier to PEAK_DECONV, which will be used for deconvolution of mass spectrometric overlaps.
 		
 		OUTPUT:
 		val: signal intensity (float)
@@ -981,7 +983,7 @@ class rgams_SRS:
 		det = self.get_detector()
 		
 		if not ( f == 'nofile' ):
-			f.write_peak('RGA_SRS',self.label(),mz,val,unit,det,gate,t)
+			f.write_peak('RGA_SRS',self.label(),mz,val,unit,det,gate,t,peaktype)
 		
 		# add data to peakbuffer
 		if add_to_peakbuffer:
@@ -993,9 +995,9 @@ class rgams_SRS:
 	########################################################################################################
 	
 
-	def zero(self,mz,mz_offset,gate,f):
+	def zero(self,mz,mz_offset,gate,f,zerotype=None):
 		'''
-		val,unit = rgams_SRS.zero(mz,mz_offset,gate,f)
+		val,unit = rgams_SRS.zero(mz,mz_offset,gate,f,zerotype=None)
 		
 		Read out detector signal at single mass with relative offset to given m/z value (this is useful to determine the baseline near a peak at a given m/z value), see rgams_SRS.peak())
 		The detector signal is read at mz+mz_offset
@@ -1005,6 +1007,7 @@ class rgams_SRS:
 		mz_offset: offset relative m/z value (integer).
 		gate: gate time (seconds) NOTE: gate time can be longer than the max. gate time supported by the hardware (2.4 seconds). If so, the multiple zero readings will be averaged to achieve the requested gate time.
 		f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.
+		zerotype (optional): string to indicate the "type" of the ZERO reading (default: type=None). See 'peaktype' argument for self.peak(...).
 		
 		OUTPUT:
 		val: signal intensity (float)
@@ -1085,7 +1088,7 @@ class rgams_SRS:
 			unit = 'A'
 
 		if not ( f == 'nofile' ):
-			f.write_zero('RGA_SRS',self.label(),mz,mz_offset,val,unit,self.get_detector(),gate,t)
+			f.write_zero('RGA_SRS',self.label(),mz,mz_offset,val,unit,self.get_detector(),gate,t,zerotype)
 
 		return val,unit
 
@@ -2150,9 +2153,9 @@ class rgams_SRS:
 
 
 
-	def peak_zero_loop (self,mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False):
+	def peak_zero_loop (self,mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False,datatype=None):
 		'''
-		peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False)
+		peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False,datatype=None)
 		
 		Cycle PEAKS and ZERO readings given mz values.
 		
@@ -2166,13 +2169,13 @@ class rgams_SRS:
 		clear_peakbuf_cond: flag to set clearing of peakbuffer before conditioning cycles on/off (optional, default=True)
 		clear_peakbuf_main: flag to set clearing of peakbuffer before main cycles on/off (optional, default=True)
 		plot_cond: flag to set plotting of readings used for detector conditioning (inclusion of values in peakbuffer)
-
+		datatype (optional): see 'peaktype' argument of self.peak or 'zerotype' argument of self.zero (default: datatype=None)
 		OUTPUT:
 		(none)
 	'''
 
 
-		def pz_cycle (m,g,f,add_to_peakbuffer=True):
+		def pz_cycle (m,g,f,typ,add_to_peakbuffer=True):
 
 			if isinstance(m[0],int):
 				# m is s singe 2-tuple, containing only one pair of peak and zero offset m/z values
@@ -2189,11 +2192,12 @@ class rgams_SRS:
 					mz_p = m[0]
 					mz_z = m[1]
 
-				self.peak(mz_p,g,f,add_to_peakbuffer,peaktype=datatype) # read PEAK value
+				self.peak(mz_p,g,f,add_to_peakbuffer,peaktype=typ) # read PEAK value
 				if not mz_z == 0:
 					self.zero(mz_p,mz_z,g,f,zerotype=datatype) # read ZERO value
 			if add_to_peakbuffer:
 				self.plot_peakbuffer()
+
 
 		# prepare:
 		self.set_detector(detector)
@@ -2208,7 +2212,7 @@ class rgams_SRS:
 				msg = 'Conditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...        '
 				print ( '\r' + msg , end='\r' )
 				sys.stdout.flush()
-				pz_cycle (mz,gate,'nofile',plot_cond)
+				pz_cycle (mz,gate,'nofile',datatype,plot_cond)
 			print ( msg.rstrip() + 'done.' )
 
 		# reading data values:
@@ -2222,8 +2226,9 @@ class rgams_SRS:
 				msg = 'Reading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...        '
 				print ( '\r' + msg , end='\r' )
 				sys.stdout.flush()
-				pz_cycle (mz,gate,datafile)
+				pz_cycle (mz,gate,datafile,datatype)
 			print ( msg.rstrip() + 'done.' )
+
 
 
 ####################################################################################################

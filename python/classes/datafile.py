@@ -414,9 +414,9 @@ class datafile:
 	########################################################################################################
 
 	
-	def write_peak(self,caller,label,mz,intensity,unit,det,gate,timestmp):
+	def write_peak(self,caller,label,mz,intensity,unit,det,gate,timestmp,peaktype=None):
 		"""
-		datafile.write_peak(caller,mz,intensity,unit,det,gate,timestmp)
+		datafile.write_peak(caller,mz,intensity,unit,det,gate,timestmp,peaktype=None)
 		
 		Write PEAK data line to the data file.
 		
@@ -429,6 +429,7 @@ class datafile:
 		det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier
 		gate: gate time (float)
 		timestmp: timestamp of the peak measurement (see misc.now_UNIX)
+		peaktype (optional): string to indicate the "type" of the PEAK reading (default: type=None). Specifying type will add the type string the the PEAK identifier in the data file in order to tell the processing tool(s) to use the PEAK_xyz reading for a specific purpose. Example: type='DECONV' will change the PEAK identifier to PEAK_DECONV, which will be used for deconvolution of mass spectrometric overlaps.
 		
 		OUTPUT:
 		(none)
@@ -437,15 +438,20 @@ class datafile:
 		det = det.replace(' ','');
 		
 		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det + ' ; gate=' + str(gate) + ' s'
-		self.writeln(caller,label,'PEAK',s,timestmp)
+		if peaktype:
+			p = 'PEAK_' + peaktype
+		else:
+			p = 'PEAK'
+
+		self.writeln(caller,label,p,s,timestmp)
 
 
 	########################################################################################################
 
 	
-	def write_zero(self,caller,label,mz,mz_offset,intensity,unit,det,gate,timestmp):
+	def write_zero(self,caller,label,mz,mz_offset,intensity,unit,det,gate,timestmp,zerotype=None):
 		"""
-		datafile.write_zero(caller,mz,mz_offset,intensity,unit,det,gate,timestmp)
+		datafile.write_zero(caller,mz,mz_offset,intensity,unit,det,gate,timestmp,zerotype=None)
 		
 		Write ZERO data line to the data file.
 		
@@ -455,10 +461,11 @@ class datafile:
 		mz: mz value (integer)
 		mz_offset: mz offset value (integer, positive offset corresponds to higher mz value)
 		intensity: zero intensity value (float)
-		unit: unit of peak intensity value (string)
+		unit: unit of zero intensity value (string)
 		det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier
 		gate: gate time (float)
-		timestmp: timestamp of the peak measurement (see misc.now_UNIX)
+		timestmp: timestamp of the zero measurement (see misc.now_UNIX)
+		zerotype (optional): string to indicate the "type" of the ZERO reading (default: type=None). Specifying type will add the type string the the ZERO identifier in the data file in order to tell the processing tool(s) to use the ZERO_xyz reading for a specific purpose. Example: type='DECONV' will change the ZERO identifier to ZERO_DECONV, which will be used for deconvolution of mass spectrometric overlaps.
 		
 		OUTPUT:
 		(none)
@@ -469,9 +476,13 @@ class datafile:
 			offset = '+'+str(mz_offset)
 		else:
 			offset = str(mz_offset)
-		
+		if zerotype:
+			p = 'ZERO_' + zerotype
+		else:
+			p = 'ZERO'
+
 		s = 'mz=' + str(mz) + ' ; mz-offset=' + offset + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det + ' ; gate=' + str(gate) + ' s'
-		self.writeln(caller,label,'ZERO',s,timestmp)
+		self.writeln(caller,label,p,s,timestmp)
 
 
 	########################################################################################################
