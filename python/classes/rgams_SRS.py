@@ -2176,28 +2176,12 @@ class rgams_SRS:
 
 
 		def pz_cycle (m,g,f,typ,add_to_peakbuffer=True):
-
-			if isinstance(m[0],int):
-				# m is s singe 2-tuple, containing only one pair of peak and zero offset m/z values
-				L = 1
-			else:
-				# m is a tuple of 2-tuples
-				L = len(m)
-
-			for i in range(L):
-				if L > 1:
-					mz_p = m[i][0]
-					mz_z = m[i][1]
-				else:
-					mz_p = m[0]
-					mz_z = m[1]
-
-				self.peak(mz_p,g,f,add_to_peakbuffer,peaktype=typ) # read PEAK value
-				if not mz_z == 0:
-					self.zero(mz_p,mz_z,g,f,zerotype=datatype) # read ZERO value
+			for i in range(len(m)):
+				self.peak(m[i][0],g,f,add_to_peakbuffer) # read PEAK value
+				if not m[i][1] == 0:
+					self.zero(m[i][0],m[i][1],g,f) # read ZERO value
 			if add_to_peakbuffer:
 				self.plot_peakbuffer()
-
 
 		# prepare:
 		self.set_detector(detector)
