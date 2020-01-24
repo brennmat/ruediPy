@@ -46,8 +46,10 @@ from classes.selectorvalve_VICI	import selectorvalve_VICI
 from classes.datafile		import datafile
 
 # set up ruediPy objects:
-VALVE     = selectorvalve_VICI ( serialport = '/dev/serial/by-id/usb-FTDI_USB-RS232_Cable_FT1JKU8W-if00-port0', label = 'INLETSELECTOR' )
+VALVE     = selectorvalve_VICI ( serialport = '/dev/serial/by-id/usb-FTDI_USB-RS232_Cable_FT2MLH28-if00-port0', label = 'INLETSELECTOR' )
 DATAFILE  = datafile ( '~/data' )
+
+VALVE.set_legacy()
 
 # start data file:
 DATAFILE.next() # start a new data file

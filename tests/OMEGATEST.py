@@ -54,7 +54,7 @@ from classes.datafile			import datafile
 # for Mac OS X:
 # PSENS		= pressuresensor_OMEGA ( serialport = '/dev/cu.usbserial-487740' , label = 'TOTALPRESSURE' )
 
-PSENS		= pressuresensor_OMEGA ( serialport = '/dev/serial/by-id/usb-Omega_Engineering_USBPX2_487740-if00-port0' , label = 'TOTALPRESSURE' )
+PSENS		= pressuresensor_OMEGA ( serialport = '/dev/serial/by-id/usb-OMEGA_Engineering_USBPX2_495514-if00-port0' , label = 'TOTALPRESSURE' )
 
 
 

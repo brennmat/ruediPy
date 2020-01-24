@@ -51,7 +51,7 @@ from classes.datafile		import datafile
 # set up ruediPy objects:
 # MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
 # MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2304868-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
-MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2469173-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
+MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2350188-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
 DATAFILE  = datafile ( '~/data' )
 
 # set/show MS configuraton:
@@ -86,7 +86,10 @@ for k in range(5):
 # series of sinlge mass measurements ('PEAK' readings):
 print ('Single mass measurements...')
 MS.peakbuffer_clear() # clear peakbuffer (to start with fresh display)
-peaks = [ (28,0.5,'F') , (32,0.5,'F') , (40,0.5,'F') , (44,0.5,'F') , (84,2.4,'M') ]
+peaks = [ (32,0.5,'F') , (28,0.5,'F') , (40,0.5,'F') , (44,0.5,'F') , (84,2.4,'M') ]
+
+peaks = [ (40,0.5,'F') ]
+
 j = 0
 # while j < 3:
 while 1:

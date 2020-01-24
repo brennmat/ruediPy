@@ -45,7 +45,7 @@ import time
 from classes.temperaturesensor_MAXIM	import temperaturesensor_MAXIM
 from classes.datafile					import datafile
 
-TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FT9S9VXT-if00-port0' , label = 'TEMP-TEST' )
+TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FTAMEDJD-if00-port0' , label = 'TEMP-TEST' )
 # TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FT9S6X3O-if00-port0' , label = 'TEMP-TEST' , fig_w = 8 , fig_h = 3)
 
 # TSENS		= temperaturesensor_MAXIM ( serialport = '/dev/cu.usbserial' , label = 'TEMP-TEST' , fig_w = 8 , fig_h = 3)
