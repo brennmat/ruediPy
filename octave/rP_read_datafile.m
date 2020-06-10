@@ -79,8 +79,6 @@ if fid == -1 % could not get read access to file, issue error:
 else % read file line by line:
 	disp (sprintf('rP_read_datafile: reading file %s...',file)); fflush (stdout);
 	
-	% tic
-	
 	t = OBJ = LABEL = TYPE = DATA = FIELDTYPES = {};
 	line = fgetl (fid); k = 1;
 	
@@ -92,16 +90,16 @@ else % read file line by line:
 		DATA{k} = line(j+2:end);
 		
 		% TIME:
-		time_keys = strsplit (time_keys,' ');
+		time_keys = __my_strsplit (time_keys,' ');
 		t{k} = time_keys{1};
 		
 		% DATASOURCE[LABEL]:
-		u = strsplit (time_keys{2},'[');
+		u = __my_strsplit (time_keys{2},'[');
 		if length(u) == 1 % there was no LABEL part
-			OBJ{k}   = strtrim (time_keys{2});
+			OBJ{k}   = __my_strtrim (time_keys{2});
 			LABEL{k} = OBJ{k};
 		else
-			OBJ{k}   = strtrim (u{1});
+			OBJ{k}   = __my_strtrim (u{1});
 			LABEL{k} = u{2}(1:end-1);
 		end	
 		
@@ -204,7 +202,7 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					p.epochtime = tt(k);
 					
 					% comment text:
-					p.comment = strtrim (DD{k}); % remove leading and trailing whitespace from s
+					p.comment = __my_strtrim (DD{k}); % remove leading and trailing whitespace from s
 
 					% append to COMMENTs:
 					if k == 1 % first iteration
@@ -222,7 +220,7 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					p.epochtime = tt(k);
 					
 					% analysistype text:
-					p.type = strtrim (DD{k}); % remove leading and trailing whitespace
+					p.type = __my_strtrim (DD{k}); % remove leading and trailing whitespace
 
 					% append to ANALYSISTYPEs (although there should be only one):
 					if k == 1 % first iteration
@@ -240,14 +238,14 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					p.epochtime = tt(k);
 
 					% split data line entries:
-					u = strtrim (strsplit(DD{k},';')); % split fields and remove leading and trailing whitespace
-					
+					u = __my_strtrim (__my_strsplit(DD{k},';')); % split fields and remove leading and trailing whitespace
+
 					% species value:
 					l = find (index(u,'species') == 1);
 					if isempty(l)
 						error ('rP_read_datafile: could not find ''species'' field in STANDARD data of DATAFILE object data. Aborting...')
 					else
-						p.species = strsplit(u{l},'='){2};
+						p.species = __my_strsplit(u{l},'='){2};
 					end
 									
 					% concentration value:
@@ -255,7 +253,7 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					if isempty(l)
 						error ('rP_read_datafile: could not find ''concentration'' field in STANDARD data of DATAFILE object data. Aborting...')
 					else
-						p.concentration = str2num (strsplit(strsplit(u{l},'='){2},' '){1});
+						p.concentration = str2num (__my_strsplit(__my_strsplit(u{l},'='){2},' '){1});
 					end
 
 					% mz value:
@@ -263,7 +261,7 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					if isempty(l)
 						error ('rP_read_datafile: could not find ''mz'' field in STANDARD data of DATAFILE object data. Aborting...')
 					else
-						p.mz = str2num (strsplit(u{l},'='){2});
+						p.mz = str2num (__my_strsplit(u{l},'='){2});
 					end
 
 					% append to STANDARD:
@@ -282,7 +280,7 @@ function X = __parse_DATAFILE (TYPE,DATA,t) % parse DATAFILE object data
 					p.epochtime = tt(k);
 
 					% sampletype text:
-					p.name = strtrim (DD{k}); % remove leading and trailing whitespace
+					p.name = __my_strtrim (DD{k}); % remove leading and trailing whitespace
 
 					% append to SAMPLENAMEs (although there should be only one):
 					if k == 1 % first iteration
@@ -353,6 +351,44 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					
 				end % for j = ..
 
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PEAK_DECONV %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			case 'PEAK_DECONV'
+			
+				a = sscanf ( sprintf('%s\n',DD{:}) ,'mz=%d ; intensity=%f %s ; detector=%s ; gate=%f %s\n' , [6,Inf] );
+
+				for j = 1:length(tt)
+							
+					X.PEAK_DECONV(j).epochtime      = tt(j);
+					X.PEAK_DECONV(j).mz             = a(1,j);
+					X.PEAK_DECONV(j).intensity.val  = a(2,j);
+					X.PEAK_DECONV(j).gate.val       = a(5,j);
+
+					u = char([a(3,j) a(4,j) a(6,j)]);
+					X.PEAK_DECONV(j).intensity.unit = u(1);
+					X.PEAK_DECONV(j).detector       = u(2);
+					X.PEAK_DECONV(j).gate.unit      = u(3);
+									
+				end % for j = ..
+								
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ZERO_DECONV %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			case 'ZERO_DECONV'
+
+				a = sscanf ( sprintf('%s\n',DD{:}) ,'mz=%d ; mz-offset=%d ; intensity=%f %s ; detector=%s ; gate=%f %s\n' , [7,Inf] );
+
+				for j = 1:length(tt)
+					X.ZERO_DECONV(j).epochtime      = tt(j);
+					X.ZERO_DECONV(j).mz             = a(1,j);
+					X.ZERO_DECONV(j).mz_offset      = a(2,j);
+					X.ZERO_DECONV(j).intensity.val  = a(3,j);
+					X.ZERO_DECONV(j).gate.val       = a(6,j);
+
+					u = char([a(4,j) a(5,j) a(7,j)]);
+					X.ZERO_DECONV(j).intensity.unit = u(1);
+					X.ZERO_DECONV(j).detector       = u(2);
+					X.ZERO_DECONV(j).gate.unit      = u(3);
+					
+				end % for j = ..
+
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SCAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			case 'SCAN'
 			
@@ -362,7 +398,7 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					p.epochtime = tt(k);
 					
 					% split data line entries:
-					u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace from s
+					u = __my_strtrim (__my_strsplit(DD{k},';')); % remove leading and trailing whitespace from s
 										
 					% mz values:
 					l = find (index(u,'mz=') == 1);
@@ -370,7 +406,7 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 						warning ('rP_read_datafile: could not find ''mz'' field in SCAN data of SRSRGA object data. Using mz = NA...')
 						p.mz = NA;
 					else
-						p.mz = str2num (strsplit(u{l},'='){2});
+						p.mz = str2num (__my_strsplit(u{l},'='){2});
 					end
 					
 					% intensity values:
@@ -380,10 +416,10 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 						p.intensity.val = NA;
 						p.intensity.unit = '?';
 					else
-						uu = strrep (strtrim(u{l}),', ',',');
-						uu = strsplit ( strsplit(uu,'='){2} , ' ' );						
+						uu = strrep (__my_strtrim(u{l}),', ',',');
+						uu = __my_strsplit ( __my_strsplit(uu,'='){2} , ' ' );						
 						p.intensity.val  = str2num (uu{1});
-						p.intensity.unit = strtrim (uu{2});
+						p.intensity.unit = __my_strtrim (uu{2});
 					end
 
 					% gate value:
@@ -393,9 +429,9 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 						p.gate.val = NA;
 						p.gate.unit = '?';
 					else
-						uu = strsplit ( strsplit(strtrim(u{l}),'='){2} , ' ' );
+						uu = __my_strsplit ( __my_strsplit(__my_strtrim(u{l}),'='){2} , ' ' );
 						p.gate.val  = str2num (uu{1});
-						p.gate.unit = strtrim(uu{2});
+						p.gate.unit = __my_strtrim(uu{2});
 					end
 					
 					% detector:
@@ -404,7 +440,7 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 						warning ('rP_read_datafile: could not find ''detector'' field in SCAN data of SRSRGA object data. Using detector = ''?''...')
 						p.detector = '?';
 					else
-						p.detector = strtrim (strsplit(u{l},'='){2});
+						p.detector = __my_strtrim (__my_strsplit(u{l},'='){2});
 					end
 					
 					% append to SCANs:
@@ -415,6 +451,79 @@ function X = __parse_SRSRGA (TYPE,DATA,t) % parse SRSRGA object data
 					end
 													
 				end % for k = ...
+
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% SCAN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			case 'DECONVOLUTION'
+			
+				for k = 1:length(TT)
+					
+					% timestamp:
+					p.epochtime = tt(k);
+					
+					% split data line entries:
+					u = __my_strtrim (__my_strsplit(DD{k},';')); % remove leading and trailing whitespace from s
+					
+					for kk=1:length(u)
+						uu = __my_strtrim (__my_strsplit(u{kk},'='));
+						switch toupper(uu{1})
+							case 'TARGET_MZ'
+								p.target_mz=str2num(uu{2});
+							case 'TARGET_SPECIES'
+								p.target_species=uu{2};
+							case 'DETECTOR'
+								p.detector=uu{2};
+							case 'MS_EE'
+								v = __my_strtrim (__my_strsplit(uu{2},' '));
+								p.MS_EE.val = str2num(v{1});
+								p.MS_EE.unit = v{2};
+							case 'BASIS'
+								b = strrep (uu{2},' ',''); # remove all spaces
+								b = strrep (b,'((',''); # remove opening brackets
+								b = strrep (b,'))',''); # remove closing brackets
+								b = strsplit( b , '),(' ); % cannot use __my_strsplit with length(sep) > 1
+								species = {}; bas = mz = val = [];
+								for i = 1:length(b)
+									bb = __my_strsplit(b{i},',');
+									species{i} = strrep(bb{1},"'","");
+									nn = (length(bb)-1)/2;
+									bas = [ bas, repmat(i,1,nn)  ];
+									for j = 1:nn
+										mz  = [ mz , str2num(bb{2*j})   ];
+										val = [ val, str2num(bb{2*j+1}) ];
+									end
+								end
+
+								BAS = unique (bas);
+								MZ = unique (mz);
+								x = repmat (0,length(MZ),length(BAS));
+								for i = 1:length(BAS) % for each basis...
+									for j = 1:length(MZ) % ...check if it has an entry for any of the mz values...
+										kk = find( bas == BAS(i) );
+										ll = find( mz(kk) == MZ(j) );
+										if any(ll)
+											x(j,i) = val(kk(ll));
+										end
+									end % for j = ...
+								end % for i = ...
+
+								p.basis.species   = species;
+								p.basis.mz  = MZ';
+								p.basis.val = x;
+						end % switch
+					end % for kk
+
+					% append to DECONVOLUTION entries:
+					if k == 1 % first iteration
+						X.DECONVOLUTION = p;
+					else
+						X.DECONVOLUTION = [ X.DECONVOLUTION p ];
+					end
+
+					clear p
+
+				end
+
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			otherwise
@@ -446,11 +555,11 @@ function X = __parse_SELECTORVALVE (TYPE,DATA,t) % parse SELECTORVALVE object da
 					p.epochtime = tt(k);
 										
 					% split data line entries (there is currently only one single entry for SELECTORVALVE POSITION, but who knows if this might change in the future):
-					%%% u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace
+					%%% u = __my_strtrim (__my_strsplit(DD{k},';')); % remove leading and trailing whitespace
 															
 					% position value:
 					
-					u = strtrim (DD{k}); % remove leading and trailing whitespace
+					u = __my_strtrim (DD{k}); % remove leading and trailing whitespace
 					p.val = str2num (u);
 					
 					if ~( p.val >= 0 )
@@ -496,12 +605,12 @@ function X = __parse_TEMPERATURESENSOR (TYPE,DATA,t) % parse TEMPERATURESENSOR o
 					p.epochtime = tt(k);
 										
 					% split data line entries:
-					u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace from s
+					u = __my_strtrim (__my_strsplit(DD{k},';')); % remove leading and trailing whitespace from s
 															
 					% temperature value + unit:
-					uu = strsplit(strtrim(DD{k}),' ');
+					uu = __my_strsplit(__my_strtrim(DD{k}),' ');
 					p.val  = str2num (uu{1});
-					p.unit = strtrim(uu{2});
+					p.unit = __my_strtrim(uu{2});
 		
 					% append to TEMPERATUREs:
 					if k == 1 % first iteration
@@ -543,12 +652,12 @@ function X = __parse_PRESSURESENSOR (TYPE,DATA,t) % parse PRESSURESENSOR object 
 					p.epochtime = tt(k);
 										
 					% split data line entries:
-					u = strtrim (strsplit(DD{k},';')); % remove leading and trailing whitespace from s
+					u = __my_strtrim (__my_strsplit(DD{k},';')); % remove leading and trailing whitespace from s
 															
 					% pressure value + unit:
-					uu = strsplit(strtrim(DD{k}),' ');
+					uu = __my_strsplit(__my_strtrim(DD{k}),' ');
 					p.val  = str2num (uu{1});
-					p.unit = strtrim(uu{2});
+					p.unit = __my_strtrim(uu{2});
 		
 					% append to PRESSUREs:
 					if k == 1 % first iteration
@@ -568,3 +677,40 @@ function X = __parse_PRESSURESENSOR (TYPE,DATA,t) % parse PRESSURESENSOR object 
 		end % switch		
 	end % for i = ...
 end % function
+
+
+function ss = __my_strsplit (s,sep)
+% split string s at sep (could use regular strsplit instead, but this is slow)
+	k = find (s == sep);
+	if isempty(k)
+		ss = cellstr(s);
+	else
+		ss = {};
+		if k(1) > 1
+			ss{1} = s(1:k(1)-1);
+		end
+		for i = 2:length(k)
+			if k(i) - k(i-1) > 1
+				ss{end+1} = s(k(i-1)+1:k(i)-1);
+			end
+		end
+		if k(end) < length(s)
+			ss{end+1} = s(k(end)+1:end);
+		end
+	end
+end
+
+
+function s = __my_strtrim (s)
+% remove leading and trailing spaces from string s (could use regular strtrim instead, but this is slow)
+	if iscellstr (s)
+		for i = 1:length(s)
+			s{i} = __my_strtrim (s{i});
+		end
+	else
+		try
+			while s(1) == ' ', s= s(2:end); end
+			while s(end) == ' ', s= s(1:end-1); end
+		end
+	end
+end
