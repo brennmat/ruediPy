@@ -2,7 +2,8 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 
 % function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch (data,MS_names,SENSOR_names,varargin)
 % 
-% Calibrate a batch of ruediPy analysis steps by combining data from samples, calibrations, and blanks. Write results to CSV data file. Note that even if data from a total gas pressure sensor is available, the partial pressures are NOT normalised to the total gas pressure. 
+% Calibrate a batch of ruediPy analysis steps by combining data from samples, calibrations, and blanks. Write results to CSV data file.
+% Note that even if data from a total gas pressure sensor is available, the partial pressures are NOT normalised to the total gas pressure. 
 %
 % INPUT:
 % data: files to be processed (string with file/path pattern)
@@ -284,7 +285,7 @@ for i = 1:length(X)
 		otherwise
 			warning (sprintf("rP_calibrate_batch: unknown analysis type \'%s\' in file %s. Ignoring this step...",X(i).INFO.type,RAW{i}.file))
 	end % switch
-
+	
 	mz_det = { mz_det{:} X(i).MS.mz_det{:} };
 	
 end % for

@@ -2177,9 +2177,9 @@ class rgams_SRS:
 
 		def pz_cycle (m,g,f,typ,add_to_peakbuffer=True):
 			for i in range(len(m)):
-				self.peak(m[i][0],g,f,add_to_peakbuffer) # read PEAK value
+				self.peak(m[i][0],g,f,add_to_peakbuffer,peaktype=typ) # read PEAK value
 				if not m[i][1] == 0:
-					self.zero(m[i][0],m[i][1],g,f) # read ZERO value
+					self.zero(m[i][0],m[i][1],g,f,zerotype=typ) # read ZERO value
 			if add_to_peakbuffer:
 				self.plot_peakbuffer()
 
@@ -2216,3 +2216,23 @@ class rgams_SRS:
 
 
 ####################################################################################################
+
+
+	def write_deconv_info (self,target_mz,target_species,deconv_detector,basis,f):
+
+		'''
+		write_deconv_info (target_mz,target_species,deconv_detector,basis,f)
+
+		Write DECONVOLUTION information line to data file (information needed by the deconvolution processor).
+
+		INPUT:
+		target_mz: m/z ratio of the peak that needs "overlap correction by deconvolution" (integer)
+		target_species: name of the gas species that needs "overlap correction by deconvolution" (string)
+		deconv_detector: indicates whether deconvolution (regression of linear model) is based on Faraday or Multiplier data (string, eiter 'F' or 'M')
+		basis: spectra (or "endmembers") to be used as basis for deconvolution (Pyhton tuple). Every tuple element is of the form ('speciesname',mz1,peakheight1,mz2,peakheight2,...,mzN,peakheightN). Example: basis=( ('CH4',13,0.12,14,0.205,15,0.902,16,1.0) , ('N2',14,0.13,15,0.00043,28,1.0,29,0.0035) , ('O2',16,0.21,32,1.0) )
+		f: data file object
+
+		OUTPUT:
+		(none)
+		'''
+		f.write_ms_deconv('RGA_SRS',self.label(),target_mz,target_species,deconv_detector,self.get_electron_energy(),basis,misc.now_UNIX())

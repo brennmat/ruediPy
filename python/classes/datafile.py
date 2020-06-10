@@ -437,9 +437,9 @@ class datafile:
 		
 		det = det.replace(' ','');
 		
-		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det + ' ; gate=' + str(gate) + ' s'
+		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det.upper() + ' ; gate=' + str(gate) + ' s'
 		if peaktype:
-			p = 'PEAK_' + peaktype
+			p = 'PEAK_' + peaktype.upper()
 		else:
 			p = 'PEAK'
 
@@ -477,11 +477,11 @@ class datafile:
 		else:
 			offset = str(mz_offset)
 		if zerotype:
-			p = 'ZERO_' + zerotype
+			p = 'ZERO_' + zerotype.upper()
 		else:
 			p = 'ZERO'
 
-		s = 'mz=' + str(mz) + ' ; mz-offset=' + offset + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det + ' ; gate=' + str(gate) + ' s'
+		s = 'mz=' + str(mz) + ' ; mz-offset=' + offset + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det.upper() + ' ; gate=' + str(gate) + ' s'
 		self.writeln(caller,label,p,s,timestmp)
 
 
@@ -510,6 +510,35 @@ class datafile:
 		
 		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + '; detector=' + det + ' ; gate=' + str(gate) + ' s'
 		self.writeln(caller,label,'SCAN',s,timestmp)
+
+
+	########################################################################################################
+
+
+	def write_ms_deconv(self,caller,label,target_mz,target_species,deconv_detector,ms_EE,basis,timestmp):
+		"""
+		datafile.write_ms_deconv(caller,label,target_mz,target_species,deconv_detector,ms_EE,basis,timestmp)
+		
+		Write DECONVOLUTION line to the data file (information for deconvolution processor).
+		
+		INPUT:
+		caller: type of calling object, i.e. the "data origin" (string)
+		label: name/label of the calling object (string)
+		target_mz: m/z ratio of the peak that needs "overlap correction by deconvolution" (integer)
+		target_species: name of the gas species that needs "overlap correction by deconvolution" (string)
+		deconv_detector: indicates whether deconvolution (regression of linear model) is based on Faraday or Multiplier data (string, either 'F' or 'M')
+		ms_EE: ionisation energy used for the analysis in the MS ion source (float, in eV)
+		basis: spectra (or "endmembers") to be used as basis for deconvolution (Pyhton tuple). Every tuple element is of the form ('speciesname',mz1,peakheight1,mz2,peakheight2,...,mzN,peakheightN). Example: basis=( ('CH4',13,0.12,14,0.205,15,0.902,16,1.0) , ('N2',14,0.13,15,0.00043,28,1.0,29,0.0035) , ('O2',16,0.21,32,1.0) )
+
+		gate: gate time (float)
+		timestmp: timestamp of the peak measurement (see misc.now_UNIX)
+		
+		OUTPUT:
+		(none)
+		"""
+		
+		s = 'target_mz=' + str(target_mz) + ' ; target_species=' + target_species + ' ; detector = ' + deconv_detector.upper() + ' ; MS_EE=' + str(ms_EE) + ' eV ; basis=' + str(basis)
+		self.writeln(caller,label,'DECONVOLUTION',s,timestmp)
 
 
 	########################################################################################################

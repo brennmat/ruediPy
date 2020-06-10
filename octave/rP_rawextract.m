@@ -144,7 +144,7 @@ end
 X = [];
 for i = 1:length(RAW)
 
-	disp (sprintf('rP_rawextract: parsing file %s...',RAW{i}.file))
+	disp (sprintf('rP_rawextract: processing file %s...',RAW{i}.file))
 
 	info = rP_digest_step_DATAFILEINFO(RAW{i});
 
@@ -240,8 +240,9 @@ else
 			% get MS numbers:
 			item_EPOCH = item_MEAN = item_MEANERR = repmat (NA,size(items));
 			if isstruct (X(i).MS)
-				for j = 1:length(items)
-					k = strmatch (items{j},X(i).MS.mz_det,"exact");
+				for j = 1:length(items)				
+					% strmatch is obsolete: k = strmatch (items{j},X(i).MS.mz_det,"exact");
+					k = find ( strcmp(items{j},X(i).MS.mz_det) );
 					if ~isempty(k)
 						item_EPOCH(j) = X(i).MS.mean_time(k);
 						item_MEAN(j) = X(i).MS.mean(k);
@@ -254,7 +255,8 @@ else
 			sens_EPOCH = sens_MEAN = sens_MEANERR = repmat (NA,size(sens));
 			if isfield (X(i),'SENSORS')
 				for j = 1:length(X(i).SENSORS)
-					k = strmatch (X(i).SENSORS{j}.sensor,sens,"exact");
+					% strmatch is obsolete: k = strmatch (X(i).SENSORS{j}.sensor,sens,"exact");
+					k = find ( strcmp(X(i).SENSORS{j}.sensor,sens) );
 					if ~isempty(k)
 						sens_EPOCH(k) = X(i).SENSORS{j}.mean_time;
 						sens_MEAN(k) = X(i).SENSORS{j}.mean;
