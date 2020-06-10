@@ -1,0 +1,1625 @@
+1580829522.5409636 DATAFILE COMMENT: RUEDI data file created 2020-02-04 16:18:42
+1580829522.5411484 DATAFILE COMMENT: Data format:
+1580829522.5411792 DATAFILE COMMENT: EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...
+1580829522.5411947 DATAFILE COMMENT: EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.
+1580829522.5412805 DATAFILE ANALYSISTYPE: SAMPLE
+1580829522.5413423 DATAFILE SAMPLENAME: deconv_test
+1580829529.8079484 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.277e-12 A ; detector=F ; gate=0.1 s
+1580829530.0755873 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829530.3229167 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.847e-13 A ; detector=F ; gate=0.1 s
+1580829530.5906265 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829530.838018 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=7.568999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829531.105644 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829531.3531072 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.164214e-10 A ; detector=F ; gate=0.1 s
+1580829531.6207123 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829531.8682408 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.1729999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829532.1358817 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.9849999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829532.3833408 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.727058e-10 A ; detector=F ; gate=0.1 s
+1580829532.6510425 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829532.8996067 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7059e-12 A ; detector=F ; gate=0.1 s
+1580829533.1701915 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829533.420682 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8984e-12 A ; detector=F ; gate=0.1 s
+1580829533.6907213 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829533.9401221 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.654e-13 A ; detector=F ; gate=0.1 s
+1580829534.2107117 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829534.4606745 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6464616e-09 A ; detector=F ; gate=0.1 s
+1580829534.7310562 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829535.079132 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1812e-12 A ; detector=F ; gate=0.1 s
+1580829535.3466356 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829535.5940232 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829535.8616333 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829536.108181 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.931e-13 A ; detector=F ; gate=0.1 s
+1580829536.375891 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829536.6233826 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1594309999999999e-10 A ; detector=F ; gate=0.1 s
+1580829536.890969 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829537.1384566 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.599e-13 A ; detector=F ; gate=0.1 s
+1580829537.406157 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.055e-13 A ; detector=F ; gate=0.1 s
+1580829537.6536686 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7146799999999999e-10 A ; detector=F ; gate=0.1 s
+1580829537.9230568 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829538.173415 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6602e-12 A ; detector=F ; gate=0.1 s
+1580829538.4436188 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829538.6933525 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.875e-12 A ; detector=F ; gate=0.1 s
+1580829538.9638824 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829539.2136922 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829539.4843237 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829539.7340088 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6541201e-09 A ; detector=F ; gate=0.1 s
+1580829540.0039709 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.5229999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829540.356536 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2474e-12 A ; detector=F ; gate=0.1 s
+1580829540.6239314 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829540.8712437 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=4.47e-13 A ; detector=F ; gate=0.1 s
+1580829541.1388035 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829541.3863916 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=9.862e-13 A ; detector=F ; gate=0.1 s
+1580829541.6540644 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829541.9015834 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.148445e-10 A ; detector=F ; gate=0.1 s
+1580829542.1691012 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829542.4166267 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829542.6841712 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.055e-13 A ; detector=F ; gate=0.1 s
+1580829542.9316285 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7196029999999999e-10 A ; detector=F ; gate=0.1 s
+1580829543.199394 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829543.4469306 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6984e-12 A ; detector=F ; gate=0.1 s
+1580829543.7145638 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829543.9638035 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9604e-12 A ; detector=F ; gate=0.1 s
+1580829544.2342129 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829544.484114 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829544.7540514 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829545.0026793 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6515178e-09 A ; detector=F ; gate=0.1 s
+1580829545.273343 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829545.612921 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2181e-12 A ; detector=F ; gate=0.1 s
+1580829545.880775 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829546.1283 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.848e-13 A ; detector=F ; gate=0.1 s
+1580829546.3957908 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829546.6423984 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=7.808e-13 A ; detector=F ; gate=0.1 s
+1580829546.910114 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829547.1576393 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.15742e-10 A ; detector=F ; gate=0.1 s
+1580829547.4251854 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829547.672699 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.902999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829547.9416385 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829548.1914518 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.717948e-10 A ; detector=F ; gate=0.1 s
+1580829548.462174 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829548.712284 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6754e-12 A ; detector=F ; gate=0.1 s
+1580829548.9828823 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829549.2334223 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=2.0149999999999998e-12 A ; detector=F ; gate=0.1 s
+1580829549.5042446 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829549.7547426 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829550.0250494 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829550.274622 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6516958999999998e-09 A ; detector=F ; gate=0.1 s
+1580829550.545128 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829550.8831978 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0642e-12 A ; detector=F ; gate=0.1 s
+1580829551.1510818 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829551.3984282 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829551.665991 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829551.9125397 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.282e-13 A ; detector=F ; gate=0.1 s
+1580829552.1802676 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829552.4277682 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.15342e-10 A ; detector=F ; gate=0.1 s
+1580829552.695432 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829552.9431148 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829553.210512 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.331e-13 A ; detector=F ; gate=0.1 s
+1580829553.4581616 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.717125e-10 A ; detector=F ; gate=0.1 s
+1580829553.7258456 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829553.9750733 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6068e-12 A ; detector=F ; gate=0.1 s
+1580829554.245278 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829554.4950867 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9449e-12 A ; detector=F ; gate=0.1 s
+1580829554.7657428 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829555.0159554 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829555.2864006 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829555.5361297 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6553304e-09 A ; detector=F ; gate=0.1 s
+1580829555.8070211 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=4.843e-13 A ; detector=F ; gate=0.1 s
+1580829556.1470325 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0495999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829556.4153826 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829556.6627288 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829556.930349 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829557.1778784 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.302e-13 A ; detector=F ; gate=0.1 s
+1580829557.4455705 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829557.6930387 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.155381e-10 A ; detector=F ; gate=0.1 s
+1580829557.9606414 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829558.2082422 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829558.4758685 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.847e-13 A ; detector=F ; gate=0.1 s
+1580829558.723422 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.712144e-10 A ; detector=F ; gate=0.1 s
+1580829558.9922876 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829559.2422519 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7059e-12 A ; detector=F ; gate=0.1 s
+1580829559.5128348 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829559.7629752 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9682e-12 A ; detector=F ; gate=0.1 s
+1580829560.033883 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829560.2830896 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829560.5541008 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829560.8041232 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6502741e-09 A ; detector=F ; gate=0.1 s
+1580829561.0748782 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=4.262e-13 A ; detector=F ; gate=0.1 s
+1580829561.4131997 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1885e-12 A ; detector=F ; gate=0.1 s
+1580829561.6816082 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829561.9289057 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829562.1965492 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829562.4440236 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.855e-13 A ; detector=F ; gate=0.1 s
+1580829562.7117188 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829562.9591887 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.153484e-10 A ; detector=F ; gate=0.1 s
+1580829563.2269123 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829563.4744947 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.663e-13 A ; detector=F ; gate=0.1 s
+1580829563.7420683 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.055e-13 A ; detector=F ; gate=0.1 s
+1580829563.9913242 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7237539999999998e-10 A ; detector=F ; gate=0.1 s
+1580829564.2618165 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829564.5121565 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7671e-12 A ; detector=F ; gate=0.1 s
+1580829564.7829738 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829565.0333076 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9526e-12 A ; detector=F ; gate=0.1 s
+1580829565.303774 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829565.5537646 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829565.8242056 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829566.074838 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6539493e-09 A ; detector=F ; gate=0.1 s
+1580829566.344914 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.848e-13 A ; detector=F ; gate=0.1 s
+1580829566.6815078 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0495999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829566.9498441 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829567.1970208 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829567.4645455 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829567.7112072 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.65e-13 A ; detector=F ; gate=0.1 s
+1580829567.9789143 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=1.942e-13 A ; detector=F ; gate=0.1 s
+1580829568.2264578 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1533709999999998e-10 A ; detector=F ; gate=0.1 s
+1580829568.494056 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829568.741577 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=6.705e-13 A ; detector=F ; gate=0.1 s
+1580829569.011513 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829569.2613008 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.712127e-10 A ; detector=F ; gate=0.1 s
+1580829569.5318258 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829569.7816074 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5538e-12 A ; detector=F ; gate=0.1 s
+1580829570.0520384 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829570.3017595 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9526e-12 A ; detector=F ; gate=0.1 s
+1580829570.5723653 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829570.8227904 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829571.093094 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829571.3426998 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6389761e-09 A ; detector=F ; gate=0.1 s
+1580829571.6122625 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829571.9515486 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1518e-12 A ; detector=F ; gate=0.1 s
+1580829572.2190702 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829572.4662967 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829572.7338803 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829572.9804957 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.653e-13 A ; detector=F ; gate=0.1 s
+1580829573.2482517 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829573.495797 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.163215e-10 A ; detector=F ; gate=0.1 s
+1580829573.7634113 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829574.0108616 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829574.2784677 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.778e-13 A ; detector=F ; gate=0.1 s
+1580829574.5260468 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.717972e-10 A ; detector=F ; gate=0.1 s
+1580829574.7937033 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829575.0436134 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7671e-12 A ; detector=F ; gate=0.1 s
+1580829575.3143816 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829575.5640392 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9526e-12 A ; detector=F ; gate=0.1 s
+1580829575.834504 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829576.0842159 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.778e-13 A ; detector=F ; gate=0.1 s
+1580829576.3545165 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.5499999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829576.603947 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6439985e-09 A ; detector=F ; gate=0.1 s
+1580829576.8747356 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829577.2147481 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2326e-12 A ; detector=F ; gate=0.1 s
+1580829577.4829366 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829577.7294922 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829577.9970996 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829578.2437148 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.727999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829578.5114202 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829578.758882 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.155393e-10 A ; detector=F ; gate=0.1 s
+1580829579.0266452 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829579.2740502 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.829e-13 A ; detector=F ; gate=0.1 s
+1580829579.5416257 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.608e-13 A ; detector=F ; gate=0.1 s
+1580829579.78915 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.71961e-10 A ; detector=F ; gate=0.1 s
+1580829580.0568135 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829580.3043036 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7977999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829580.5718837 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829580.8202262 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9916e-12 A ; detector=F ; gate=0.1 s
+1580829581.090278 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=1.941e-13 A ; detector=F ; gate=0.1 s
+1580829581.34023 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829581.6105154 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829581.860398 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.645207e-09 A ; detector=F ; gate=0.1 s
+1580829582.1308727 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.608e-13 A ; detector=F ; gate=0.1 s
+1580829582.4748461 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1007e-12 A ; detector=F ; gate=0.1 s
+1580829582.7424269 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829582.9897625 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829583.2573128 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829583.5049326 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=7.568999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829583.772707 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829584.0201755 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1552839999999999e-10 A ; detector=F ; gate=0.1 s
+1580829584.2878006 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829584.5353498 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.11e-13 A ; detector=F ; gate=0.1 s
+1580829584.8031223 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.1229999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829585.0505009 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.709682e-10 A ; detector=F ; gate=0.1 s
+1580829585.3181002 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829585.5657647 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7174e-12 A ; detector=F ; gate=0.1 s
+1580829585.8351157 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829586.0851374 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=2.0150999999999998e-12 A ; detector=F ; gate=0.1 s
+1580829586.3560433 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829586.6064816 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829586.8771005 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829587.126522 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6565516e-09 A ; detector=F ; gate=0.1 s
+1580829587.3970647 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=4.1229999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829587.7408204 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1445e-12 A ; detector=F ; gate=0.1 s
+1580829588.0085588 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829588.2558718 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829588.5234957 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829588.7700644 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.653e-13 A ; detector=F ; gate=0.1 s
+1580829589.0377803 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829589.2853026 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.159317e-10 A ; detector=F ; gate=0.1 s
+1580829589.5529156 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.077e-13 A ; detector=F ; gate=0.1 s
+1580829589.8005023 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.219e-13 A ; detector=F ; gate=0.1 s
+1580829590.068074 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829590.3156698 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7146799999999999e-10 A ; detector=F ; gate=0.1 s
+1580829590.583297 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829590.83155 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6142999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829591.1009295 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829591.3511925 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9526e-12 A ; detector=F ; gate=0.1 s
+1580829591.6219206 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829591.871305 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829592.1421852 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829592.392731 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.653855e-09 A ; detector=F ; gate=0.1 s
+1580829592.6629925 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829593.0009847 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2474e-12 A ; detector=F ; gate=0.1 s
+1580829593.2687867 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829593.5161645 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829593.783819 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829594.0304377 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.164e-13 A ; detector=F ; gate=0.1 s
+1580829594.2981617 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829594.5456882 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.156294e-10 A ; detector=F ; gate=0.1 s
+1580829594.8133442 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829595.0609007 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829595.3284647 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829595.576032 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.714589e-10 A ; detector=F ; gate=0.1 s
+1580829595.8437688 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829596.0912707 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5839e-12 A ; detector=F ; gate=0.1 s
+1580829596.3588681 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829596.6064112 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9216e-12 A ; detector=F ; gate=0.1 s
+1580829596.8756363 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829597.126105 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829597.3967175 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829597.6473122 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6615074e-09 A ; detector=F ; gate=0.1 s
+1580829597.9179652 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.027e-13 A ; detector=F ; gate=0.1 s
+1580829598.2579956 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0495999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829598.5263271 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=1.4689999999999998e-13 A ; detector=F ; gate=0.1 s
+1580829598.7736604 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829599.0412366 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829599.288812 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.303999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829599.5564933 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829599.8041055 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.150354e-10 A ; detector=F ; gate=0.1 s
+1580829600.0729578 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829600.3202233 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.711e-13 A ; detector=F ; gate=0.1 s
+1580829600.5878708 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.815e-13 A ; detector=F ; gate=0.1 s
+1580829600.8353143 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.715477e-10 A ; detector=F ; gate=0.1 s
+1580829601.103028 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829601.350529 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5613e-12 A ; detector=F ; gate=0.1 s
+1580829601.618207 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829601.8657842 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.7594e-12 A ; detector=F ; gate=0.1 s
+1580829602.1333034 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829602.3806412 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829602.6483028 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829602.895739 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6527615e-09 A ; detector=F ; gate=0.1 s
+1580829603.1634395 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829603.495976 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.218e-12 A ; detector=F ; gate=0.1 s
+1580829603.76438 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829604.0117402 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829604.2794783 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.942e-13 A ; detector=F ; gate=0.1 s
+1580829604.5270128 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=9.495e-13 A ; detector=F ; gate=0.1 s
+1580829604.7947288 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829605.0422184 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.152361e-10 A ; detector=F ; gate=0.1 s
+1580829605.3097901 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829605.5573485 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.254e-13 A ; detector=F ; gate=0.1 s
+1580829605.8258367 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.746e-13 A ; detector=F ; gate=0.1 s
+1580829606.0762427 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.714589e-10 A ; detector=F ; gate=0.1 s
+1580829606.3472652 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829606.5977805 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6142999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829606.8686984 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829607.119128 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8983e-12 A ; detector=F ; gate=0.1 s
+1580829607.3895946 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.266e-13 A ; detector=F ; gate=0.1 s
+1580829607.639065 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829607.9100704 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829608.1601243 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6477277e-09 A ; detector=F ; gate=0.1 s
+1580829608.42967 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=4.1919999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829608.7729967 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1592e-12 A ; detector=F ; gate=0.1 s
+1580829609.041529 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829609.2888799 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.779e-13 A ; detector=F ; gate=0.1 s
+1580829609.55654 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829609.804032 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.920999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829610.0717442 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.827e-13 A ; detector=F ; gate=0.1 s
+1580829610.3191977 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.150354e-10 A ; detector=F ; gate=0.1 s
+1580829610.586801 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829610.8343847 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.94e-13 A ; detector=F ; gate=0.1 s
+1580829611.102143 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.778e-13 A ; detector=F ; gate=0.1 s
+1580829611.3496213 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.717125e-10 A ; detector=F ; gate=0.1 s
+1580829611.6181738 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829611.8670964 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6678e-12 A ; detector=F ; gate=0.1 s
+1580829612.1378982 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829612.3884087 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9449e-12 A ; detector=F ; gate=0.1 s
+1580829612.659124 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829612.9096186 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829613.1799726 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829613.4306831 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6538975999999998e-09 A ; detector=F ; gate=0.1 s
+1580829613.7011771 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=4.055e-13 A ; detector=F ; gate=0.1 s
+1580829614.0395608 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1741e-12 A ; detector=F ; gate=0.1 s
+1580829614.3074307 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829614.5548203 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.848e-13 A ; detector=F ; gate=0.1 s
+1580829614.8224895 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829615.0690293 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=9.797e-13 A ; detector=F ; gate=0.1 s
+1580829615.3366706 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829615.584189 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1543749999999999e-10 A ; detector=F ; gate=0.1 s
+1580829615.8517838 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829616.0992222 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.389e-13 A ; detector=F ; gate=0.1 s
+1580829616.3668869 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829616.6144085 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.72379e-10 A ; detector=F ; gate=0.1 s
+1580829616.8821564 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829617.1297035 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7289e-12 A ; detector=F ; gate=0.1 s
+1580829617.3972461 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829617.6447597 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9449e-12 A ; detector=F ; gate=0.1 s
+1580829617.9140973 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829618.1645644 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829618.4351263 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829618.6855023 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.645207e-09 A ; detector=F ; gate=0.1 s
+1580829618.9562485 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829619.2950904 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2474e-12 A ; detector=F ; gate=0.1 s
+1580829619.5625172 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829619.8098423 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829620.0776193 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829620.3241937 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.224e-13 A ; detector=F ; gate=0.1 s
+1580829620.5917928 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.824e-13 A ; detector=F ; gate=0.1 s
+1580829620.8393114 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.161188e-10 A ; detector=F ; gate=0.1 s
+1580829621.1070263 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829621.3546035 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.369e-13 A ; detector=F ; gate=0.1 s
+1580829621.6222281 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.2609999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829621.8697872 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.722114e-10 A ; detector=F ; gate=0.1 s
+1580829622.1373532 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829622.3848662 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7671e-12 A ; detector=F ; gate=0.1 s
+1580829622.6524892 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829622.9015148 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9449e-12 A ; detector=F ; gate=0.1 s
+1580829623.1723998 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829623.422687 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829623.693135 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829623.9437876 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6464304e-09 A ; detector=F ; gate=0.1 s
+1580829624.2136433 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829624.5568068 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1958e-12 A ; detector=F ; gate=0.1 s
+1580829624.8244848 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829625.0718687 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829625.339556 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829625.5861151 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.284e-13 A ; detector=F ; gate=0.1 s
+1580829625.853875 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829626.1013079 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1632259999999998e-10 A ; detector=F ; gate=0.1 s
+1580829626.3689804 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829626.6164734 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.040999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829626.884111 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=5.162e-13 A ; detector=F ; gate=0.1 s
+1580829627.1316364 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.718836e-10 A ; detector=F ; gate=0.1 s
+1580829627.399338 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829627.646779 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.8055e-12 A ; detector=F ; gate=0.1 s
+1580829627.9163065 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829628.166648 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=2.0307e-12 A ; detector=F ; gate=0.1 s
+1580829628.4372876 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829628.687759 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829628.9582543 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829629.2080066 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6565516e-09 A ; detector=F ; gate=0.1 s
+1580829629.4786587 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829629.8239064 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1372e-12 A ; detector=F ; gate=0.1 s
+1580829630.0919375 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829630.339319 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829630.6069543 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829630.8545954 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.071e-13 A ; detector=F ; gate=0.1 s
+1580829631.1223595 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829631.369813 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.165182e-10 A ; detector=F ; gate=0.1 s
+1580829631.6374047 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829631.8849912 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829632.1526423 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829632.4000912 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7154819999999999e-10 A ; detector=F ; gate=0.1 s
+1580829632.667729 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829632.9170184 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5537e-12 A ; detector=F ; gate=0.1 s
+1580829633.18729 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829633.4370425 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9216e-12 A ; detector=F ; gate=0.1 s
+1580829633.707591 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829633.9582505 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829634.2288775 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829634.479275 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6513843e-09 A ; detector=F ; gate=0.1 s
+1580829634.7499776 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.847e-13 A ; detector=F ; gate=0.1 s
+1580829635.0906024 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1886e-12 A ; detector=F ; gate=0.1 s
+1580829635.3584526 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829635.6057522 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829635.8734322 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829636.1200767 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=9.509999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829636.3877504 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829636.6352913 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.165226e-10 A ; detector=F ; gate=0.1 s
+1580829636.9029498 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829637.1505787 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.4269999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829637.4182434 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.47e-13 A ; detector=F ; gate=0.1 s
+1580829637.6657338 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.717125e-10 A ; detector=F ; gate=0.1 s
+1580829637.9334652 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829638.1809537 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6678e-12 A ; detector=F ; gate=0.1 s
+1580829638.4486 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829638.6960964 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.976e-12 A ; detector=F ; gate=0.1 s
+1580829638.9666889 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829639.2166402 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829639.4873328 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829639.737477 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6515178e-09 A ; detector=F ; gate=0.1 s
+1580829640.0084243 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829640.350143 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.218e-12 A ; detector=F ; gate=0.1 s
+1580829640.617736 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.077e-13 A ; detector=F ; gate=0.1 s
+1580829640.865015 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829641.1325696 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829641.3792503 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=1.0445e-12 A ; detector=F ; gate=0.1 s
+1580829641.6468563 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829641.8945003 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.157306e-10 A ; detector=F ; gate=0.1 s
+1580829642.1621227 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829642.4096766 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.692e-13 A ; detector=F ; gate=0.1 s
+1580829642.6772954 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.1229999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829642.9247708 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.718787e-10 A ; detector=F ; gate=0.1 s
+1580829643.1923826 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829643.439861 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6449e-12 A ; detector=F ; gate=0.1 s
+1580829643.70755 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.5499999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829643.9572885 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9994e-12 A ; detector=F ; gate=0.1 s
+1580829644.228281 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829644.4787352 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829644.7488844 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.01e-13 A ; detector=F ; gate=0.1 s
+1580829644.998717 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6552545e-09 A ; detector=F ; gate=0.1 s
+1580829645.269089 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.986e-13 A ; detector=F ; gate=0.1 s
+1580829645.6160975 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1006e-12 A ; detector=F ; gate=0.1 s
+1580829645.883686 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829646.130985 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829646.398613 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829646.6452448 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.000999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829646.9129267 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829647.1604726 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.157306e-10 A ; detector=F ; gate=0.1 s
+1580829647.4281733 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829647.675615 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=7.133e-13 A ; detector=F ; gate=0.1 s
+1580829647.9433904 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.986e-13 A ; detector=F ; gate=0.1 s
+1580829648.19088 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.713757e-10 A ; detector=F ; gate=0.1 s
+1580829648.4584725 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829648.7060382 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7059e-12 A ; detector=F ; gate=0.1 s
+1580829648.9750926 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829649.225679 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9682e-12 A ; detector=F ; gate=0.1 s
+1580829649.4964037 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829649.7468407 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829650.0170927 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829650.2669828 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6476385e-09 A ; detector=F ; gate=0.1 s
+1580829650.5374756 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.847e-13 A ; detector=F ; gate=0.1 s
+1580829650.8854854 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2326e-12 A ; detector=F ; gate=0.1 s
+1580829651.153822 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829651.4010968 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829651.668758 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829651.9153795 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.861e-13 A ; detector=F ; gate=0.1 s
+1580829652.1831603 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829652.4305882 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.165182e-10 A ; detector=F ; gate=0.1 s
+1580829652.6982613 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829652.945845 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829653.2135248 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.779e-13 A ; detector=F ; gate=0.1 s
+1580829653.460903 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.720419e-10 A ; detector=F ; gate=0.1 s
+1580829653.7286222 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829653.9762297 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7212e-12 A ; detector=F ; gate=0.1 s
+1580829654.2438428 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829654.4913716 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8443e-12 A ; detector=F ; gate=0.1 s
+1580829654.7590132 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829655.0087721 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829655.2798638 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829655.5303142 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6565073e-09 A ; detector=F ; gate=0.1 s
+1580829655.800702 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829656.1455476 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2992e-12 A ; detector=F ; gate=0.1 s
+1580829656.4132059 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829656.6605384 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.438e-13 A ; detector=F ; gate=0.1 s
+1580829656.928084 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829657.1747453 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.515e-13 A ; detector=F ; gate=0.1 s
+1580829657.4423988 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=1.942e-13 A ; detector=F ; gate=0.1 s
+1580829657.689905 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.158177e-10 A ; detector=F ; gate=0.1 s
+1580829657.9575799 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829658.2051046 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.643e-13 A ; detector=F ; gate=0.1 s
+1580829658.4727914 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.9849999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829658.7203913 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.719655e-10 A ; detector=F ; gate=0.1 s
+1580829658.989791 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829659.2397625 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6563e-12 A ; detector=F ; gate=0.1 s
+1580829659.5106978 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829659.7611578 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9686e-12 A ; detector=F ; gate=0.1 s
+1580829660.0313082 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829660.2787187 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829660.5462925 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829660.7937372 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6501592e-09 A ; detector=F ; gate=0.1 s
+1580829661.0613508 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829661.3959985 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1007e-12 A ; detector=F ; gate=0.1 s
+1580829661.663572 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829661.9109492 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829662.178595 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829662.4262507 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.284e-13 A ; detector=F ; gate=0.1 s
+1580829662.6947954 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829662.942349 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.15232e-10 A ; detector=F ; gate=0.1 s
+1580829663.209914 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829663.4573886 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.4359999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829663.725943 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829663.9753954 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.715477e-10 A ; detector=F ; gate=0.1 s
+1580829664.245817 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829664.4964757 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7135e-12 A ; detector=F ; gate=0.1 s
+1580829664.7667909 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829665.0170615 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9449e-12 A ; detector=F ; gate=0.1 s
+1580829665.2879913 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829665.5383084 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829665.8092747 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829666.059247 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6489880999999998e-09 A ; detector=F ; gate=0.1 s
+1580829666.3300157 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.778e-13 A ; detector=F ; gate=0.1 s
+1580829666.6762183 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1447e-12 A ; detector=F ; gate=0.1 s
+1580829666.943779 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829667.191112 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829667.458754 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829667.7064028 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.071e-13 A ; detector=F ; gate=0.1 s
+1580829667.9741259 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829668.2215607 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.158177e-10 A ; detector=F ; gate=0.1 s
+1580829668.489134 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829668.7366297 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.605e-13 A ; detector=F ; gate=0.1 s
+1580829669.0042117 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829669.251766 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7088049999999999e-10 A ; detector=F ; gate=0.1 s
+1580829669.519429 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829669.7669241 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6678e-12 A ; detector=F ; gate=0.1 s
+1580829670.0369627 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829670.287601 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9449e-12 A ; detector=F ; gate=0.1 s
+1580829670.558235 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829670.8082905 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829671.0792348 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829671.329795 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6526448e-09 A ; detector=F ; gate=0.1 s
+1580829671.600332 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829671.9452062 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1886e-12 A ; detector=F ; gate=0.1 s
+1580829672.2127342 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829672.4600916 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829672.7277575 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829672.9743354 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.214e-13 A ; detector=F ; gate=0.1 s
+1580829673.242009 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829673.4896011 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.155153e-10 A ; detector=F ; gate=0.1 s
+1580829673.7572548 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829674.0048962 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.5499999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829674.2724624 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.401e-13 A ; detector=F ; gate=0.1 s
+1580829674.5199308 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.71961e-10 A ; detector=F ; gate=0.1 s
+1580829674.7876031 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829675.035153 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6524999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829675.3037236 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829675.5512013 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8209e-12 A ; detector=F ; gate=0.1 s
+1580829675.8192592 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829676.0694566 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829676.3402605 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829676.589873 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6513843e-09 A ; detector=F ; gate=0.1 s
+1580829676.860279 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.778e-13 A ; detector=F ; gate=0.1 s
+1580829677.2214088 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1446e-12 A ; detector=F ; gate=0.1 s
+1580829677.4888334 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829677.7362566 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=4.055e-13 A ; detector=F ; gate=0.1 s
+1580829678.0037642 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829678.2514107 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.931e-13 A ; detector=F ; gate=0.1 s
+1580829678.5190587 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829678.76659 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.164242e-10 A ; detector=F ; gate=0.1 s
+1580829679.0343068 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829679.2817893 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.324e-13 A ; detector=F ; gate=0.1 s
+1580829679.549475 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829679.797002 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.715477e-10 A ; detector=F ; gate=0.1 s
+1580829680.0655632 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829680.3131368 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5991e-12 A ; detector=F ; gate=0.1 s
+1580829680.5806813 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829680.8285623 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9838e-12 A ; detector=F ; gate=0.1 s
+1580829681.099104 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829681.3489401 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829681.6195126 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.4859999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829681.8698258 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6577268e-09 A ; detector=F ; gate=0.1 s
+1580829682.140503 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829682.489461 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1227e-12 A ; detector=F ; gate=0.1 s
+1580829682.7578192 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829683.0051615 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829683.2727053 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.8919999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829683.5194242 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=4.47e-13 A ; detector=F ; gate=0.1 s
+1580829683.7871907 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829684.034609 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.15918e-10 A ; detector=F ; gate=0.1 s
+1580829684.302269 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829684.5497901 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.28e-13 A ; detector=F ; gate=0.1 s
+1580829684.8174102 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.848e-13 A ; detector=F ; gate=0.1 s
+1580829685.0648954 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.721242e-10 A ; detector=F ; gate=0.1 s
+1580829685.33358 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829685.5809684 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6984e-12 A ; detector=F ; gate=0.1 s
+1580829685.8492541 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=1.605e-13 A ; detector=F ; gate=0.1 s
+1580829686.0997329 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9682e-12 A ; detector=F ; gate=0.1 s
+1580829686.3701885 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829686.620903 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829686.891216 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829687.1413822 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6551965e-09 A ; detector=F ; gate=0.1 s
+1580829687.4115407 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=2.962e-13 A ; detector=F ; gate=0.1 s
+1580829687.7635062 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1665999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829688.0317574 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829688.279131 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829688.5467384 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829688.793341 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=7.778e-13 A ; detector=F ; gate=0.1 s
+1580829689.061125 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829689.3086274 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.160204e-10 A ; detector=F ; gate=0.1 s
+1580829689.5762408 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.8919999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829689.8237107 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=7.479999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829690.091468 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.9159999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829690.3389595 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.712127e-10 A ; detector=F ; gate=0.1 s
+1580829690.6074817 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829690.856018 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5991e-12 A ; detector=F ; gate=0.1 s
+1580829691.127136 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829691.3777764 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8363e-12 A ; detector=F ; gate=0.1 s
+1580829691.648338 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829691.8986592 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829692.1695733 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829692.4200659 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6616854e-09 A ; detector=F ; gate=0.1 s
+1580829692.690881 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829693.0650544 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1521e-12 A ; detector=F ; gate=0.1 s
+1580829693.333005 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.824e-13 A ; detector=F ; gate=0.1 s
+1580829693.5803523 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829693.8479476 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829694.0945487 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.579999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829694.362286 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829694.609748 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1553e-10 A ; detector=F ; gate=0.1 s
+1580829694.8774126 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829695.1249914 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829695.3927276 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829695.6402338 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.715477e-10 A ; detector=F ; gate=0.1 s
+1580829695.907922 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829696.1554005 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5839e-12 A ; detector=F ; gate=0.1 s
+1580829696.4239883 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.212e-13 A ; detector=F ; gate=0.1 s
+1580829696.6715875 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9216e-12 A ; detector=F ; gate=0.1 s
+1580829696.940859 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829697.1912951 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829697.4619474 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829697.7124372 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6538199e-09 A ; detector=F ; gate=0.1 s
+1580829697.9829443 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829698.3352 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1665e-12 A ; detector=F ; gate=0.1 s
+1580829698.6032798 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829698.8505554 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829699.118207 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829699.3657737 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=7.857e-13 A ; detector=F ; gate=0.1 s
+1580829699.6335194 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.212e-13 A ; detector=F ; gate=0.1 s
+1580829699.881079 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1672529999999999e-10 A ; detector=F ; gate=0.1 s
+1580829700.1496768 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829700.3971186 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.197e-13 A ; detector=F ; gate=0.1 s
+1580829700.6647637 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.539e-13 A ; detector=F ; gate=0.1 s
+1580829700.9122899 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.718787e-10 A ; detector=F ; gate=0.1 s
+1580829701.1799772 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829701.4274502 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7594e-12 A ; detector=F ; gate=0.1 s
+1580829701.6952033 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829701.943966 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8597e-12 A ; detector=F ; gate=0.1 s
+1580829702.214825 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829702.465853 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829702.735967 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829702.9864457 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6589367e-09 A ; detector=F ; gate=0.1 s
+1580829703.2570152 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=4.608e-13 A ; detector=F ; gate=0.1 s
+1580829703.606137 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1665999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829703.874426 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829704.121761 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829704.3893955 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829704.6370287 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.72e-13 A ; detector=F ; gate=0.1 s
+1580829704.9049835 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829705.152278 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.169229e-10 A ; detector=F ; gate=0.1 s
+1580829705.4199636 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829705.6675065 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.206e-13 A ; detector=F ; gate=0.1 s
+1580829705.936542 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829706.1863525 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7113049999999999e-10 A ; detector=F ; gate=0.1 s
+1580829706.45689 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829706.7075377 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5839e-12 A ; detector=F ; gate=0.1 s
+1580829706.9783185 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829707.22834 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9141e-12 A ; detector=F ; gate=0.1 s
+1580829707.4992683 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=1.604e-13 A ; detector=F ; gate=0.1 s
+1580829707.7499223 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829708.0199313 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829708.2697084 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6538975999999998e-09 A ; detector=F ; gate=0.1 s
+1580829708.539672 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829708.8854134 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1079e-12 A ; detector=F ; gate=0.1 s
+1580829709.1529355 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829709.400284 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829709.66792 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829709.9154704 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.794e-13 A ; detector=F ; gate=0.1 s
+1580829710.1831453 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829710.4306657 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.157165e-10 A ; detector=F ; gate=0.1 s
+1580829710.698292 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829710.9457502 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829711.2133527 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.47e-13 A ; detector=F ; gate=0.1 s
+1580829711.4607875 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.721268e-10 A ; detector=F ; gate=0.1 s
+1580829711.7285135 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829711.976008 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7901e-12 A ; detector=F ; gate=0.1 s
+1580829712.2445655 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829712.4921138 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9916e-12 A ; detector=F ; gate=0.1 s
+1580829712.7598507 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829713.0099492 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829713.2804449 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829713.5310926 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6629049e-09 A ; detector=F ; gate=0.1 s
+1580829713.8015392 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.986e-13 A ; detector=F ; gate=0.1 s
+1580829714.1527483 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1372e-12 A ; detector=F ; gate=0.1 s
+1580829714.4209328 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829714.668264 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829714.9358795 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829715.1834133 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.302e-13 A ; detector=F ; gate=0.1 s
+1580829715.4511578 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=1.605e-13 A ; detector=F ; gate=0.1 s
+1580829715.6986508 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.167213e-10 A ; detector=F ; gate=0.1 s
+1580829715.966284 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829716.2138183 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.636e-13 A ; detector=F ; gate=0.1 s
+1580829716.4815106 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829716.7290592 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7104899999999998e-10 A ; detector=F ; gate=0.1 s
+1580829716.996644 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829717.244124 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5839e-12 A ; detector=F ; gate=0.1 s
+1580829717.5127547 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829717.7602797 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=2.0071999999999998e-12 A ; detector=F ; gate=0.1 s
+1580829718.0302403 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829718.279613 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829718.5506506 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829718.801065 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6526004e-09 A ; detector=F ; gate=0.1 s
+1580829719.0717063 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829719.4209826 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1372e-12 A ; detector=F ; gate=0.1 s
+1580829719.6891413 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=1.673e-13 A ; detector=F ; gate=0.1 s
+1580829719.9365523 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829720.2042055 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829720.4516993 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=7.85e-13 A ; detector=F ; gate=0.1 s
+1580829720.7194018 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829720.966986 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1541429999999998e-10 A ; detector=F ; gate=0.1 s
+1580829721.2356222 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829721.483155 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829721.7509122 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829721.9983926 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.720419e-10 A ; detector=F ; gate=0.1 s
+1580829722.26705 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829722.5146444 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7061e-12 A ; detector=F ; gate=0.1 s
+1580829722.7822592 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829723.032414 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8597e-12 A ; detector=F ; gate=0.1 s
+1580829723.302817 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829723.5534117 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829723.8239577 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829724.0743532 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6526004e-09 A ; detector=F ; gate=0.1 s
+1580829724.3451831 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829724.700411 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1812e-12 A ; detector=F ; gate=0.1 s
+1580829724.9685152 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829725.2158608 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.5499999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829725.4834726 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829725.7301652 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.72e-13 A ; detector=F ; gate=0.1 s
+1580829725.9978373 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829726.2452974 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1631829999999998e-10 A ; detector=F ; gate=0.1 s
+1580829726.512957 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829726.7604764 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.435e-13 A ; detector=F ; gate=0.1 s
+1580829727.028062 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829727.2755694 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.720419e-10 A ; detector=F ; gate=0.1 s
+1580829727.5441477 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829727.7924185 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5839e-12 A ; detector=F ; gate=0.1 s
+1580829728.0628145 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829728.3134716 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.7977999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829728.5836232 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829728.8334851 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829729.1040144 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829729.3533893 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6577268e-09 A ; detector=F ; gate=0.1 s
+1580829729.6241376 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829729.9764152 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1812e-12 A ; detector=F ; gate=0.1 s
+1580829730.2446764 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829730.4920444 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829730.7595582 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829731.0072844 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=9.006e-13 A ; detector=F ; gate=0.1 s
+1580829731.274933 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829731.5223784 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.168176e-10 A ; detector=F ; gate=0.1 s
+1580829731.7900472 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829732.0374684 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=6.422e-13 A ; detector=F ; gate=0.1 s
+1580829732.3052475 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.677e-13 A ; detector=F ; gate=0.1 s
+1580829732.5526428 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7212369999999999e-10 A ; detector=F ; gate=0.1 s
+1580829732.8203745 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829733.0701728 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7404e-12 A ; detector=F ; gate=0.1 s
+1580829733.3410647 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829733.5914378 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9994e-12 A ; detector=F ; gate=0.1 s
+1580829733.86219 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=1.334e-13 A ; detector=F ; gate=0.1 s
+1580829734.1125169 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.419e-13 A ; detector=F ; gate=0.1 s
+1580829734.3829913 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.4689999999999998e-13 A ; detector=F ; gate=0.1 s
+1580829734.6325302 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6538199e-09 A ; detector=F ; gate=0.1 s
+1580829734.9034264 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829735.2504728 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0788e-12 A ; detector=F ; gate=0.1 s
+1580829735.5188794 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829735.7662106 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829736.033831 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829736.281352 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=4.539e-13 A ; detector=F ; gate=0.1 s
+1580829736.5490618 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829736.796614 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1652459999999999e-10 A ; detector=F ; gate=0.1 s
+1580829737.0642128 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829737.311908 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829737.5794036 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.1229999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829737.8269513 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.720426e-10 A ; detector=F ; gate=0.1 s
+1580829738.0972471 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829738.3478053 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5915e-12 A ; detector=F ; gate=0.1 s
+1580829738.6183665 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829738.8677223 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.976e-12 A ; detector=F ; gate=0.1 s
+1580829739.1381853 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=1.604e-13 A ; detector=F ; gate=0.1 s
+1580829739.3881464 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829739.6586864 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829739.9091327 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6513477e-09 A ; detector=F ; gate=0.1 s
+1580829740.1873384 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829740.5365946 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1007e-12 A ; detector=F ; gate=0.1 s
+1580829740.8042586 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=1.874e-13 A ; detector=F ; gate=0.1 s
+1580829741.0515845 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829741.3191803 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829741.565765 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=4.539e-13 A ; detector=F ; gate=0.1 s
+1580829741.8334951 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829742.0811336 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.154298e-10 A ; detector=F ; gate=0.1 s
+1580829742.3487208 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829742.596253 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.102e-13 A ; detector=F ; gate=0.1 s
+1580829742.8646235 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.778e-13 A ; detector=F ; gate=0.1 s
+1580829743.1149578 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.719572e-10 A ; detector=F ; gate=0.1 s
+1580829743.3852646 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829743.6356063 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5386999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829743.9063654 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829744.1560671 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.976e-12 A ; detector=F ; gate=0.1 s
+1580829744.4267788 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829744.677428 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829744.9477458 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829745.197085 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6501592e-09 A ; detector=F ; gate=0.1 s
+1580829745.4676318 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.9849999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829745.8174107 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1008999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829746.0854023 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829746.3326187 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829746.6002684 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829746.8469007 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=7.416e-13 A ; detector=F ; gate=0.1 s
+1580829747.1145465 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829747.3620737 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.163172e-10 A ; detector=F ; gate=0.1 s
+1580829747.629743 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829747.8785188 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.118e-13 A ; detector=F ; gate=0.1 s
+1580829748.1493685 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.986e-13 A ; detector=F ; gate=0.1 s
+1580829748.399996 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.72294e-10 A ; detector=F ; gate=0.1 s
+1580829748.670225 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829748.9201796 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.4634e-12 A ; detector=F ; gate=0.1 s
+1580829749.1908755 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829749.4413915 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9216e-12 A ; detector=F ; gate=0.1 s
+1580829749.7119427 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829749.9623091 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.077e-13 A ; detector=F ; gate=0.1 s
+1580829750.232495 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829750.4822261 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.648782e-09 A ; detector=F ; gate=0.1 s
+1580829750.7527592 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829751.1035504 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0787e-12 A ; detector=F ; gate=0.1 s
+1580829751.3714056 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829751.6187367 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829751.8863926 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829752.1329446 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.991e-13 A ; detector=F ; gate=0.1 s
+1580829752.4006672 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=1.671e-13 A ; detector=F ; gate=0.1 s
+1580829752.6481664 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.158177e-10 A ; detector=F ; gate=0.1 s
+1580829752.915881 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829753.1632586 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829753.430936 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.4e-13 A ; detector=F ; gate=0.1 s
+1580829753.6785192 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.722117e-10 A ; detector=F ; gate=0.1 s
+1580829753.947868 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829754.1983056 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7212e-12 A ; detector=F ; gate=0.1 s
+1580829754.4684658 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829754.718319 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=2.0228999999999998e-12 A ; detector=F ; gate=0.1 s
+1580829754.98886 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829755.239499 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829755.5101726 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829755.7604535 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6476444e-09 A ; detector=F ; gate=0.1 s
+1580829756.0313375 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=4.195e-13 A ; detector=F ; gate=0.1 s
+1580829756.382618 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1371e-12 A ; detector=F ; gate=0.1 s
+1580829756.6507008 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829756.898116 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829757.1657517 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829757.4133391 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.094e-13 A ; detector=F ; gate=0.1 s
+1580829757.6810088 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829757.928549 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.161165e-10 A ; detector=F ; gate=0.1 s
+1580829758.196245 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829758.443838 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829758.7113426 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.779e-13 A ; detector=F ; gate=0.1 s
+1580829758.9603438 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.721242e-10 A ; detector=F ; gate=0.1 s
+1580829759.2311363 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829759.4814765 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7824e-12 A ; detector=F ; gate=0.1 s
+1580829759.7518756 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=1.334e-13 A ; detector=F ; gate=0.1 s
+1580829760.0016592 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9682e-12 A ; detector=F ; gate=0.1 s
+1580829760.2721596 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=1.671e-13 A ; detector=F ; gate=0.1 s
+1580829760.5220199 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829760.7920527 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829761.0418632 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6616503e-09 A ; detector=F ; gate=0.1 s
+1580829761.3121843 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829761.6635447 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0366e-12 A ; detector=F ; gate=0.1 s
+1580829761.931944 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829762.1792614 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829762.446945 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829762.6945698 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.936e-13 A ; detector=F ; gate=0.1 s
+1580829762.962333 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=1.874e-13 A ; detector=F ; gate=0.1 s
+1580829763.209943 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.167128e-10 A ; detector=F ; gate=0.1 s
+1580829763.4775004 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829763.7250662 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829763.9926283 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829764.2401538 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.717138e-10 A ; detector=F ; gate=0.1 s
+1580829764.5077987 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829764.7552953 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5386999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829765.026044 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829765.2759202 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9062e-12 A ; detector=F ; gate=0.1 s
+1580829765.5465918 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829765.7967424 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829766.0676064 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829766.3182204 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6563385e-09 A ; detector=F ; gate=0.1 s
+1580829766.5886235 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829766.940592 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1667e-12 A ; detector=F ; gate=0.1 s
+1580829767.2082388 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829767.4556751 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829767.723209 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829767.970821 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=8.228e-13 A ; detector=F ; gate=0.1 s
+1580829768.2384791 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829768.486012 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.163172e-10 A ; detector=F ; gate=0.1 s
+1580829768.753671 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829769.0010865 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.184e-13 A ; detector=F ; gate=0.1 s
+1580829769.2688 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.3299999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829769.5162826 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.726216e-10 A ; detector=F ; gate=0.1 s
+1580829769.7840018 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.5499999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829770.033744 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7212e-12 A ; detector=F ; gate=0.1 s
+1580829770.3044736 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829770.5546448 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9839e-12 A ; detector=F ; gate=0.1 s
+1580829770.8249187 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829771.0751934 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.418e-13 A ; detector=F ; gate=0.1 s
+1580829771.3459218 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829771.5964084 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6501353e-09 A ; detector=F ; gate=0.1 s
+1580829771.8669631 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.368e-13 A ; detector=F ; gate=0.1 s
+1580829772.2228396 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2844e-12 A ; detector=F ; gate=0.1 s
+1580829772.4903262 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829772.7376912 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829773.0053267 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829773.2529309 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=4.961999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829773.5205586 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829773.7681572 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1571749999999998e-10 A ; detector=F ; gate=0.1 s
+1580829774.0358295 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829774.2832458 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829774.5508873 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.6759999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829774.798388 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.716385e-10 A ; detector=F ; gate=0.1 s
+1580829775.0695136 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829775.3201973 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7594e-12 A ; detector=F ; gate=0.1 s
+1580829775.5909097 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829775.8414016 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9682e-12 A ; detector=F ; gate=0.1 s
+1580829776.1114607 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829776.361166 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829776.6315815 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829776.8813388 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6651808e-09 A ; detector=F ; gate=0.1 s
+1580829777.152051 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=5.869e-13 A ; detector=F ; gate=0.1 s
+1580829777.5081005 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1446e-12 A ; detector=F ; gate=0.1 s
+1580829777.7763395 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829778.0236628 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829778.2912455 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.2159999999999998e-13 A ; detector=F ; gate=0.1 s
+1580829778.537983 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.515e-13 A ; detector=F ; gate=0.1 s
+1580829778.8056555 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829779.053149 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.164882e-10 A ; detector=F ; gate=0.1 s
+1580829779.3217616 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829779.5693512 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.497e-13 A ; detector=F ; gate=0.1 s
+1580829779.8370514 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829780.0847054 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.71384e-10 A ; detector=F ; gate=0.1 s
+1580829780.3532135 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829780.6017072 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5161e-12 A ; detector=F ; gate=0.1 s
+1580829780.8702524 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829781.117829 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8828e-12 A ; detector=F ; gate=0.1 s
+1580829781.385536 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829781.633042 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829781.9006517 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829782.1480343 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.656474e-09 A ; detector=F ; gate=0.1 s
+1580829782.4167616 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829782.7619162 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2326e-12 A ; detector=F ; gate=0.1 s
+1580829783.0293932 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.212e-13 A ; detector=F ; gate=0.1 s
+1580829783.2769542 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829783.5446224 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829783.7921412 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.071e-13 A ; detector=F ; gate=0.1 s
+1580829784.0597782 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829784.3073604 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.166085e-10 A ; detector=F ; gate=0.1 s
+1580829784.5749698 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829784.8225338 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.711e-13 A ; detector=F ; gate=0.1 s
+1580829785.0923991 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.539e-13 A ; detector=F ; gate=0.1 s
+1580829785.342614 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.71384e-10 A ; detector=F ; gate=0.1 s
+1580829785.6134598 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829785.8635237 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.683e-12 A ; detector=F ; gate=0.1 s
+1580829786.1334555 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.5499999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829786.3832154 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9682e-12 A ; detector=F ; gate=0.1 s
+1580829786.6540985 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829786.9042482 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829787.175104 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829787.4253037 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6577268e-09 A ; detector=F ; gate=0.1 s
+1580829787.6958604 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829788.0828521 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0719e-12 A ; detector=F ; gate=0.1 s
+1580829788.350608 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.554e-13 A ; detector=F ; gate=0.1 s
+1580829788.59784 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829788.865439 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.4689999999999998e-13 A ; detector=F ; gate=0.1 s
+1580829789.1120718 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.931e-13 A ; detector=F ; gate=0.1 s
+1580829789.3798258 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829789.627238 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.171967e-10 A ; detector=F ; gate=0.1 s
+1580829789.8949368 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829790.1424837 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.3679999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829790.4100924 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.1229999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829790.6576235 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.71384e-10 A ; detector=F ; gate=0.1 s
+1580829790.9267826 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829791.1774588 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5237e-12 A ; detector=F ; gate=0.1 s
+1580829791.4483578 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829791.698649 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8366e-12 A ; detector=F ; gate=0.1 s
+1580829791.969115 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829792.2191613 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829792.4900334 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829792.7405407 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6589482e-09 A ; detector=F ; gate=0.1 s
+1580829793.0109947 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829793.3654 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0134e-12 A ; detector=F ; gate=0.1 s
+1580829793.633385 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829793.8806965 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829794.148314 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829794.3958745 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=1.0354e-12 A ; detector=F ; gate=0.1 s
+1580829794.6635828 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829794.9110389 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1553e-10 A ; detector=F ; gate=0.1 s
+1580829795.1786594 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829795.426192 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.0769999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829795.694004 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829795.9442255 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.714656e-10 A ; detector=F ; gate=0.1 s
+1580829796.2146938 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829796.4651303 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6602e-12 A ; detector=F ; gate=0.1 s
+1580829796.735749 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829796.9860768 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9526e-12 A ; detector=F ; gate=0.1 s
+1580829797.2567298 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829797.5069916 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829797.777897 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.739e-13 A ; detector=F ; gate=0.1 s
+1580829798.028023 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6501353e-09 A ; detector=F ; gate=0.1 s
+1580829798.2986143 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829798.6511326 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0715e-12 A ; detector=F ; gate=0.1 s
+1580829798.919403 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829799.1666567 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829799.4342864 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829799.6809213 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.351e-13 A ; detector=F ; gate=0.1 s
+1580829799.9486513 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829800.1960447 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.167128e-10 A ; detector=F ; gate=0.1 s
+1580829800.4637945 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829800.7111564 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.044e-13 A ; detector=F ; gate=0.1 s
+1580829800.9809349 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.848e-13 A ; detector=F ; gate=0.1 s
+1580829801.2307968 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7237539999999998e-10 A ; detector=F ; gate=0.1 s
+1580829801.5017195 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829801.7520752 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5915e-12 A ; detector=F ; gate=0.1 s
+1580829802.0224793 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829802.272393 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8908e-12 A ; detector=F ; gate=0.1 s
+1580829802.54298 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829802.7934084 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829803.0636196 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829803.3132784 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6626326e-09 A ; detector=F ; gate=0.1 s
+1580829803.5828106 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829803.9355085 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1812e-12 A ; detector=F ; gate=0.1 s
+1580829804.2036607 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829804.4509509 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.713e-13 A ; detector=F ; gate=0.1 s
+1580829804.7186332 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829804.965394 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.64e-13 A ; detector=F ; gate=0.1 s
+1580829805.2329743 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829805.480448 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.166124e-10 A ; detector=F ; gate=0.1 s
+1580829805.7481194 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829805.995622 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.056e-13 A ; detector=F ; gate=0.1 s
+1580829806.2632437 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.055e-13 A ; detector=F ; gate=0.1 s
+1580829806.5107248 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7212369999999999e-10 A ; detector=F ; gate=0.1 s
+1580829806.778537 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829807.0290828 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7594e-12 A ; detector=F ; gate=0.1 s
+1580829807.2997758 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829807.5496469 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9293e-12 A ; detector=F ; gate=0.1 s
+1580829807.8202305 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829808.0706446 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829808.3410966 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829808.5908434 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6538643e-09 A ; detector=F ; gate=0.1 s
+1580829808.8610122 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829809.2146535 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1372e-12 A ; detector=F ; gate=0.1 s
+1580829809.482842 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829809.7301204 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829809.9977937 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829810.2452374 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.579999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829810.5129693 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829810.7603915 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1669269999999999e-10 A ; detector=F ; gate=0.1 s
+1580829811.0279934 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829811.2755167 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.603e-13 A ; detector=F ; gate=0.1 s
+1580829811.5431862 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829811.790715 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7220559999999999e-10 A ; detector=F ; gate=0.1 s
+1580829812.0593905 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829812.3068793 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5237e-12 A ; detector=F ; gate=0.1 s
+1580829812.5744703 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829812.8223825 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8596e-12 A ; detector=F ; gate=0.1 s
+1580829813.092813 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829813.3430247 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829813.613188 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.671e-13 A ; detector=F ; gate=0.1 s
+1580829813.863514 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6513843e-09 A ; detector=F ; gate=0.1 s
+1580829814.1343672 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829814.4882493 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0495999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829814.7565408 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829815.0039225 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829815.271508 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829815.5181289 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.069999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829815.7858272 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829816.033356 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.163172e-10 A ; detector=F ; gate=0.1 s
+1580829816.3009748 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829816.5484257 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.838e-13 A ; detector=F ; gate=0.1 s
+1580829816.8167007 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.055e-13 A ; detector=F ; gate=0.1 s
+1580829817.0668008 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.719572e-10 A ; detector=F ; gate=0.1 s
+1580829817.3377976 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829817.588128 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6296e-12 A ; detector=F ; gate=0.1 s
+1580829817.8591228 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829818.1095607 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.875e-12 A ; detector=F ; gate=0.1 s
+1580829818.3800616 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829818.6302824 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.266e-13 A ; detector=F ; gate=0.1 s
+1580829818.9004967 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829819.1503692 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6765681e-09 A ; detector=F ; gate=0.1 s
+1580829819.4199822 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829819.778254 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1592e-12 A ; detector=F ; gate=0.1 s
+1580829820.0457637 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829820.2930937 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829820.5606909 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829820.8073204 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=8.367e-13 A ; detector=F ; gate=0.1 s
+1580829821.0750642 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829821.3226447 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.169139e-10 A ; detector=F ; gate=0.1 s
+1580829821.5903454 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=3.063e-13 A ; detector=F ; gate=0.1 s
+1580829821.8381672 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=6.493e-13 A ; detector=F ; gate=0.1 s
+1580829822.1090553 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.0539999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829822.3594975 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.713024e-10 A ; detector=F ; gate=0.1 s
+1580829822.63028 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829822.8806963 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5839e-12 A ; detector=F ; gate=0.1 s
+1580829823.1512232 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829823.4006913 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8905e-12 A ; detector=F ; gate=0.1 s
+1580829823.671748 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.283e-13 A ; detector=F ; gate=0.1 s
+1580829823.9222622 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829824.192264 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829824.441982 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.657571e-09 A ; detector=F ; gate=0.1 s
+1580829824.712398 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829825.0679445 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1812e-12 A ; detector=F ; gate=0.1 s
+1580829825.3363073 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829825.583466 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.369e-13 A ; detector=F ; gate=0.1 s
+1580829825.8511548 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829826.0977952 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=1.1231e-12 A ; detector=F ; gate=0.1 s
+1580829826.365522 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829826.6130693 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.165097e-10 A ; detector=F ; gate=0.1 s
+1580829826.880718 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829827.1282213 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=6.285e-13 A ; detector=F ; gate=0.1 s
+1580829827.3958776 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829827.643348 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7245729999999998e-10 A ; detector=F ; gate=0.1 s
+1580829827.912342 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829828.16179 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7555e-12 A ; detector=F ; gate=0.1 s
+1580829828.4317253 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829828.6818454 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9682e-12 A ; detector=F ; gate=0.1 s
+1580829828.9519522 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829829.2024274 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829829.4729888 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829829.722609 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6550577e-09 A ; detector=F ; gate=0.1 s
+1580829829.9932933 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829830.347855 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2252e-12 A ; detector=F ; gate=0.1 s
+1580829830.615732 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829830.8631148 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.852e-13 A ; detector=F ; gate=0.1 s
+1580829831.1306217 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829831.3781815 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.424e-13 A ; detector=F ; gate=0.1 s
+1580829831.6458647 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829831.8932078 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1621799999999999e-10 A ; detector=F ; gate=0.1 s
+1580829832.1608284 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829832.4082549 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.497e-13 A ; detector=F ; gate=0.1 s
+1580829832.6759338 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829832.9251697 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7303879999999998e-10 A ; detector=F ; gate=0.1 s
+1580829833.1955812 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829833.4453058 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5839e-12 A ; detector=F ; gate=0.1 s
+1580829833.7154078 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.077e-13 A ; detector=F ; gate=0.1 s
+1580829833.9653862 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9604e-12 A ; detector=F ; gate=0.1 s
+1580829834.235972 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829834.4863331 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829834.7568974 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829835.0067084 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6525762e-09 A ; detector=F ; gate=0.1 s
+1580829835.276936 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.9159999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829835.6331315 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1227e-12 A ; detector=F ; gate=0.1 s
+1580829835.9006798 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829836.1479583 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829836.4156241 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.334e-13 A ; detector=F ; gate=0.1 s
+1580829836.6622488 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.071e-13 A ; detector=F ; gate=0.1 s
+1580829836.9300082 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829837.1775014 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1669269999999999e-10 A ; detector=F ; gate=0.1 s
+1580829837.445199 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829837.6927025 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.847e-13 A ; detector=F ; gate=0.1 s
+1580829837.962251 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.848e-13 A ; detector=F ; gate=0.1 s
+1580829838.2126157 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7261899999999999e-10 A ; detector=F ; gate=0.1 s
+1580829838.4830723 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829838.7335122 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7594e-12 A ; detector=F ; gate=0.1 s
+1580829839.004184 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829839.254523 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9916e-12 A ; detector=F ; gate=0.1 s
+1580829839.525147 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829839.7755778 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.5499999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829840.045707 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829840.2933571 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6577268e-09 A ; detector=F ; gate=0.1 s
+1580829840.560936 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.9159999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829840.9040308 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1080999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829841.1718638 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829841.4192493 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829841.686994 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829841.9345932 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=8.224e-13 A ; detector=F ; gate=0.1 s
+1580829842.202342 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829842.4498262 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.167128e-10 A ; detector=F ; gate=0.1 s
+1580829842.7174761 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829842.9649906 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829843.2328355 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.4e-13 A ; detector=F ; gate=0.1 s
+1580829843.480289 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.726216e-10 A ; detector=F ; gate=0.1 s
+1580829843.7479765 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829843.997414 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7443e-12 A ; detector=F ; gate=0.1 s
+1580829844.26772 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829844.5182827 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.976e-12 A ; detector=F ; gate=0.1 s
+1580829844.7887309 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.779e-13 A ; detector=F ; gate=0.1 s
+1580829845.0383067 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829845.3089767 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=3.098e-13 A ; detector=F ; gate=0.1 s
+1580829845.559049 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6627014e-09 A ; detector=F ; gate=0.1 s
+1580829845.8298929 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829846.184081 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1519e-12 A ; detector=F ; gate=0.1 s
+1580829846.4524357 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829846.6997344 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829846.9673173 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829847.2139776 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.233e-13 A ; detector=F ; gate=0.1 s
+1580829847.4817245 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829847.7291787 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.159138e-10 A ; detector=F ; gate=0.1 s
+1580829847.9969478 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829848.2443705 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829848.5120246 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829848.7594388 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7179389999999999e-10 A ; detector=F ; gate=0.1 s
+1580829849.0296984 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829849.2793443 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5767e-12 A ; detector=F ; gate=0.1 s
+1580829849.5494454 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829849.7992337 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9295e-12 A ; detector=F ; gate=0.1 s
+1580829850.0697541 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829850.3204346 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829850.590586 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829850.8403919 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6601807e-09 A ; detector=F ; gate=0.1 s
+1580829851.110678 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829851.465017 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0642e-12 A ; detector=F ; gate=0.1 s
+1580829851.7334793 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829851.9807274 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829852.2482996 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829852.4950197 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.579999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829852.7627542 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829853.0103006 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.170963e-10 A ; detector=F ; gate=0.1 s
+1580829853.2787902 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829853.5263033 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829853.794049 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.438e-13 A ; detector=F ; gate=0.1 s
+1580829854.0416424 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.720419e-10 A ; detector=F ; gate=0.1 s
+1580829854.3092537 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829854.5567417 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5238e-12 A ; detector=F ; gate=0.1 s
+1580829854.8264945 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829855.0763152 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8286e-12 A ; detector=F ; gate=0.1 s
+1580829855.3469775 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829855.5974562 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829855.868145 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.35e-13 A ; detector=F ; gate=0.1 s
+1580829856.1183596 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6576674e-09 A ; detector=F ; gate=0.1 s
+1580829856.3891916 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829856.7432823 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0787e-12 A ; detector=F ; gate=0.1 s
+1580829857.0117567 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829857.2589953 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.779e-13 A ; detector=F ; gate=0.1 s
+1580829857.526731 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829857.7743332 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=1.0495999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829858.042093 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829858.2895887 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.159099e-10 A ; detector=F ; gate=0.1 s
+1580829858.5570939 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829858.80539 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=7.196e-13 A ; detector=F ; gate=0.1 s
+1580829859.0756655 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.9849999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829859.3251984 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.720442e-10 A ; detector=F ; gate=0.1 s
+1580829859.595419 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829859.8455665 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5840999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829860.1158853 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829860.3657827 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.7977999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829860.636212 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829860.885549 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829861.1551065 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829861.4045644 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6575596e-09 A ; detector=F ; gate=0.1 s
+1580829861.6742182 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829862.0299933 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1374e-12 A ; detector=F ; gate=0.1 s
+1580829862.2980802 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829862.545554 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829862.8130977 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829863.060359 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=8.576e-13 A ; detector=F ; gate=0.1 s
+1580829863.3284287 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829863.575727 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.159138e-10 A ; detector=F ; gate=0.1 s
+1580829863.8434267 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829864.0908613 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.4349999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829864.358458 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.4e-13 A ; detector=F ; gate=0.1 s
+1580829864.6059394 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.719594e-10 A ; detector=F ; gate=0.1 s
+1580829864.8734763 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829865.1209927 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7594e-12 A ; detector=F ; gate=0.1 s
+1580829865.3887088 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829865.636265 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9451e-12 A ; detector=F ; gate=0.1 s
+1580829865.9041061 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.5499999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829866.153555 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829866.4246204 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829866.6740925 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6613798e-09 A ; detector=F ; gate=0.1 s
+1580829866.94419 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829867.2976632 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1886e-12 A ; detector=F ; gate=0.1 s
+1580829867.56624 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829867.8135474 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829868.0811677 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829868.3286958 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=4.539e-13 A ; detector=F ; gate=0.1 s
+1580829868.5964167 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829868.843959 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.162076e-10 A ; detector=F ; gate=0.1 s
+1580829869.111645 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829869.3592246 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.5329999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829869.6268752 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829869.8743403 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.725367e-10 A ; detector=F ; gate=0.1 s
+1580829870.141997 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829870.3895907 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5991e-12 A ; detector=F ; gate=0.1 s
+1580829870.6581447 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829870.9072528 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8828e-12 A ; detector=F ; gate=0.1 s
+1580829871.1777852 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829871.4281795 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829871.6986814 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829871.9485617 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6576674e-09 A ; detector=F ; gate=0.1 s
+1580829872.2191217 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.9849999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829872.5740557 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2252e-12 A ; detector=F ; gate=0.1 s
+1580829872.8414578 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=1.941e-13 A ; detector=F ; gate=0.1 s
+1580829873.0887322 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829873.356438 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829873.6039507 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=8.224e-13 A ; detector=F ; gate=0.1 s
+1580829873.8717175 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829874.119142 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.165121e-10 A ; detector=F ; gate=0.1 s
+1580829874.3869221 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829874.6343234 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.432e-13 A ; detector=F ; gate=0.1 s
+1580829874.9019995 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.4e-13 A ; detector=F ; gate=0.1 s
+1580829875.1494257 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.719572e-10 A ; detector=F ; gate=0.1 s
+1580829875.4181597 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829875.6657133 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6984e-12 A ; detector=F ; gate=0.1 s
+1580829875.9351332 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829876.1855934 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.976e-12 A ; detector=F ; gate=0.1 s
+1580829876.4542031 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829876.704554 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829876.974976 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829877.2245238 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6601807e-09 A ; detector=F ; gate=0.1 s
+1580829877.4952893 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=4.746e-13 A ; detector=F ; gate=0.1 s
+1580829877.8541174 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1006e-12 A ; detector=F ; gate=0.1 s
+1580829878.121692 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829878.3691661 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829878.636989 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.739e-13 A ; detector=F ; gate=0.1 s
+1580829878.8845453 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.284e-13 A ; detector=F ; gate=0.1 s
+1580829879.1522706 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829879.3995857 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.160112e-10 A ; detector=F ; gate=0.1 s
+1580829879.667212 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829879.9147663 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.937e-13 A ; detector=F ; gate=0.1 s
+1580829880.182357 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829880.429981 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.71711e-10 A ; detector=F ; gate=0.1 s
+1580829880.697709 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829880.9466221 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5537e-12 A ; detector=F ; gate=0.1 s
+1580829881.217266 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.418e-13 A ; detector=F ; gate=0.1 s
+1580829881.4681132 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8132e-12 A ; detector=F ; gate=0.1 s
+1580829881.738363 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829881.987725 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829882.2585979 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829882.5091364 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6628513999999998e-09 A ; detector=F ; gate=0.1 s
+1580829882.7797604 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829883.1362238 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1593999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829883.4041438 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829883.6515105 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829883.919171 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829884.1657612 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.302e-13 A ; detector=F ; gate=0.1 s
+1580829884.4334872 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.077e-13 A ; detector=F ; gate=0.1 s
+1580829884.6809635 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.168958e-10 A ; detector=F ; gate=0.1 s
+1580829884.9486394 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829885.1961162 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.1649999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829885.4639046 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829885.7113628 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7113049999999999e-10 A ; detector=F ; gate=0.1 s
+1580829885.978975 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829886.2264335 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5613e-12 A ; detector=F ; gate=0.1 s
+1580829886.4951127 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829886.7426014 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9449e-12 A ; detector=F ; gate=0.1 s
+1580829887.0123436 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829887.262485 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829887.5328848 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829887.7833464 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6665561e-09 A ; detector=F ; gate=0.1 s
+1580829888.0541124 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829888.406925 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2474e-12 A ; detector=F ; gate=0.1 s
+1580829888.6746547 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829888.9219236 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829889.1897433 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829889.4371955 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.931e-13 A ; detector=F ; gate=0.1 s
+1580829889.704657 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829889.952503 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1571749999999998e-10 A ; detector=F ; gate=0.1 s
+1580829890.2209976 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829890.46852 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.845e-13 A ; detector=F ; gate=0.1 s
+1580829890.7362032 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.0539999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829890.9837396 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.720426e-10 A ; detector=F ; gate=0.1 s
+1580829891.2515354 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.35e-13 A ; detector=F ; gate=0.1 s
+1580829891.499918 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7824e-12 A ; detector=F ; gate=0.1 s
+1580829891.767529 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829892.0178092 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8908e-12 A ; detector=F ; gate=0.1 s
+1580829892.2887042 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=1.873e-13 A ; detector=F ; gate=0.1 s
+1580829892.5393052 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829892.8090773 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829893.0588372 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6525672e-09 A ; detector=F ; gate=0.1 s
+1580829893.329465 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=4.2609999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829893.7009993 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1886e-12 A ; detector=F ; gate=0.1 s
+1580829893.9687765 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829894.2162125 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.778e-13 A ; detector=F ; gate=0.1 s
+1580829894.4839644 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829894.7315907 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=7.928e-13 A ; detector=F ; gate=0.1 s
+1580829894.9993274 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829895.2467177 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.162089e-10 A ; detector=F ; gate=0.1 s
+1580829895.5144622 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829895.7618642 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.181e-13 A ; detector=F ; gate=0.1 s
+1580829896.0295439 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.608e-13 A ; detector=F ; gate=0.1 s
+1580829896.2769694 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7220559999999999e-10 A ; detector=F ; gate=0.1 s
+1580829896.5457244 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829896.7941427 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.7135e-12 A ; detector=F ; gate=0.1 s
+1580829897.0650315 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829897.314759 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9838e-12 A ; detector=F ; gate=0.1 s
+1580829897.584428 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829897.8346522 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829898.1054103 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829898.3561544 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6551859e-09 A ; detector=F ; gate=0.1 s
+1580829898.6263874 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829899.002037 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1080999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829899.2699378 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829899.5172439 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829899.7848988 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829900.0325844 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.217e-13 A ; detector=F ; gate=0.1 s
+1580829900.3002675 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829900.5477307 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1571239999999999e-10 A ; detector=F ; gate=0.1 s
+1580829900.8153899 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829901.0630233 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.4269999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829901.3306339 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829901.5780067 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.718746e-10 A ; detector=F ; gate=0.1 s
+1580829901.845925 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.01e-13 A ; detector=F ; gate=0.1 s
+1580829902.0932956 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5915e-12 A ; detector=F ; gate=0.1 s
+1580829902.3610327 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829902.60851 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9916e-12 A ; detector=F ; gate=0.1 s
+1580829902.8783834 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829903.1274369 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829903.3975837 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829903.6473403 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6513067e-09 A ; detector=F ; gate=0.1 s
+1580829903.916832 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.778e-13 A ; detector=F ; gate=0.1 s
+1580829904.2858846 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1886e-12 A ; detector=F ; gate=0.1 s
+1580829904.5542185 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829904.8016877 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829905.0694385 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.143e-13 A ; detector=F ; gate=0.1 s
+1580829905.316962 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=8.064e-13 A ; detector=F ; gate=0.1 s
+1580829905.58478 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829905.8323054 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.166439e-10 A ; detector=F ; gate=0.1 s
+1580829906.0999238 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829906.3474646 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=6.009e-13 A ; detector=F ; gate=0.1 s
+1580829906.6151323 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829906.8626208 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.7113049999999999e-10 A ; detector=F ; gate=0.1 s
+1580829907.1303596 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=1.671e-13 A ; detector=F ; gate=0.1 s
+1580829907.377721 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6678e-12 A ; detector=F ; gate=0.1 s
+1580829907.646363 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829907.8954737 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9604e-12 A ; detector=F ; gate=0.1 s
+1580829908.1665204 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.346e-13 A ; detector=F ; gate=0.1 s
+1580829908.4173052 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829908.688838 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829908.9386113 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.647533e-09 A ; detector=F ; gate=0.1 s
+1580829909.2090926 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829909.5606484 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2474e-12 A ; detector=F ; gate=0.1 s
+1580829909.8285575 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829910.07591 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829910.3436093 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829910.59013 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.141999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829910.8579462 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829911.1053612 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.165121e-10 A ; detector=F ; gate=0.1 s
+1580829911.3729718 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829911.620428 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=4.497e-13 A ; detector=F ; gate=0.1 s
+1580829911.8881886 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.917e-13 A ; detector=F ; gate=0.1 s
+1580829912.1356127 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.721292e-10 A ; detector=F ; gate=0.1 s
+1580829912.4032788 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829912.6507914 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6487e-12 A ; detector=F ; gate=0.1 s
+1580829912.9202297 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829913.1706479 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9449e-12 A ; detector=F ; gate=0.1 s
+1580829913.4411428 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829913.6923032 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829913.9622004 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829914.2118495 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6501353e-09 A ; detector=F ; gate=0.1 s
+1580829914.4823987 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829914.8358717 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0569e-12 A ; detector=F ; gate=0.1 s
+1580829915.1038756 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829915.3512473 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829915.6188028 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829915.866375 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.37e-13 A ; detector=F ; gate=0.1 s
+1580829916.1340241 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829916.381403 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.162127e-10 A ; detector=F ; gate=0.1 s
+1580829916.6491122 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829916.8967392 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.869e-13 A ; detector=F ; gate=0.1 s
+1580829917.16424 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.847e-13 A ; detector=F ; gate=0.1 s
+1580829917.411799 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.714656e-10 A ; detector=F ; gate=0.1 s
+1580829917.6794887 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829917.9280887 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5915e-12 A ; detector=F ; gate=0.1 s
+1580829918.1978111 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829918.4467483 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9526e-12 A ; detector=F ; gate=0.1 s
+1580829918.7171016 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829918.9671435 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829919.236682 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829919.4870577 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6525762e-09 A ; detector=F ; gate=0.1 s
+1580829919.7578619 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829920.1088884 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2993e-12 A ; detector=F ; gate=0.1 s
+1580829920.3771772 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=1.941e-13 A ; detector=F ; gate=0.1 s
+1580829920.6244571 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829920.8921537 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829921.1397312 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=9.869e-13 A ; detector=F ; gate=0.1 s
+1580829921.4075043 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829921.6549494 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.160062e-10 A ; detector=F ; gate=0.1 s
+1580829921.92258 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829922.1700149 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.741e-13 A ; detector=F ; gate=0.1 s
+1580829922.4377327 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.055e-13 A ; detector=F ; gate=0.1 s
+1580829922.6851172 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.71384e-10 A ; detector=F ; gate=0.1 s
+1580829922.9529223 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829923.2003047 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6524999999999999e-12 A ; detector=F ; gate=0.1 s
+1580829923.4679773 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=3.165e-13 A ; detector=F ; gate=0.1 s
+1580829923.7154765 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.8753e-12 A ; detector=F ; gate=0.1 s
+1580829923.986038 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829924.236248 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829924.506882 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829924.7569797 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6512064e-09 A ; detector=F ; gate=0.1 s
+1580829925.0281532 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829925.3827677 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1227e-12 A ; detector=F ; gate=0.1 s
+1580829925.650368 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829925.8976793 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829926.1652975 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829926.4119291 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=4.746e-13 A ; detector=F ; gate=0.1 s
+1580829926.6795917 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829926.927234 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.168159e-10 A ; detector=F ; gate=0.1 s
+1580829927.1947541 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829927.4423006 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=5.528e-13 A ; detector=F ; gate=0.1 s
+1580829927.7098274 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.9849999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829927.9574099 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.708857e-10 A ; detector=F ; gate=0.1 s
+1580829928.2250519 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829928.472571 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5764e-12 A ; detector=F ; gate=0.1 s
+1580829928.7402382 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829928.9893334 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.976e-12 A ; detector=F ; gate=0.1 s
+1580829929.2602084 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829929.510426 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.756e-13 A ; detector=F ; gate=0.1 s
+1580829929.7811418 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829930.030663 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.647533e-09 A ; detector=F ; gate=0.1 s
+1580829930.3011131 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829930.655311 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.2252e-12 A ; detector=F ; gate=0.1 s
+1580829930.923343 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829931.1707401 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829931.4383738 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.806e-13 A ; detector=F ; gate=0.1 s
+1580829931.6859121 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=6.214e-13 A ; detector=F ; gate=0.1 s
+1580829931.953672 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829932.2011333 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.161063e-10 A ; detector=F ; gate=0.1 s
+1580829932.4688098 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829932.7162774 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829932.9839761 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829933.2315001 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.713843e-10 A ; detector=F ; gate=0.1 s
+1580829933.499208 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.823e-13 A ; detector=F ; gate=0.1 s
+1580829933.7466536 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6678e-12 A ; detector=F ; gate=0.1 s
+1580829934.016387 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829934.2667217 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9449e-12 A ; detector=F ; gate=0.1 s
+1580829934.5368547 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.009e-13 A ; detector=F ; gate=0.1 s
+1580829934.786624 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829935.057022 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829935.3071523 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6474608e-09 A ; detector=F ; gate=0.1 s
+1580829935.5772104 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829935.9327846 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1079e-12 A ; detector=F ; gate=0.1 s
+1580829936.2005332 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=1.4689999999999998e-13 A ; detector=F ; gate=0.1 s
+1580829936.4477668 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829936.7154045 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829936.9629593 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.72e-13 A ; detector=F ; gate=0.1 s
+1580829937.2307556 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829937.478399 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.16309e-10 A ; detector=F ; gate=0.1 s
+1580829937.746024 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829937.993485 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.845e-13 A ; detector=F ; gate=0.1 s
+1580829938.2611554 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829938.508681 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.713024e-10 A ; detector=F ; gate=0.1 s
+1580829938.7764633 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.62e-13 A ; detector=F ; gate=0.1 s
+1580829939.0239544 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6068e-12 A ; detector=F ; gate=0.1 s
+1580829939.2916043 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829939.539168 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9216e-12 A ; detector=F ; gate=0.1 s
+1580829939.8083453 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829940.05883 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829940.3288653 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829940.5789516 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6513548e-09 A ; detector=F ; gate=0.1 s
+1580829940.8495135 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.232e-13 A ; detector=F ; gate=0.1 s
+1580829941.2571545 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1738e-12 A ; detector=F ; gate=0.1 s
+1580829941.5247324 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.008e-13 A ; detector=F ; gate=0.1 s
+1580829941.7721992 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=2.959e-13 A ; detector=F ; gate=0.1 s
+1580829942.0399497 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829942.2874348 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.025e-13 A ; detector=F ; gate=0.1 s
+1580829942.5551627 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829942.802573 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.159202e-10 A ; detector=F ; gate=0.1 s
+1580829943.0702863 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829943.3177247 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829943.585518 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=3.848e-13 A ; detector=F ; gate=0.1 s
+1580829943.8333063 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.706413e-10 A ; detector=F ; gate=0.1 s
+1580829944.1040473 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829944.354651 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6449e-12 A ; detector=F ; gate=0.1 s
+1580829944.6251056 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.552e-13 A ; detector=F ; gate=0.1 s
+1580829944.8747423 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9137999999999998e-12 A ; detector=F ; gate=0.1 s
+1580829945.1450887 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829945.3946667 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.618e-13 A ; detector=F ; gate=0.1 s
+1580829945.6654832 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829945.9150226 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6387114e-09 A ; detector=F ; gate=0.1 s
+1580829946.1850042 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829946.5382605 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.0569e-12 A ; detector=F ; gate=0.1 s
+1580829946.8059995 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829947.0532608 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829947.3209357 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=1.403e-13 A ; detector=F ; gate=0.1 s
+1580829947.5684555 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=7.783e-13 A ; detector=F ; gate=0.1 s
+1580829947.8361514 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829948.083647 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.1669269999999999e-10 A ; detector=F ; gate=0.1 s
+1580829948.3513868 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=1.874e-13 A ; detector=F ; gate=0.1 s
+1580829948.598757 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=2.508e-13 A ; detector=F ; gate=0.1 s
+1580829948.8671286 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=5.301e-13 A ; detector=F ; gate=0.1 s
+1580829949.1175008 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.707172e-10 A ; detector=F ; gate=0.1 s
+1580829949.3879778 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.891e-13 A ; detector=F ; gate=0.1 s
+1580829949.6384857 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.6219e-12 A ; detector=F ; gate=0.1 s
+1580829949.90927 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.414e-13 A ; detector=F ; gate=0.1 s
+1580829950.1596642 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.844e-12 A ; detector=F ; gate=0.1 s
+1580829950.4305131 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829950.6804812 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829950.949713 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.5499999999999997e-13 A ; detector=F ; gate=0.1 s
+1580829951.199928 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6400029e-09 A ; detector=F ; gate=0.1 s
+1580829951.470336 RGA_SRS[omanRUEDI] ZERO: mz=44 ; mz-offset=+3 ; intensity=3.3e-13 A ; detector=F ; gate=0.1 s
+1580829951.824938 RGA_SRS[omanRUEDI] PEAK: mz=13 ; intensity=1.1812e-12 A ; detector=F ; gate=0.1 s
+1580829952.0932996 RGA_SRS[omanRUEDI] ZERO: mz=13 ; mz-offset=-4 ; intensity=2.482e-13 A ; detector=F ; gate=0.1 s
+1580829952.3405292 RGA_SRS[omanRUEDI] PEAK: mz=14 ; intensity=3.097e-13 A ; detector=F ; gate=0.1 s
+1580829952.6082408 RGA_SRS[omanRUEDI] ZERO: mz=14 ; mz-offset=-5 ; intensity=2.278e-13 A ; detector=F ; gate=0.1 s
+1580829952.8557403 RGA_SRS[omanRUEDI] PEAK: mz=15 ; intensity=5.723e-13 A ; detector=F ; gate=0.1 s
+1580829953.1234372 RGA_SRS[omanRUEDI] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.075e-13 A ; detector=F ; gate=0.1 s
+1580829953.3709068 RGA_SRS[omanRUEDI] PEAK: mz=16 ; intensity=2.159202e-10 A ; detector=F ; gate=0.1 s
+1580829953.6385586 RGA_SRS[omanRUEDI] ZERO: mz=16 ; mz-offset=-7 ; intensity=1.874e-13 A ; detector=F ; gate=0.1 s
+1580829953.8860407 RGA_SRS[omanRUEDI] PEAK: mz=20 ; intensity=3.71e-13 A ; detector=F ; gate=0.1 s
+1580829954.153724 RGA_SRS[omanRUEDI] ZERO: mz=20 ; mz-offset=+3 ; intensity=4.954e-13 A ; detector=F ; gate=0.1 s
+1580829954.401199 RGA_SRS[omanRUEDI] PEAK: mz=28 ; intensity=1.702292e-10 A ; detector=F ; gate=0.1 s
+1580829954.6698298 RGA_SRS[omanRUEDI] ZERO: mz=28 ; mz-offset=-3 ; intensity=2.279e-13 A ; detector=F ; gate=0.1 s
+1580829954.9191935 RGA_SRS[omanRUEDI] PEAK: mz=29 ; intensity=1.5991e-12 A ; detector=F ; gate=0.1 s
+1580829955.1892595 RGA_SRS[omanRUEDI] ZERO: mz=29 ; mz-offset=-4 ; intensity=2.2109999999999999e-13 A ; detector=F ; gate=0.1 s
+1580829955.439473 RGA_SRS[omanRUEDI] PEAK: mz=32 ; intensity=1.9604e-12 A ; detector=F ; gate=0.1 s
+1580829955.7100344 RGA_SRS[omanRUEDI] ZERO: mz=32 ; mz-offset=+5 ; intensity=2.688e-13 A ; detector=F ; gate=0.1 s
+1580829955.9606905 RGA_SRS[omanRUEDI] PEAK: mz=40 ; intensity=3.642e-13 A ; detector=F ; gate=0.1 s
+1580829956.230999 RGA_SRS[omanRUEDI] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.755e-13 A ; detector=F ; gate=0.1 s
+1580829956.4801073 RGA_SRS[omanRUEDI] PEAK: mz=44 ; intensity=2.6287717e-09 A ; detector=F ; gate=0.1 s

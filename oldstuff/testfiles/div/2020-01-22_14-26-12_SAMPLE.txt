@@ -1,0 +1,107 @@
+1579699572.7715592 DATAFILE COMMENT: RUEDI data file created 2020-01-22 14:26:12
+1579699572.7716882 DATAFILE COMMENT: Data format:
+1579699572.7717314 DATAFILE COMMENT: EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...
+1579699572.7717626 DATAFILE COMMENT: EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.
+1579699572.771796 DATAFILE ANALYSISTYPE: SAMPLE
+1579699572.7718248 DATAFILE SAMPLENAME: deconv_test
+1579699577.6513124 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=28 ; intensity=1.0346315e-09 A ; detector=F ; gate=0.2 s
+1579699578.0154114 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=28 ; mz-offset=-3 ; intensity=3.971e-13 A ; detector=F ; gate=0.2 s
+1579699578.374761 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=32 ; intensity=2.194611e-10 A ; detector=F ; gate=0.2 s
+1579699578.755054 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.972e-13 A ; detector=F ; gate=0.2 s
+1579699579.115235 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=40 ; intensity=1.46099e-11 A ; detector=F ; gate=0.2 s
+1579699579.4954808 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=40 ; mz-offset=-3 ; intensity=2.819e-13 A ; detector=F ; gate=0.2 s
+1579699579.8558123 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=44 ; intensity=5.932e-13 A ; detector=F ; gate=0.2 s
+1579699580.236198 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=44 ; mz-offset=+3 ; intensity=1.02e-13 A ; detector=F ; gate=0.2 s
+1579699580.9060247 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=28 ; intensity=1.035602e-09 A ; detector=F ; gate=0.2 s
+1579699581.2858632 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=28 ; mz-offset=-3 ; intensity=4.912e-13 A ; detector=F ; gate=0.2 s
+1579699581.6306581 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=32 ; intensity=2.196593e-10 A ; detector=F ; gate=0.2 s
+1579699581.9952753 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.89e-13 A ; detector=F ; gate=0.2 s
+1579699582.355184 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=40 ; intensity=1.45648e-11 A ; detector=F ; gate=0.2 s
+1579699582.7197018 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.624e-13 A ; detector=F ; gate=0.2 s
+1579699583.0809 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=44 ; intensity=5.635999999999999e-13 A ; detector=F ; gate=0.2 s
+1579699583.446447 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=44 ; mz-offset=+3 ; intensity=8.149999999999999e-14 A ; detector=F ; gate=0.2 s
+1579699583.873426 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=28 ; intensity=1.0354444999999999e-09 A ; detector=F ; gate=0.2 s
+1579699584.2389107 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=28 ; mz-offset=-3 ; intensity=4.407e-13 A ; detector=F ; gate=0.2 s
+1579699584.5841906 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=32 ; intensity=2.206194e-10 A ; detector=F ; gate=0.2 s
+1579699584.9648528 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=32 ; mz-offset=+5 ; intensity=3.913e-13 A ; detector=F ; gate=0.2 s
+1579699585.3104548 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=40 ; intensity=1.45697e-11 A ; detector=F ; gate=0.2 s
+1579699585.6900172 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.213e-13 A ; detector=F ; gate=0.2 s
+1579699586.0351963 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=44 ; intensity=6.163e-13 A ; detector=F ; gate=0.2 s
+1579699586.4151793 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=44 ; mz-offset=+3 ; intensity=7.82e-14 A ; detector=F ; gate=0.2 s
+1579699586.8378427 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=28 ; intensity=1.038234e-09 A ; detector=F ; gate=0.2 s
+1579699587.2026067 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=28 ; mz-offset=-3 ; intensity=4.589e-13 A ; detector=F ; gate=0.2 s
+1579699587.5641906 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=32 ; intensity=2.202576e-10 A ; detector=F ; gate=0.2 s
+1579699587.9450505 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=32 ; mz-offset=+5 ; intensity=4.5239999999999997e-13 A ; detector=F ; gate=0.2 s
+1579699588.30517 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=40 ; intensity=1.4602599999999998e-11 A ; detector=F ; gate=0.2 s
+1579699588.6859405 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.682e-13 A ; detector=F ; gate=0.2 s
+1579699589.0472224 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=44 ; intensity=6.386e-13 A ; detector=F ; gate=0.2 s
+1579699589.4288368 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=44 ; mz-offset=+3 ; intensity=7.58e-14 A ; detector=F ; gate=0.2 s
+1579699589.8402143 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=28 ; intensity=1.0412631e-09 A ; detector=F ; gate=0.2 s
+1579699590.2217872 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=28 ; mz-offset=-3 ; intensity=4.295e-13 A ; detector=F ; gate=0.2 s
+1579699590.5833395 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=32 ; intensity=2.208421e-10 A ; detector=F ; gate=0.2 s
+1579699590.9481041 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=32 ; mz-offset=+5 ; intensity=4.525e-13 A ; detector=F ; gate=0.2 s
+1579699591.2941918 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=40 ; intensity=1.46423e-11 A ; detector=F ; gate=0.2 s
+1579699591.6752687 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=40 ; mz-offset=-3 ; intensity=1.521e-13 A ; detector=F ; gate=0.2 s
+1579699592.0366278 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=44 ; intensity=6.161999999999999e-13 A ; detector=F ; gate=0.2 s
+1579699592.4014099 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=44 ; mz-offset=+3 ; intensity=8.27e-14 A ; detector=F ; gate=0.2 s
+1579699594.109433 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=14 ; intensity=3.37532e-11 A ; detector=F ; gate=0.2 s
+1579699594.4906704 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=14 ; mz-offset=-5 ; intensity=3.386e-13 A ; detector=F ; gate=0.2 s
+1579699594.8509564 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=16 ; intensity=9.7932e-12 A ; detector=F ; gate=0.2 s
+1579699595.2316878 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=16 ; mz-offset=-7 ; intensity=1.374e-13 A ; detector=F ; gate=0.2 s
+1579699595.6432216 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=14 ; intensity=3.4268299999999996e-11 A ; detector=F ; gate=0.2 s
+1579699596.024706 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=14 ; mz-offset=-5 ; intensity=3.3159999999999997e-13 A ; detector=F ; gate=0.2 s
+1579699596.3687024 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=16 ; intensity=9.9074e-12 A ; detector=F ; gate=0.2 s
+1579699596.749276 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=16 ; mz-offset=-7 ; intensity=1.693e-13 A ; detector=F ; gate=0.2 s
+1579699597.1730464 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=14 ; intensity=3.4336699999999996e-11 A ; detector=F ; gate=0.2 s
+1579699597.5537512 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=14 ; mz-offset=-5 ; intensity=2.634e-13 A ; detector=F ; gate=0.2 s
+1579699597.913315 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=16 ; intensity=9.849e-12 A ; detector=F ; gate=0.2 s
+1579699598.2794116 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=16 ; mz-offset=-7 ; intensity=1.4639999999999999e-13 A ; detector=F ; gate=0.2 s
+1579699598.7040286 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=14 ; intensity=3.45837e-11 A ; detector=F ; gate=0.2 s
+1579699599.0696743 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=14 ; mz-offset=-5 ; intensity=2.48e-13 A ; detector=F ; gate=0.2 s
+1579699599.4294007 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=16 ; intensity=9.9233e-12 A ; detector=F ; gate=0.2 s
+1579699599.810382 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=16 ; mz-offset=-7 ; intensity=1.3859999999999998e-13 A ; detector=F ; gate=0.2 s
+1579699600.2397115 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=14 ; intensity=3.4487e-11 A ; detector=F ; gate=0.2 s
+1579699600.6210818 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=14 ; mz-offset=-5 ; intensity=3.4639999999999997e-13 A ; detector=F ; gate=0.2 s
+1579699600.9810917 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=16 ; intensity=9.966599999999999e-12 A ; detector=F ; gate=0.2 s
+1579699601.346437 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=16 ; mz-offset=-7 ; intensity=1.592e-13 A ; detector=F ; gate=0.2 s
+1579699601.948068 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=15 ; intensity=1.11098e-11 A ; detector=F ; gate=2.4 s
+1579699604.565021 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=15 ; mz-offset=-6 ; intensity=-1.273e-13 A ; detector=F ; gate=2.4 s
+1579699607.2263749 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=15 ; intensity=1.17096e-11 A ; detector=F ; gate=2.4 s
+1579699609.8441632 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=15 ; mz-offset=-6 ; intensity=-1.286e-13 A ; detector=F ; gate=2.4 s
+1579699612.5567749 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=15 ; intensity=1.16029e-11 A ; detector=F ; gate=2.4 s
+1579699615.1738384 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=15 ; mz-offset=-6 ; intensity=-1.2149999999999999e-13 A ; detector=F ; gate=2.4 s
+1579699617.865557 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=15 ; intensity=1.12116e-11 A ; detector=F ; gate=2.4 s
+1579699620.4836242 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=15 ; mz-offset=-6 ; intensity=-1.265e-13 A ; detector=F ; gate=2.4 s
+1579699623.167691 RGA_SRS[MS_MINIRUEDI_TEST] PEAK_DECONV: mz=15 ; intensity=1.12393e-11 A ; detector=F ; gate=2.4 s
+1579699625.7848194 RGA_SRS[MS_MINIRUEDI_TEST] ZERO_DECONV: mz=15 ; mz-offset=-6 ; intensity=-1.166e-13 A ; detector=F ; gate=2.4 s
+1579699649.6503878 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=4 ; intensity=5.3333499999999996e-11 A ; detector=M ; gate=1.0 s
+1579699651.1296759 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=4 ; mz-offset=+1 ; intensity=3.87229e-11 A ; detector=M ; gate=1.0 s
+1579699652.5891836 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=15 ; intensity=6.5076129e-08 A ; detector=M ; gate=1.0 s
+1579699654.0703936 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.5118799999999998e-11 A ; detector=M ; gate=1.0 s
+1579699655.5293107 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=84 ; intensity=1.73444e-11 A ; detector=M ; gate=1.0 s
+1579699657.0091417 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=84 ; mz-offset=+4 ; intensity=6.9543e-12 A ; detector=M ; gate=1.0 s
+1579699658.5496385 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=4 ; intensity=5.35388e-11 A ; detector=M ; gate=1.0 s
+1579699660.0297165 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=4 ; mz-offset=+1 ; intensity=4.45543e-11 A ; detector=M ; gate=1.0 s
+1579699661.4891722 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=15 ; intensity=6.41953293e-08 A ; detector=M ; gate=1.0 s
+1579699662.9700103 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.42752e-11 A ; detector=M ; gate=1.0 s
+1579699664.428489 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=84 ; intensity=1.7565299999999998e-11 A ; detector=M ; gate=1.0 s
+1579699665.9088998 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=84 ; mz-offset=+4 ; intensity=6.9132e-12 A ; detector=M ; gate=1.0 s
+1579699667.4857657 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=4 ; intensity=5.6436699999999996e-11 A ; detector=M ; gate=1.0 s
+1579699668.9666307 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=4 ; mz-offset=+1 ; intensity=4.31513e-11 A ; detector=M ; gate=1.0 s
+1579699670.4263875 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=15 ; intensity=6.30348624e-08 A ; detector=M ; gate=1.0 s
+1579699671.9074738 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.59072e-11 A ; detector=M ; gate=1.0 s
+1579699673.3681126 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=84 ; intensity=1.89209e-11 A ; detector=M ; gate=1.0 s
+1579699674.849495 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=84 ; mz-offset=+4 ; intensity=7.5456e-12 A ; detector=M ; gate=1.0 s
+1579699676.3990083 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=4 ; intensity=5.64894e-11 A ; detector=M ; gate=1.0 s
+1579699677.8784678 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=4 ; mz-offset=+1 ; intensity=4.17383e-11 A ; detector=M ; gate=1.0 s
+1579699679.339255 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=15 ; intensity=6.22394573e-08 A ; detector=M ; gate=1.0 s
+1579699680.8201723 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.47228e-11 A ; detector=M ; gate=1.0 s
+1579699682.2803044 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=84 ; intensity=1.7469399999999998e-11 A ; detector=M ; gate=1.0 s
+1579699683.7609591 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=84 ; mz-offset=+4 ; intensity=6.8985e-12 A ; detector=M ; gate=1.0 s
+1579699685.3268683 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=4 ; intensity=5.36941e-11 A ; detector=M ; gate=1.0 s
+1579699686.80696 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=4 ; mz-offset=+1 ; intensity=3.70807e-11 A ; detector=M ; gate=1.0 s
+1579699688.2658358 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=15 ; intensity=6.08539042e-08 A ; detector=M ; gate=1.0 s
+1579699689.7470117 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=15 ; mz-offset=-6 ; intensity=2.40846e-11 A ; detector=M ; gate=1.0 s
+1579699691.2051642 RGA_SRS[MS_MINIRUEDI_TEST] PEAK: mz=84 ; intensity=1.84124e-11 A ; detector=M ; gate=1.0 s
+1579699692.684893 RGA_SRS[MS_MINIRUEDI_TEST] ZERO: mz=84 ; mz-offset=+4 ; intensity=7.2305999999999995e-12 A ; detector=M ; gate=1.0 s
+1579699694.410242 RGA_SRS[MS_MINIRUEDI_TEST] DECONVOLUTION: target_mz=15 ; target_species=CH4 ; MS_EE=70 eV ; basis=(('CH4', 13, 0.12, 14, 0.205, 15, 0.902, 16, 1.0), ('N2', 14, 0.13, 15, 0.00043, 28, 1.0, 29, 0.0035), ('O2', 16, 0.21, 32, 1.0))
