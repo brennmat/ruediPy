@@ -1,7 +1,7 @@
 %% THIS NEEDS THE underscore PACKAGE: \usepackage[strings]{underscore}
 
 \subsubsection{Class \texttt{rgams_SRS}}
-\path{ruediPy/python/classes/rgams_SRS.py}\par
+\path{ruediPy/trunk/python/classes/rgams_SRS.py}\par
 ruediPy class for SRS RGA-MS control.\par
 
 \paragraph{Method \texttt{calibrate_all}}
@@ -9,7 +9,7 @@ ruediPy class for SRS RGA-MS control.\par
 \texttt{\newline
 val = rgams_SRS.calibrate_all()\newline
 \newline
-Calibrate the internal coefficients for compensation of baseline offset offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command in the SRS RGA manual.\newline
+Calibrate the internal coefficients for compensation of baseline offset and peak positions. This will zero the baseline for all noise-floor (NF) and detector combinations. See also the "CA" command in the SRS RGA manual.\newline
 \newline
 INPUT:\newline
 (none)\newline
@@ -332,6 +332,7 @@ ansreq: flag indicating if answer from RGA is expected:\newline
 ansreq = 1: answer expected, check for answer\newline
 ansreq = 0: no answer expected, don't check for answer\newline
 timeout (optional): max. wait time for answer from RGA (seconds), default: timeout = 10 seconds\newline
+wait_between_bytes (optional): wait time between reads of single response bytes (seconds), default = 0.02 seconds. If reading answer from RGA, it may be required to wait a short time between reading each single byte. If the data is coming too slowly, the data reading might empty the input buffer before all the data is transferred for the RGA to the buffer, and the code would then assume it is done with reading all the data. Adding a small wait time in between the single reads of each byte helps to avoid this problem.\newline
 \newline
 OUTPUT:\newline
 ans: answer / result returned from RGA\newline
@@ -341,7 +342,7 @@ ans: answer / result returned from RGA\newline
 \paragraph{Method \texttt{peak}}
 \vspace{1ex}
 \texttt{\newline
-val,unit = rgams_SRS.peak(mz,gate,f,add_to_peakbuffer=True)\newline
+val,unit = rgams_SRS.peak(mz,gate,f,add_to_peakbuffer=True,peaktype=None)\newline
 \newline
 Read out detector signal at single mass (m/z value).\newline
 \newline
@@ -350,6 +351,7 @@ mz: m/z value (integer)\newline
 gate: gate time (seconds) NOTE: gate time can be longer than the max. gate time supported by the hardware (2.4 seconds). If so, the multiple peak readings will be averaged to achieve the requested gate time.\newline
 f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
 add_to_peakbuffer (optional): flag to choose if peak value is added to peakbuffer (default: add_to_peakbuffer=True)\newline
+peaktype (optional): string to indicate the "type" of the PEAK reading (default: type=None). Specifying type will add the type string the the PEAK identifier in the data file in order to tell the processing tool(s) to use the PEAK_xyz reading for a specific purpose. Example: type='DECONV' will change the PEAK identifier to PEAK_DECONV, which will be used for deconvolution of mass spectrometric overlaps.\newline
 \newline
 OUTPUT:\newline
 val: signal intensity (float)\newline
@@ -370,7 +372,7 @@ in the electrometer and in the CDEM's HV power supply.\newline
 \paragraph{Method \texttt{peak_zero_loop}}
 \vspace{1ex}
 \texttt{\newline
-peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False)\newline
+peak_zero_loop (mz,detector,gate,ND,NC,datafile,clear_peakbuf_cond=True,clear_peakbuf_main=True,plot_cond=False,datatype=None)\newline
 \newline
 Cycle PEAKS and ZERO readings given mz values.\newline
 \newline
@@ -384,7 +386,7 @@ datafile: file object for writing data (see datafile.py). If f = 'nofile', data 
 clear_peakbuf_cond: flag to set clearing of peakbuffer before conditioning cycles on/off (optional, default=True)\newline
 clear_peakbuf_main: flag to set clearing of peakbuffer before main cycles on/off (optional, default=True)\newline
 plot_cond: flag to set plotting of readings used for detector conditioning (inclusion of values in peakbuffer)\newline
-\newline
+datatype (optional): see 'peaktype' argument of self.peak or 'zerotype' argument of self.zero (default: datatype=None)\newline
 OUTPUT:\newline
 (none)\newline
 \newline
@@ -702,6 +704,22 @@ OUTPUT:\newline
 \newline
 }
 
+\paragraph{Method \texttt{set_peakbuffer_mz_color}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_peakbuffer_mz_color(mz,col)\newline
+\newline
+Set color to be used for given m/z value in peakbuffer plot.\newline
+\newline
+INPUT:\newline
+mz: m/z value\newline
+col: color (string), for example col = 'r' or col = 'darkgray'; see Python/Matplotlib documentation for details.\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{set_peakbuffer_plot_max_y}}
 \vspace{1ex}
 \texttt{\newline
@@ -726,6 +744,21 @@ Set lower limit of y range in peakbuffer plot.\newline
 \newline
 INPUT:\newline
 val: lower limit of y-axis range\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
+\paragraph{Method \texttt{set_peakbuffer_scale}}
+\vspace{1ex}
+\texttt{\newline
+rgams_SRS.set_peakbuffer_scale(scale)\newline
+\newline
+Set scale of y-axis in peakbuffer plot (linear or log).\newline
+\newline
+INPUT:\newline
+scale: scale (string, either 'linear' or 'log, default: scale = 'linear')\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -778,10 +811,29 @@ OUTPUT:\newline
 \newline
 }
 
+\paragraph{Method \texttt{write_deconv_info}}
+\vspace{1ex}
+\texttt{\newline
+write_deconv_info (target_mz,target_species,deconv_detector,basis,f)\newline
+\newline
+Write DECONVOLUTION information line to data file (information needed by the deconvolution processor).\newline
+\newline
+INPUT:\newline
+target_mz: m/z ratio of the peak that needs "overlap correction by deconvolution" (integer)\newline
+target_species: name of the gas species that needs "overlap correction by deconvolution" (string)\newline
+deconv_detector: indicates whether deconvolution (regression of linear model) is based on Faraday or Multiplier data (string, eiter 'F' or 'M')\newline
+basis: spectra (or "endmembers") to be used as basis for deconvolution (Pyhton tuple). Every tuple element is of the form ('speciesname',mz1,peakheight1,mz2,peakheight2,...,mzN,peakheightN). Example: basis=( ('CH4',13,0.12,14,0.205,15,0.902,16,1.0) , ('N2',14,0.13,15,0.00043,28,1.0,29,0.0035) , ('O2',16,0.21,32,1.0) )\newline
+f: data file object\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{zero}}
 \vspace{1ex}
 \texttt{\newline
-val,unit = rgams_SRS.zero(mz,mz_offset,gate,f)\newline
+val,unit = rgams_SRS.zero(mz,mz_offset,gate,f,zerotype=None)\newline
 \newline
 Read out detector signal at single mass with relative offset to given m/z value (this is useful to determine the baseline near a peak at a given m/z value), see rgams_SRS.peak())\newline
 The detector signal is read at mz+mz_offset\newline
@@ -791,6 +843,7 @@ mz: m/z value (integer)\newline
 mz_offset: offset relative m/z value (integer).\newline
 gate: gate time (seconds) NOTE: gate time can be longer than the max. gate time supported by the hardware (2.4 seconds). If so, the multiple zero readings will be averaged to achieve the requested gate time.\newline
 f: file object for writing data (see datafile.py). If f = 'nofile', data is not written to any data file.\newline
+zerotype (optional): string to indicate the "type" of the ZERO reading (default: type=None). See 'peaktype' argument for self.peak(...).\newline
 \newline
 OUTPUT:\newline
 val: signal intensity (float)\newline
@@ -809,8 +862,23 @@ in the electrometer and in the CDEM's HV power supply.\newline
 }
 
 \subsubsection{Class \texttt{selectorvalve_VICI}}
-\path{ruediPy/python/classes/selectorvalve_VICI.py}\par
+\path{ruediPy/trunk/python/classes/selectorvalve_VICI.py}\par
 ruediPy class for VICI valve control. This assumes the serial protocol used with VICI's older "microlectric" actuators. For use with the newer "universal" actuators, they must be set to "legacy mode" using the "LG1" command (see page 8 of VICI document "Universal Electric Actuator Instruction Manual"). The self.set_legacy command may be useful for this.\par
+
+\paragraph{Method \texttt{getnumpos}}
+\vspace{1ex}
+\texttt{\newline
+positions = selectorvalve_VICI.getnumpos()\newline
+\newline
+Return number of positions of the SELECTORVALVE object\newline
+\newline
+INPUT:\newline
+(none)\newline
+\newline
+OUTPUT:\newline
+positions: number of positions (int)\newline
+\newline
+}
 
 \paragraph{Method \texttt{getpos}}
 \vspace{1ex}
@@ -878,7 +946,7 @@ OUTPUT:\newline
 No method description available.\par
 
 \subsubsection{Class \texttt{pressuresensor_WIKA}}
-\path{ruediPy/python/classes/pressuresensor_WIKA.py}\par
+\path{ruediPy/trunk/python/classes/pressuresensor_WIKA.py}\par
 ruediPy class for WIKA pressure sensor control.\par
 
 \paragraph{Method \texttt{label}}
@@ -992,7 +1060,7 @@ OUTPUT:\newline
 }
 
 \subsubsection{Class \texttt{pressuresensor_OMEGA}}
-\path{ruediPy/python/classes/pressuresensor_OMEGA.py}\par
+\path{ruediPy/trunk/python/classes/pressuresensor_OMEGA.py}\par
 ruediPy class for OMEGA pressure sensor control.\par
 
 \paragraph{Method \texttt{label}}
@@ -1091,7 +1159,7 @@ OUTPUT:\newline
 }
 
 \subsubsection{Class \texttt{temperaturesensor_MAXIM}}
-\path{ruediPy/python/classes/temperaturesensor_MAXIM.py}\par
+\path{ruediPy/trunk/python/classes/temperaturesensor_MAXIM.py}\par
 ruediPy class for MAXIM DS1820 type temperature sensors (wrapper class for pydigitemp package).\par
 
 \paragraph{Method \texttt{label}}
@@ -1190,7 +1258,7 @@ OUTPUT:\newline
 }
 
 \subsubsection{Class \texttt{datafile}}
-\path{ruediPy/python/classes/datafile.py}\par
+\path{ruediPy/trunk/python/classes/datafile.py}\par
 ruediPy class for handling of data files.\par
 
 \paragraph{Method \texttt{basepath}}
@@ -1325,10 +1393,34 @@ OUTPUT:\newline
 \newline
 }
 
+\paragraph{Method \texttt{write_ms_deconv}}
+\vspace{1ex}
+\texttt{\newline
+datafile.write_ms_deconv(caller,label,target_mz,target_species,deconv_detector,ms_EE,basis,timestmp)\newline
+\newline
+Write DECONVOLUTION line to the data file (information for deconvolution processor).\newline
+\newline
+INPUT:\newline
+caller: type of calling object, i.e. the "data origin" (string)\newline
+label: name/label of the calling object (string)\newline
+target_mz: m/z ratio of the peak that needs "overlap correction by deconvolution" (integer)\newline
+target_species: name of the gas species that needs "overlap correction by deconvolution" (string)\newline
+deconv_detector: indicates whether deconvolution (regression of linear model) is based on Faraday or Multiplier data (string, either 'F' or 'M')\newline
+ms_EE: ionisation energy used for the analysis in the MS ion source (float, in eV)\newline
+basis: spectra (or "endmembers") to be used as basis for deconvolution (Pyhton tuple). Every tuple element is of the form ('speciesname',mz1,peakheight1,mz2,peakheight2,...,mzN,peakheightN). Example: basis=( ('CH4',13,0.12,14,0.205,15,0.902,16,1.0) , ('N2',14,0.13,15,0.00043,28,1.0,29,0.0035) , ('O2',16,0.21,32,1.0) )\newline
+\newline
+gate: gate time (float)\newline
+timestmp: timestamp of the peak measurement (see misc.now_UNIX)\newline
+\newline
+OUTPUT:\newline
+(none)\newline
+\newline
+}
+
 \paragraph{Method \texttt{write_peak}}
 \vspace{1ex}
 \texttt{\newline
-datafile.write_peak(caller,mz,intensity,unit,det,gate,timestmp)\newline
+datafile.write_peak(caller,mz,intensity,unit,det,gate,timestmp,peaktype=None)\newline
 \newline
 Write PEAK data line to the data file.\newline
 \newline
@@ -1341,6 +1433,7 @@ unit: unit of peak intensity value (string)\newline
 det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier\newline
 gate: gate time (float)\newline
 timestmp: timestamp of the peak measurement (see misc.now_UNIX)\newline
+peaktype (optional): string to indicate the "type" of the PEAK reading (default: type=None). Specifying type will add the type string the the PEAK identifier in the data file in order to tell the processing tool(s) to use the PEAK_xyz reading for a specific purpose. Example: type='DECONV' will change the PEAK identifier to PEAK_DECONV, which will be used for deconvolution of mass spectrometric overlaps.\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -1461,7 +1554,7 @@ OUTPUT:\newline
 \paragraph{Method \texttt{write_zero}}
 \vspace{1ex}
 \texttt{\newline
-datafile.write_zero(caller,mz,mz_offset,intensity,unit,det,gate,timestmp)\newline
+datafile.write_zero(caller,mz,mz_offset,intensity,unit,det,gate,timestmp,zerotype=None)\newline
 \newline
 Write ZERO data line to the data file.\newline
 \newline
@@ -1471,10 +1564,11 @@ label: name/label of the calling object (string)\newline
 mz: mz value (integer)\newline
 mz_offset: mz offset value (integer, positive offset corresponds to higher mz value)\newline
 intensity: zero intensity value (float)\newline
-unit: unit of peak intensity value (string)\newline
+unit: unit of zero intensity value (string)\newline
 det: detector (string), e.g., det='F' for Faraday or det='M' for multiplier\newline
 gate: gate time (float)\newline
-timestmp: timestamp of the peak measurement (see misc.now_UNIX)\newline
+timestmp: timestamp of the zero measurement (see misc.now_UNIX)\newline
+zerotype (optional): string to indicate the "type" of the ZERO reading (default: type=None). Specifying type will add the type string the the ZERO identifier in the data file in order to tell the processing tool(s) to use the ZERO_xyz reading for a specific purpose. Example: type='DECONV' will change the ZERO identifier to ZERO_DECONV, which will be used for deconvolution of mass spectrometric overlaps.\newline
 \newline
 OUTPUT:\newline
 (none)\newline
@@ -1501,7 +1595,7 @@ OUTPUT:\newline
 }
 
 \subsubsection{Class \texttt{misc}}
-\path{ruediPy/python/classes/misc.py}\par
+\path{ruediPy/trunk/python/classes/misc.py}\par
 ruediPy class with helper functions.\par
 
 \paragraph{Method \texttt{ask_for_value}}

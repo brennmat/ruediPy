@@ -1934,13 +1934,13 @@ class rgams_SRS:
 	def set_peakbuffer_mz_color(self,mz,col):
 		'''
 		rgams_SRS.set_peakbuffer_mz_color(mz,col)
-
+		
 		Set color to be used for given m/z value in peakbuffer plot.
-
+		
 		INPUT:
 		mz: m/z value
-		col: color (string), for example col = 'r', col = 'darkgray', or col = ''#eeefff'; see Python/Matplotlib documentation for details.
-
+		col: color (string), for example col = 'r' or col = 'darkgray'; see Python/Matplotlib documentation for details.
+		
 		OUTPUT:
 		(none)
 		'''
