@@ -49,10 +49,8 @@ from classes.rgams_SRS		import rgams_SRS
 from classes.datafile		import datafile
 
 # set up ruediPy objects:
-# MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
-# MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2304868-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
 MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2350188-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
-DATAFILE  = datafile ( '~/data' )
+DATAFILE = datafile ( '~/data' )
 
 # set/show MS configuraton:
 MS.set_detector('F')
@@ -81,7 +79,7 @@ MS.set_detector('F') # make sure ion beam is on Faraday
 
 # conditioning F:
 for k in range(5):
-        peak,unit = MS.peak(28,0.1,'nofile')
+	peak,unit = MS.peak(28,0.1,'nofile')
 
 # series of sinlge mass measurements ('PEAK' readings):
 print ('Single mass measurements...')

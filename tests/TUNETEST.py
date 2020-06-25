@@ -10,7 +10,7 @@ import os
 
 # import ruediPy classes:
 from classes.rgams_SRS		import rgams_SRS
-MS        = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 1000 )
+MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 1000 )
 MS.filament_on() # turn on with default current
 print 'Filament current: ' + MS.get_filament_current() + ' mA'
 

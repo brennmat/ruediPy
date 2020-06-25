@@ -42,21 +42,13 @@
 import time
 
 # import ruediPy classes:
-from classes.pressuresensor_OMEGA	import pressuresensor_OMEGA
-from classes.datafile			import datafile
+from classes.pressuresensor_OMEGA   import pressuresensor_OMEGA
+from classes.datafile               import datafile
 
-# for Linux (use device 'file' by ID to avoid confusion of com ports):
-# PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2257101-if00-port0' , label = 'TOTALPRESSURE' , max_buffer_points = 500)
-
-# PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2257101-if00-port0' , label = 'TOTALPRESSURE' , max_buffer_points = 500)
-
+PSENS = pressuresensor_OMEGA ( serialport = '/dev/serial/by-id/usb-OMEGA_Engineering_USBPX2_495514-if00-port0' , label = 'TOTALPRESSURE' )
 
 # for Mac OS X:
-# PSENS		= pressuresensor_OMEGA ( serialport = '/dev/cu.usbserial-487740' , label = 'TOTALPRESSURE' )
-
-PSENS		= pressuresensor_OMEGA ( serialport = '/dev/serial/by-id/usb-OMEGA_Engineering_USBPX2_495514-if00-port0' , label = 'TOTALPRESSURE' )
-
-
+# PSENS = pressuresensor_OMEGA ( serialport = '/dev/cu.usbserial-487740' , label = 'TOTALPRESSURE' )
 
 # start data file:
 DATAFILE	= datafile ( '~/data' )

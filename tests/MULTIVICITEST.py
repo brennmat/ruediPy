@@ -42,28 +42,28 @@
 # import general purpose Python classes:
 
 # import ruediPy classes:
-from classes.selectorvalve_compositeVICI	import selectorvalve_compositeVICI
-from classes.datafile		import datafile
+from classes.selectorvalve_compositeVICI    import selectorvalve_compositeVICI
+from classes.datafile                       import datafile
 
 # set up ruediPy objects:
 VALVE = selectorvalve_compositeVICI (
 	serialports = (
-		'/dev/serial/by-id/usb-FTDI_USB-RS232_Cable_FT1JKR1A-if00-port0' ,
-		'/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2235236-if00-port0',
-		'/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2350964-if00-port0'
+		'/dev/serial/by-id/usb-FTDI_USB-RS232_Cable_FT1JKR1A-if00-port0' , # Valve 1
+		'/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2235236-if00-port0',      # Valve 2
+		'/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2350964-if00-port0'       # Valve 3
 	),
-	valvespostable = (	(1,1,1) ,	# Position 1
-				(1,1,2) ,	# Position 2
-				(1,1,3) ,	# Position 3
-				(1,2,3) ,	# Position 4
-				(1,3,3) ,	# Position 5
-				(2,3,3) ,	# Position 6
-				(3,3,3)  	# Position 7
+	valvespostable = (	(1,1,1) , # Position 1
+				(1,1,2) , # Position 2
+				(1,1,3) , # Position 3
+				(1,2,3) , # Position 4
+				(1,3,3) , # Position 5
+				(2,3,3) , # Position 6
+				(3,3,3)   # Position 7
 	) ,
 	label = 'MULTIINLETSELECTORS'
 	)
 
-DATAFILE  = datafile ( '~/data' )
+DATAFILE = datafile ( '~/data' )
 
 # start data file:
 DATAFILE.next() # start a new data file
