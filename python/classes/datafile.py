@@ -37,7 +37,7 @@
 import sys
 import warnings
 import os
-from os.path 		import expanduser
+from os.path		import expanduser
 
 from classes.misc	import misc
 
@@ -266,7 +266,7 @@ class datafile:
 		n = n + '.txt'
 		try:
 			self.fid = open(n, 'w')
-			    		
+
 		except IOError as e:
 			self.fid = -1;
 			self.warning ('could not open new file (' + n + '): ' + str(e))
@@ -277,8 +277,8 @@ class datafile:
 		self.write_comment(self.label(),'Data format:')
 		self.write_comment(self.label(),'EPOCHTIME DATASOURCE[LABEL/NAME] TYPE: DATAFIELD-1; DATAFIELD-2; DATAFIELD-3; ...')
 		self.write_comment(self.label(),'EPOCH TIME: UNIX time (seconds after Jan 01 1970 UTC), DATASOURCE: data origin (with optional label of origin object), TYPE: type of data, DATAFIELD-i: data fields, separated by colons. The field format and number of fields depends on the DATASOURCE and TYPE of data.')
-	   	
-	   	# write analysis type:
+
+		# write analysis type:
 		if typ == '':
 			typ = 'UNKNOWN'
 		self.writeln( self.label() ,'','ANALYSISTYPE' , typ , misc.now_UNIX() )
@@ -322,9 +322,9 @@ class datafile:
 		"""
 		
 		# remove whitespace / spaces:
-		caller 		= caller.replace(' ','')
-		label 		= label.replace(' ','')
-		identifier	= identifier.replace(' ','')
+		caller     = caller.replace(' ','')
+		label      = label.replace(' ','')
+		identifier = identifier.replace(' ','')
 		
 		# combine CALLER and LABEL part:
 		if not (label == caller):

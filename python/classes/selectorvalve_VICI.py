@@ -75,12 +75,12 @@ class selectorvalve_VICI:
 			if parse_version(serial.__version__) >= parse_version('3.3') :
 				# open port with exclusive access:
 				ser = serial.Serial(
-					port     = serialport,
-					baudrate = 9600,
-					parity   = serial.PARITY_NONE,
-					stopbits = serial.STOPBITS_ONE,
-					bytesize = serial.EIGHTBITS,
-					timeout  = 5.0,
+					port      = serialport,
+					baudrate  = 9600,
+					parity    = serial.PARITY_NONE,
+					stopbits  = serial.STOPBITS_ONE,
+					bytesize  = serial.EIGHTBITS,
+					timeout   = 5.0,
 					exclusive = True
 				)
 
@@ -134,8 +134,8 @@ class selectorvalve_VICI:
 			except:
 				self.warning('could not parse response from valve: ans = ' + ans)
 				ans = '?'
-		    	
-		    # check result:
+	
+			# check result:
 			if not ans.isdigit():
 				self.warning('could not determine number of valve positions.')
 				ans = '-1'
@@ -211,7 +211,7 @@ class selectorvalve_VICI:
 
 		INPUT:
 		(none)
-   
+
 		OUTPUT:
 		(none)
 		'''
@@ -276,8 +276,8 @@ class selectorvalve_VICI:
 		'''
 		
 		# make sure serial port buffer is empty:
-		self.ser.flushInput() 	#pot make sure input is empty
-		self.ser.flushOutput() 	# make sure output is empty
+		self.ser.flushInput()   #pot make sure input is empty
+		self.ser.flushOutput()  # make sure output is empty
 
 		# send command to serial port:
 		self.ser.write('CP\r\n'.encode('ascii'))
@@ -305,13 +305,13 @@ class selectorvalve_VICI:
 		
 		try:
 			# print ans
-			ans = ans.split('=')[1] # split answer in the form 'Position is  = 1'
+			ans = ans.split('=')[1] # split answer in the form 'Position is = 1'
 			ans = ans.strip() # strip away whitespace
 		except:
 			self.warning('could not parse response from valve: ans = ' + ans)
 			ans = '?'
-	    	
-	    # check result:
+	
+		# check result:
 		if not ans.isdigit():
 			self.warning('could not determine valve position (position = ' + ans + ')')
 			ans = '-1'

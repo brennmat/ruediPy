@@ -278,9 +278,9 @@ class temperaturesensor_MAXIM:
 		N = self._tempbuffer_max_len
 		
 		if self._tempbuffer_t.shape[0] > N:
-			self._tempbuffer_t 	     = self._tempbuffer_t[-N:]
-			self._tempbuffer_T 	     = self._tempbuffer_T[-N:]
-			self._tempbuffer_unit        = self._tempbuffer_unit[-N:]
+			self._tempbuffer_t    = self._tempbuffer_t[-N:]
+			self._tempbuffer_T    = self._tempbuffer_T[-N:]
+			self._tempbuffer_unit = self._tempbuffer_unit[-N:]
 
 
 	########################################################################################################

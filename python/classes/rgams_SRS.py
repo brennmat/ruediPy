@@ -108,12 +108,12 @@ class rgams_SRS:
 			if parse_version(serial.__version__) >= parse_version('3.3') :
 				# open port with exclusive access:
 				ser = serial.Serial(
-					port     = serialport,
-					baudrate = 28800,
-					parity   = serial.PARITY_NONE,
-					stopbits = serial.STOPBITS_TWO,
-					bytesize = serial.EIGHTBITS,
-					timeout  = 10.0,
+					port      = serialport,
+					baudrate  = 28800,
+					parity    = serial.PARITY_NONE,
+					stopbits  = serial.STOPBITS_TWO,
+					bytesize  = serial.EIGHTBITS,
+					timeout   = 10.0,
 					exclusive = True
 				)
 
@@ -128,9 +128,9 @@ class rgams_SRS:
 					timeout  = 10.0
 				)
 
-			ser.flushOutput() 	# make sure output is empty
+			ser.flushOutput()	# make sure output is empty
 			time.sleep(0.1)
-			ser.flushInput() 	# make sure input is empty
+			ser.flushInput()	# make sure input is empty
 		
 			self.ser = ser
 		
@@ -786,18 +786,18 @@ class rgams_SRS:
 		Experiment gave the following gate times vs NF parameter values:
 		
 		  NF	gate (seconds)
-		  0	2.4	  
-		  1	1.21	  
-		  2	0.48	  
-		  3	0.25	  
-		  4	0.163 
-		  5	0.060 
-		  6	0.043 
-		  7	0.025 
+		  0	2.4
+		  1	1.21
+		  2	0.48
+		  3	0.25
+		  4	0.163
+		  5	0.060
+		  6	0.043
+		  7	0.025
 		'''
 		
 		gt = numpy.array([ 2.4 , 1.21 , 0.48 , 0.25 , 0.163 , 0.060 , 0.043 , 0.025 ])
-		NF  = (numpy.abs(gt-gate)).argmin() # index to closest gate time
+		NF = (numpy.abs(gt-gate)).argmin() # index to closest gate time
 		if gate > gt.max():
 			self.warning('gate time cannot be more than ' + str(gt.max()) +'s! Using gate = ' + str(gt.max()) +'s...')
 		elif gate < gt.min():
@@ -835,11 +835,11 @@ class rgams_SRS:
 		N = self._peakbuffer_max_len
 		
 		if self._peakbuffer_t.shape[0] > N:
-			self._peakbuffer_t 		= self._peakbuffer_t[-N:]
-			self._peakbuffer_mz 		= self._peakbuffer_mz[-N:]
-			self._peakbuffer_intens	    = self._peakbuffer_intens[-N:]
-			self._peakbuffer_det	    = self._peakbuffer_det[-N:]
-			self._peakbuffer_unit       = self._peakbuffer_unit[-N:]
+			self._peakbuffer_t      = self._peakbuffer_t[-N:]
+			self._peakbuffer_mz     = self._peakbuffer_mz[-N:]
+			self._peakbuffer_intens = self._peakbuffer_intens[-N:]
+			self._peakbuffer_det    = self._peakbuffer_det[-N:]
+			self._peakbuffer_unit   = self._peakbuffer_unit[-N:]
 
 
 
@@ -860,11 +860,11 @@ class rgams_SRS:
 		(none)
 		"""
 
-		self._peakbuffer_t          = self._peakbuffer_t[[]]
-		self._peakbuffer_mz         = self._peakbuffer_mz[[]]
-		self._peakbuffer_intens     = self._peakbuffer_intens[[]]
-		self._peakbuffer_det = ['x'] * 0 # empty list
-		self._peakbuffer_unit       = ['x'] * 0 # empty list
+		self._peakbuffer_t      = self._peakbuffer_t[[]]
+		self._peakbuffer_mz     = self._peakbuffer_mz[[]]
+		self._peakbuffer_intens = self._peakbuffer_intens[[]]
+		self._peakbuffer_det    = ['x'] * 0 # empty list
+		self._peakbuffer_unit   = ['x'] * 0 # empty list
 
 
 
@@ -889,8 +889,7 @@ class rgams_SRS:
 
 
 
-        ########################################################################################################
-
+########################################################################################################
 
 
 
@@ -1487,9 +1486,9 @@ class rgams_SRS:
 			print ( 'mz-offset at mz = 128: ' + str(delta_m128) )
 
 			if abs(delta_m0) < max_delta_mz:
-			   	if abs(delta_m128) < max_delta_mz:
-			   		print ( 'Peak positions are within tolerance (delta-mz = ' + str(max_delta_mz) + '). Tuning completed.' )
-			   		doTune = False
+				if abs(delta_m128) < max_delta_mz:
+					print ( 'Peak positions are within tolerance (delta-mz = ' + str(max_delta_mz) + '). Tuning completed.' )
+					doTune = False
 			
 			# determine new values of RI and RS if tuning is yet within tolerance:
 			if doTune:
@@ -1537,7 +1536,7 @@ class rgams_SRS:
 			x = '{:.4f}'.format(x)
 
 		self.param_IO('RI' + x,0)
-		print ('Set RI voltage to ' +  x + 'V')
+		print ('Set RI voltage to ' + x + 'V')
 
 
 
@@ -1549,7 +1548,7 @@ class rgams_SRS:
 		'''
 		rgams_SRS.set_RS(x)
 
-		Set RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)
+		Set RS parameter value (peak-position tuning at high mz range / RF voltage output at 128 amu, in mV)
 
 		INPUT:
 		x: RS voltage (mV)
@@ -1609,7 +1608,7 @@ class rgams_SRS:
 		'''
 		x = rgams_SRS.get_RS(x)
 
-		Get current RS parameter value (peak-position tuning at high mz range  / RF voltage output at 128 amu, in mV)
+		Get current RS parameter value (peak-position tuning at high mz range / RF voltage output at 128 amu, in mV)
 
 		INPUT:
 		(none)

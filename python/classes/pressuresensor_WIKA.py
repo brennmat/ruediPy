@@ -75,9 +75,9 @@ class pressuresensor_WIKA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' ,  plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
 		'''
-		pressuresensor_WIKA.__init__( serialport , label = 'PRESSURESENSOR' ,  plot_title = None , max_buffer_points = 500 , fig_w = 3 , fig_h = 2 )
+		pressuresensor_WIKA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 3 , fig_h = 2 )
 		
 		Initialize PRESSURESENSOR object (WIKA), configure serial port connection
 		
@@ -128,9 +128,9 @@ class pressuresensor_WIKA:
 					timeout  = 5
 				)
 
-			ser.flushOutput() 	# make sure output is empty
+			ser.flushOutput()	# make sure output is empty
 			time.sleep(0.1)
-			ser.flushInput() 	# make sure input is empty
+			ser.flushInput()	# make sure input is empty
 		
 			self.ser = ser
 
@@ -139,7 +139,7 @@ class pressuresensor_WIKA:
 			cs = self.serial_checksum(cmd) # determine check sum
 		
 			self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
-			ans =  self.ser.read(5) # read out response to empty serial data buffer
+			ans = self.ser.read(5) # read out response to empty serial data buffer
 
 			# get serial number of pressure sensor
 			cmd = 'KN\x00' # command string to get serial number
@@ -364,9 +364,9 @@ class pressuresensor_WIKA:
 		N = self._pressbuffer_max_len
 		
 		if self._pressbuffer_t.shape[0] > N:
-			self._pressbuffer_t 	     = self._pressbuffer_t[-N:]
-			self._pressbuffer_p 	     = self._pressbuffer_p[-N:]
-			self._pressbuffer_unit       = self._pressbuffer_unit[-N:]
+			self._pressbuffer_t    = self._pressbuffer_t[-N:]
+			self._pressbuffer_p    = self._pressbuffer_p[-N:]
+			self._pressbuffer_unit = self._pressbuffer_unit[-N:]
 
 
 

@@ -128,16 +128,16 @@ class pressuresensor_OMEGA:
 					timeout  = 5
 				)
 
-			ser.flushOutput() 	# make sure output is empty
+			ser.flushOutput()   # make sure output is empty
 			time.sleep(0.1)
-			ser.flushInput() 	# make sure input is empty
+			ser.flushInput()    # make sure input is empty
 		
 			self.ser = ser
 
 			# get serial number of pressure sensor
 			self.ser.write(('SNR\r').encode('utf-8')) # send command with check sum to serial port
 			ans = self.ser.readline().decode('utf-8') # read response and decode ASCII	
-			ser.flushInput() 	# make sure input is empty
+			ser.flushInput()   # make sure input is empty
 			self._serial_number = int(ans.rstrip().split('=')[1]) # parse response to integer number
 
 			# data buffer for PEAK values:
@@ -237,10 +237,10 @@ class pressuresensor_OMEGA:
 				if ans[0] == '>':
 					# fix > character dangling in the serial buffer from previous reading
 					ans = ans[1:]
-				self.ser.flushInput() 	# make sure input is empty
+				self.ser.flushInput()  # make sure input is empty
 				
 				ans = ans.split(' ')
-				p = float( ans[0] ) # convert string to float
+				p = float( ans[0] )    # convert string to float
 				unit = ans[1]
 				if unit != 'bar':
 					raise ValueError( 'OMEGA pressure sensor returned unit = ' + unit + ', not bar!')
@@ -312,9 +312,9 @@ class pressuresensor_OMEGA:
 		N = self._pressbuffer_max_len
 		
 		if self._pressbuffer_t.shape[0] > N:
-			self._pressbuffer_t 	     = self._pressbuffer_t[-N:]
-			self._pressbuffer_p 	     = self._pressbuffer_p[-N:]
-			self._pressbuffer_unit       = self._pressbuffer_unit[-N:]
+			self._pressbuffer_t    = self._pressbuffer_t[-N:]
+			self._pressbuffer_p    = self._pressbuffer_p[-N:]
+			self._pressbuffer_unit = self._pressbuffer_unit[-N:]
 
 
 
