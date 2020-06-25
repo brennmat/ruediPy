@@ -2,15 +2,16 @@
 
 import inspect
 
-from classes.rgams_SRS		       		import rgams_SRS
+from classes.rgams_SRS		       	import rgams_SRS
 from classes.selectorvalve_VICI    		import selectorvalve_VICI
+from classes.selectorvalve_compositeVICI	import selectorvalve_compositeVICI
 from classes.pressuresensor_WIKA   		import pressuresensor_WIKA
 from classes.pressuresensor_OMEGA   		import pressuresensor_OMEGA
-from classes.temperaturesensor_MAXIM   		import temperaturesensor_MAXIM
+from classes.temperaturesensor_MAXIM   	import temperaturesensor_MAXIM
 from classes.datafile			   	import datafile
-from classes.misc			       	import misc
+from classes.misc			        import misc
 
-CLASSES = [ rgams_SRS , selectorvalve_VICI , pressuresensor_WIKA , pressuresensor_OMEGA , temperaturesensor_MAXIM , datafile , misc ]
+CLASSES = [ rgams_SRS , selectorvalve_VICI , selectorvalve_compositeVICI , pressuresensor_WIKA , pressuresensor_OMEGA , temperaturesensor_MAXIM , datafile , misc ]
 
 outfile = open('python_API.tex', 'w')
 
@@ -19,7 +20,7 @@ outfile.write( '%% THIS NEEDS THE underscore PACKAGE: \\usepackage[strings]{unde
 for X in CLASSES:
 	outfile.write ( '\subsubsection{Class \\texttt{' + X.__name__ + '}}\n' )
 	P = inspect.getsourcefile(X)
-	outfile.write ( '\path{' + P[P.find('ruedi'):len(P)] + '}\par\n' )
+	outfile.write ( '\path{' + P[P.find('python'):len(P)] + '}\par\n' )
 	doc = inspect.getdoc(X)
 	if doc is None:
 		outfile.write ( 'No class description available.\par' )
