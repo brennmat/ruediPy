@@ -42,7 +42,7 @@ try:
 	do_color_term = True
 except ImportError:
 	do_color_term = False
-	print ('*** NOTE: Please install the python termcolor package for colored warning messages! ***')
+	print ('*** NOTE: Please install the python termcolor package for colored warning messages on STDOUT! ***')
 
 # import GUI configuration (if any):
 try:
