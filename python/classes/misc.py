@@ -44,6 +44,11 @@ except ImportError:
 	do_color_term = False
 	print ('*** NOTE: Please install the python termcolor package for colored warning messages! ***')
 
+try:
+	from gui_config import GUI # to share global configurations of the program
+except ImportError:
+	pass
+	
 # check Python version and print warning if we're running version < 3:
 if ( sys.version_info[0] < 3 ):
 	warnings.warn("ruediPy / misc class is running on Python version < 3. Version 3.0 or newer is recommended!")
@@ -111,13 +116,18 @@ class misc:
 		OUTPUT:
 		(none)
 		'''
-		
-		print ('\a') # get user attention using the terminal bell
+			
 		M = '***** WARNING from ' + unit + ' at ' + misc.now_string() + ': ' + msg + '\n'
-		if do_color_term:
-			print (colored(M,'red'))
-		else:
-			print (M)
+		try:
+			# send warning message to GUI, and let it deal with it:
+			GUI.warnmessage( M )
+		except:
+			# show warning message on STDOUT:
+			print ('\a') # get user attention using the terminal bell
+			if do_color_term:
+				print (colored(M+'\n','red'))
+			else:
+				print (M+'\n')
 			
 			
 	########################################################################################################
@@ -137,8 +147,12 @@ class misc:
 		OUTPUT:
 		(none)
 		'''
-		
-		print ( unit + ' at ' + misc.now_string() + ': ' + msg )
+		M = unit + ' at ' + misc.now_string() + ': ' + msg
+		try:
+			# send log message to GUI, and let it deal with it:
+			GUI.logmessage( M )
+		except:	
+			print (M+'\n')
 
 
 	########################################################################################################
