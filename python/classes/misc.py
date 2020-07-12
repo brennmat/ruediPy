@@ -117,7 +117,28 @@ class misc:
 		if do_color_term:
 			print (colored(M,'red'))
 		else:
-			print (M)	
+			print (M)
+			
+			
+	########################################################################################################
+	
+
+	@staticmethod
+	def logmessage(unit,msg):
+		'''
+		misc.logmessage(caller,msg)
+		
+		Print a log message (similar to warning, but don't "shout" at the user)
+		
+		INPUT:
+		caller: caller label / name of the calling object (string)
+		msg: warning message
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		print ( unit + ' at ' + misc.now_string() + ': ' + msg )
 
 
 	########################################################################################################
