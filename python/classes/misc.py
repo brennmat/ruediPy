@@ -118,13 +118,14 @@ class misc:
 		(none)
 		'''
 			
-		M = '***** WARNING from ' + unit + ' at ' + misc.now_string() + ': ' + msg + '\n'
+		M = unit + ' at ' + misc.now_string() + ': ' + msg
 		try:
 			# send warning message to GUI, and let it deal with it:
 			GUI.warnmessage( M )
 		except:
 			# show warning message on STDOUT:
 			print ('\a') # get user attention using the terminal bell
+			M = '***** WARNING from ' + M
 			if do_color_term:
 				print (colored(M+'\n','red'))
 			else:
