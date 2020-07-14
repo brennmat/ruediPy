@@ -153,7 +153,7 @@ class misc:
 		try:
 			# send log message to GUI, and let it deal with it:
 			GUI.logmessage( M )
-		except:	
+		except:
 			print (M+'\n')
 
 
