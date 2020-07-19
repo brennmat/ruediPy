@@ -53,13 +53,13 @@ havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
 	try:
 		import matplotlib
+		matplotlib.use('TkAgg')
 		matplotlib.rcParams['legend.numpoints'] = 1
 		matplotlib.rcParams['axes.formatter.useoffset'] = False
 		# suppress mplDeprecation warning:
 		import warnings
 		import matplotlib.cbook
 		warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-		matplotlib.use('TkAgg')
 		import matplotlib.pyplot as plt
 	except:
 		misc.warnmessage ('SRS-RGA init','Could not set up display environment.')
@@ -1862,7 +1862,7 @@ class rgams_SRS:
 							n = n+1
 			
 				if len(self._peakbuffer_ax.lines) > 0: # if the plot is not empty
-				
+					
 					# set legend location:
 					self._peakbuffer_ax.legend( leg , loc='best' , prop={'size':9} )
 

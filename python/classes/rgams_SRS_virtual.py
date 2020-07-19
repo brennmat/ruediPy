@@ -41,28 +41,13 @@ import time
 # import struct
 # import math
 import numpy
-import os
+# import os
 # from scipy.interpolate import interp1d
 from classes.misc	import misc
-from classes.rgams_SRS	import rgams_SRS
+from classes.rgams_SRS	import rgams_SRS, havedisplay, plt
 
-havedisplay = "DISPLAY" in os.environ
-if havedisplay: # prepare plotting environment
-	try:
-		import matplotlib
-		matplotlib.rcParams['legend.numpoints'] = 1
-		matplotlib.rcParams['axes.formatter.useoffset'] = False
-		# suppress mplDeprecation warning:
-		import warnings
-		import matplotlib.cbook
-		warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-		matplotlib.use('TkAgg')
-		import matplotlib.pyplot as plt
-	except:
-		misc.warnmessage ('SRS-RGA-virtual init','Could not set up display environment.')
-		havedisplay = False
-
-
+# if havedisplay:
+#	import matplotlib.pyplot as plt
 
 class rgams_SRS_virtual(rgams_SRS):
 	"""
@@ -119,13 +104,17 @@ class rgams_SRS_virtual(rgams_SRS):
 		self._peakbuffer_max_len = max_buffer_points
 		
 		# set up plotting environment
-		self._has_display = has_plot_window # try opening a plot window
 		if has_plot_window: # should have a plot window
 			self._has_display = havedisplay # don't tryp opening a plot window if there is no plotting environment
 		else: # no plot window
 			self._has_display = False
-
+		
 		if self._has_display: # prepare plotting environment and figure
+
+
+
+			print('*********** setting up plotting environment')
+
 
 			# mz values and colors (defaults):
 			self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
@@ -163,7 +152,7 @@ class rgams_SRS_virtual(rgams_SRS):
 
 			self._figwindow_is_shown = False
 			plt.ion()			
-				
+			
 		self.log( 'Successfully configured virtual SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 		
 
@@ -443,7 +432,7 @@ class rgams_SRS_virtual(rgams_SRS):
 		if not self.has_multiplier(): # there is no Multiplier installed
 			det = 'F'
 		else:
-			if float(self.set_multiplier_hv) == 0.0:
+			if float(self.get_multiplier_hv()) == 0.0:
 				det = 'F'
 			else:
 				det = 'M'
@@ -531,6 +520,7 @@ class rgams_SRS_virtual(rgams_SRS):
 		in the electrometer and in the CDEM's HV power supply.
 		'''
 		
+		
 		# check for range of input values:
 		mz = int(mz)
 		
@@ -555,17 +545,14 @@ class rgams_SRS_virtual(rgams_SRS):
 				N = 1
 				gt = gate
 			
-			# configure RGA (gate time):
-			self.set_gate_time(gt)
-
 			for k in range(N):
 				
 				# get timestamp
 				t = misc.now_UNIX()
 				
 				# peak reading:
-				u = 1.23e-9 / 1E-16
 				time.sleep(gt)
+				u = 1.23e-9 / 1E-16
 				
 				v = v + u
 			
@@ -641,8 +628,6 @@ class rgams_SRS_virtual(rgams_SRS):
 			else:
 				N = 1
 				gt = gate
-			# configure RGA (gate time):
-			self.set_gate_time(gt)
 
 			# make sure serial port buffers are empty:
 			self.ser.flushOutput()
@@ -654,6 +639,7 @@ class rgams_SRS_virtual(rgams_SRS):
 				t = misc.now_UNIX()
 
 				# read back data:
+				time.sleep(gt)
 				u = 1.23E-14 / 1E-16
 				
 				v = v + u
