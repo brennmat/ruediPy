@@ -1464,7 +1464,7 @@ class rgams_SRS:
 					b = 0
 				if a > b:
 					m1 = CMZ[a] + (0.5-cy[a])/(cy[b]-cy[a])*(CMZ[b]-CMZ[a]) # interpolated CMZ value at cy = 0.5
-					self.log('   Median peak center: mz = ' + ' {:.3f}'.format(m1) )
+					self.log('Median peak center: mz = ' + ' {:.3f}'.format(m1) )
 
 				else:
 					self.warning('Could not determine median peak centre from cumulative sum.' )
@@ -1473,7 +1473,7 @@ class rgams_SRS:
 				# use values close to peak maximum to find peak center:
 				m2 = [ MZ[j] for j,i in enumerate(Y) if i>=0.80*max(Y)] # mz values of YY values >= 0.75*max(YY)
 				m2 = sum(m2) / len(m2)
-				self.log('   Center of mass of values > 80% of peak-max: mz = ' + ' {:.3f}'.format(m2) )
+				self.log('Center of mass of values > 80% of peak-max: mz = ' + ' {:.3f}'.format(m2) )
 
 				# mean of m1 and m2:
 				if numpy.isnan(m1) or numpy.isnan(m2):
@@ -1486,7 +1486,7 @@ class rgams_SRS:
 					else:
 						m = (m1+3*m2)/4
 						#m = m2
-						self.log(( '   Peak center at mz = ' + ' {:.3f}'.format(m) ) )
+						self.log(( 'Peak center at mz = ' + ' {:.3f}'.format(m) ) )
 						delta_m.append(mz-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
 
 			# fit first-order polynomial function to mz vs. delta_m:

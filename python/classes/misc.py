@@ -127,9 +127,9 @@ class misc:
 			print ('\a') # get user attention using the terminal bell
 			M = '***** WARNING from ' + M
 			if do_color_term:
-				print (colored(M+'\n','red'))
+				print (colored(M,'red'))
 			else:
-				print (M+'\n')
+				print (M)
 			
 			
 	########################################################################################################
@@ -154,7 +154,7 @@ class misc:
 			# send log message to GUI, and let it deal with it:
 			GUI.logmessage( M )
 		except:
-			print (M+'\n')
+			print (M)
 
 
 	########################################################################################################
