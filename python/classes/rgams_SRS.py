@@ -205,12 +205,13 @@ class rgams_SRS:
 			
 			print( 'Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 
+
 		except serial.SerialException as e:
-			print( 'Could not establish connection to SRS RGA:' , e )
+			misc.warnmessage ('rgams_SRS', 'Could not establish connection to SRS RGA:' + str(e) )
 			sys.exit(1)
 
 		except:
-			print( 'Unexpected error during initialisation of SRS RGA:', sys.exc_info()[0] )
+			self.warning('Unexpected error during initialisation of SRS RGA:' + str(sys.exc_info()[0]) )
 			sys.exit(1)
 
 	########################################################################################################
@@ -698,9 +699,9 @@ class rgams_SRS:
 					det = 'M'
 			except ValueError:
 				det = '?'
-				print ( 'Could not determine electron multiplier high voltage (could not convert string to float). RGA-MS returned HV = ' + hv )
+				self.warning ('Could not determine electron multiplier high voltage (could not convert string to float). RGA-MS returned HV = ' + hv )
 			except:
-				print ( 'Unexpected error. Could not determine electron multiplier HV.' )
+				self.warning ('Unexpected error. Could not determine electron multiplier HV.' )
 		return det
 
 	
@@ -1247,13 +1248,13 @@ class rgams_SRS:
 		
 		else:
 			if duration > 0:
-				print ('Starting degas procedure...')
+				misc.logmessage ('rgams_SRS', 'Starting degas procedure...')
 
 				# send degassing command:
 				cmd = 'DG'+str(duration)+'\r\n'
 				self.ser.write(cmd.encode('utf-8'))
 			
-				print ('...degas procedure running...')
+				misc.logmessage ('rgams_SRS', '...degas procedure running...')
 
 				# wait for response from degassing procedure:
 				t = 0
@@ -1271,9 +1272,9 @@ class rgams_SRS:
 				# read back result:
 				u = self.ser.read(1)
 				if u == b'0':
-					print ('...degassing completed without error.')
+					misc.logmessage ('rgams_SRS', '...degassing completed without error.')
 				else:
-					print ('...degassing completed with error byte: ' + str(u) )
+					self.warning ('Degassing completed with error byte: ' + str(u) )
 
 
 
@@ -1395,7 +1396,7 @@ class rgams_SRS:
 			RI0 = self.get_RI()
 			RS0 = self.get_RS()
 
-			print ('\nBefore tuning (cycle ' + str(ii) +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
+			misc.logmessage ('rgams_SRS', 'Before tuning (cycle ' + str(ii) +'):\n   RI = ' + str(RI0) + 'V\n   RS = ' + str(RS0) + 'V')
 			
 			# prepare lists for delta-m values determined from the various peaks:
 			delta_m = []
@@ -1408,7 +1409,7 @@ class rgams_SRS:
 				w    = peaks[k][1];
 				gate = peaks[k][2];
 				det  = peaks[k][3];			
-				print ( 'Scanning peak at mz = ' + str(mz) + '...' )
+				misc.logmessage ('rgams_SRS','Scanning peak at mz = ' + str(mz) + '...' )
 				self.set_detector(det)
 
 				MZ,Y,U = self.scan(mz-w,mz+w,resolution,gate,'nofile')
@@ -1444,32 +1445,31 @@ class rgams_SRS:
 					b = 0
 				if a > b:
 					m1 = CMZ[a] + (0.5-cy[a])/(cy[b]-cy[a])*(CMZ[b]-CMZ[a]) # interpolated CMZ value at cy = 0.5
-					print ( '   Median peak center: mz = ' + ' {:.3f}'.format(m1) )
+					misc.logmessage ('rgams_SRS', '   Median peak center: mz = ' + ' {:.3f}'.format(m1) )
 
 				else:
-					print ( '   Could not determine median peak centre from cumulative sum.' )
+					self.warning('Could not determine median peak centre from cumulative sum.' )
 					m1 = numpy.nan
 
 				# use values close to peak maximum to find peak center:
 				m2 = [ MZ[j] for j,i in enumerate(Y) if i>=0.80*max(Y)] # mz values of YY values >= 0.75*max(YY)
 				m2 = sum(m2) / len(m2)
-				print ( '   Center of mass of values > 80% of peak-max: mz = ' + ' {:.3f}'.format(m2) )
+				misc.logmessage ('rgams_SRS', '   Center of mass of values > 80% of peak-max: mz = ' + ' {:.3f}'.format(m2) )
 
 				# mean of m1 and m2:
 				if numpy.isnan(m1) or numpy.isnan(m2):
 					delta_m.append(numpy.nan)
-					print ('   Could not reliably determine peak center. Ignoring this peak...' )
+					self.warning('Could not reliably determine peak center. Ignoring this peak...' )
 				else:
 					if abs(m1-m2) > 0.35:
-						print ( '   Peak center values determined from peak top and peak median differ by more than 0.35, ignoring peak at mz = ' + str(mz) + '. Consider using a peak at a different mz value for tuning!')
+						self.warning('Peak center values determined from peak top and peak median differ by more than 0.35, ignoring peak at mz = ' + str(mz) + '. Consider using a peak at a different mz value for tuning!')
 						delta_m.append(numpy.nan)
 					else:
 						m = (m1+3*m2)/4
 						#m = m2
-						print ( '   Peak center at mz = ' + ' {:.3f}'.format(m) )
+						misc.logmessage ('rgams_SRS', ( '   Peak center at mz = ' + ' {:.3f}'.format(m) ) )
 						delta_m.append(mz-m) # delta_m positive <==> peak shows up a low mass, should be shifted towards higher mz value
 
-			# print ('Determine average weighted RI and RS values from delta_m value for new tuning here...')
 			# fit first-order polynomial function to mz vs. delta_m:
 			kk = ~numpy.isnan(delta_m)
 			nn = len(mmz)
@@ -1482,12 +1482,12 @@ class rgams_SRS:
 			delta_m0   = fit_fn(0)
 			delta_m128 = fit_fn(128)
 
-			print ( 'mz-offset at mz = 0: ' + str(delta_m0) )
-			print ( 'mz-offset at mz = 128: ' + str(delta_m128) )
+			misc.logmessage ('rgams_SRS', 'mz-offset at mz = 0: ' + str(delta_m0) )
+			misc.logmessage ('rgams_SRS', 'mz-offset at mz = 128: ' + str(delta_m128) )
 
 			if abs(delta_m0) < max_delta_mz:
 				if abs(delta_m128) < max_delta_mz:
-					print ( 'Peak positions are within tolerance (delta-mz = ' + str(max_delta_mz) + '). Tuning completed.' )
+					misc.logmessage ('rgams_SRS', 'Peak positions are within tolerance (delta-mz = ' + str(max_delta_mz) + '). Tuning completed.' )
 					doTune = False
 			
 			# determine new values of RI and RS if tuning is yet within tolerance:
@@ -1503,7 +1503,7 @@ class rgams_SRS:
 				# next iteration:
 				ii = ii+1
 				if ii > max_iter:
-					print ( 'Tuning completed after ' + str(max_iter) + ' iterations.' )
+					misc.logmessage ('rgams_SRS', 'Tuning completed after ' + str(max_iter) + ' iterations.' )
 					doTune = False
 
 
@@ -1536,7 +1536,7 @@ class rgams_SRS:
 			x = '{:.4f}'.format(x)
 
 		self.param_IO('RI' + x,0)
-		print ('Set RI voltage to ' + x + 'V')
+		misc.logmessage ('rgams_SRS', 'Set RI voltage to ' + x + 'V')
 
 
 
@@ -1566,7 +1566,7 @@ class rgams_SRS:
 		x = '{:.4f}'.format(x)
 
 		self.param_IO('RS' + x,0)
-		print ( 'Set RS voltage to ' + x + 'V' )
+		misc.logmessage ('rgams_SRS', 'Set RS voltage to ' + x + 'V' )
 
 
 
@@ -1712,7 +1712,7 @@ class rgams_SRS:
 		x = '{:.4f}'.format(x)
 
 		self.param_IO('DI' + x,0)
-		print ( 'Set DI value to ' + x + ' bit units' )
+		misc.logmessage ('rgams_SRS', 'Set DI value to ' + x + ' bit units' )
 
 
 
@@ -1742,7 +1742,7 @@ class rgams_SRS:
 		x = '{:.4f}'.format(x)
 
 		self.param_IO('DS' + x,0)
-		print ( 'Set DS value to ' + x + ' bit/amu' )
+		misc.logmessage ('rgams_SRS', 'Set DS value to ' + x + ' bit/amu' )
 
 
 
@@ -2190,8 +2190,6 @@ class rgams_SRS:
 			if clear_peakbuf_cond:
 				self.peakbuffer_clear() # clear peakbuffer
 			for i in range(NC):
-				##if i > 0:
-				##	print ( bs )
 				msg = 'Conditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...        '
 				print ( '\r' + msg , end='\r' )
 				sys.stdout.flush()
@@ -2202,10 +2200,7 @@ class rgams_SRS:
 		if ND > 0:
 			if clear_peakbuf_main:
 				self.peakbuffer_clear() # clear peakbuffer
-			# print 'Reading data using ' + detector + ' detector (' + str(ND) + ' cycles)...'
 			for i in range(ND):
-				## if i > 0:
-				##	print ( bs )
 				msg = 'Reading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...        '
 				print ( '\r' + msg , end='\r' )
 				sys.stdout.flush()
