@@ -59,7 +59,7 @@ if havedisplay: # prepare plotting environment
 		# suppress mplDeprecation warning:
 		import warnings
 		import matplotlib.cbook
-		warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
+		# warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
 		import matplotlib.pyplot as plt
 	except:
 		misc.warnmessage ('SRS-RGA init','Could not set up display environment.')

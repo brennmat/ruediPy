@@ -47,9 +47,6 @@ import random
 from classes.misc	import misc
 from classes.rgams_SRS	import rgams_SRS, havedisplay, plt
 
-# if havedisplay:
-#	import matplotlib.pyplot as plt
-
 class rgams_SRS_virtual(rgams_SRS):
 	"""
 	ruediPy class for virtual SRS RGA-MS
