@@ -55,7 +55,7 @@ class selectorvalve_VICI:
 	
 	def __init__( self , serialport , label = 'SELECTORVALVE' ):
 		'''
-		selectorvalve.__init__( serialport , label = 'SELECTORVALVE' )
+		selectorvalve_VICI.__init__( serialport , label = 'SELECTORVALVE' )
 		
 		Initialize SELECTORVALVE object (VICI valve), configure serial port connection
 		
@@ -128,7 +128,6 @@ class selectorvalve_VICI:
 					ans = ans + self.ser.read().decode('ascii') # read each byte
 
 			try:
-				# print ans
 				ans = ans.split('=')[1] # split answer in the form 'NP = 6'
 				ans = ans.strip() # strip away whitespace
 			except:
@@ -143,15 +142,54 @@ class selectorvalve_VICI:
 			# store number of positions:
 			self._num_positions = int(ans)
 			
-			print ( 'Successfully configured VICI selector valve on ' + serialport + ', number of positions = ' + str(self._num_positions) )
+			self.log( 'Successfully configured VICI selector valve on ' + serialport + ', number of positions = ' + str(self._num_positions) )
 
 		except serial.SerialException as e:
-			print( 'Could not establish connection to VICI selectorvalve:' , e )
+			self.warning( 'Could not establish connection to VICI selectorvalve:' , e )
 			sys.exit(1)
 
 		except:
-			print( 'Unexpected error during initialisation of VICI selectorvalve:', sys.exc_info()[0] )
+			self.warning( 'Unexpected error during initialisation of VICI selectorvalve:', sys.exc_info()[0] )
 			sys.exit(1)
+
+
+	########################################################################################################
+
+
+	def warning(self,msg):
+		'''
+		selectorvalve_VICI.warning(msg)
+		
+		Issue warning about issues related to operation of the valve.
+		
+		INPUT:
+		msg: warning message (string)
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		misc.warnmessage (self.label(),msg)
+
+	
+########################################################################################################
+
+	
+	def log(self,msg):
+		'''
+		selectorvalve_VICI.log(msg)
+		
+		Issue log message related to operation of the valve.
+		
+		INPUT:
+		msg: log message (string)
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		misc.logmessage (self.label(),msg)
+
 
 	########################################################################################################
 	
@@ -172,7 +210,7 @@ class selectorvalve_VICI:
 		return self._label
 
 	
-########################################################################################################
+	########################################################################################################
 	
 
 	def getnumpos(self):
@@ -191,16 +229,8 @@ class selectorvalve_VICI:
 		return self._num_positions
 
 	
-########################################################################################################
-	
-
-	def warning(self,msg):
-		# warn about issues related to operation of the valve
-		# msg: warning message
-		misc.warnmessage ('VICI VALVE',msg)
-
-	
 	########################################################################################################
+	
 	
 
 	def set_legacy(self):
@@ -304,7 +334,6 @@ class selectorvalve_VICI:
 				ans = ans + self.ser.read().decode('ascii') # read each byte
 		
 		try:
-			# print ans
 			ans = ans.split('=')[1] # split answer in the form 'Position is = 1'
 			ans = ans.strip() # strip away whitespace
 		except:
