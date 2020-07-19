@@ -41,6 +41,7 @@ import time
 # import struct
 # import math
 import numpy
+import random
 # import os
 # from scipy.interpolate import interp1d
 from classes.misc	import misc
@@ -553,6 +554,7 @@ class rgams_SRS_virtual(rgams_SRS):
 				# peak reading:
 				time.sleep(gt)
 				u = 1.23e-9 / 1E-16
+				u = (1+(random.random()-0.5)/5) * u
 				
 				v = v + u
 			
