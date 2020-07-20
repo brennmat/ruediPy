@@ -56,15 +56,26 @@ if havedisplay: # prepare plotting environment
 		matplotlib.use('TkAgg')
 		matplotlib.rcParams['legend.numpoints'] = 1
 		matplotlib.rcParams['axes.formatter.useoffset'] = False
-		# suppress mplDeprecation warning:
-		import warnings
-		import matplotlib.cbook
-		# warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-		import matplotlib.pyplot as plt
+	except ImportError:
+		misc.warnmessage ('SRS-RGA init','Could not load and configure matplotlib, cannot set up display environment.')
+		havedisplay = False
 	except:
-		misc.warnmessage ('SRS-RGA init','Could not set up display environment.')
+		misc.warnmessage ('SRS-RGA init','Unexpected error while loading matplotlib, cannot set up display environment.')
 		havedisplay = False
 
+		# suppress mplDeprecation warning:
+		## import warnings
+		## import matplotlib.cbook
+		## warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
+		
+	try:
+		import matplotlib.pyplot as plt
+	except ImportError:
+		misc.warnmessage ('SRS-RGA init','Could not load and configure pyplot, cannot set up display environment.')
+		havedisplay = False
+	except:
+		misc.warnmessage ('SRS-RGA init','Unexpected error while loading pyplot, cannot set up display environment.')
+		havedisplay = False
 
 
 class rgams_SRS:
@@ -201,7 +212,7 @@ class rgams_SRS:
 				self._fig.tight_layout(pad=4.0)
 
 				self._figwindow_is_shown = False
-				plt.ion()			
+				plt.ion()		
 			
 			print( 'Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 
@@ -1897,6 +1908,7 @@ class rgams_SRS:
 
 				# Update the plot:
 				self._fig.canvas.flush_events()
+				
 
 			except:
 				self.warning( 'Error during plotting of peakbuffer trend (' + str(sys.exc_info()[0]) + ').' )
@@ -2056,7 +2068,7 @@ class rgams_SRS:
 
 		print ( 'SRS RGA status:' )
 		print ( '   MS max m/z range: ' + str(self.mz_max()) )
-		print ( '   Ionizer electron energy: ' + self.get_electron_energy() + ' eV' )
+		print ( '   Ionizer electron energy: ' + str(self.get_electron_energy()) + ' eV' )
 		print ( '   Electron emission current: ' + str(self.get_electron_emission()) + ' mA' )
 		if self.has_multiplier():
 			print ( '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)' )

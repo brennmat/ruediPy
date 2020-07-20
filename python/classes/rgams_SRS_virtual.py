@@ -45,7 +45,11 @@ import random
 # import os
 # from scipy.interpolate import interp1d
 from classes.misc	import misc
-from classes.rgams_SRS	import rgams_SRS, havedisplay, plt
+from classes.rgams_SRS	import rgams_SRS, havedisplay
+
+if havedisplay:
+	import matplotlib
+	import matplotlib.pyplot as plt
 
 class rgams_SRS_virtual(rgams_SRS):
 	"""
@@ -87,11 +91,27 @@ class rgams_SRS_virtual(rgams_SRS):
 		self._tune_default_RI = tune_default_RI
 		self._tune_default_RS = tune_default_RS
 		
+		if not tune_default_RI == []:
+			self._RI = tune_default_RI
+		else:
+			self._RI = -9.0
+		if not tune_default_RS == []:
+			self._RS = tune_default_RS
+		else:
+			self._RS = 1070.0
+
+		self._DI = 116
+		self._DS = 0.0
+
 		self._EE = 70
 		self._FL = 0.0
 		self._hasmulti = True
 		self._mzmax = 200
 		self._noisefloor = 3
+		
+		# init MS settings:
+		self.set_detector('F')
+		self.filament_off()
 		
 		# peakbuffer:
 		self._peakbuffer_t = numpy.array([])
@@ -109,11 +129,6 @@ class rgams_SRS_virtual(rgams_SRS):
 		
 		if self._has_display: # prepare plotting environment and figure
 
-
-
-			print('*********** setting up plotting environment')
-
-
 			# mz values and colors (defaults):
 			self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
 
@@ -129,7 +144,7 @@ class rgams_SRS_virtual(rgams_SRS):
 			self._peakbufferplot_yscale = peakbuffer_plot_yscale
 
 			# set up upper panel for peak history plot:
-			self._peakbuffer_ax = plt.subplot(2,1,1)
+			self._peakbuffer_ax = self._fig.add_subplot(2,1,1)
 			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ')',loc="center")
 			plt.xlabel('Time')
 			plt.ylabel('Intensity')
@@ -140,7 +155,7 @@ class rgams_SRS_virtual(rgams_SRS):
 			self.set_peakbuffer_scale(self._peakbufferplot_yscale)
 
 			# set up lower panel for scans:
-			self._scan_ax = plt.subplot(2,1,2)
+			self._scan_ax = self._fig.add_subplot(2,1,2)
 			self._scan_ax.set_title('SCAN (' + self.label() + ')',loc="center")
 			plt.xlabel('mz')
 			plt.ylabel('Intensity')
@@ -149,14 +164,50 @@ class rgams_SRS_virtual(rgams_SRS):
 			self._fig.tight_layout(pad=4.0)
 
 			self._figwindow_is_shown = False
-			plt.ion()			
+			plt.ion()		
 			
 		self.log( 'Successfully configured virtual SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 		
 
 	########################################################################################################
 	
+	
+	def print_status(self):
+		'''
+		rgams_SRS.print_status()
 
+		Print status of the RGA head.
+
+		INPUT:
+		(none)
+
+		OUTPUT:
+		(none)
+		'''
+
+		print ( 'SRS RGA status:' )
+		print ( '   MS max m/z range: ' + str(self.mz_max()) )
+		print ( '   Ionizer electron energy: ' + str(self.get_electron_energy()) + ' eV' )
+		print ( '   Electron emission current: ' + str(self.get_electron_emission()) + ' mA' )
+		if self.has_multiplier():
+			print ( '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)' )
+			det = self.get_detector()
+			if det == 'M':
+				det = det + ' (bias voltage = ' + self.get_multiplier_hv() + ' V)'
+			print ( '   Currently active detector: ' + det )
+
+		else:
+			print ( '   MS does not have electron multiplier installed (Faraday only).' )
+		print ( '   Current mz-tuning:' )
+		print ( '      RI = ' + str(self.get_RI()) + ' mV (RF output at 0 amu)' )
+		print ( '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu)' )
+		print ( '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at m/z = 0)' )
+		print ( '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter for m/z > 0)' )
+		
+
+	########################################################################################################
+	
+	
 	def set_electron_energy(self,val):
 		'''
 		rgams_SRS_virtual.set_electron_energy(val)
@@ -550,7 +601,11 @@ class rgams_SRS_virtual(rgams_SRS):
 				
 				# peak reading:
 				time.sleep(gt)
-				u = 1.23e-9 / 1E-16
+				if self.get_electron_emission() > 0.0:
+					u = 1.23e-9
+				else:
+					u = 1.23e-15
+				u = u / 1E-16
 				u = (1+(random.random()-0.5)/5) * u
 				
 				v = v + u
@@ -639,7 +694,13 @@ class rgams_SRS_virtual(rgams_SRS):
 
 				# read back data:
 				time.sleep(gt)
-				u = 1.23E-14 / 1E-16
+				if self.get_electron_emission() > 0.0:
+					u = 1.23e-15
+				else:
+					u = 1.23e-16
+				u = u / 1E-16
+				u = (1+(random.random()-0.5)/5) * u
+
 				
 				v = v + u
 
@@ -1031,3 +1092,146 @@ class rgams_SRS_virtual(rgams_SRS):
 		self.log('Set DS value to ' + x + ' bit/amu' )
 
 
+
+########################################################################################################
+
+
+
+	def plot_peakbuffer_virtual(self):
+		
+		# plt.plot(self._peakbuffer_t, self._peakbuffer_intens)
+		# plt.ion()
+		
+		
+		
+		
+		
+		if not self._figwindow_is_shown:
+			# show the window on screen
+			self._fig.show()
+			self._figwindow_is_shown = True
+			
+		# remove all the lines that are currently in the plot:
+		self._peakbuffer_ax.lines = []
+		
+		
+		
+		
+		plt.lines = []
+		
+		
+		
+
+		# redo the plot by plotting line by line (mz by mz and detector by detector):
+		colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k') # some colors for use with all 'other' mz values
+		n = 0
+		leg = []
+		t0 = misc.now_UNIX()			
+		N = len(self._peakbuffer_mz)
+
+		X_MIN = None
+		X_MAX = None
+
+		if self._peakbufferplot_yscale == 'log':
+			Y_MIN = 0.1
+			Y_MAX = 10
+
+		else:
+			Y_MIN = 1
+			Y_MAX = 1
+
+		print(len(self._peakbuffer_ax.lines))
+
+		for mz in numpy.unique(self._peakbuffer_mz): # loop through all mz values in the peak buffer
+			for det in [ 'F' , 'M' ]: # loop through all detectors (Faraday and Multiplier)
+				k = [ i for i in range(N) if ((self._peakbuffer_mz[i] == mz) & (self._peakbuffer_det[i] == det)) ] # index to data with current mz / detector pair
+				if len(k) > 0: # if k is not empty
+										
+					intens0 = self._peakbuffer_intens[k[0]]
+					col = [c for c in self._peakbufferplot_colors if c[0] == mz]
+					if col:
+						col = col[0][1]
+					else:
+						col = colors[n%7]
+					if det == 'F':
+						style = 'o'
+					elif det == 'M':
+						style = 's'
+					else:
+						style = 'x'
+					
+					yy = self._peakbuffer_intens[k]/intens0
+					tt = self._peakbuffer_t[k] - t0
+
+					self._peakbuffer_ax.plot( tt , yy , color=col, marker=style , linestyle='-' , linewidth=1 , markersize=10)
+					
+
+					print(len(self._peakbuffer_ax.lines))
+					
+					
+
+					
+					
+					
+					
+
+					val_min = self._peakbuffer_intens[k].min()
+					val_max = self._peakbuffer_intens[k].max()
+					min = "{:.2e}".format(val_min)
+					max = "{:.2e}".format(val_max)
+					leg.append( 'mz=' + str(int(mz)) + ' det=' + det + ': ' + min + ' ... ' + max + ' ' + self._peakbuffer_unit[k[0]] )
+					
+					if X_MIN == None:
+						X_MIN = tt.min()
+					if X_MAX == None:
+						X_MAX = tt.min()
+					if tt.min() < X_MIN:
+						X_MIN = tt.min()
+					if tt.max() > X_MAX:
+						X_MAX = tt.max()
+
+					if yy.min() < Y_MIN:
+						Y_MIN = yy.min()
+					if yy.max() > Y_MAX:
+						Y_MAX =	yy.max()
+					
+					n = n+1
+	
+		if len(self._peakbuffer_ax.lines) > 0: # if the plot is not empty
+		
+			print('Formatting the plot...')
+			
+			# set legend location:
+			self._peakbuffer_ax.legend( leg , loc='best' , prop={'size':9} )
+
+			# set title and axis labels:
+			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
+			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ') at ' + t0)
+			self._peakbuffer_ax.set_xlabel('Time (s)')
+			self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
+
+			# Set x-axis scaling:
+			DX = 0.05*(X_MAX-X_MIN)
+			if DX == 0:
+				DX = 5
+			self._peakbuffer_ax.set_xlim( [ X_MIN-DX , X_MAX+DX ] )
+
+			# Set y-axis scaling:
+			if Y_MIN < self._peakbuffer_plot_min_y:
+				Y_MIN = self._peakbuffer_plot_min_y
+			if Y_MAX > self._peakbuffer_plot_max_y:
+				Y_MAX = self._peakbuffer_plot_max_y
+
+			if self._peakbufferplot_yscale == 'log':
+				self._peakbuffer_ax.set_ylim( [ Y_MIN , Y_MAX ] )
+
+			else:		
+				if Y_MIN < Y_MAX:
+					DY = 0.05*(Y_MAX-Y_MIN)
+				else:
+					DY = 0.001
+				self._peakbuffer_ax.set_ylim( [ Y_MIN-DY , Y_MAX+DY ] )
+
+
+		# Update the plot:
+		self._fig.canvas.flush_events()
