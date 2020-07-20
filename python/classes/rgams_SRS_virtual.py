@@ -39,7 +39,7 @@ import warnings
 import serial
 import time
 # import struct
-# import math
+import math
 import numpy
 import random
 # import os
@@ -101,7 +101,7 @@ class rgams_SRS_virtual(rgams_SRS):
 			self._RS = 1070.0
 
 		self._DI = 116
-		self._DS = 0.0
+		self._DS = -0.01
 
 		self._EE = 70
 		self._FL = 0.0
@@ -772,6 +772,7 @@ class rgams_SRS_virtual(rgams_SRS):
 
 		# read back result from RGA:
 		N = (high-low)*step
+		self.warning('Scan is not properly implemented in rgams_SRS_virtual!')
 		Y = None # <---- MODIFY!!!! this should have N detector values
 		time.sleep(2)
 		
