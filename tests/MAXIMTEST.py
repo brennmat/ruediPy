@@ -45,7 +45,7 @@ import time
 from classes.temperaturesensor_MAXIM	import temperaturesensor_MAXIM
 from classes.datafile					import datafile
 
-TSENS = temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FTAMEDJD-if00-port0' , label = 'TEMP-TEST' )
+TSENS = temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FTBDR1ZC-if00-port0' , label = 'TEMP-TEST' )
 
 DATAFILE = datafile ( '~/data' )
 
@@ -59,3 +59,4 @@ while 1:
 	T,unit = TSENS.temperature(DATAFILE)
 	print ( str(T) + ' ' + unit )
 	TSENS.plot_tempbuffer()
+	time.sleep(0.2)
