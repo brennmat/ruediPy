@@ -164,7 +164,9 @@ else % read file line by line:
 						u = __parse_PRESSURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
 						FIELDTYPES{end+1} = 'PRESSURESENSOR';
 						X = setfield (X,L{k},u); % add PRESSURESENSOR[LABEL-k] data
-					
+					case 'RUEDI_MEASURE'
+						% Do nothing
+
 					%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OTHERWISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 					otherwise
 						warning (sprintf('rP_read_datafile: Unknown object type %s, skipping...',O{i}))
