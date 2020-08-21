@@ -83,8 +83,6 @@ class selectorvalve_compositeVICI:
 				for j in range(num_hw_valves):
 					if valvespostable[i][j] < 1:
 						raise ValueError('Valve positions must not be less than 1.')
-
-			print ('Hello 2')
 			
 			# Table of hardware-valve positions:
 			for i in range(self._num_positions):
