@@ -47,7 +47,7 @@ class selectorvalve_compositeVICI:
 	########################################################################################################
 	
 	
-	def __init__( self , serialports , valvespostable , label = 'COMPOSITESELECTORVALVE' ):
+	def __init__( self , serialports , valvespostable , label = 'COMPOSITESELECTORVALVE' , labels = None ):
 		'''
 		selectorvalve.__init__( self , serialports , valvespostable , label = 'COMPOSITESELECTORVALVE' )
 		
@@ -59,7 +59,8 @@ class selectorvalve_compositeVICI:
 			Pos-1: VICI1 = position 1, VICI2 = position 1
 			Pos-2: VICI1 = position 1, VICI2 = position 2
 			Pos-3: VICI1 = position 3, VICI2 = position 2
-		label (optional): label / name of the SELECTORVALVE object (string). Default: label = 'SELECTORVALVE'
+		label (optional): label / name of the composite-SELECTORVALVE object (string). Default: label = 'SELECTORVALVE'
+		labels (optional): labels / names of the individual SELECTORVALVE objects (tuple of strings). Default: label = ( 'VALVE1' , 'VALVE2' )
 		
 		OUTPUT:
 		(none)
@@ -95,7 +96,11 @@ class selectorvalve_compositeVICI:
 			self._hw_valves = [];
 			for i in range(num_hw_valves):
 				# add hardware valve:
-				self._hw_valves.append(selectorvalve_VICI( serialport = serialports[i] , label = '' ))
+				try:
+					lbl = labels[i]
+				except:
+					lbl = ''
+				self._hw_valves.append(selectorvalve_VICI( serialport = serialports[i] , label = lbl ))
 				
 			# Check if hardware valves support the required position values:
 			for i in range(num_hw_valves):
