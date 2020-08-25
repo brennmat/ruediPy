@@ -67,6 +67,8 @@ class selectorvalve_VICI:
 		(none)
 		'''
 
+		self._label = label
+			
 		try:
 			# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
 			# use exclusive access mode if possible (available with serial module version 3.3 and later)
@@ -101,7 +103,6 @@ class selectorvalve_VICI:
 			ser.flushInput()
 
 			self.ser = ser;
-			self._label = label
 
 			# determine number of valve positions:
 			self.ser.write('NP\r\n'.encode('ascii')) # send NP command to valve controller
@@ -145,7 +146,7 @@ class selectorvalve_VICI:
 			self.log( 'Successfully configured VICI selector valve on ' + serialport + ', number of positions = ' + str(self._num_positions) )
 
 		except serial.SerialException as e:
-			self.warning( 'Could not establish connection to VICI selectorvalve:' , e )
+			self.warning( 'Could not establish connection to VICI selectorvalve: ' + str(e) )
 			sys.exit(1)
 
 		except:
