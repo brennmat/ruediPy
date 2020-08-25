@@ -38,6 +38,7 @@ import sys
 import warnings
 import serial
 import time
+from pathlib import Path
 from classes.misc	import misc
 
 # check Python version and print warning if we're running version < 3:
@@ -53,16 +54,18 @@ class selectorvalve_VICI:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'SELECTORVALVE' ):
+	def __init__( self , serialport , label = 'SELECTORVALVE' , statusfilepath = None ):
 		'''
-		selectorvalve_VICI.__init__( serialport , label = 'SELECTORVALVE' )
+		selectorvalve_VICI.__init__( serialport , label = 'SELECTORVALVE' , statusfilepath = None )
 		
 		Initialize SELECTORVALVE object (VICI valve), configure serial port connection
 		
 		INPUT:
 		serialport: device name of the serial port, e.g. P = '/dev/ttyUSB3'
 		label (optional): label / name of the SELECTORVALVE object (string). Default: label = 'SELECTORVALVE'
-		
+		label (optional): label / name of the SELECTORVALVE object (string, will be used as the file name for the status file)
+		statusfilepath (optional): path where the status file will be written (string). No files will be written if statusfilepath = None.
+
 		OUTPUT:
 		(none)
 		'''
@@ -142,15 +145,32 @@ class selectorvalve_VICI:
 
 			# store number of positions:
 			self._num_positions = int(ans)
+
+			self._statusfile = None
+			if statusfilepath is not None:
+				try:
+					# create valve status file:
+					if len(self._label) == 0:
+						raise
+					p = str(Path(statusfilepath,self._label+'.txt'))
+					self._statusfile = open( p , "wt" )
+					self.log( 'status file = ' + p )
+					self.writestatusfile(None)
+				except:
+					self.warning( 'Could not set up status file for writing of valve position.' )
+				
+			u = 'Successfully configured VICI selector valve on ' + serialport + ', number of positions = ' + str(self._num_positions)
+			if self._statusfile is not None:
+				u = u + ', status file = ' + p		
+			self.log( u )
 			
-			self.log( 'Successfully configured VICI selector valve on ' + serialport + ', number of positions = ' + str(self._num_positions) )
 
 		except serial.SerialException as e:
 			self.warning( 'Could not establish connection to VICI selectorvalve: ' + str(e) )
 			sys.exit(1)
 
 		except:
-			self.warning( 'Unexpected error during initialisation of VICI selectorvalve:', sys.exc_info()[0] )
+			self.warning( 'Unexpected error during initialisation of VICI selectorvalve: ' + str(sys.exc_info()[0]) )
 			sys.exit(1)
 
 
@@ -288,6 +308,9 @@ class selectorvalve_VICI:
 
 			# give the valve some time to actually do the switch:
 			time.sleep(0.5)
+			
+			# write valve position to status file:
+			self.writestatusfile(val)
 
 
 	########################################################################################################
@@ -348,3 +371,27 @@ class selectorvalve_VICI:
 
 		# return the result:
 		return int(ans)
+
+
+	########################################################################################################
+	
+
+	def writestatusfile(self,pos):
+		if self._statusfile is not None:
+			try:
+				p = 'UNKNOWN'
+				t = str(misc.now_UNIX()) # get current UNIX / Epoch time
+				try:
+					if pos > 0:
+						p = str(pos)
+				except:
+					pass
+				p = str(t) + ": POSITION = " + p
+				self._statusfile.seek(0)   # clear the file
+				self._statusfile.truncate()   # clear the file
+				self._statusfile.write(p+'\n') # write valve position to file
+				self._statusfile.flush()       # make sure data gets written to file now (don't wait for flushing file buffer)
+				# time.sleep(0.05)
+			except:
+				self.warning('Could not write valve position to status file')
+
