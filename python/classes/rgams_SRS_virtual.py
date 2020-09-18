@@ -36,14 +36,10 @@
 
 import sys
 import warnings
-import serial
 import time
-# import struct
 import math
 import numpy
 import random
-# import os
-# from scipy.interpolate import interp1d
 from classes.misc	import misc
 from classes.rgams_SRS	import rgams_SRS, havedisplay
 
