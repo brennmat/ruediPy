@@ -665,6 +665,26 @@ class rgams_SRS:
 			self.param_IO('MF' + x,0) # set back to previous MF value
 		return self._mzmax
 
+
+	########################################################################################################
+	
+
+	def mz_min(self):
+		'''
+		val = rgams_SRS.mz_min()
+		
+		Determine lowest mz value supported by the MS.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: min. supported mz value (int)
+		'''
+
+		# lowest m/z for SRS RGA is m/z=1:
+		return 1
+
 	
 	########################################################################################################
 	
