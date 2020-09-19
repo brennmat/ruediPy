@@ -87,7 +87,7 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , has_plot_window = True ):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = False):
 
 		'''
 		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
@@ -105,6 +105,7 @@ class rgams_SRS:
 		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
 		peakbuffer_plot_yscale (optional) = y-axis scaling for peakbuffer plot (default: 'linear', use 'log' for log scaling)
 		has_plot_window (optional): flag to choose if a plot window should be opened for the rgams_SRS object (default: has_plot_window = True)
+		has_external_plot_window (optional) = flag to indicate if external plot window is used instead of the "built-in" window. If set to True, this will override the 'has_plot_window' flag (default: has_external_plot_window = False).
 
 		OUTPUT:
 		(none)
@@ -167,11 +168,15 @@ class rgams_SRS:
 			self._peakbuffer_det = ['x'] * 0 # empty list
 			self._peakbuffer_unit = ['x'] * 0 # empty list
 			self._peakbuffer_max_len = max_buffer_points
+			self._peakbuffer_lastupdate_timestamp = -1
 		
 			# set up plotting environment
+			self._has_external_display = has_external_plot_window
+			if self._has_external_display:
+				has_plot_window = False # don't care with the built-in plotting, which will be dealt with externally
 			self._has_display = has_plot_window # try opening a plot window
 			if has_plot_window: # should have a plot window
-				self._has_display = havedisplay # don't tryp opening a plot window if there is no plotting environment
+				self._has_display = havedisplay # don't try opening a plot window if there is no plotting environment
 			else: # no plot window
 				self._has_display = False
 		
@@ -871,6 +876,8 @@ class rgams_SRS:
 			self._peakbuffer_intens = self._peakbuffer_intens[-N:]
 			self._peakbuffer_det    = self._peakbuffer_det[-N:]
 			self._peakbuffer_unit   = self._peakbuffer_unit[-N:]
+			
+		self._peakbuffer_lastupdate_timestamp = misc.now_UNIX()
 
 
 
@@ -899,7 +906,7 @@ class rgams_SRS:
 
 
 
-	########################################################################################################
+########################################################################################################
 
 
 
@@ -917,6 +924,27 @@ class rgams_SRS:
 		"""
 
 		self._peakbuffer_max_len = N
+
+
+
+########################################################################################################
+
+
+
+	def peakbuffer_get_timestamp(self):
+		"""
+		timestamp = rgams_SRS.peakbuffer_get_timestamp()
+
+		Get time stamp of last update to peakbuffer data
+		
+		INPUT:
+		(none)
+
+		OUTPUT:
+		timestamp: UNIX time of last update
+		"""
+
+		return self._peakbuffer_lastupdate_timestamp
 
 
 
@@ -1795,7 +1823,8 @@ class rgams_SRS:
 		'''
 
 		if not self._has_display:
-			self.warning('Plotting of peakbuffer trend not possible (no display system available).')
+			if not self._has_external_display:
+				self.warning('Plotting of peakbuffer trend not possible (no display system available).')
 
 		else:
 			
