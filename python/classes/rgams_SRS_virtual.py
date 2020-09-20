@@ -603,7 +603,12 @@ class rgams_SRS_virtual(rgams_SRS):
 				# peak reading:
 				time.sleep(gt)
 				if self.get_electron_emission() > 0.0:
-					u = 1.23e-9
+					if mz == 28:
+						u = 1.23E-9
+					if mz == 32:
+						u = 2.4E-10
+					if mz == 40:
+						u = 3E-11
 				else:
 					u = 1.23e-15
 				u = u / 1E-16
