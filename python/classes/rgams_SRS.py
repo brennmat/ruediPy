@@ -623,7 +623,39 @@ class rgams_SRS:
 	
 	########################################################################################################
 	
+	
+	def supported_gate_times(self):
+		'''
+		g = rgams_SRS.supported_gate_times()
+		
+		Return the gate times that are supported by the hardware (estimated values if MS has electron multiplier installed.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		g: supported gate times in seconds (array)
+		
+		NOTE:
+		Experiment gave the following gate times vs NF parameter values:
+		
+		  NF	gate (seconds)
+		  0	2.4
+		  1	1.21
+		  2	0.48
+		  3	0.25
+		  4	0.163
+		  5	0.060
+		  6	0.043
+		  7	0.025
+		'''
 
+		return [ 2.4 , 1.2 , 0.6 , 0.3 , 0.15 , 0.08 , 0.04 , 0.02 ]
+
+	
+	########################################################################################################
+	
+	
 	def has_multiplier(self):
 		'''
 		val = rgams_SRS.has_multiplier()
@@ -839,6 +871,7 @@ class rgams_SRS:
 		in the electrometer and in the CDEM HV power supply.
 		
 		NOTE (2):
+		see self.supported_gate_times() for more information on gate times supported by the RGA.
 		Experiment gave the following gate times vs NF parameter values:
 		
 		  NF	gate (seconds)
@@ -852,7 +885,8 @@ class rgams_SRS:
 		  7	0.025
 		'''
 		
-		gt = numpy.array([ 2.4 , 1.21 , 0.48 , 0.25 , 0.163 , 0.060 , 0.043 , 0.025 ])
+		gt = numpy.array( self.supported_gate_times() )
+		# gt = numpy.array([ 2.4 , 1.21 , 0.48 , 0.25 , 0.163 , 0.060 , 0.043 , 0.025 ])
 		NF = (numpy.abs(gt-gate)).argmin() # index to closest gate time
 		if gate > gt.max():
 			self.warning('gate time cannot be more than ' + str(gt.max()) +'s! Using gate = ' + str(gt.max()) +'s...')
