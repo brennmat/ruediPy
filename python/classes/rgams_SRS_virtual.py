@@ -576,13 +576,16 @@ class rgams_SRS_virtual(rgams_SRS):
 		# check for range of input values:
 		mz = int(mz)
 		
+		# get timestamp
+		t = misc.now_UNIX()
+
 		if mz < 1:
 			self.warning ('mz value must be positive! Skipping peak measurement...')
 			val = '-1'
 			unit = '(none)'
 			
 		elif mz > self.mz_max():
-			self.warning ('mz value must be ' + self.mz_max() + ' or less! Skipping peak measurement...')
+			self.warning ('mz value must be ' + str(self.mz_max()) + ' or less! Skipping peak measurement...')
 			val = '-1'
 			unit = '(none)'
 			
@@ -590,6 +593,7 @@ class rgams_SRS_virtual(rgams_SRS):
 
 			# deal with gate times longer than 2.4 seconds (max. allowed with SRS-RGA):
 			v = 0.0;
+
 			if gate > 2.4:
 				N = int(round(gate/2.4))
 				gt = 2.4
@@ -599,8 +603,6 @@ class rgams_SRS_virtual(rgams_SRS):
 			
 			for k in range(N):
 				
-				# get timestamp
-				t = misc.now_UNIX()
 		
 				# peak reading:
 				time.sleep(gt)

@@ -1036,14 +1036,17 @@ class rgams_SRS:
 		
 		# check for range of input values:
 		mz = int(mz)
+
+		# get timestamp
+		t = misc.now_UNIX()
 		
-		if mz < 1:
-			self.warning ('mz value must be positive! Skipping peak measurement...')
+		if mz < self.mz_min():
+			self.warning ('mz value must be ' + str(self.mz_min()) + ' or higher! Skipping peak measurement...')
 			val = '-1'
 			unit = '(none)'
 			
 		elif mz > self.mz_max():
-			self.warning ('mz value must be ' + self.mz_max() + ' or less! Skipping peak measurement...')
+			self.warning ('mz value must be ' + str(self.mz_max()) + ' or less! Skipping peak measurement...')
 			val = '-1'
 			unit = '(none)'
 			
@@ -1069,9 +1072,6 @@ class rgams_SRS:
 				
 				# send command to RGA:
 				self.ser.write(('MR' + str(mz) + '\r\n').encode('utf-8'))
-				
-				# get timestamp
-				t = misc.now_UNIX()
 				
 				# read back data:
 				u = self.ser.read(4) # this will wait until all 4 bytes are received
@@ -1139,6 +1139,9 @@ class rgams_SRS:
 		# check for range of input values:
 		mz = int(mz)
 		mz_offset = int (mz_offset)
+
+		# get timestamp
+		t = misc.now_UNIX()
 		
 		if mz+mz_offset < 1:
 			self.warning ('mz+mz_offset must be positive! Skipping zero measurement...')
@@ -1174,9 +1177,6 @@ class rgams_SRS:
 
 				# wait a bit to make sure that serial command is sent
 				time.sleep(0.02)
-
-				# get timestamp
-				t = misc.now_UNIX()
 
 				# read back data:
 				u = self.ser.read(4)
