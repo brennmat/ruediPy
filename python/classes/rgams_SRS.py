@@ -172,7 +172,14 @@ class rgams_SRS:
 			self._peakbuffer_unit = ['x'] * 0 # empty list
 			self._peakbuffer_max_len = max_buffer_points
 			self._peakbuffer_lastupdate_timestamp = -1
-		
+
+			self._peakbuffer_plot_min_y = peakbuffer_plot_min
+			self._peakbuffer_plot_max_y = peakbuffer_plot_max
+
+			
+			# mz values and colors (defaults):
+			self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
+
 			# set up plotting environment
 			self._has_external_display = has_external_plot_window
 			if self._has_external_display:
@@ -184,9 +191,6 @@ class rgams_SRS:
 				self._has_display = False
 		
 			if self._has_display: # prepare plotting environment and figure
-
-				# mz values and colors (defaults):
-				self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
 
 				# set up plotting environment
 				self._fig = plt.figure(figsize=(fig_w,fig_h))
@@ -204,8 +208,7 @@ class rgams_SRS:
 				self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ')',loc="center")
 				plt.xlabel('Time')
 				plt.ylabel('Intensity')
-				self._peakbuffer_plot_min_y = peakbuffer_plot_min
-				self._peakbuffer_plot_max_y = peakbuffer_plot_max
+
 				# add (empty) line to plot (will be updated with data later):
 				self._peakbuffer_ax.plot( [], [] )
 				self.set_peakbuffer_scale(self._peakbufferplot_yscale)
@@ -586,6 +589,31 @@ class rgams_SRS:
 	
 	########################################################################################################
 	
+
+
+	def is_filament_on(self):
+		'''
+		val = rgams_SRS.is_filament_on()
+		
+		Check is filamen is turned on or off.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: on / off state (Boolean)
+		'''
+
+		if self.get_electron_emission() == 0.0:
+			return False
+		else:
+			return True
+
+
+
+	########################################################################################################
+
+
 
 	def filament_on(self):
 		'''
