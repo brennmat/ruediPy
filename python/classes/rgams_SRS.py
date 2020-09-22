@@ -33,17 +33,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Copyright 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
-
-import sys
-import warnings
-import serial
-import time
-import struct
-import math
-import numpy
-import os
-from scipy.interpolate import interp1d
-from classes.misc	import misc
+try:
+	import sys
+	import warnings
+	import serial
+	import time
+	import struct
+	import math
+	import numpy
+	import os
+	from scipy.interpolate import interp1d
+	from classes.misc	import misc
+except ImportError as e:
+	print (e)
+	raise
 
 # check Python version and print warning if we're running version < 3:
 if ( sys.version_info[0] < 3 ):

@@ -35,16 +35,19 @@
 #
 # Copyright 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 
-import sys
-import warnings
-import numpy
-import os
-import time
-
-from classes.misc	 import misc
-from digitemp.master import UART_Adapter
-from digitemp.device import AddressableDevice
-from digitemp.device import DS18B20
+try:
+	import sys
+	import warnings
+	import numpy
+	import os
+	import time
+	from classes.misc    import misc
+	from digitemp.master import UART_Adapter
+	from digitemp.device import AddressableDevice
+	from digitemp.device import DS18B20
+except ImportError as e:
+	print (e)
+	raise
 
 # check Python version and print warning if we're running version < 3:
 if ( sys.version_info[0] < 3 ):

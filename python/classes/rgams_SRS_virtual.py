@@ -34,14 +34,18 @@
 #
 # Copyright 2020, Matthias Brennwald (brennmat@gmail.com)
 
-import sys
-import warnings
-import time
-import math
-import numpy
-import random
-from classes.misc	import misc
-from classes.rgams_SRS	import rgams_SRS, havedisplay
+try:
+	import sys
+	import warnings
+	import time
+	import math
+	import numpy
+	import random
+	from classes.misc	import misc
+	from classes.rgams_SRS	import rgams_SRS, havedisplay
+except ImportError as e:
+	print (e)
+	raise
 
 if havedisplay:
 	import matplotlib

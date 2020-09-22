@@ -34,9 +34,14 @@
 #
 # Copyright 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 
-import sys
-import warnings
-import time
+try:
+	import sys
+	import warnings
+	import time
+except ImportError as e:
+	print (e)
+	raise
+
 try:
 	from termcolor import colored
 	do_color_term = True

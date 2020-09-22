@@ -34,13 +34,17 @@
 #
 # Copyright 2016, 2017, 2018 Matthias Brennwald (brennmat@gmail.com)
 
-import sys
-import warnings
-import serial
-import time
-import struct
-import numpy
-import os
+try:
+	import sys
+	import warnings
+	import serial
+	import time
+	import struct
+	import numpy
+	import os
+except ImportError as e:
+	print (e)
+	raise
 
 # check Python version and print warning if we're running version < 3:
 if ( sys.version_info[0] < 3 ):

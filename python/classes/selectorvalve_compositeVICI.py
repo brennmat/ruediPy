@@ -34,10 +34,13 @@
 #
 # Copyright 2020, Matthias Brennwald (brennmat@gmail.com)
 
-import sys
-
-from classes.selectorvalve_VICI import selectorvalve_VICI
-from classes.misc	import misc
+try:
+	import sys
+	from classes.selectorvalve_VICI import selectorvalve_VICI
+	from classes.misc	import misc
+except ImportError as e:
+	print (e)
+	raise
 
 class selectorvalve_compositeVICI:
 	"""

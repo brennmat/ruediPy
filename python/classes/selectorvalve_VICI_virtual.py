@@ -34,13 +34,16 @@
 #
 # Copyright 2020, Matthias Brennwald (brennmat@gmail.com)
 
-import sys
-import warnings
-import serial
-import time
-from classes.misc	import misc
-from classes.selectorvalve_VICI import selectorvalve_VICI
-
+try:
+	import sys
+	import warnings
+	import serial
+	import time
+	from classes.misc	import misc
+	from classes.selectorvalve_VICI import selectorvalve_VICI
+except ImportError as e:
+	print (e)
+	raise
 
 class selectorvalve_VICI_virtual(selectorvalve_VICI):
 	"""

@@ -34,12 +34,16 @@
 #
 # Copyright 2016, 2017, Matthias Brennwald (brennmat@gmail.com)
 
-import sys
-import warnings
-import serial
-import time
-from pathlib import Path
-from classes.misc	import misc
+try:
+	import sys
+	import warnings
+	import serial
+	import time
+	from pathlib import Path
+	from classes.misc	import misc
+except ImportError as e:
+	print (e)
+	raise
 
 # check Python version and print warning if we're running version < 3:
 if ( sys.version_info[0] < 3 ):
