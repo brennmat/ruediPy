@@ -173,9 +173,12 @@ class rgams_SRS:
 			self._peakbuffer_max_len = max_buffer_points
 			self._peakbuffer_lastupdate_timestamp = -1
 
+			# y-axis range:
 			self._peakbuffer_plot_min_y = peakbuffer_plot_min
 			self._peakbuffer_plot_max_y = peakbuffer_plot_max
 
+			# y-axis scaling for peakbuffer plot:
+			self._peakbufferplot_yscale = peakbuffer_plot_yscale
 			
 			# mz values and colors (defaults):
 			self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
@@ -199,9 +202,6 @@ class rgams_SRS:
 				if self._label:
 					t = t + ' (' + self._label + ')'
 				self._fig.canvas.set_window_title(t)
-
-				# y-axis scaling for peakbuffer plot:
-				self._peakbufferplot_yscale = peakbuffer_plot_yscale
 
 				# set up upper panel for peak history plot:
 				self._peakbuffer_ax = plt.subplot(2,1,1)
@@ -296,6 +296,28 @@ class rgams_SRS:
 	########################################################################################################
 
 	
+	def get_peakbuffer_scale(self):
+		'''
+		s = rgams_SRS.get_peakbuffer_scale(self)
+		
+		Get scale of y-axis in peakbuffer plot (linear or log).
+
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		s: scale (string, either 'linear' or 'log', default: scale = 'linear')
+		'''
+		
+		if self._peakbufferplot_yscale.upper() == 'LOG':
+			return 'log'
+		else:
+			return 'linear'
+
+
+	########################################################################################################
+
+	
 	def set_peakbuffer_scale(self,scale='linear'):
 		'''
 		rgams_SRS.set_peakbuffer_scale(scale)
@@ -317,11 +339,14 @@ class rgams_SRS:
 			self._peakbufferplot_yscale = 'log'
 		else:
 			self.warning('Unknown peakbuffer sccale: ' + scale )
-		self._peakbuffer_ax.set_yscale(self._peakbufferplot_yscale)
 
-		from matplotlib.ticker import FuncFormatter
-		yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
-		self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
+		if self._has_display:
+			# if plot is not handled by external GUI:
+			self._peakbuffer_ax.set_yscale(self._peakbufferplot_yscale)
+
+			from matplotlib.ticker import FuncFormatter
+			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
+			self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
 
 	
 	########################################################################################################
