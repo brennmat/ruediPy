@@ -16,7 +16,7 @@ function X = rP_digest_step_RGA_SRS (RAW,MS_name,opt)
 % 
 % OUTPUT:
 % X: struct object with "digested" data from file:
-%	X.mz_det: mz/detector combination of the digested PEAK-ZERO data (cell string). An asterisk is appended to the mz_det strings if interference compensation / deconvolution was applied to the data.
+%	X.mz_det: mz/detector combination of the digested PEAK-ZERO data (cell string). If interference compensation / deconvolution was applied to the data, the string "deconvolved" is appended to the detector name (example: "15_F" becomes "15_Fdeconvolved"). 
 %	X.mean: means of PEAK-ZERO values (for each X.mz value)
 %	X.mean_err: errors of X.inens.val data (errors of the means)
 %	X.median: medians of PEAK-ZERO values (for each X.mz value)
@@ -469,7 +469,7 @@ if isfield (MS,'DECONVOLUTION')
 						X.median_err(j) = sqrt (X.median_err(j)^2 + (frac_median_target_err * X.median(j))^2 );
 						X.median(j)     = frac_median_target * X.median(j);
 
-						X.mz_det{j} = [ X.mz_det{j} '*' ];
+						X.mz_det{j} = [ X.mz_det{j} 'deconvolved' ];
 
 						disp (sprintf('%s contribution to peak height at m/z=%i (%s detector):',...
 							MS.DECONVOLUTION(i).target_species,MS.DECONVOLUTION(i).target_mz,MS.DECONVOLUTION(i).detector))

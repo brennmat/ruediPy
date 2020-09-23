@@ -107,7 +107,7 @@ else
 		% units:
 		u = f(k+1:end)(2:end-1);
 		
-		fields{i} = ff;
+		fields{i} = strrep(ff,'*','deconvolved');
 		units{i}  = u;
 		
 	end
