@@ -51,7 +51,7 @@ except ImportError:
 
 # import GUI configuration (if any):
 try:
-	from gui_config import GUI # to share global configurations of the program
+	from gui_config import gui_config # to share global configurations of the program
 except ImportError:
 	pass
 
@@ -126,7 +126,7 @@ class misc:
 		M = unit + ' at ' + misc.now_string() + ': ' + msg
 		try:
 			# send warning message to GUI, and let it deal with it:
-			GUI.warnmessage( M )
+			gui_config.warnmessage( M )
 		except:
 			# show warning message on STDOUT:
 			print ('\a') # get user attention using the terminal bell
@@ -157,7 +157,7 @@ class misc:
 		M = unit + ' at ' + misc.now_string() + ': ' + msg
 		try:
 			# send log message to GUI, and let it deal with it:
-			GUI.logmessage( M )
+			gui_config.logmessage( M )
 		except:
 			print (M)
 

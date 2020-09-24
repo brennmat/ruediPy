@@ -153,7 +153,7 @@ class rgams_SRS_virtual(rgams_SRS):
 			self._fig.canvas.set_window_title(t)
 
 			# set up upper panel for peak history plot:
-			self._peakbuffer_ax = self._fig.add_subplot(2,1,1)
+			self._peakbuffer_ax = plt.subplot(2,1,1)
 			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ')',loc="center")
 			plt.xlabel('Time')
 			plt.ylabel('Intensity')
@@ -163,7 +163,7 @@ class rgams_SRS_virtual(rgams_SRS):
 			self.set_peakbuffer_scale(self._peakbufferplot_yscale)
 
 			# set up lower panel for scans:
-			self._scan_ax = self._fig.add_subplot(2,1,2)
+			self._scan_ax = plt.subplot(2,1,2)
 			self._scan_ax.set_title('SCAN (' + self.label() + ')',loc="center")
 			plt.xlabel('mz')
 			plt.ylabel('Intensity')
@@ -173,7 +173,7 @@ class rgams_SRS_virtual(rgams_SRS):
 
 			self._figwindow_is_shown = False
 			plt.ion()		
-			
+
 		self.log( 'Successfully configured virtual SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 		
 
@@ -1121,144 +1121,3 @@ class rgams_SRS_virtual(rgams_SRS):
 
 
 ########################################################################################################
-
-
-
-	def plot_peakbuffer_virtual(self):
-		
-		# plt.plot(self._peakbuffer_t, self._peakbuffer_intens)
-		# plt.ion()
-		
-		
-		
-		
-		
-		if not self._figwindow_is_shown:
-			# show the window on screen
-			self._fig.show()
-			self._figwindow_is_shown = True
-			
-		# remove all the lines that are currently in the plot:
-		self._peakbuffer_ax.lines = []
-		
-		
-		
-		
-		plt.lines = []
-		
-		
-		
-
-		# redo the plot by plotting line by line (mz by mz and detector by detector):
-		colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k') # some colors for use with all 'other' mz values
-		n = 0
-		leg = []
-		t0 = misc.now_UNIX()			
-		N = len(self._peakbuffer_mz)
-
-		X_MIN = None
-		X_MAX = None
-
-		if self._peakbufferplot_yscale == 'log':
-			Y_MIN = 0.1
-			Y_MAX = 10
-
-		else:
-			Y_MIN = 1
-			Y_MAX = 1
-
-		print(len(self._peakbuffer_ax.lines))
-
-		for mz in numpy.unique(self._peakbuffer_mz): # loop through all mz values in the peak buffer
-			for det in [ 'F' , 'M' ]: # loop through all detectors (Faraday and Multiplier)
-				k = [ i for i in range(N) if ((self._peakbuffer_mz[i] == mz) & (self._peakbuffer_det[i] == det)) ] # index to data with current mz / detector pair
-				if len(k) > 0: # if k is not empty
-										
-					intens0 = self._peakbuffer_intens[k[0]]
-					col = [c for c in self._peakbufferplot_colors if c[0] == mz]
-					if col:
-						col = col[0][1]
-					else:
-						col = colors[n%7]
-					if det == 'F':
-						style = 'o'
-					elif det == 'M':
-						style = 's'
-					else:
-						style = 'x'
-					
-					yy = self._peakbuffer_intens[k]/intens0
-					tt = self._peakbuffer_t[k] - t0
-
-					self._peakbuffer_ax.plot( tt , yy , color=col, marker=style , linestyle='-' , linewidth=1 , markersize=10)
-					
-
-					print(len(self._peakbuffer_ax.lines))
-					
-					
-
-					
-					
-					
-					
-
-					val_min = self._peakbuffer_intens[k].min()
-					val_max = self._peakbuffer_intens[k].max()
-					min = "{:.2e}".format(val_min)
-					max = "{:.2e}".format(val_max)
-					leg.append( 'mz=' + str(int(mz)) + ' det=' + det + ': ' + min + ' ... ' + max + ' ' + self._peakbuffer_unit[k[0]] )
-					
-					if X_MIN == None:
-						X_MIN = tt.min()
-					if X_MAX == None:
-						X_MAX = tt.min()
-					if tt.min() < X_MIN:
-						X_MIN = tt.min()
-					if tt.max() > X_MAX:
-						X_MAX = tt.max()
-
-					if yy.min() < Y_MIN:
-						Y_MIN = yy.min()
-					if yy.max() > Y_MAX:
-						Y_MAX =	yy.max()
-					
-					n = n+1
-	
-		if len(self._peakbuffer_ax.lines) > 0: # if the plot is not empty
-		
-			print('Formatting the plot...')
-			
-			# set legend location:
-			self._peakbuffer_ax.legend( leg , loc='best' , prop={'size':9} )
-
-			# set title and axis labels:
-			t0 = time.strftime("%b %d %Y %H:%M:%S", time.localtime(t0))
-			self._peakbuffer_ax.set_title('PEAKBUFFER (' + self.label() + ') at ' + t0)
-			self._peakbuffer_ax.set_xlabel('Time (s)')
-			self._peakbuffer_ax.set_ylabel('Intensity (rel.)')
-
-			# Set x-axis scaling:
-			DX = 0.05*(X_MAX-X_MIN)
-			if DX == 0:
-				DX = 5
-			self._peakbuffer_ax.set_xlim( [ X_MIN-DX , X_MAX+DX ] )
-
-			# Set y-axis scaling:
-			if Y_MIN < self._peakbuffer_plot_min_y:
-				Y_MIN = self._peakbuffer_plot_min_y
-			if Y_MAX > self._peakbuffer_plot_max_y:
-				Y_MAX = self._peakbuffer_plot_max_y
-
-			if self._peakbufferplot_yscale == 'log':
-				self._peakbuffer_ax.set_ylim( [ Y_MIN , Y_MAX ] )
-
-			else:		
-				if Y_MIN < Y_MAX:
-					DY = 0.05*(Y_MAX-Y_MIN)
-				else:
-					DY = 0.001
-				self._peakbuffer_ax.set_ylim( [ Y_MIN-DY , Y_MAX+DY ] )
-
-
-		# Update the plot:
-		self._fig.canvas.flush_events()
