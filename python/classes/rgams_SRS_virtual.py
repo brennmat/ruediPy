@@ -800,8 +800,16 @@ class rgams_SRS_virtual(rgams_SRS):
 		N = (high-low)*step
 		self.warning('Scan is not properly implemented in rgams_SRS_virtual!')
 		Y = None # <---- MODIFY!!!! this should have N detector values
-		time.sleep(2)
 		
+		
+		# determine scan data:
+		low = float(low)
+		high = float(high)
+		M = [low + x*(high-low)/N for x in range(N)]
+		Y = []
+		for mz in M:
+			Y.append( self.peak(round(mz),gate/N,'nofile',add_to_peakbuffer=False) )		
+		unit = 'A'		
 
 		# get time stamp after scan
 		t2 = misc.now_UNIX()
