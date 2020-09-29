@@ -793,14 +793,11 @@ class rgams_SRS_virtual(rgams_SRS):
 		# configure RGA (gate time):
 		self.set_gate_time(gate)
 
-		# get time stamp before scan
-		t1 = misc.now_UNIX()
+		# get time stamp:
+		t = misc.now_UNIX()
 
-		# read back result from RGA:
+		# number of scan points:
 		N = (high-low)*step
-		self.warning('Scan is not properly implemented in rgams_SRS_virtual!')
-		Y = None # <---- MODIFY!!!! this should have N detector values
-		
 		
 		# determine scan data:
 		low = float(low)
@@ -808,19 +805,19 @@ class rgams_SRS_virtual(rgams_SRS):
 		M = [low + x*(high-low)/N for x in range(N)]
 		Y = []
 		for mz in M:
-			Y.append( self.peak(round(mz),gate/N,'nofile',add_to_peakbuffer=False) )		
-		unit = 'A'		
-
-		# get time stamp after scan
-		t2 = misc.now_UNIX()
-
-		# determine "mean" timestamp
-		t = (t1 + t2) / 2.0
-
-		# determine scan mz values:
-		low = float(low)
-		high = float(high)
-		M = [low + x*(high-low)/N for x in range(N)]
+			y  = self.peak(round(mz),gate/N,'nofile',add_to_peakbuffer=False)[0]
+			y0 = self.peak(100,gate/N,'nofile',add_to_peakbuffer=False)[0]
+			d = abs(mz-round(mz))
+			if d > 0.35:
+				# baseline:
+				y = y0
+			elif d > 0.15:
+				# flank:
+				y = y0 + 0.8*(0.35-d)/0.15*y
+		
+			Y.append( y )
+			
+		# set unit:	
 		unit = 'A'
 
 		# write to data file:
