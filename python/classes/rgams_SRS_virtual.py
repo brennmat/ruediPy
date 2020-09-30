@@ -820,6 +820,10 @@ class rgams_SRS_virtual(rgams_SRS):
 		# set unit:	
 		unit = 'A'
 
+		# discard data that are out of the desired mz range:
+		Y = [ Y[i] for i in range(len(M)) if (M[i] >= llow) & (M[i] <= hhigh) ]
+		M = [ m for m in M if (m >= llow) & (m <= hhigh) ]
+
 		# write to data file:
 		if not ( f == 'nofile' ):
 			det = self.get_detector()
