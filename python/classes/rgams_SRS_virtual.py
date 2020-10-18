@@ -784,7 +784,7 @@ class rgams_SRS_virtual(rgams_SRS):
 		if high > self.mz_max():
 			self.warning ('Scan must end at m/z=' + self.mz_max() + ' or lower! Ending at m/z= ' + self.mz_max() + '...')
 			low = self.mz_max()
-		if low >= high:
+		if low > high:
 			self.warning ('Scan m/z value at start must be lower than at end. Swapping values...')
 			x = low;
 			low = high;
