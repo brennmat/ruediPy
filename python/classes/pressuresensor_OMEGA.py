@@ -288,7 +288,7 @@ class pressuresensor_OMEGA:
 		(none)
 		'''
 		
-		misc.warnmessage (self.label(),msg)
+		misc.warnmessage ('[' + self.label() + '] ' + msg)
 
 
 	########################################################################################################

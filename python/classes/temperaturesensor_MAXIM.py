@@ -253,7 +253,7 @@ class temperaturesensor_MAXIM:
 		(none)
 		'''
 		
-		misc.warnmessage (self.label(),msg)
+		misc.warnmessage ('[' + self.label() + '] ' + msg)
 
 
 	########################################################################################################

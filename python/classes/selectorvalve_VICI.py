@@ -194,8 +194,8 @@ class selectorvalve_VICI:
 		(none)
 		'''
 		
-		misc.warnmessage (self.label(),msg)
-
+		misc.warnmessage ('[' + self.label() + '] ' + msg)
+		
 	
 ########################################################################################################
 
@@ -213,7 +213,7 @@ class selectorvalve_VICI:
 		(none)
 		'''
 		
-		misc.logmessage (self.label(),msg)
+		misc.logmessage ('[' + self.label() + '] ' + msg)
 
 
 	########################################################################################################

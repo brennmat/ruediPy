@@ -65,7 +65,7 @@ if havedisplay: # prepare plotting environment
 		matplotlib.use('TkAgg')
 		import matplotlib.pyplot as plt
 	except:
-		misc.warnmessage ('WIKA-PRESSURE init','Could not set up display environment.')
+		misc.warnmessage ('Could not set up display environment.')
 		havedisplay = False
 
 
@@ -340,7 +340,7 @@ class pressuresensor_WIKA:
 		(none)
 		'''
 		
-		misc.warnmessage (self.label(),msg)
+		misc.warnmessage ('[' + self.label() + '] ' + msg)
 
 
 	########################################################################################################

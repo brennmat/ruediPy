@@ -173,7 +173,7 @@ class selectorvalve_compositeVICI:
 	def warning(self,msg):
 		# warn about issues related to operation of the valve
 		# msg: warning message
-		misc.warnmessage ('VICI COMPOSITE VALVE',msg)
+		misc.warnmessage ('[' + self.label() + '] ' + msg)
 
 
 

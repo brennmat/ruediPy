@@ -122,7 +122,7 @@ class datafile:
 		(none)
 		"""
 		
-		misc.warnmessage ('DATAFILE',msg)
+		misc.warnmessage (msg)
 	
 	
 	########################################################################################################

@@ -38,6 +38,9 @@ try:
 	import sys
 	import warnings
 	import time
+	import inspect
+	import os
+	
 except ImportError as e:
 	print (e)
 	raise
@@ -107,23 +110,35 @@ class misc:
 	
 	########################################################################################################
 	
-
+	
 	@staticmethod
-	def warnmessage(unit,msg):
+	def warnmessage(msg, caller=None):
 		'''
-		misc.warnmessage(caller,msg)
+		misc.warnmessage(msg, caller=None)
 		
 		Print a warning message
 		
 		INPUT:
-		caller: caller label / name of the calling object (string)
 		msg: warning message
-		
+		caller (deprecated!): caller label / name of the calling object (string). The 'caller' argument is depracated and is determined automatically.
+				
 		OUTPUT:
 		(none)
 		'''
-			
-		M = unit + ' at ' + misc.now_string() + ': ' + msg
+
+		if caller is not None:
+			# old-style (depracated!) way of warnmessage call!
+			# warnmessage( caller, msg )
+			print( 'Calling misc.warnmessage(...) with TWO arguments is deprecated!' )
+			print('   msg = ' + caller )
+			print('   caller = ' + msg )
+			msg = caller
+	
+		caller_frame = inspect.stack()[1]
+		caller_filename = caller_frame.filename
+		caller = os.path.splitext(os.path.basename(caller_filename))[0]
+		
+		M = caller + ' at ' + misc.now_string() + ': ' + msg
 		try:
 			# send warning message to GUI, and let it deal with it:
 			gui_config.warnmessage( M )
@@ -141,20 +156,33 @@ class misc:
 	
 
 	@staticmethod
-	def logmessage(unit,msg):
+	def logmessage(msg, caller=None):
 		'''
-		misc.logmessage(caller,msg)
+		misc.logmessage(msg, caller=None)
 		
-		Print a log message (similar to warning, but don't "shout" at the user)
+		Print a warning message
 		
 		INPUT:
-		caller: caller label / name of the calling object (string)
 		msg: warning message
-		
+		caller (deprecated!): caller label / name of the calling object (string). The 'caller' argument is depracated and is determined automatically.
+				
 		OUTPUT:
 		(none)
 		'''
-		M = unit + ' at ' + misc.now_string() + ': ' + msg
+
+		if caller is not None:
+			# old-style (depracated!) way of logmessage call!
+			# logmessage( caller, msg )
+			print( 'Calling misc.logmessage(...) with TWO arguments is deprecated!' )
+			print('   msg = ' + caller )
+			print('   caller = ' + msg )
+			msg = caller
+	
+		caller_frame = inspect.stack()[1]
+		caller_filename = caller_frame.filename
+		caller = os.path.splitext(os.path.basename(caller_filename))[0]
+
+		M = caller + ' at ' + misc.now_string() + ': ' + msg
 		try:
 			# send log message to GUI, and let it deal with it:
 			gui_config.logmessage( M )

@@ -271,7 +271,7 @@ class rgams_SRS:
 		(none)
 		'''
 		
-		misc.warnmessage (self.label(),msg)
+		misc.warnmessage ('[' + self.label() + '] ' + msg)
 
 	
 	########################################################################################################
@@ -290,7 +290,7 @@ class rgams_SRS:
 		(none)
 		'''
 		
-		misc.logmessage (self.label(),msg)
+		misc.logmessage ('[' + self.label() + '] ' + msg)
 
 	
 	########################################################################################################
