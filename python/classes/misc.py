@@ -129,9 +129,9 @@ class misc:
 		if caller is not None:
 			# old-style (depracated!) way of warnmessage call!
 			# warnmessage( caller, msg )
-			print( 'Calling misc.warnmessage(...) with TWO arguments is deprecated!' )
-			print('   msg = ' + caller )
-			print('   caller = ' + msg )
+			print( 'Calling misc.warnmessage(...) with TWO arguments is deprecated!' , file=sys.stderr )
+			print('   msg = ' + caller , file=sys.stderr )
+			print('   caller (ignored!) = ' + msg , file=sys.stderr )
 			msg = caller
 	
 		caller_frame = inspect.stack()[1]
@@ -173,9 +173,9 @@ class misc:
 		if caller is not None:
 			# old-style (depracated!) way of logmessage call!
 			# logmessage( caller, msg )
-			print( 'Calling misc.logmessage(...) with TWO arguments is deprecated!' )
-			print('   msg = ' + caller )
-			print('   caller = ' + msg )
+			print( 'Calling misc.logmessage(...) with TWO arguments is deprecated!' , file=sys.stderr )
+			print('   msg = ' + caller , file=sys.stderr )
+			print('   caller (ignored!) = ' + msg , file=sys.stderr )
 			msg = caller
 	
 		caller_frame = inspect.stack()[1]
