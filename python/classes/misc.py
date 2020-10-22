@@ -185,7 +185,7 @@ class misc:
 		M = caller + ' at ' + misc.now_string() + ': ' + msg
 		try:
 			# send log message to GUI, and let it deal with it:
-			gui_config.logmessage( M )
+			gui_config.logmessage( M )			
 		except:
 			print (M)
 
