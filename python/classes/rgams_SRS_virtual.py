@@ -616,12 +616,18 @@ class rgams_SRS_virtual(rgams_SRS):
 				if self.get_electron_emission() > 0.0:
 					if mz == 4:
 						u = 1E-14
+					elif mz == 14:
+						u = 1.1E-10
 					elif mz == 28:
 						u = 1.23E-9
 					elif mz == 32:
 						u = 2.4E-10
 					elif mz == 40:
 						u = 3E-11
+					elif mz == 40:
+						u = 1E-12
+					elif mz == 84:
+						u = 1E-14
 					else:
 						u = 1E-15
 				else:
@@ -896,7 +902,7 @@ class rgams_SRS_virtual(rgams_SRS):
 ########################################################################################################
 
 
-	def tune_peak_position(self,peaks,max_iter=10,max_delta_mz=0.05,use_defaults=False,resolution=25):
+	def tune_peak_position_NADABADABUM(self,peaks,max_iter=10,max_delta_mz=0.05,use_defaults=False,resolution=25):
 		'''
 		rgams_SRS_virtual.tune_peak_position(mz,gate,det,max_iter=10,max_delta_mz=0.05,use_defaults=False,resolution=25)
 

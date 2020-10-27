@@ -1545,6 +1545,7 @@ class rgams_SRS:
 			error ('Need at least two distinct mz values to tune peak positions!')
 
 		ii = 1 # first iteration
+		tuning_successful = False
 		doTune = True
 		while doTune:
 			if ii == 1:
@@ -1657,6 +1658,7 @@ class rgams_SRS:
 				if abs(delta_m128) < max_delta_mz:
 					self.log('Peak positions are within tolerance (delta-mz = ' + str(max_delta_mz) + '). Tuning completed.' )
 					doTune = False
+					tuning_successful = True
 			
 			# determine new values of RI and RS if tuning is yet within tolerance:
 			if doTune:
@@ -1673,6 +1675,8 @@ class rgams_SRS:
 				if ii > max_iter:
 					self.log('Tuning completed after ' + str(max_iter) + ' iterations.' )
 					doTune = False
+					
+		return tuning_successful
 
 
 
