@@ -624,7 +624,7 @@ class rgams_SRS_virtual(rgams_SRS):
 						u = 2.4E-10
 					elif mz == 40:
 						u = 3E-11
-					elif mz == 40:
+					elif mz == 44:
 						u = 1E-12
 					elif mz == 84:
 						u = 1E-14
