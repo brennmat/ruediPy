@@ -354,33 +354,19 @@ class datafile:
 	########################################################################################################
 
 	
-	def write_comment(self,cmt,caller=None):
+	def write_comment(self,caller,cmt):
 		"""
-		datafile.write_comment(cmt,caller=None)
+		datafile.write_comment(caller,cmt)
 		
 		Write COMMENT line to the data file.
 		
 		INPUT:
+		caller: label / name of the calling object (string)
 		cmt: comment string
-		caller (deprecated!): caller label / name of the calling object (string). The 'caller' argument is depracated and is determined automatically.
 		
 		OUTPUT:
 		(none)
 		"""
-		
-		if caller is not None:
-			# old-style (depracated!) way of write_comment call!
-			# write_comment( caller, cmt )
-			print( 'Calling datafile.write_comment(...) with TWO arguments is deprecated!' , file=sys.stderr )
-			print('   cmt = ' + caller , file=sys.stderr )
-			print('   caller (ignored!) = ' + cmt , file=sys.stderr )
-			cmt = caller
-	
-		caller_frame = inspect.stack()[1]
-		caller_filename = caller_frame.filename
-		caller = os.path.splitext(os.path.basename(caller_filename))[0]
-
-		M = caller + ' at ' + misc.now_string() + ': ' + cmt
 		
 		# cmt: comment line
 		self.writeln( caller, '' , 'COMMENT' , cmt , misc.now_UNIX() )
