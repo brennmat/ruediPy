@@ -112,9 +112,9 @@ class misc:
 	
 	
 	@staticmethod
-	def warnmessage(msg, caller=None):
+	def warnmessage(msg, caller=None, show_caller=True):
 		'''
-		misc.warnmessage(msg, caller=None)
+		misc.warnmessage(msg, caller=None, show_caller=True)
 		
 		Print a warning message
 		
@@ -133,32 +133,35 @@ class misc:
 			print('   msg = ' + caller , file=sys.stderr )
 			print('   caller (ignored!) = ' + msg , file=sys.stderr )
 			msg = caller
-	
-		caller_frame = inspect.stack()[1]
-		caller_filename = caller_frame.filename
-		caller = os.path.splitext(os.path.basename(caller_filename))[0]
-		
-		M = caller + ' at ' + misc.now_string() + ': ' + msg
+
+		msg = misc.now_string() + ': ' + msg
+
+		if show_caller:
+			caller_frame = inspect.stack()[1]
+			caller_filename = caller_frame.filename
+			caller = os.path.splitext(os.path.basename(caller_filename))[0]
+			msg = caller + ' at ' + misc.now_string() + ': ' + msg
+			
 		try:
 			# send warning message to GUI, and let it deal with it:
-			gui_config.warnmessage( M )
+			gui_config.warnmessage( msg )
 		except:
 			# show warning message on STDOUT:
 			print ('\a') # get user attention using the terminal bell
-			M = '***** WARNING from ' + M
+			M = '***** WARNING from ' + msg
 			if do_color_term:
-				print (colored(M,'red'))
+				print (colored(msg,'red'))
 			else:
-				print (M)
+				print (msg)
 			
 			
 	########################################################################################################
 	
 
 	@staticmethod
-	def logmessage(msg, caller=None):
+	def logmessage(msg, caller=None, show_caller=True):
 		'''
-		misc.logmessage(msg, caller=None)
+		misc.logmessage(msg, caller=None, show_caller=True)
 		
 		Print a warning message
 		
@@ -177,17 +180,21 @@ class misc:
 			print('   msg = ' + caller , file=sys.stderr )
 			print('   caller (ignored!) = ' + msg , file=sys.stderr )
 			msg = caller
-	
-		caller_frame = inspect.stack()[1]
-		caller_filename = caller_frame.filename
-		caller = os.path.splitext(os.path.basename(caller_filename))[0]
 
-		M = caller + ' at ' + misc.now_string() + ': ' + msg
+		msg = misc.now_string() + ': ' + msg
+		
+		if show_caller:
+			caller_frame = inspect.stack()[1]
+			caller_filename = caller_frame.filename
+			caller = os.path.splitext(os.path.basename(caller_filename))[0]
+
+			msg = caller + ' at ' + msg
+
 		try:
 			# send log message to GUI, and let it deal with it:
-			gui_config.logmessage( M )			
+			gui_config.logmessage( msg )			
 		except:
-			print (M)
+			print (msg)
 
 
 	########################################################################################################
