@@ -695,6 +695,9 @@ class rgams_SRS_virtual(rgams_SRS):
 		# check for range of input values:
 		mz = int(mz)
 		mz_offset = int (mz_offset)
+
+		# get timestamp
+		t = misc.now_UNIX()
 		
 		if mz+mz_offset < 1:
 			self.warning ('mz+mz_offset must be positive! Skipping zero measurement...')
@@ -707,41 +710,16 @@ class rgams_SRS_virtual(rgams_SRS):
 			unit = '(none)'
 			
 		else: # proceed with measurement
-		
+
 			# deal with gate times longer than 2.4 seconds (max. allowed with SRS-RGA):
-			v = 0.0;
-			if gate > 2.4:
-				N = int(round(gate/2.4))
-				gt = 2.4
-			else:
-				N = 1
-				gt = gate
 
-			# make sure serial port buffers are empty:
-			self.ser.flushOutput()
-			self.ser.flushInput()
-
-			for k in range(N):
-
-				# get timestamp
-				t = misc.now_UNIX()
-
-				# read back data:
-				time.sleep(gt)
-				if self.get_electron_emission() > 0.0:
-					u = 1.23e-15
-				else:
-					u = 1.23e-16
-				u = u / 1E-16
-				u = (1+(random.random()-0.5)/5) * u
-
-				
-				v = v + u
-
-			v = v/N
-			val = v * 1E-16 # multiply by 1E-16 to convert to Amperes
+			val = 1E-15
 			unit = 'A'
 
+		det = self.get_detector()
+		if det == 'M':
+			val = 1E4 * val
+		
 		if not ( f == 'nofile' ):
 			f.write_zero('RGA_SRS',self.label(),mz,mz_offset,val,unit,self.get_detector(),gate,t,zerotype)
 
