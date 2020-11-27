@@ -79,9 +79,9 @@ class temperaturesensor_MAXIM:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
+	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = False):
 		'''
-		temperaturesensor_MAXIM.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 )
+		temperaturesensor_MAXIM.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = False )
 		
 		Initialize TEMPERATURESENSOR object (MAXIM), configure serial port / 1-wire bus for connection to DS18B20 temperature sensor chip
 		
@@ -98,12 +98,28 @@ class temperaturesensor_MAXIM:
 		'''
 		
 		self._label = label
-		self._has_display = havedisplay
 		
 		if plot_title == None:
 			self._plot_title = self._label
 		else:
 			self._plot_title = plot_title
+
+		# data buffer for temperature values:
+		self._tempbuffer_t = numpy.array([])
+		self._tempbuffer_T = numpy.array([])
+		self._tempbuffer_unit = ['x'] * 0 # empty list
+		self._tempbuffer_max_len = max_buffer_points
+		self._tempbuffer_lastupdate_timestamp = -1
+		
+		# set up plotting environment:
+		self._has_external_display = has_external_plot_window
+		if self._has_external_display:
+			has_plot_window = False # don't care with the built-in plotting, which will be dealt with externally
+		self._has_display = has_plot_window # try opening a plot window
+		if has_plot_window: # should have a plot window
+			self._has_display = havedisplay # don't try opening a plot window if there is no plotting environment
+		else: # no plot window
+			self._has_display = False
 
 		try:
 
@@ -127,13 +143,6 @@ class temperaturesensor_MAXIM:
 					self._sensor = DS18B20(bus, rom=romcode)
 					self._ROMcode = romcode
 		
-			# data buffer for temperature values:
-			self._tempbuffer_t = numpy.array([])
-			self._tempbuffer_T = numpy.array([])
-			self._tempbuffer_unit = ['x'] * 0 # empty list
-			self._tempbuffer_max_len = max_buffer_points
-	
-			# set up plotting environment
 			if self._has_display: # prepare plotting environment and figure
 
 				# set up plotting environment
@@ -284,6 +293,27 @@ class temperaturesensor_MAXIM:
 			self._tempbuffer_t    = self._tempbuffer_t[-N:]
 			self._tempbuffer_T    = self._tempbuffer_T[-N:]
 			self._tempbuffer_unit = self._tempbuffer_unit[-N:]
+
+		self._tempbuffer_lastupdate_timestamp = misc.now_UNIX()
+
+
+	########################################################################################################
+
+
+	def tempbuffer_get_timestamp(self):
+		"""
+		timestamp = temperaturesensor_MAXIM.tempbuffer_get_timestamp()
+
+		Get time stamp of last update to tempbuffer data
+		
+		INPUT:
+		(none)
+
+		OUTPUT:
+		timestamp: UNIX time of last update
+		"""
+
+		return self._tempbuffer_lastupdate_timestamp
 
 
 	########################################################################################################

@@ -78,9 +78,9 @@ class pressuresensor_OMEGA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = False):
 		'''
-		pressuresensor_OMEGA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 3 , fig_h = 2 )
+		pressuresensor_OMEGA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = False )
 		
 		Initialize PRESSURESENSOR object (OMEGA), configure serial port connection
 		
@@ -97,12 +97,28 @@ class pressuresensor_OMEGA:
 		'''
 	
 		self._label = label
-		self._has_display = havedisplay
 
 		if plot_title == None:
 			self._plot_title = self._label
 		else:
 			self._plot_title = plot_title
+
+		# data buffer for PEAK values:
+		self._pressbuffer_t = numpy.array([])
+		self._pressbuffer_p = numpy.array([])
+		self._pressbuffer_unit = ['x'] * 0 # empty list
+		self._pressbuffer_max_len = max_buffer_points
+		self._pressbuffer_lastupdate_timestamp = -1
+		
+		# set up plotting environment:
+		self._has_external_display = has_external_plot_window
+		if self._has_external_display:
+			has_plot_window = False # don't care with the built-in plotting, which will be dealt with externally
+		self._has_display = has_plot_window # try opening a plot window
+		if has_plot_window: # should have a plot window
+			self._has_display = havedisplay # don't try opening a plot window if there is no plotting environment
+		else: # no plot window
+			self._has_display = False
 
 		try:
 
@@ -144,13 +160,6 @@ class pressuresensor_OMEGA:
 			ser.flushInput()   # make sure input is empty
 			self._serial_number = int(ans.rstrip().split('=')[1]) # parse response to integer number
 
-			# data buffer for PEAK values:
-			self._pressbuffer_t = numpy.array([])
-			self._pressbuffer_p = numpy.array([])
-			self._pressbuffer_unit = ['x'] * 0 # empty list
-			self._pressbuffer_max_len = max_buffer_points
-	
-			# set up plotting environment
 			if self._has_display: # prepare plotting environment and figure
 
 				# set up plot figure:
@@ -320,6 +329,26 @@ class pressuresensor_OMEGA:
 			self._pressbuffer_p    = self._pressbuffer_p[-N:]
 			self._pressbuffer_unit = self._pressbuffer_unit[-N:]
 
+		self._pressbuffer_lastupdate_timestamp = misc.now_UNIX()
+
+
+	########################################################################################################
+
+
+	def pressbuffer_get_timestamp(self):
+		"""
+		timestamp = pressuresensor_OMEGA.pressbuffer_get_timestamp()
+
+		Get time stamp of last update to pressbuffer data
+		
+		INPUT:
+		(none)
+
+		OUTPUT:
+		timestamp: UNIX time of last update
+		"""
+
+		return self._pressbuffer_lastupdate_timestamp
 
 
 	########################################################################################################

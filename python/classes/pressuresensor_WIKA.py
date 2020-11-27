@@ -79,9 +79,9 @@ class pressuresensor_WIKA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = False):
 		'''
-		pressuresensor_WIKA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 3 , fig_h = 2 )
+		pressuresensor_WIKA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = False )
 		
 		Initialize PRESSURESENSOR object (WIKA), configure serial port connection
 		
@@ -98,12 +98,28 @@ class pressuresensor_WIKA:
 		'''
 	
 		self._label = label
-		self._has_display = havedisplay
 
 		if plot_title == None:
 			self._plot_title = self._label
 		else:
 			self._plot_title = plot_title
+
+		# data buffer for PEAK values:
+		self._pressbuffer_t = numpy.array([])
+		self._pressbuffer_p = numpy.array([])
+		self._pressbuffer_unit = ['x'] * 0 # empty list
+		self._pressbuffer_max_len = max_buffer_points
+		self._pressbuffer_lastupdate_timestamp = -1
+		
+		# set up plotting environment:
+		self._has_external_display = has_external_plot_window
+		if self._has_external_display:
+			has_plot_window = False # don't care with the built-in plotting, which will be dealt with externally
+		self._has_display = has_plot_window # try opening a plot window
+		if has_plot_window: # should have a plot window
+			self._has_display = havedisplay # don't try opening a plot window if there is no plotting environment
+		else: # no plot window
+			self._has_display = False
 
 		try:
 			# open and configure serial port for communication with WIKA pressure sensor (9600 baud, 8 data bits, no parity, 1 stop bit
@@ -154,14 +170,6 @@ class pressuresensor_WIKA:
 			self.ser.read(2) # 6th and 7th byte (not used)
 			self._serial_number = struct.unpack('<I',ans)[0] # convert to 4 bytes to integer
 	
-
-			# data buffer for PEAK values:
-			self._pressbuffer_t = numpy.array([])
-			self._pressbuffer_p = numpy.array([])
-			self._pressbuffer_unit = ['x'] * 0 # empty list
-			self._pressbuffer_max_len = max_buffer_points
-	
-			# set up plotting environment
 			if self._has_display: # prepare plotting environment and figure
 
 				# set up plot figure:
@@ -372,7 +380,27 @@ class pressuresensor_WIKA:
 			self._pressbuffer_p    = self._pressbuffer_p[-N:]
 			self._pressbuffer_unit = self._pressbuffer_unit[-N:]
 
+		self._pressbuffer_lastupdate_timestamp = misc.now_UNIX()
 
+
+	########################################################################################################
+
+
+	def pressbuffer_get_timestamp(self):
+		"""
+		timestamp = pressuresensor_WIKA.pressbuffer_get_timestamp()
+
+		Get time stamp of last update to pressbuffer data
+		
+		INPUT:
+		(none)
+
+		OUTPUT:
+		timestamp: UNIX time of last update
+		"""
+
+		return self._pressbuffer_lastupdate_timestamp
+		
 
 	########################################################################################################
 
