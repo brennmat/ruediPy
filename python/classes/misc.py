@@ -45,18 +45,22 @@ except ImportError as e:
 	print (e)
 	raise
 
-try:
-	from termcolor import colored
-	do_color_term = True
-except ImportError:
-	do_color_term = False
-	print ('*** NOTE: Please install the python termcolor package for colored warning messages on STDOUT! ***')
-
 # import GUI configuration (if any):
+has_gui = False
 try:
 	from gui_config import gui_config # to share global configurations of the program
+	has_gui = True
 except ImportError:
 	pass
+
+if has_gui:
+	try:
+		from termcolor import colored
+		do_color_term = True
+	except ImportError:
+		do_color_term = False
+		print ('*** NOTE: Please install the python termcolor package for colored warning messages on STDOUT! ***')
+
 
 # check Python version and print warning if we're running version < 3:
 if ( sys.version_info[0] < 3 ):
