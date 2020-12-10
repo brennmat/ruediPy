@@ -53,12 +53,12 @@ try:
 except ImportError:
 	pass
 
+do_color_term = False
 if has_gui:
 	try:
 		from termcolor import colored
 		do_color_term = True
 	except ImportError:
-		do_color_term = False
 		print ('*** NOTE: Please install the python termcolor package for colored warning messages on STDOUT! ***')
 
 
