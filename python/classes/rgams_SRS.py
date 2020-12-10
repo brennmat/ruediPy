@@ -1005,7 +1005,7 @@ class rgams_SRS:
 		(none)
 		"""
 
-		self._peakbuffer_t = numpy.append( self._peakbuffer_t , t+numpy.random.rand(1,1) )
+		self._peakbuffer_t = numpy.append( self._peakbuffer_t , t )
 		self._peakbuffer_mz = numpy.append( self._peakbuffer_mz , mz )
 		self._peakbuffer_intens = numpy.append( self._peakbuffer_intens , intens )
 		self._peakbuffer_det.append( det )
