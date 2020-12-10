@@ -296,6 +296,39 @@ class rgams_SRS:
 	########################################################################################################
 
 	
+	def get_peakbuffer(self):
+		'''
+		x = rgams_SRS.get_peakbuffer(self)
+		
+		Return peakbuffer data (for use with external modules)
+
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		x: peakbuffer data, struct with the following fields:
+			x.t: time values (float)
+			x.intens: PEAK intensities (float)
+			x.mz: m/z ratio (int)
+			x.unit: unit of the PEAK values (string)
+			x.det: detector used for PEAK rading (string)
+		'''
+
+		class peakbuffer:
+			def __init__(self,t,intens,mz,unit,det):
+				self.t      = t
+				self.intens = intens
+				self.mz     = mz
+				self.unit   = unit
+				self.det    = det
+		
+		x = peakbuffer(self._peakbuffer_t, self._peakbuffer_intens, self._peakbuffer_mz, self._peakbuffer_unit, self._peakbuffer_det)
+		return(x)
+
+
+	########################################################################################################
+
+	
 	def get_peakbuffer_scale(self):
 		'''
 		s = rgams_SRS.get_peakbuffer_scale(self)
@@ -971,8 +1004,8 @@ class rgams_SRS:
 		OUTPUT:
 		(none)
 		"""
-				
-		self._peakbuffer_t = numpy.append( self._peakbuffer_t , t )
+
+		self._peakbuffer_t = numpy.append( self._peakbuffer_t , t+numpy.random.rand(1,1) )
 		self._peakbuffer_mz = numpy.append( self._peakbuffer_mz , mz )
 		self._peakbuffer_intens = numpy.append( self._peakbuffer_intens , intens )
 		self._peakbuffer_det.append( det )
@@ -1156,7 +1189,7 @@ class rgams_SRS:
 		# add data to peakbuffer
 		if add_to_peakbuffer:
 			self.peakbuffer_add(t,mz,val,det,unit)
-
+			
 		return val,unit
 		
 		
