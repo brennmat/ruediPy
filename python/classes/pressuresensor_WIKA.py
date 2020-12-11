@@ -112,6 +112,10 @@ class pressuresensor_WIKA:
 		self._pressbuffer_lastupdate_timestamp = -1
 		
 		# set up plotting environment:
+		if not has_external_plot_window:
+			if misc.have_external_gui():
+				self.warning( 'It looks like there is an external GUI. Configuring the sensor with has_external_plot_window=True although no external plot window was requested!' )
+				has_external_plot_window = True
 		self._has_external_display = has_external_plot_window
 		if self._has_external_display:
 			has_plot_window = False # don't care with the built-in plotting, which will be dealt with externally

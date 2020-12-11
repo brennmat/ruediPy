@@ -354,3 +354,26 @@ class misc:
 									
 
 ########################################################################################################
+
+
+	@staticmethod
+	def have_external_gui():
+		'''
+		x = misc.have_external_gui()
+		
+		Determine if an external GUI system is configured.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		gui: flag indicating if external GUI is configured
+		
+		EXAMPLE:
+		g = misc.have_external_gui( )
+		'''
+		
+		return has_gui					
+									
+
+########################################################################################################

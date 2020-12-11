@@ -134,6 +134,10 @@ class rgams_SRS_virtual(rgams_SRS):
 		self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
 
 		# set up plotting environment
+		if not has_external_plot_window:
+			if misc.have_external_gui():
+				self.warning( 'It looks like there is an external GUI. Configuring the MS with has_external_plot_window=True although no external plot window was requested!' )
+				has_external_plot_window = True
 		self._has_external_display = has_external_plot_window
 		if self._has_external_display:
 			has_plot_window = False # don't care with the built-in plotting, which will be dealt with externally
@@ -618,12 +622,22 @@ class rgams_SRS_virtual(rgams_SRS):
 						u = 1E-14
 					elif mz == 14:
 						u = 1.1E-10
+					elif mz == 15:
+						u = 1E-13
+					elif mz == 16:
+						u = 5E-13
 					elif mz == 18:
 						u = 1.0E-11
+					elif mz == 20:
+						u = 1.0E-12
+					elif mz == 22:
+						u = 1.0E-13
 					elif mz == 28:
 						u = 1.23E-9
 					elif mz == 32:
 						u = 2.4E-10
+					elif mz == 36:
+						u = 1E-13
 					elif mz == 40:
 						u = 3E-11
 					elif mz == 44:
