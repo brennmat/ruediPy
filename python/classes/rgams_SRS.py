@@ -975,7 +975,6 @@ class rgams_SRS:
 		'''
 		
 		gt = numpy.array( self.supported_gate_times() )
-		# gt = numpy.array([ 2.4 , 1.21 , 0.48 , 0.25 , 0.163 , 0.060 , 0.043 , 0.025 ])
 		NF = (numpy.abs(gt-gate)).argmin() # index to closest gate time
 		if gate > gt.max():
 			self.warning('gate time cannot be more than ' + str(gt.max()) +'s! Using gate = ' + str(gt.max()) +'s...')
@@ -1143,9 +1142,9 @@ class rgams_SRS:
 
 			# deal with gate times longer than 2.4 seconds (max. allowed with SRS-RGA):
 			v = 0.0;
-			if gate > 2.4:
-				N = int(round(gate/2.4))
-				gt = 2.4
+			if gate > max(self.supported_gate_times()):
+				N = int(round(gate/max(self.supported_gate_times())))
+				gt = max(self.supported_gate_times())
 			else:
 				N = 1
 				gt = gate
@@ -1246,9 +1245,9 @@ class rgams_SRS:
 		
 			# deal with gate times longer than 2.4 seconds (max. allowed with SRS-RGA):
 			v = 0.0;
-			if gate > 2.4:
-				N = int(round(gate/2.4))
-				gt = 2.4
+			if gate > max(self.supported_gate_times()):
+				N = int(round(gate/max(self.supported_gate_times())))
+				gt = max(self.supported_gate_times())
 			else:
 				N = 1
 				gt = gate
