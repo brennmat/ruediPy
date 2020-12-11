@@ -1049,7 +1049,7 @@ class rgams_SRS:
 		self._peakbuffer_intens = self._peakbuffer_intens[[]]
 		self._peakbuffer_det    = ['x'] * 0 # empty list
 		self._peakbuffer_unit   = ['x'] * 0 # empty list
-
+		self._peakbuffer_lastupdate_timestamp = misc.now_UNIX()
 
 
 ########################################################################################################

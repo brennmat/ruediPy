@@ -399,6 +399,7 @@ class temperaturesensor_MAXIM:
 			self._tempbuffer_t = self._tempbuffer_t[[]]
 			self._tempbuffer_T = self._tempbuffer_T[[]]
 			self._tempbuffer_unit = ['x'] * 0 # empty list
+			self._tempbuffer_lastupdate_timestamp = misc.now_UNIX()
 
 
 

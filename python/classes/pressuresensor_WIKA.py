@@ -484,7 +484,7 @@ class pressuresensor_WIKA:
 			self._pressbuffer_t = self._pressbuffer_t[[]]
 			self._pressbuffer_p = self._pressbuffer_p[[]]
 			self._pressbuffer_unit = ['x'] * 0 # empty list
-
+			self._pressbuffer_lastupdate_timestamp = misc.now_UNIX()
 
 
 	########################################################################################################
