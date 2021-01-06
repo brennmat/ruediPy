@@ -60,10 +60,10 @@ if havedisplay: # prepare plotting environment
 		matplotlib.rcParams['legend.numpoints'] = 1
 		matplotlib.rcParams['axes.formatter.useoffset'] = False
 	except ImportError:
-		misc.warnmessage ('SRS-RGA init','Could not load and configure matplotlib, cannot set up display environment.')
+		misc.warnmessage ('Could not load and configure matplotlib, cannot set up display environment.')
 		havedisplay = False
 	except:
-		misc.warnmessage ('SRS-RGA init','Unexpected error while loading matplotlib, cannot set up display environment.')
+		misc.warnmessage ('Unexpected error while loading matplotlib, cannot set up display environment.')
 		havedisplay = False
 
 		# suppress mplDeprecation warning:
@@ -74,10 +74,10 @@ if havedisplay: # prepare plotting environment
 	try:
 		import matplotlib.pyplot as plt
 	except ImportError:
-		misc.warnmessage ('SRS-RGA init','Could not load and configure pyplot, cannot set up display environment.')
+		misc.warnmessage ('Could not load and configure pyplot, cannot set up display environment.')
 		havedisplay = False
 	except:
-		misc.warnmessage ('SRS-RGA init','Unexpected error while loading pyplot, cannot set up display environment.')
+		misc.warnmessage ('Unexpected error while loading pyplot, cannot set up display environment.')
 		havedisplay = False
 
 
@@ -233,7 +233,7 @@ class rgams_SRS:
 
 
 		except serial.SerialException as e:
-			misc.warnmessage ('rgams_SRS', 'Could not establish connection to SRS RGA:' + str(e) )
+			misc.warnmessage ('Could not establish connection to SRS RGA:' + str(e) )
 			sys.exit(1)
 
 		except:
