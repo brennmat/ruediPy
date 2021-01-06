@@ -393,7 +393,7 @@ class datafile:
 		
 		s = 'species=' + species + ' ; concentration=' + str(conc) + ' vol/vol ; mz=' + str(mz)
 		self.writeln(self.label(),'','STANDARD',s,misc.now_UNIX())
-
+		
 
 	########################################################################################################
 
@@ -412,7 +412,7 @@ class datafile:
 		"""
 		
 		self.writeln(self.label(),'','SAMPLENAME',desc,misc.now_UNIX())
-
+		
 
 	########################################################################################################
 
@@ -447,7 +447,7 @@ class datafile:
 			p = 'PEAK'
 
 		self.writeln(caller,label,p,s,timestmp)
-
+		
 
 	########################################################################################################
 
@@ -486,7 +486,7 @@ class datafile:
 
 		s = 'mz=' + str(mz) + ' ; mz-offset=' + offset + ' ; intensity=' + str(intensity) + ' ' + unit + ' ; detector=' + det.upper() + ' ; gate=' + str(gate) + ' s'
 		self.writeln(caller,label,p,s,timestmp)
-
+		
 
 	########################################################################################################
 
@@ -513,7 +513,7 @@ class datafile:
 		
 		s = 'mz=' + str(mz) + ' ; intensity=' + str(intensity) + ' ' + unit + '; detector=' + det + ' ; gate=' + str(gate) + ' s'
 		self.writeln(caller,label,'SCAN',s,timestmp)
-
+		
 
 	########################################################################################################
 
@@ -542,7 +542,7 @@ class datafile:
 		
 		s = 'target_mz=' + str(target_mz) + ' ; target_species=' + target_species + ' ; detector = ' + deconv_detector.upper() + ' ; MS_EE=' + str(ms_EE) + ' eV ; basis=' + str(basis)
 		self.writeln(caller,label,'DECONVOLUTION',s,timestmp)
-
+		
 
 	########################################################################################################
 
@@ -566,7 +566,7 @@ class datafile:
 		# s = 'position=' + str(position)
 		s = str(position)
 		self.writeln(caller,label,'POSITION',s,timestmp)
-
+		
 
 	########################################################################################################
 
@@ -590,7 +590,7 @@ class datafile:
 				
 		s = str(value) + ' ' + unit
 		self.writeln(caller,label,'PRESSURE',s,timestmp)
-
+		
 
 	########################################################################################################
 
