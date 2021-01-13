@@ -157,11 +157,14 @@ class pressuresensor_OMEGA:
 			ser.flushInput()    # make sure input is empty
 		
 			self.ser = ser
-
+			self._ser_locked = False
+			
 			# get serial number of pressure sensor
+			self.get_serial_lock()
 			self.ser.write(('SNR\r').encode('utf-8')) # send command with check sum to serial port
 			ans = self.ser.readline().decode('utf-8') # read response and decode ASCII	
 			ser.flushInput()   # make sure input is empty
+			self.release_serial_lock()
 			self._serial_number = int(ans.rstrip().split('=')[1]) # parse response to integer number
 
 			if self._has_display: # prepare plotting environment and figure
@@ -198,6 +201,54 @@ class pressuresensor_OMEGA:
 
 		except:
 			self.warning ( 'An error occured during configuration of the pressure sensor at serial interface ' + serialport + '. The pressure sensor cannot be used.' )
+
+
+
+	########################################################################################################
+	
+	
+
+	def get_serial_lock(self):
+		'''
+		pressuresensor_OMEGA._get_serial_lock()
+		
+		Lock serial port for exclusive access (important if different threads / processes are trying to use the port). Make sure to release the lock after using the port (see pressuresensor_OMEGA._release_serial_lock()!
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# wait until the serial port is unlocked:
+		while self._ser_locked == True:
+			time.sleep(0.01)
+			
+		# lock the port:
+		self._ser_locked = True
+		
+
+	
+	########################################################################################################
+	
+	
+
+	def release_serial_lock(self):
+		'''
+		pressuresensor_OMEGA._release_serial_lock()
+		
+		Release lock on serial port.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# release the lock:
+		self._ser_locked = False
 
 
 
@@ -249,12 +300,14 @@ class pressuresensor_OMEGA:
 		else:
 			try:
 				# get pressure reading from the sensor:
+				self.get_serial_lock()
 				self.ser.write(('P\r').encode('utf-8')) # send command to serial port
 				ans =  self.ser.readline().decode('utf-8') # read response and decode ASCII
 				if ans[0] == '>':
 					# fix > character dangling in the serial buffer from previous reading
 					ans = ans[1:]
 				self.ser.flushInput()  # make sure input is empty
+				self.release_serial_lock()
 				
 				ans = ans.split(' ')
 				p = float( ans[0] )    # convert string to float
