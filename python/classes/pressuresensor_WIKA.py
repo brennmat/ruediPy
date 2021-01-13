@@ -157,11 +157,12 @@ class pressuresensor_WIKA:
 			ser.flushInput()	# make sure input is empty
 		
 			self.ser = ser
+			self._ser_locked = False
 
 			# configure pressure sensor for single pressure readings on request ("polling mode")
 			cmd = 'SO\xFF' # command string) (byte to set polling mode
 			cs = self.serial_checksum(cmd) # determine check sum
-		
+			self.get_serial_lock()
 			self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
 			ans = self.ser.read(5) # read out response to empty serial data buffer
 
@@ -172,6 +173,8 @@ class pressuresensor_WIKA:
 			self.ser.read(1) # first byte (not used)
 			ans = self.ser.read(4) # four bytes of UNSIGNED32 number
 			self.ser.read(2) # 6th and 7th byte (not used)
+			self.release_serial_lock()
+			
 			self._serial_number = struct.unpack('<I',ans)[0] # convert to 4 bytes to integer
 	
 			if self._has_display: # prepare plotting environment and figure
@@ -209,11 +212,58 @@ class pressuresensor_WIKA:
 		except:
 			# print ( '\n**** WARNING: An error occured during configuration of the pressure sensor at serial interface ' + serialport + '. The pressure sensor cannot be used.\n' )
 			self.warning ( 'An error occured during configuration of the pressure sensor at serial interface ' + serialport + '. The pressure sensor cannot be used.' )
-
-
+	
 	
 	########################################################################################################
 	
+
+	def get_serial_lock(self):
+		'''
+		pressuresensor_WIKA._get_serial_lock()
+		
+		Lock serial port for exclusive access (important if different threads / processes are trying to use the port). Make sure to release the lock after using the port (see rgams_SRS._release_serial_lock()!
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# wait until the serial port is unlocked:
+		while self._ser_locked == True:
+			time.sleep(0.01)
+			
+		# lock the port:
+		self._ser_locked = True
+		
+
+	
+########################################################################################################
+	
+
+
+	def release_serial_lock(self):
+		'''
+		pressuresensor_WIKA._release_serial_lock()
+		
+		Release lock on serial port.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# release the lock:
+		self._ser_locked = False
+
+
+
+########################################################################################################
+
+
 
 	def serial_checksum(self,cmd):
 		"""
@@ -291,12 +341,14 @@ class pressuresensor_WIKA:
 			try:
 				cmd = 'PZ\x00' # command string to set polling mode
 				cs = self.serial_checksum(cmd) # determine check sum
+				self.get_serial_lock()
 				self.ser.write((cmd + chr(cs) + '\r').encode('utf-8')) # send command with check sum to serial port
 				ans = self.ser.read(1) # first byte (not used)
 				ans = self.ser.read(4) # four bytes of IEEE754 float number
 				p = struct.unpack('<f',ans)[0] # convert to 4 bytes to float
 				ans = self.ser.read(1) # unit
 				self.ser.read(2) # last two bytes (not used)
+				self.release_serial_lock()
 		
 				# get timestamp
 				t = misc.now_UNIX()
