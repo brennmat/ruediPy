@@ -110,8 +110,10 @@ class selectorvalve_VICI:
 			ser.flushInput()
 
 			self.ser = ser;
+			self._ser_locked = False
 
 			# determine number of valve positions:
+			self.get_serial_lock()
 			self.ser.write('NP\r\n'.encode('ascii')) # send NP command to valve controller
 
 			# wait for response
@@ -141,7 +143,9 @@ class selectorvalve_VICI:
 			except:
 				self.warning('could not parse response from valve: ans = ' + ans)
 				ans = '?'
-	
+			
+			self.release_serial_lock()
+			
 			# check result:
 			if not ans.isdigit():
 				self.warning('could not determine number of valve positions.')
@@ -178,7 +182,57 @@ class selectorvalve_VICI:
 			sys.exit(1)
 
 
+
 	########################################################################################################
+	
+	
+
+	def get_serial_lock(self):
+		'''
+		selectorvalve_VICI._get_serial_lock()
+		
+		Lock serial port for exclusive access (important if different threads / processes are trying to use the port). Make sure to release the lock after using the port (see rgams_SRS._release_serial_lock()!
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# wait until the serial port is unlocked:
+		while self._ser_locked == True:
+			time.sleep(0.01)
+			
+		# lock the port:
+		self._ser_locked = True
+		
+
+	
+	########################################################################################################
+	
+	
+
+	def release_serial_lock(self):
+		'''
+		selectorvalve_VICI._release_serial_lock()
+		
+		Release lock on serial port.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# release the lock:
+		self._ser_locked = False
+
+
+
+	########################################################################################################
+
 
 
 	def warning(self,msg):
@@ -271,7 +325,9 @@ class selectorvalve_VICI:
 		(none)
 		'''
 		
+		self.get_serial_lock()
 		self.ser.write(('LG1\r\n').encode('ascii'))
+		self.release_serial_lock()
 		
 		time.sleep(0.5)
 
@@ -304,7 +360,9 @@ class selectorvalve_VICI:
 			curpos = self.getpos()
 			if not curpos == val: # check if valve is already at desired position
 				# send command to serial port:
+				self.get_serial_lock()
 				self.ser.write(('GO' + str(val) + '\r\n').encode('ascii'))
+				self.release_serial_lock()
 			
 			# write to datafile
 			if not f == 'nofile':
@@ -332,6 +390,9 @@ class selectorvalve_VICI:
 		OUTPUT:
 		pos: valve postion (integer)
 		'''
+		
+		# lock serial port:
+		self.get_serial_lock()
 		
 		# make sure serial port buffer is empty:
 		self.ser.flushInput()   #pot make sure input is empty
@@ -367,7 +428,10 @@ class selectorvalve_VICI:
 		except:
 			self.warning('could not parse response from valve: ans = ' + ans)
 			ans = '?'
-	
+		
+		# release serial port:
+		self.release_serial_lock()
+
 		# check result:
 		if not ans.isdigit():
 			self.warning('could not determine valve position (position = ' + ans + ')')
