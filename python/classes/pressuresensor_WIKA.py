@@ -221,7 +221,7 @@ class pressuresensor_WIKA:
 		'''
 		pressuresensor_WIKA._get_serial_lock()
 		
-		Lock serial port for exclusive access (important if different threads / processes are trying to use the port). Make sure to release the lock after using the port (see rgams_SRS._release_serial_lock()!
+		Lock serial port for exclusive access (important if different threads / processes are trying to use the port). Make sure to release the lock after using the port (see pressuresensor_WIKA._release_serial_lock()!
 		
 		INPUT:
 		(none)

@@ -146,6 +146,8 @@ class temperaturesensor_MAXIM:
 				else:
 					self._sensor = DS18B20(bus, rom=romcode)
 					self._ROMcode = romcode
+				
+				self._UART_locked = False
 		
 			if self._has_display: # prepare plotting environment and figure
 
@@ -186,6 +188,50 @@ class temperaturesensor_MAXIM:
 		except:
 			# print ( '\n**** WARNING: An error occured during configuration of the temperature sensor at serial interface ' + serialport + '. The temperature sensor cannot be used.\n' )
 			self.warning ('An error occured during configuration of the temperature sensor at serial interface ' + serialport + '. The temperature sensor cannot be used.')
+
+
+	########################################################################################################
+
+
+	def get_UART_lock(self):
+		'''
+		temperaturesensor_MAXIM.get_UART_lock()
+		
+		Lock UART port for exclusive access (important if different threads / processes are trying to use the port). Make sure to release the lock after using the port (see temperaturesensor_MAXIM.release_UART_lock()!
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# wait until the serial port is unlocked:
+		while self._UART_locked == True:
+			time.sleep(0.01)
+			
+		# lock the port:
+		self._UART_locked = True
+
+
+	########################################################################################################
+
+
+	def release_UART_lock(self):
+		'''
+		temperaturesensor_MAXIM.release_UART_lock()
+		
+		Release lock on UART port.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# release the lock:
+		self._UART_locked = False
 
 	
 	########################################################################################################
@@ -232,7 +278,9 @@ class temperaturesensor_MAXIM:
 			self.warning( 'sensor is not initialised, could not read data.' )
 		else:
 			try:
+				self.get_UART_lock()
 				temp = self._sensor.get_temperature()
+				self.release_UART_lock()
 				unit = 'deg.C'
 		
 				# add data to peakbuffer
