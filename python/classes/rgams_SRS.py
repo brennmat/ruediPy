@@ -148,15 +148,17 @@ class rgams_SRS:
 			ser.flushInput()	# make sure input is empty
 		
 			self.ser = ser
-		
+			self._ser_locked = False
+			
 			# object name label:
 			self._label = label
 		
 			# get ID / serial number of SRS RGA:
+						
 			sn = self.param_IO('ID?',1)
 			sn = sn.split('.')
 			self._serial_number = sn[1]
-
+			
 			# cem bias / high voltage:
 			self._cem_hv = cem_hv
 
@@ -389,6 +391,53 @@ class rgams_SRS:
 	########################################################################################################
 	
 
+	def get_serial_lock(self):
+		'''
+		rgams_SRS._get_serial_lock()
+		
+		Lock serial port for exclusive access (important if different threads / processes are trying to use the port). Make sure to release the lock after using the port (see rgams_SRS._release_serial_lock()!
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# wait until the serial port is unlocked:
+		while self._ser_locked == True:
+			time.sleep(0.01)
+			
+		# lock the port:
+		self._ser_locked = True
+		
+
+	
+	########################################################################################################
+	
+
+	def release_serial_lock(self):
+		'''
+		rgams_SRS._release_serial_lock()
+		
+		Release lock on serial port.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		(none)
+		'''
+
+		# release the lock:
+		self._ser_locked = False
+
+
+	
+	########################################################################################################
+
+	
+
 	def param_IO(self,cmd,ansreq,timeout=10,wait_between_bytes=0.02):
 		'''
 		ans = rgams_SRS.param_IO(cmd,ansreq)
@@ -406,6 +455,9 @@ class rgams_SRS:
 		OUTPUT:
 		ans: answer / result returned from RGA
 		'''
+
+		# lock the serial port
+		self.get_serial_lock()
 	
 		# check if serial buffer (input) is empty (just in case, will be useful to catch errors):
 		if self.ser.inWaiting() > 0:
@@ -442,16 +494,23 @@ class rgams_SRS:
 						time.sleep(wait_between_bytes) # allow some time before quering for the next byte
 
 				ans = ans.rstrip('\r\n') # remove newline characters at end
-		
-			# return the result:
-			return ans
-			
+					
 		else: # check if serial buffer is empty (will be useful to catch errors):
+			ans = None
 			if self.ser.inWaiting() > 0:
 				self.warning('DEBUGGING INFO: serial buffer not empty after executing command = ' + cmd +'. First byte in buffer: ' + self.ser.read().decode('utf-8') )
+
+		# release the lock on the serial port
+		self.release_serial_lock()
+
+		# return the result:
+		if ans is not None:
+			return ans
+
 			
 	
 	########################################################################################################
+	
 	
 
 	def set_electron_energy(self,val):
@@ -833,15 +892,11 @@ class rgams_SRS:
 		# send command to serial port:
 		if det == 'F':
 			self.param_IO('HV0',1)
-			# time.sleep(0.05)
-			# self.ser.flushInput()
 
 		elif det == 'M':
 			if self.has_multiplier():
 				# self.param_IO('HV*',1)  <--- this uses the factory default value (HV = 1400 V)
 				self.set_multiplier_hv(self.get_multiplier_default_hv())
-				# time.sleep(0.05)
-				# self.ser.flushInput()
 
 			else:
 				self.warning ('RGA has no electron multiplier installed!')
@@ -1152,11 +1207,12 @@ class rgams_SRS:
 			else:
 				N = 1
 				gt = gate
+			
 			# configure RGA (gate time):
 			self.set_gate_time(gt)
 
-			# make sure serial port buffers are empty:
-			time.sleep(0.02) # wait a bit to make sure that any ongoing data transfer to the RGA serial buffers is done
+			# lock serial port, make sure serial port buffers are empty:
+			self.get_serial_lock() # wait until serial port is available, then lock it for access
 			self.ser.flushOutput()
 			self.ser.flushInput()
 
@@ -1180,10 +1236,13 @@ class rgams_SRS:
 				
 				v = v + u
 			
+			# release lock on serial port:
+			self.release_serial_lock()
+
 			v = v/N
 			val = v * 1E-16 # multiply by 1E-16 to convert to Amperes
 			unit = 'A'
-		
+					
 		det = self.get_detector()
 		
 		if not ( f == 'nofile' ):
@@ -1258,7 +1317,8 @@ class rgams_SRS:
 			# configure RGA (gate time):
 			self.set_gate_time(gt)
 
-			# make sure serial port buffers are empty:
+			# lock serial port, make sure serial port buffers are empty:
+			self.get_serial_lock() # wait until serial port is available, then lock it for access
 			self.ser.flushOutput()
 			self.ser.flushInput()
 
@@ -1287,6 +1347,9 @@ class rgams_SRS:
 				
 				v = v + u
 
+			# release lock on serial port:
+			self.release_serial_lock()
+			
 			v = v/N
 			val = v * 1E-16 # multiply by 1E-16 to convert to Amperes
 			unit = 'A'
@@ -1363,6 +1426,9 @@ class rgams_SRS:
 
 		N = int(self.param_IO('AP?',1)) # number of data points in the scan
 
+		# wait until serial port is available, then lock it for access
+		self.get_serial_lock()
+
 		# start the scan:
 		self.ser.write('SC1\r\n'.encode('utf-8'))
 
@@ -1401,6 +1467,9 @@ class rgams_SRS:
 
 				# prepare for next value:
 				k = k + 1
+
+		# release lock on serial port
+		self.release_serial_lock()
 
 		# get time stamp after scan
 		t2 = misc.now_UNIX()
@@ -1454,6 +1523,9 @@ class rgams_SRS:
 			if duration > 0:
 				self.log('Starting degas procedure...')
 
+				# wait until serial port is available, then lock it for access
+				self.get_serial_lock()
+
 				# send degassing command:
 				cmd = 'DG'+str(duration)+'\r\n'
 				self.ser.write(cmd.encode('utf-8'))
@@ -1479,6 +1551,9 @@ class rgams_SRS:
 					self.log('...degassing completed without error.')
 				else:
 					self.warning ('Degassing completed with error byte: ' + str(u) )
+
+				# release lock on serial port
+				self.release_serial_lock()
 
 
 
