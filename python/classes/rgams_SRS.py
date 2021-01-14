@@ -510,9 +510,53 @@ class rgams_SRS:
 			
 	
 	########################################################################################################
-	
-	
 
+
+	
+	def electron_energy_min(self):
+		'''
+		val = rgams_SRS.electron_energy_min()
+		
+		Return lowest electron energy value supported by the MS.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: min. supported mz value (int)
+		'''
+
+		# lowest value for SRS RGA:
+		return 25
+
+			
+	
+	########################################################################################################
+
+
+	
+	def electron_energy_max(self):
+		'''
+		val = rgams_SRS.electron_energy_max()
+		
+		Return highest electron energy value supported by the MS.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		val: max. supported mz value (int)
+		'''
+
+		# highest value for SRS RGA:
+		return 105
+
+			
+	
+	########################################################################################################
+
+
+	
 	def set_electron_energy(self,val):
 		'''
 		rgams_SRS.set_electron_energy(val)
@@ -526,6 +570,15 @@ class rgams_SRS:
 		(none)
 		'''
 		
+		maxval = self.electron_energy_max()
+		minval = self.electron_energy_min()
+		if val > maxval:
+			self.warning ('EE parameter cannot be higher than ' + str(minval) + '. Using EE = ' + str(maxval) + '...')
+			val = maxval
+		if val < minval:
+			self.warning ('EE parameter cannot be less than ' + str(minval) + '. Using EE = ' + str(minval) + '...')
+			val = minval
+
 		# send command to serial port:
 		self.param_IO('EE' + str(val),1)
 
