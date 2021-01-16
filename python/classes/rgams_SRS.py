@@ -527,7 +527,7 @@ class rgams_SRS:
 		'''
 
 		# lowest value for SRS RGA:
-		return 25
+		return 25.0
 
 			
 	
@@ -549,7 +549,7 @@ class rgams_SRS:
 		'''
 
 		# highest value for SRS RGA:
-		return 105
+		return 105.0
 
 			
 	
@@ -644,7 +644,7 @@ class rgams_SRS:
 		'''
 		
 		# send command to serial port:
-		ans = self.param_IO('EE?',1)
+		ans = float(self.param_IO('EE?',1))
 		return ans
 
 
@@ -692,10 +692,10 @@ class rgams_SRS:
 		# check if CEM option is installed:
 		if self.has_multiplier():
 			# send command to serial port:
-			ans = self.param_IO('HV?',1)
+			ans = float(self.param_IO('HV?',1))
 		else:
 			self.warning ('Cannot get multiplier (CEM) high voltage, because CEM option is not installed.')
-			ans = ''
+			ans = None
 
 		return ans
 		
@@ -875,7 +875,11 @@ class rgams_SRS:
 		'''
 
 		if hasattr(self, '_hasmulti') == 0: # never asked for multiplier before
-			self._hasmulti = self.param_IO('MO?',1) # remember for next time
+			u = self.param_IO('MO?',1)
+			if u:
+				self._hasmulti = 1
+			else:
+				self._hasmulti = 0
 		return self._hasmulti
 
 	
@@ -1010,7 +1014,7 @@ class rgams_SRS:
 		'''
 
 		if hasattr(self, '_noisefloor') == 0: # never asked for noisefloor before
-			self._noisefloor = self.param_IO('NF?',1) # get current NF value
+			self._noisefloor = float( self.param_IO('NF?',1) ) # get current NF value
 			
 		return self._noisefloor
 
@@ -1926,8 +1930,7 @@ class rgams_SRS:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
 
-		u = self.param_IO('RI?',1)
-		x = float(u)
+		x = float(self.param_IO('RI?',1))
 		
 		if ( x < -86.0 ) or ( x > 86.0 ) :
 			error ('Could not determine current RI setting, or RI value returned was out of bounds (-86V...+86V)')
@@ -1955,8 +1958,8 @@ class rgams_SRS:
 		NOTE:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
-		u = self.param_IO('RS?',1)
-		x = float(u)
+
+		x = float(self.param_IO('RS?',1))
 
 		if ( x < 600.0 ) or ( x > 1600.0 ) :
 			error ('Could not determine current RS setting, or RS value returned was out of bounds (600V...1600V)')
