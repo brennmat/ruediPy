@@ -2496,6 +2496,9 @@ class rgams_SRS:
 				self.warning(msg)
 				status += msg + '\n'
 		
+		# remove newline at end:
+		status = status.rstrip()
+		
 		if stdout:
 			print(status)
 			

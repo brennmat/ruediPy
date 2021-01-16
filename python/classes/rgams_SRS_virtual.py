@@ -215,7 +215,10 @@ class rgams_SRS_virtual(rgams_SRS):
 		status += '      RI = ' + str(self.get_RI()) + ' mV (RF output at 0 amu\n'
 		status += '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu\n'
 		status += '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at m/z = 0\n'
-		status += '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter for m/z > 0\n'
+		status += '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter for m/z > 0'
+		
+		# fake some time that would be needed to talk the the MS:
+		time.sleep(1.5)
 		
 		if stdout:
 			print(status)
