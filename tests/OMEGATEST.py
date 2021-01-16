@@ -45,7 +45,7 @@ import time
 from classes.pressuresensor_OMEGA   import pressuresensor_OMEGA
 from classes.datafile               import datafile
 
-PSENS = pressuresensor_OMEGA ( serialport = '/dev/serial/by-id/usb-OMEGA_Engineering_USBPX2_495514-if00-port0' , label = 'TOTALPRESSURE' )
+PSENS = pressuresensor_OMEGA ( serialport = '/dev/serial/by-id/usb-Omega_Engineering_USBPX2_521894-if00-port0' , label = 'TOTALPRESSURE' )
 
 # for Mac OS X:
 # PSENS = pressuresensor_OMEGA ( serialport = '/dev/cu.usbserial-487740' , label = 'TOTALPRESSURE' )
