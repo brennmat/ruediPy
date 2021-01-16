@@ -184,37 +184,43 @@ class rgams_SRS_virtual(rgams_SRS):
 	########################################################################################################
 	
 	
-	def print_status(self):
+	def print_status(self, stdout = True):
 		'''
-		rgams_SRS.print_status()
+		rgams_SRS.print_status(stdout = True)
 
 		Print status of the RGA head.
 
 		INPUT:
-		(none)
+		stdout: flag to control output to STDOUT (default: stdout = True)
 
 		OUTPUT:
-		(none)
+		status: string containing status information
 		'''
-
-		print ( 'SRS RGA status:' )
-		print ( '   MS max m/z range: ' + str(self.mz_max()) )
-		print ( '   Ionizer electron energy: ' + str(self.get_electron_energy()) + ' eV' )
-		print ( '   Electron emission current: ' + str(self.get_electron_emission()) + ' mA' )
+		
+		
+		status  = 'SRS RGA status:\n'
+		status += '   MS max m/z range: ' + str(self.mz_max()) + '\n'
+		status += '   Ionizer electron energy: ' + str(self.get_electron_energy()) + ' eV\n'
+		status += '   Electron emission current: ' + str(self.get_electron_emission()) + ' mA\n'
 		if self.has_multiplier():
-			print ( '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)' )
+			status += '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)\n'
 			det = self.get_detector()
 			if det == 'M':
 				det = det + ' (bias voltage = ' + self.get_multiplier_hv() + ' V)'
-			print ( '   Currently active detector: ' + det )
+			status += '   Currently active detector: ' + det + '\n'
 
 		else:
-			print ( '   MS does not have electron multiplier installed (Faraday only).' )
-		print ( '   Current mz-tuning:' )
-		print ( '      RI = ' + str(self.get_RI()) + ' mV (RF output at 0 amu)' )
-		print ( '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu)' )
-		print ( '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at m/z = 0)' )
-		print ( '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter for m/z > 0)' )
+			status += '   MS does not have electron multiplier installed (Faraday only).\n'
+		status += '   Current mz-tuning:\n'
+		status += '      RI = ' + str(self.get_RI()) + ' mV (RF output at 0 amu\n'
+		status += '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu\n'
+		status += '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at m/z = 0\n'
+		status += '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter for m/z > 0\n'
+		
+		if stdout:
+			print(status)
+		
+		return status
 		
 
 	########################################################################################################

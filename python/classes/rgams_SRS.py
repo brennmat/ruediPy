@@ -2360,47 +2360,46 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def print_status(self):
+	def print_status(self, stdout = True):
 		'''
-		rgams_SRS.print_status()
+		rgams_SRS.print_status(stdout = True)
 
 		Print status of the RGA head.
 
 		INPUT:
-		(none)
+		stdout: flag to control output to STDOUT (default: stdout = True)
 
 		OUTPUT:
-		(none)
+		status: string containing status information
 		'''
 
-		print ( 'SRS RGA status:' )
-		print ( '   MS max m/z range: ' + str(self.mz_max()) )
-		print ( '   Ionizer electron energy: ' + str(self.get_electron_energy()) + ' eV' )
-		print ( '   Electron emission current: ' + str(self.get_electron_emission()) + ' mA' )
+		status  = 'SRS RGA status:\n'
+		status += '   MS max m/z range: ' + str(self.mz_max()) + '\n'
+		status += '   Ionizer electron energy: ' + str(self.get_electron_energy()) + ' eV\n'
+		status += '   Electron emission current: ' + str(self.get_electron_emission()) + ' mA\n'
 		if self.has_multiplier():
-			print ( '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)' )
+			status += '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)\n'
 			det = self.get_detector()
 			if det == 'M':
 				det = det + ' (bias voltage = ' + self.get_multiplier_hv() + ' V)'
-			print ( '   Currently active detector: ' + det )
+			status += '   Currently active detector: ' + det + '\n'
 
 		else:
-			print ( '   MS does not have electron multiplier installed (Faraday only).' )
-		print ( '   Current mz-tuning:' )
-		print ( '      RI = ' + str(self.get_RI()) + ' mV (RF output at 0 amu)' )
-		print ( '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu)' )
-		print ( '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at m/z = 0)' )
-		print ( '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter for m/z > 0)' )
+			status += '   MS does not have electron multiplier installed (Faraday only).\n'
+		status += '   Current mz-tuning:\n'
+		status += '      RI = ' + str(self.get_RI()) + ' mV (RF output at 0 amu)\n'
+		status += '      RS = ' + str(self.get_RS()) + ' mV (RF output at 128 amu)\n'
+		status += '      DI = ' + str(self.get_DI()) + ' bit units (Peak width parameter at m/z = 0)\n'
+		status += '      DS = ' + str(self.get_DS()) + ' bit/amu units (Peak width parameter for m/z > 0)\n'
 
 		# check for MS/RGA errors:
-		status = int(self.param_IO('ER?',1))
-		print ('\nChecking SRS-RGA...')
-		if status == 0:
-			print ('...no errors found.')
+		errstatus = int(self.param_IO('ER?',1))
+		if errstatus == 0:
+			status += 'Error status: no errors found.\n'
 		else:
 			# Found an error with the MS/RGA! Determine and show error information
-
-			if status & 0b00000001:
+			status += 'Error status:\n'
+			if errstatus & 0b00000001:
 			# RS232 communication problem
 				err = int(self.param_IO('EC?',1))
 				msg = 'unknown error'
@@ -2418,9 +2417,11 @@ class rgams_SRS:
 					msg = 'jumper protection violation'
 				if err & 0b01000000:
 					msg = 'parameter conflict'
-				self.warning('RGA communications error: ' + msg + '.')
+				msg = 'RGA communications error: ' + msg + '.'
+				self.warning(msg)
+				status += msg + '\n'
 
-			if status & 0b00000010:
+			if errstatus & 0b00000010:
 			# Filament problem
 				err = int(self.param_IO('EF?',1))
 				msg = 'unknown error'
@@ -2432,17 +2433,21 @@ class rgams_SRS:
 					msg = 'unable to set the requested emission current'
 				if err & 0b10000000:
 					msg = 'no filament detected'
-				self.warning('RGA filament error: ' + msg + '.')
+				msg = 'RGA filament error: ' + msg + '.'
+				self.warning(msg)
+				status += msg + '\n'
 
-			if status & 0b00001000:
+			if errstatus & 0b00001000:
 			# CEM problem
 				err = int(self.param_IO('EM?',1))
 				msg = 'unknown error'
 				if err & 0b10000000:
 					msg = 'no electron multiplier option installed'
-				self.warning('RGA electron multiplier error: ' + msg + '.')
+				msg = 'RGA electron multiplier error: ' + msg + '.'
+				self.warning(msg)
+				status += msg + '\n'
 
-			if status & 0b00010000:
+			if errstatus & 0b00010000:
 			# Quadrupole filter problem
 				err = int(self.param_IO('EQ?',1))
 				msg = 'unknown error'
@@ -2452,9 +2457,11 @@ class rgams_SRS:
 					msg = 'primary current exceeds 2.0A'
 				if err & 0b10000000:
 					msg = 'RF_CT exceeds (V_EXT-2V) at M_MAX'
-				self.warning('RGA quadrupole mass filter error: ' + msg + '.')
+				msg = 'RGA quadrupole mass filter error: ' + msg + '.'
+				self.warning(msg)
+				status += msg + '\n'
 
-			if status & 0b00100000:
+			if errstatus & 0b00100000:
 			# Electrometer problem
 				err = int(self.param_IO('ED?',1))
 				msg = 'unknown error'
@@ -2470,9 +2477,11 @@ class rgams_SRS:
 					msg = 'detect fails to read +5nA input current'
 				if err & 0b10000000:
 					msg = 'ADC16 test failure'
-				self.warning('RGA electrometer error: ' + msg + '.')
+				msg = 'RGA electrometer error: ' + msg + '.'
+				self.warning(msg)
+				status += msg + '\n'
 
-			if status & 0b01000000:
+			if errstatus & 0b01000000:
 			# External PSU problem
 				err = int(self.param_IO('EP?',1))
 				msg = 'unknown error'
@@ -2480,9 +2489,14 @@ class rgams_SRS:
 					msg = 'external 24V PS voltage <22V'
 				if err & 0b10000000:
 					msg = 'external 24V PS voltage >26V'
-				self.warning('RGA 24V external PSU error: ' + msg + '.')
-
-		print ('')
+				msg = 'RGA 24V external PSU error: ' + msg + '.'
+				self.warning(msg)
+				status += msg + '\n'
+		
+		if stdout:
+			print(status)
+			
+		return status
 
 
 
