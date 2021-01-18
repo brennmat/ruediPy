@@ -2398,10 +2398,10 @@ class rgams_SRS:
 		# check for MS/RGA errors:
 		errstatus = int(self.param_IO('ER?',1))
 		if errstatus == 0:
-			status += 'Error status: no errors found.\n'
+			status += '   Error status: no errors found.\n'
 		else:
 			# Found an error with the MS/RGA! Determine and show error information
-			status += 'Error status:\n'
+			status += '   Error status:\n'
 			if errstatus & 0b00000001:
 			# RS232 communication problem
 				err = int(self.param_IO('EC?',1))
@@ -2420,7 +2420,7 @@ class rgams_SRS:
 					msg = 'jumper protection violation'
 				if err & 0b01000000:
 					msg = 'parameter conflict'
-				msg = 'RGA communications error: ' + msg + '.'
+				msg = '      RGA communications error: ' + msg + '.'
 				self.warning(msg)
 				status += msg + '\n'
 
@@ -2436,7 +2436,7 @@ class rgams_SRS:
 					msg = 'unable to set the requested emission current'
 				if err & 0b10000000:
 					msg = 'no filament detected'
-				msg = 'RGA filament error: ' + msg + '.'
+				msg = '      RGA filament error: ' + msg + '.'
 				self.warning(msg)
 				status += msg + '\n'
 
@@ -2446,7 +2446,7 @@ class rgams_SRS:
 				msg = 'unknown error'
 				if err & 0b10000000:
 					msg = 'no electron multiplier option installed'
-				msg = 'RGA electron multiplier error: ' + msg + '.'
+				msg = '      RGA electron multiplier error: ' + msg + '.'
 				self.warning(msg)
 				status += msg + '\n'
 
@@ -2460,7 +2460,7 @@ class rgams_SRS:
 					msg = 'primary current exceeds 2.0A'
 				if err & 0b10000000:
 					msg = 'RF_CT exceeds (V_EXT-2V) at M_MAX'
-				msg = 'RGA quadrupole mass filter error: ' + msg + '.'
+				msg = '      RGA quadrupole mass filter error: ' + msg + '.'
 				self.warning(msg)
 				status += msg + '\n'
 
@@ -2468,7 +2468,8 @@ class rgams_SRS:
 			# Electrometer problem
 				err = int(self.param_IO('ED?',1))
 				msg = 'unknown error'
-				if err & 0b00000010:
+				if True:
+				# if err & 0b00000010:
 					msg = 'op-amp input offset voltage out of range'
 				if err & 0b00001000:
 					msg = 'compensate fails to read -5nA input current'
@@ -2480,7 +2481,7 @@ class rgams_SRS:
 					msg = 'detect fails to read +5nA input current'
 				if err & 0b10000000:
 					msg = 'ADC16 test failure'
-				msg = 'RGA electrometer error: ' + msg + '.'
+				msg = '      RGA electrometer error: ' + msg + '.'
 				self.warning(msg)
 				status += msg + '\n'
 
@@ -2492,7 +2493,7 @@ class rgams_SRS:
 					msg = 'external 24V PS voltage <22V'
 				if err & 0b10000000:
 					msg = 'external 24V PS voltage >26V'
-				msg = 'RGA 24V external PSU error: ' + msg + '.'
+				msg = '      RGA 24V external PSU error: ' + msg + '.'
 				self.warning(msg)
 				status += msg + '\n'
 		
