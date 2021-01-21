@@ -1111,7 +1111,7 @@ class rgams_SRS_virtual(rgams_SRS):
 			error ('DI value out of allowed range (0...255 bit units)')
 
 		self._DI = x
-		self.log('Set DI value to ' + x + ' bit units' )
+		self.log('Set DI value to ' + str(x) + ' bit units' )
 
 
 
@@ -1136,7 +1136,7 @@ class rgams_SRS_virtual(rgams_SRS):
 		'''
 
 		self._DS = x
-		self.log('Set DS value to ' + x + ' bit/amu' )
+		self.log('Set DS value to ' + str(x) + ' bit/amu' )
 
 
 
