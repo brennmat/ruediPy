@@ -90,7 +90,7 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = False):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , scan_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = False):
 
 		'''
 		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
@@ -107,6 +107,7 @@ class rgams_SRS:
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches). 
 		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
 		peakbuffer_plot_yscale (optional) = y-axis scaling for peakbuffer plot (default: 'linear', use 'log' for log scaling)
+		scan_plot_yscale (optional) = y-axis scaling for scan plot (default: 'linear', use 'log' for log scaling)
 		has_plot_window (optional): flag to choose if a plot window should be opened for the rgams_SRS object (default: has_plot_window = True)
 		has_external_plot_window (optional) = flag to indicate if external plot window is used instead of the "built-in" window. If set to True, this will override the 'has_plot_window' flag (default: has_external_plot_window = False).
 
@@ -181,6 +182,9 @@ class rgams_SRS:
 
 			# y-axis scaling for peakbuffer plot:
 			self._peakbufferplot_yscale = peakbuffer_plot_yscale
+
+			# y-axis scaling for scan plot:
+			self._scan_yscale = scan_plot_yscale
 			
 			# mz values and colors (defaults):
 			self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
@@ -224,7 +228,8 @@ class rgams_SRS:
 				self._scan_ax.set_title('SCAN (' + self.label() + ')',loc="center")
 				plt.xlabel('mz')
 				plt.ylabel('Intensity')
-
+				self.set_scan_scale(self._scan_yscale)
+				
 				# get some space in between panels to avoid overlapping labels / titles
 				self._fig.tight_layout(pad=4.0)
 
@@ -386,6 +391,58 @@ class rgams_SRS:
 			from matplotlib.ticker import FuncFormatter
 			yformatter = FuncFormatter(lambda y, _: '{:.1%}'.format(y))
 			self._peakbuffer_ax.yaxis.set_major_formatter(yformatter)
+
+	
+	########################################################################################################
+
+	
+	def get_scan_scale(self):
+		'''
+		s = rgams_SRS.get_scan_scale(self)
+		
+		Get scale of y-axis in scan plot (linear or log).
+
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		s: scale (string, either 'linear' or 'log', default: scale = 'linear')
+		'''
+		
+		if self._scan_yscale.upper() == 'LOG':
+			return 'log'
+		else:
+			return 'linear'
+
+
+	########################################################################################################
+
+	
+	def set_scan_scale(self,scale='linear'):
+		'''
+		rgams_SRS.set_scan_scale(scale)
+		
+		Set scale of y-axis in scan plot (linear or log).
+
+		INPUT:
+		scale: scale (string, either 'linear' or 'log, default: scale = 'linear')
+		
+		OUTPUT:
+		(none)
+		'''
+		
+		# change scale
+		scale = scale.upper()
+		if scale == 'LINEAR':
+			self._scan_yscale = 'linear'
+		elif scale == 'LOG':
+			self._scan_yscale = 'log'
+		else:
+			self.warning('Unknown scan sccale: ' + scale )
+
+		if self._has_display:
+			# if plot is not handled by external GUI:
+			self._scan_ax.set_yscale(self._scan_yscale)
 
 	
 	########################################################################################################

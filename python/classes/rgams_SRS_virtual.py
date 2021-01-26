@@ -60,7 +60,7 @@ class rgams_SRS_virtual(rgams_SRS):
 	########################################################################################################
 
 
-	def __init__( self , serialport=None , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = False):
+	def __init__( self , serialport=None , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , scan_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = False):
 
 		'''
 		rgams_SRS_virtual.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
@@ -77,6 +77,8 @@ class rgams_SRS_virtual(rgams_SRS):
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches). 
 		peakbuffer_plot_min, peakbuffer_plot_max (optional): limits of y-axis range in peakbuffer plot (default: peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2)
 		peakbuffer_plot_yscale (optional) = y-axis scaling for peakbuffer plot (default: 'linear', use 'log' for log scaling)
+		scan_plot_yscale (optional) = y-axis scaling for scan plot (default: 'linear', use 'log' for log scaling)
+
 		has_plot_window (optional): flag to choose if a plot window should be opened for the rgams_SRS object (default: has_plot_window = True)
 		has_external_plot_window (optional) = flag to indicate if external plot window is used instead of the "built-in" window. If set to True, this will override the 'has_plot_window' flag (default: has_external_plot_window = False).
 
@@ -129,6 +131,9 @@ class rgams_SRS_virtual(rgams_SRS):
 
 		# y-axis scaling for peakbuffer plot:
 		self._peakbufferplot_yscale = peakbuffer_plot_yscale			
+
+		# y-axis scaling for scan plot:
+		self._scan_yscale = scan_plot_yscale
 
 		# mz values and colors (defaults):
 		self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
