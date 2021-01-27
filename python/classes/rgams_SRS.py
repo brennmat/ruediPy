@@ -2441,7 +2441,7 @@ class rgams_SRS:
 			status += '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)\n'
 			det = self.get_detector()
 			if det == 'M':
-				det = det + ' (bias voltage = ' + self.get_multiplier_hv() + ' V)'
+				det = det + ' (bias voltage = ' + str(self.get_multiplier_hv()) + ' V)'
 			status += '   Currently active detector: ' + det + '\n'
 
 		else:

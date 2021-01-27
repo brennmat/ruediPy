@@ -70,6 +70,9 @@ while time.time() < T0:
 	peak,unit = MS.peak(28,1,'nofile')
 	MS.plot_peakbuffer()
 
+
+# 	MS.set_DI(114)
+
 # tune peak positions:
 print ('Tuning peak positions...')
 ## MS.set_RI(-9.7) # set start value
