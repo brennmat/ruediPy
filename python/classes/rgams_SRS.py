@@ -1095,10 +1095,10 @@ class rgams_SRS:
 		
 		NF = int(NF) # make sure NF is an integer value
 		if NF > 7:
-			self.warning ('NF parameter must be 7 or less. Using NF = 7...')
+			self.warning ('NF parameter must not be higher than 7. Using NF = 7...')
 			NF = 7
 		elif NF < 0:
-			self.warning ('NF parameter must be 0 or higher. Using NF = 0...')
+			self.warning ('NF parameter must not be less than 0. Using NF = 0...')
 			NF = 0
 		
 		if NF != self.get_noise_floor(): # only change NF setting if necessary
@@ -1148,12 +1148,14 @@ class rgams_SRS:
 		'''
 		
 		gt = numpy.array( self.supported_gate_times() )
-		NF = (numpy.abs(gt-gate)).argmin() # index to closest gate time
 		if gate > gt.max():
 			self.warning('gate time cannot be more than ' + str(gt.max()) +'s! Using gate = ' + str(gt.max()) +'s...')
+			gate = gt.max()
 		elif gate < gt.min():
 			self.warning('gate time cannot be less than ' + str(gt.min()) +'s! Using gate = ' + str(gt.min()) +'s...')
-			
+			gate = gt.min()
+	
+		NF = (numpy.abs(gt-gate)).argmin() # index to closest gate time
 		self.set_noise_floor(NF)
 
 	
@@ -1195,9 +1197,7 @@ class rgams_SRS:
 		self._peakbuffer_lastupdate_timestamp = misc.now_UNIX()
 
 
-
 	########################################################################################################
-
 
 
 	def peakbuffer_clear(self):
@@ -1221,8 +1221,7 @@ class rgams_SRS:
 		self._peakbuffer_lastupdate_timestamp = misc.now_UNIX()
 
 
-########################################################################################################
-
+	########################################################################################################
 
 
 	def peakbuffer_set_length(self,N):
@@ -1767,7 +1766,7 @@ class rgams_SRS:
 		for i in range(N):
 			mmz.append(peaks[i][0])
 		if len(list(set(mmz))) < 2:
-			error ('Need at least two distinct mz values to tune peak positions!')
+			self.warning ('Need at least two distinct mz values to tune peak positions!')
 
 		ii = 1 # first iteration
 		tuning_successful = False
@@ -1925,8 +1924,12 @@ class rgams_SRS:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
 
-		if (x < -86.0) or ( x > 86.0):
-			error ('RI value out of allowed range (-86...+86V)')
+		if x > 86:
+			self.warning ('RI parameter must not be higher than 86. Using RI = 86...')
+			x = 86
+		elif x < 86:
+			self.warning ('RI parameter must not be lower than -86. Using RI = -86...')
+			x = -86
 		if x >= 0:
 			x = '+' + '{:.4f}'.format(x)
 		else:
@@ -1957,8 +1960,12 @@ class rgams_SRS:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
 
-		if (x < 600.0) or ( x > 1600.0):
-			error ('RS value out of allowed range (600...+1600V)')
+		if x > 1600:
+			self.warning ('RS parameter must not be higher than 1600 V. Using RS = 1600 V...')
+			x = 1600
+		elif x < 600:
+			self.warning ('RS parameter must not be lower than 600 V. Using RS = 600 V...')
+			x = 600
 
 		x = '{:.4f}'.format(x)
 
@@ -1990,7 +1997,7 @@ class rgams_SRS:
 		x = float(self.param_IO('RI?',1))
 		
 		if ( x < -86.0 ) or ( x > 86.0 ) :
-			error ('Could not determine current RI setting, or RI value returned was out of bounds (-86V...+86V)')
+			self.warning ('Could not determine current RI setting, or RI value returned was out of bounds (-86V...+86V)')
 
 		return x
 
@@ -2019,7 +2026,7 @@ class rgams_SRS:
 		x = float(self.param_IO('RS?',1))
 
 		if ( x < 600.0 ) or ( x > 1600.0 ) :
-			error ('Could not determine current RS setting, or RS value returned was out of bounds (600V...1600V)')
+			self.warning ('Could not determine current RS setting, or RS value returned was out of bounds (600V...1600V)')
 
 		return x
 
@@ -2048,7 +2055,7 @@ class rgams_SRS:
 		x = float(self.param_IO('DI?',1))
 
 		if ( x < 0 ) or ( x > 255 ) :
-			error ('Could not determine current DI setting, or DI value returned was out of bounds (0...255)')
+			self.warning ('Could not determine current DI setting, or DI value returned was out of bounds (0...255)')
 
 		return x
 
@@ -2077,7 +2084,7 @@ class rgams_SRS:
 		x = float(self.param_IO('DS?',1))
 
 		if ( x < -2.55 ) or ( x > 2.55 ) :
-			error ('Could not determine current DS setting, or DS value returned was out of bounds (-2.55...2.55)')
+			self.warning ('Could not determine current DS setting, or DS value returned was out of bounds (-2.55...2.55)')
 
 		return x
 
@@ -2102,8 +2109,12 @@ class rgams_SRS:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
 
-		if (x < 0.0) or ( x > 255.0):
-			error ('DI value out of allowed range (0...255 bit units)')
+		if x > 255:
+			self.warning ('DI parameter must not be higher than 255. Using DI = 255...')
+			x = 255
+		elif x < 0:
+			self.warning ('DI parameter must not be lower than 0. Using DI = 0...')
+			x = 0
 
 		x = '{:.4f}'.format(x)
 
@@ -2132,8 +2143,12 @@ class rgams_SRS:
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
 
-		if (x < -2.55) or ( x > 2.55):
-			error ('DS value out of allowed range (-2.55...2.55 bit/amu units)')
+		if x > 2.55:
+			self.warning ('DS parameter must not be higher than 2.55 bit/amu. Using DS = 2.55 bit/amu...')
+			x = 2.55
+		elif x < -2.55:
+			self.warning ('DS parameter must not be lower than -2.55 bit/amu. Using DS = -2.55 bit/amu...')
+			x = -2.55
 
 		x = '{:.4f}'.format(x)
 

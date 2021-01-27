@@ -965,8 +965,12 @@ class rgams_SRS_virtual(rgams_SRS):
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
 
-		if (x < -86.0) or ( x > 86.0):
-			error ('RI value out of allowed range (-86...+86V)')
+		if x > 86:
+			self.warning ('RI parameter must not be higher than 86. Using RI = 86...')
+			x = 86
+		elif x < -86:
+			self.warning ('RI parameter must not be lower than -86. Using RI = -86...')
+			x = -86
 		self._RI = x
 
 
@@ -991,8 +995,12 @@ class rgams_SRS_virtual(rgams_SRS):
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
 
-		if (x < 600.0) or ( x > 1600.0):
-			error ('RS value out of allowed range (600...+1600V)')
+		if x > 1600:
+			self.warning ('RS parameter must not be higher than 1600 V. Using RS = 1600 V...')
+			x = 1600
+		elif x < 600:
+			self.warning ('RS parameter must not be lower than 600 V. Using RS = 600 V...')
+			x = 600
 		self._RS = x
 
 
@@ -1112,8 +1120,12 @@ class rgams_SRS_virtual(rgams_SRS):
 		See also the SRS RGA manual, chapter 7, section "Peak Tuning Procedure"
 		'''
 
-		if (x < 0.0) or ( x > 255.0):
-			error ('DI value out of allowed range (0...255 bit units)')
+		if x > 255:
+			self.warning ('DI parameter must not be higher than 255 V. Using DI = 255...')
+			x = 255
+		elif x < 0:
+			self.warning ('DI parameter must not be lower than 0. Using DI = 0...')
+			x = 0
 
 		self._DI = x
 		self.log('Set DI value to ' + str(x) + ' bit units' )
