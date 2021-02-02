@@ -327,8 +327,10 @@ class pressuresensor_OMEGA:
 					self.pressbuffer_add(t,p,unit)
 
 			except ValueError as e:
+				self.release_serial_lock()
 				self.warning( e )
 			except:
+				self.release_serial_lock()
 				self.warning( 'An unknown error occured while reading the OMEGA pressure sensor!' )
 
 		# write data to datafile

@@ -287,6 +287,7 @@ class temperaturesensor_MAXIM:
 				if add_to_tempbuffer:
 					self.tempbuffer_add(t,temp,unit)
 			except:
+				self.release_UART_lock()
 				self.warning( 'could not read sensor!' )
 
 		# write data to datafile

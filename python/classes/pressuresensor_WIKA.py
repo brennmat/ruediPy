@@ -379,6 +379,7 @@ class pressuresensor_WIKA:
 					self.pressbuffer_add(t,p,unit)
 
 			except:
+				self.release_serial_lock()
 				self.warning( 'could not read sensor!' )
 
 		# write data to datafile
