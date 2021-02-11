@@ -1927,7 +1927,7 @@ class rgams_SRS:
 		if x > 86:
 			self.warning ('RI parameter must not be higher than 86. Using RI = 86...')
 			x = 86
-		elif x < 86:
+		elif x < -86:
 			self.warning ('RI parameter must not be lower than -86. Using RI = -86...')
 			x = -86
 		if x >= 0:
