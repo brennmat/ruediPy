@@ -75,7 +75,7 @@ class datafile:
 		# check for tilde in pth (as shortcut for home directory), and replace with full path
 		if pth[0] == '~':
 			pth = pth.replace("~", expanduser("~"))
-				
+		
 		# check if path exists and is accessible for writing:		
 		if not os.access(pth, os.W_OK):
 			self.warning ('path \'' + pth + '\' is not accessible for writing!')
@@ -85,7 +85,7 @@ class datafile:
 		
 		# init empty file ID:
 		self._fid = -1
-
+		
 	
 	########################################################################################################
 	
@@ -142,6 +142,28 @@ class datafile:
 			"""
 			
 			return self._basepath
+	
+	
+	########################################################################################################
+	
+	
+	def basepath_accessible(self):
+			"""
+			access = datafile.basepath_accessible()
+			
+			Return bool indicating if base path is accessible for writing
+			
+			INPUT:
+			(none)
+			
+			OUTPUT:
+			access: accessible flag (bool)
+			"""
+			
+			if os.access(self.basepath(), os.W_OK):
+				return True
+			else:
+				return False
 	
 	
 	########################################################################################################
