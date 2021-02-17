@@ -122,12 +122,12 @@ class selectorvalve_compositeVICI:
 
 		# Error handling:
 		except ValueError as e:
-			print( 'Could not initialise composite selectorvalve:' , e )
-			sys.exit(1)
+			self.warning(( 'Could not initialise composite selectorvalve:' , e )
+			raise sys.exc_info()[1]
 
 		except:
-			print( 'Unexpected error during initialisation of composite selectorvalve:', sys.exc_info()[0] )
-			sys.exit(1)
+			self.warning(( 'Unexpected error during initialisation of composite selectorvalve:', sys.exc_info()[0] )
+			raise sys.exc_info()[1]
 
 	########################################################################################################
 	

@@ -241,11 +241,12 @@ class rgams_SRS:
 
 		except serial.SerialException as e:
 			misc.warnmessage ('Could not establish connection to SRS RGA:' + str(e) )
-			sys.exit(1)
+			raise sys.exc_info()[1]
 
 		except:
 			self.warning('Unexpected error during initialisation of SRS RGA:' + str(sys.exc_info()[0]) )
-			sys.exit(1)
+			raise sys.exc_info()[1]
+			
 
 	########################################################################################################
 	
