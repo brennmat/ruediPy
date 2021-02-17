@@ -238,14 +238,11 @@ class rgams_SRS:
 			
 			print( 'Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
 
+		# Error handling:
+		except Exception as e:
+			self.warning( 'Could not initialise SRS RGA:' + e[0] )			
+			raise e
 
-		except serial.SerialException as e:
-			misc.warnmessage ('Could not establish connection to SRS RGA:' + str(e) )
-			raise sys.exc_info()[1]
-
-		except:
-			self.warning('Unexpected error during initialisation of SRS RGA:' + str(sys.exc_info()[0]) )
-			raise sys.exc_info()[1]
 			
 
 	########################################################################################################

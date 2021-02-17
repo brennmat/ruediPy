@@ -121,13 +121,10 @@ class selectorvalve_compositeVICI:
 			self._lastpos = -1
 
 		# Error handling:
-		except ValueError as e:
-			self.warning(( 'Could not initialise composite selectorvalve:' , e )
-			raise sys.exc_info()[1]
+		except Exception as e:
+			self.warning( 'Could not initialise composite selectorvalve:' + e[0] )			
+			raise e
 
-		except:
-			self.warning(( 'Unexpected error during initialisation of composite selectorvalve:', sys.exc_info()[0] )
-			raise sys.exc_info()[1]
 
 	########################################################################################################
 	

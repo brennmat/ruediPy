@@ -172,14 +172,10 @@ class selectorvalve_VICI:
 				u = u + ', status file = ' + p		
 			self.log( u )
 			
-
-		except serial.SerialException as e:
-			self.warning( 'Could not establish connection to VICI selectorvalve: ' + str(e) )
-			raise sys.exc_info()[1]
-
-		except:
-			self.warning( 'Unexpected error during initialisation of VICI selectorvalve: ' + str(sys.exc_info()[0]) )
-			raise sys.exc_info()[1]
+		# Error handling:
+		except Exception as e:
+			self.warning( 'Could not initialise VICI selectorvalve:' + e[0] )			
+			raise e
 
 
 
