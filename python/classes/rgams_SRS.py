@@ -116,6 +116,9 @@ class rgams_SRS:
 		'''
 
 		try:
+
+			# object name label (do this first, so the label/name is set for warning or log messages or exception handling):
+			self._label = label
 		
 			# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
 			# use exclusive access mode if possible (available with serial module version 3.3 and later)
@@ -151,11 +154,7 @@ class rgams_SRS:
 			self.ser = ser
 			self._ser_locked = False
 			
-			# object name label:
-			self._label = label
-		
 			# get ID / serial number of SRS RGA:
-						
 			sn = self.param_IO('ID?',1)
 			sn = sn.split('.')
 			self._serial_number = sn[1]
