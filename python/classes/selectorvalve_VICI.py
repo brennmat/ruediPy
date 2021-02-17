@@ -174,13 +174,11 @@ class selectorvalve_VICI:
 			
 		# Error handling:
 		except Exception as e:
-			self.warning( 'Could not initialise VICI selectorvalve:' + e[0] )			
+			self.warning( 'Could not initialise VICI selectorvalve:' + repr(e) )			
 			raise e
 
 
-
 	########################################################################################################
-	
 	
 
 	def get_serial_lock(self):
@@ -282,7 +280,13 @@ class selectorvalve_VICI:
 		label: label / name (string)
 		"""
 		
-		return self._label
+		try:
+			label = self._label
+		except:
+			label = ''
+		pass
+		
+		return label
 
 	
 	########################################################################################################

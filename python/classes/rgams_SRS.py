@@ -240,7 +240,7 @@ class rgams_SRS:
 
 		# Error handling:
 		except Exception as e:
-			self.warning( 'Could not initialise SRS RGA:' + e[0] )			
+			self.warning( 'Could not initialise SRS RGA:' + repr(e) )		
 			raise e
 
 			
@@ -260,8 +260,14 @@ class rgams_SRS:
 		OUTPUT:
 		l: label / name (string)
 		"""
+
+		try:
+			label = self._label
+		except:
+			label = ''
+		pass
 		
-		return self._label
+		return label
 
 	
 	########################################################################################################
@@ -280,7 +286,7 @@ class rgams_SRS:
 		(none)
 		'''
 		
-		misc.warnmessage ('[' + self.label() + '] ' + msg)
+		misc.warnmessage ( '[' + self.label() + '] ' + msg)
 
 	
 	########################################################################################################

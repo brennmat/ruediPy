@@ -122,7 +122,7 @@ class selectorvalve_compositeVICI:
 
 		# Error handling:
 		except Exception as e:
-			self.warning( 'Could not initialise composite selectorvalve:' + e[0] )			
+			self.warning( 'Could not initialise composite selectorvalve:' + repr(e) )			
 			raise e
 
 
