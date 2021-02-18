@@ -66,7 +66,7 @@ if havedisplay: # prepare plotting environment
 		matplotlib.use('TkAgg')
 		import matplotlib.pyplot as plt
 	except:
-		misc.warnmessage ('MAXIM-TEMPERATURE init','Could not set up display environment.')
+		misc.warnmessage ('Could not set up display environment.')
 		havedisplay = False
 
 

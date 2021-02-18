@@ -373,7 +373,7 @@ class misc:
 		g = misc.have_external_gui( )
 		'''
 		
-		return has_gui					
+		return gui_config.have_gui()		
 									
 
 ########################################################################################################
