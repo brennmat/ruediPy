@@ -60,10 +60,10 @@ class rgams_SRS_virtual(rgams_SRS):
 	########################################################################################################
 
 
-	def __init__( self , serialport=None , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , scan_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = False):
+	def __init__( self , serialport=None , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , scan_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = None):
 
 		'''
-		rgams_SRS_virtual.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
+		rgams_SRS_virtual.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , scan_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = None)
 		
 		Initialize virtual mass spectrometer (SRS RGA)
 		
@@ -86,9 +86,15 @@ class rgams_SRS_virtual(rgams_SRS):
 		(none)
 		'''
 
+		# object name label (do this first, so the label/name is set for warning or log messages or exception handling):
+		self._label = label
+			
+		# Check for has_external_plot_window flag:
+		if has_external_plot_window is None:
+			has_external_plot_window = misc.have_external_gui()
+
 		# general parameters:
 		self._serialport = serialport;
-		self._label = label
 		self._serial_number = 123456789
 		self._cem_hv = cem_hv
 		self._tune_default_RI = tune_default_RI

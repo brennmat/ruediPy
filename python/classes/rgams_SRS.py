@@ -90,10 +90,10 @@ class rgams_SRS:
 	########################################################################################################
 
 
-	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , scan_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = False):
+	def __init__( self , serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , scan_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = None):
 
 		'''
-		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 )
+		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , scan_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = None)
 		
 		Initialize mass spectrometer (SRS RGA), configure serial port connection.
 		
@@ -109,7 +109,7 @@ class rgams_SRS:
 		peakbuffer_plot_yscale (optional) = y-axis scaling for peakbuffer plot (default: 'linear', use 'log' for log scaling)
 		scan_plot_yscale (optional) = y-axis scaling for scan plot (default: 'linear', use 'log' for log scaling)
 		has_plot_window (optional): flag to choose if a plot window should be opened for the rgams_SRS object (default: has_plot_window = True)
-		has_external_plot_window (optional) = flag to indicate if external plot window is used instead of the "built-in" window. If set to True, this will override the 'has_plot_window' flag (default: has_external_plot_window = False).
+		has_external_plot_window (optional): flag to indicate if there is a GUI system that handles the plotting of the data buffer on its own. This flag can be set explicitly to True of False, or can use None to ask for automatic 'on the fly' check if the has_external_plot_window = True or False should be used. Default: has_external_plot_window = None
 
 		OUTPUT:
 		(none)
@@ -119,6 +119,10 @@ class rgams_SRS:
 
 			# object name label (do this first, so the label/name is set for warning or log messages or exception handling):
 			self._label = label
+			
+			# Check for has_external_plot_window flag:
+			if has_external_plot_window is None:
+				has_external_plot_window = misc.have_external_gui()
 		
 			# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
 			# use exclusive access mode if possible (available with serial module version 3.3 and later)

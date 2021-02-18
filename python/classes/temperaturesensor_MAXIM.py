@@ -79,9 +79,9 @@ class temperaturesensor_MAXIM:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = False):
+	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None):
 		'''
-		temperaturesensor_MAXIM.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = False )
+		temperaturesensor_MAXIM.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None )
 		
 		Initialize TEMPERATURESENSOR object (MAXIM), configure serial port / 1-wire bus for connection to DS18B20 temperature sensor chip
 		
@@ -92,6 +92,7 @@ class temperaturesensor_MAXIM:
 		plot_title (optional): title string for use in plot window. If plot_title = None, the sensor label is used. Default: label = None
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
+		has_external_plot_window (optional): flag to indicate if there is a GUI system that handles the plotting of the data buffer on its own. This flag can be set explicitly to True of False, or can use None to ask for automatic 'on the fly' check if the has_external_plot_window = True or False should be used. Default: has_external_plot_window = None
 		
 		OUTPUT:
 		(none)
@@ -99,6 +100,11 @@ class temperaturesensor_MAXIM:
 		
 		self._label = label
 		
+		# Check for has_external_plot_window flag:
+		if has_external_plot_window is None:
+				has_external_plot_window = misc.have_external_gui() 
+
+		# Check plot title:
 		if plot_title == None:
 			self._plot_title = self._label
 		else:
