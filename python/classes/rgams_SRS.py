@@ -767,6 +767,25 @@ class rgams_SRS:
 	########################################################################################################
 	
 
+	def set_multiplier_default_hv(self, cem_hv):
+		'''
+		rgams_SRS.set_multiplier_default_hv(cem_hv)
+		
+		Set default value to be used for electron multiplier (CEM) high voltage (bias voltage).
+		
+		INPUT:
+		cem_hv: see __init__
+		
+		OUTPUT:
+		(None)
+		'''
+
+		self._cem_hv = float(cem_hv)
+
+	
+	########################################################################################################
+	
+
 	def get_multiplier_default_hv(self):
 		'''
 		val = rgams_SRS.get_multiplier_default_hv()

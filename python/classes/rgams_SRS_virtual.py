@@ -96,7 +96,7 @@ class rgams_SRS_virtual(rgams_SRS):
 		# general parameters:
 		self._serialport = serialport;
 		self._serial_number = 123456789
-		self._cem_hv = cem_hv
+		self._cem_hv = float(cem_hv)
 		self._tune_default_RI = tune_default_RI
 		self._tune_default_RS = tune_default_RS
 		
@@ -217,7 +217,7 @@ class rgams_SRS_virtual(rgams_SRS):
 			status += '   MS has electron multiplier installed (default bias voltage = ' + str(self.get_multiplier_default_hv()) + ' V)\n'
 			det = self.get_detector()
 			if det == 'M':
-				det = det + ' (bias voltage = ' + self.get_multiplier_hv() + ' V)'
+				det = det + ' (bias voltage = ' + str(self.get_multiplier_hv()) + ' V)'
 			status += '   Currently active detector: ' + det + '\n'
 
 		else:
@@ -294,8 +294,7 @@ class rgams_SRS_virtual(rgams_SRS):
 		
 		# check if CEM option is installed:
 		if self.has_multiplier():
-			# send command to serial port:
-			self._cem_hv = val
+			self._cem_hv = float(val)
 
 		else:
 			self.warning ('Cannot set multiplier (CEM) high voltage, because CEM option is not installed.')
@@ -303,6 +302,26 @@ class rgams_SRS_virtual(rgams_SRS):
 
 	########################################################################################################
 	
+
+	def set_multiplier_default_hv(self, cem_hv):
+		'''
+		rgams_SRS_virtual.set_multiplier_default_hv(cem_hv)
+		
+		Set default value to be used for electron multiplier (CEM) high voltage (bias voltage). THIS FUNCTION DOES NOTHING!
+		
+		INPUT:
+		cem_hv: see __init__
+		
+		OUTPUT:
+		(None)
+		'''
+
+		# do nothing, as self._cem_hv is used differently with the virtual RGA than with the real RGA.
+		pass
+
+	
+	########################################################################################################
+
 
 	def get_multiplier_hv(self):
 		'''
@@ -319,11 +338,10 @@ class rgams_SRS_virtual(rgams_SRS):
 		
 		# check if CEM option is installed:
 		if self.has_multiplier():
-			# send command to serial port:
 			ans = self._cem_hv
 		else:
 			self.warning ('Cannot get multiplier (CEM) high voltage, because CEM option is not installed.')
-			ans = ''
+			ans = None
 
 		return ans
 		
@@ -345,7 +363,8 @@ class rgams_SRS_virtual(rgams_SRS):
 		val: voltage
 		'''
 
-		return 1500
+		# return some fixed number (not self._cem_hv, which is used differently for the virtual_RGA):
+		return 1500.0
 
 	
 	########################################################################################################
