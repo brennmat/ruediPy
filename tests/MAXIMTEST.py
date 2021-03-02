@@ -45,7 +45,7 @@ import time
 from classes.temperaturesensor_MAXIM	import temperaturesensor_MAXIM
 from classes.datafile					import datafile
 
-TSENS = temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FT9PNMU8-if00-port0' , label = 'TEMP-TEST' )
+TSENS = temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller-if00-port0' , label = 'TEMP-TEST' )
 
 DATAFILE = datafile ( '~/data' )
 

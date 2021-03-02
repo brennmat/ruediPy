@@ -373,7 +373,14 @@ class misc:
 		g = misc.have_external_gui( )
 		'''
 		
-		return gui_config.have_gui()		
+		have_external_gui = False
+		try:
+			# try asking gui_config module, if it exists:
+			have_external_gui = gui_config.have_gui()
+		except:
+			pass
+
+		return have_external_gui	
 									
 
 ########################################################################################################
