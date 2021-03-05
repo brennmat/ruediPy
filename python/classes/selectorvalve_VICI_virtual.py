@@ -68,6 +68,14 @@ class selectorvalve_VICI_virtual(selectorvalve_VICI):
 		(none)
 		'''
 
+		try:
+			if type(numpos) is not int:
+				raise RuntimeError('Number of selector valve positions is of type ' + str(type(numpos)) + ', but must an integer.')				
+			if numpos < 1:
+				raise RuntimeError('Number of selector valve positions is ' + str(numpos) + ', but must be > 0.')
+		except Exception as e:
+			raise e
+		
 		self._serialport = serialport;
 		self._label = label
 		self._num_positions = numpos
