@@ -115,7 +115,7 @@ class misc:
 	
 	
 	@staticmethod
-	def warnmessage(msg, caller=None, show_caller=True):
+	def warnmessage(msg, caller=None, show_caller=True, overwrite_previous_msg = False):
 		'''
 		misc.warnmessage(msg, caller=None, show_caller=True)
 		
@@ -147,7 +147,7 @@ class misc:
 			
 		try:
 			# send warning message to GUI, and let it deal with it:
-			gui_config.warnmessage( msg )
+			gui_config.warnmessage( msg, overwrite_previous_msg = False )
 		except:
 			# show warning message on STDOUT:
 			print ('\a') # get user attention using the terminal bell
@@ -162,7 +162,7 @@ class misc:
 	
 
 	@staticmethod
-	def logmessage(msg, caller=None, show_caller=True):
+	def logmessage(msg, caller=None, show_caller=True, overwrite_previous_msg = False):
 		'''
 		misc.logmessage(msg, caller=None, show_caller=True)
 		
@@ -195,7 +195,7 @@ class misc:
 
 		try:
 			# send log message to GUI, and let it deal with it:
-			gui_config.logmessage( msg )			
+			gui_config.logmessage( msg, overwrite_previous_msg )			
 		except:
 			print (msg)
 
