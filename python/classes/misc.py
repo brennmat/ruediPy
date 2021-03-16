@@ -54,7 +54,7 @@ except ImportError:
 	pass
 
 do_color_term = False
-if has_gui:
+if not has_gui:
 	try:
 		from termcolor import colored
 		do_color_term = True
