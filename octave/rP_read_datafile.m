@@ -134,6 +134,7 @@ else % read file line by line:
 	    	LABEL = strrep (LABEL,'/','_');
 	    	
 	    	L = unique (LABEL(j)); % list of labels available for the objects of type OBJ(j)
+	    	
 	    	for k = 1:length(L)
 
 	    		l = find ( index(LABEL(j),L(k)) );
@@ -145,22 +146,22 @@ else % read file line by line:
 						FIELDTYPES{end+1} = 'DATAFILE';
 						X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
 					
-					case 'RGA_SRS'
+					case {'RGA_SRS', 'RGA_SRS_VIRTUAL'}
 						u = __parse_SRSRGA (TYPE(j(l)),DATA(j(l)),t(j(l)));
 						FIELDTYPES{end+1} = 'RGA_SRS';
 						X = setfield (X,L{k},u); % add SRSRGA[LABEL-k] data
 						
-					case 'SELECTORVALVE_VICI'
+					case {'SELECTORVALVE_VICI', 'SELECTORVALVE_VICI_VIRTUAL'}
 						u = __parse_SELECTORVALVE (TYPE(j(l)),DATA(j(l)),t(j(l)));
 						FIELDTYPES{end+1} = 'SELECTORVALVE';
 						X = setfield (X,L{k},u); % add SELECTORVALVE[LABEL-k] data
 					
-					case 'TEMPERATURESENSOR_MAXIM'
+					case {'TEMPERATURESENSOR_MAXIM', 'TEMPERATURESENSOR_VIRTUAL'}
 						u = __parse_TEMPERATURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
 						FIELDTYPES{end+1} = 'TEMPERATURESENSOR';
 						X = setfield (X,L{k},u); % add TEMPERATURESENSOR[LABEL-k] data
 					
-					case {'PRESSURESENSOR_WIKA', 'PRESSURESENSOR_OMEGA'}
+					case {'PRESSURESENSOR_WIKA', 'PRESSURESENSOR_OMEGA', 'PRESSURESENSOR_VIRTUAL'}
 						u = __parse_PRESSURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
 						FIELDTYPES{end+1} = 'PRESSURESENSOR';
 						X = setfield (X,L{k},u); % add PRESSURESENSOR[LABEL-k] data

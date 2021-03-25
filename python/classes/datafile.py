@@ -586,7 +586,7 @@ class datafile:
 		"""
 		
 		# s = 'position=' + str(position)
-		s = str(position)
+		s = str(position)		
 		self.writeln(caller,label,'POSITION',s,timestmp)
 		
 
