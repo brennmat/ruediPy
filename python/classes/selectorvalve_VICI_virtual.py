@@ -135,7 +135,7 @@ class selectorvalve_VICI_virtual(selectorvalve_VICI):
 			
 			# write to datafile
 			if not f == 'nofile':
-				f.write_valve_pos('SELECTORVALVE_VICI_VIRTUAL',self.label(),val,misc.now_UNIX())
+				f.write_valve_pos('SELECTORVALVE_VICI',self.label(),val,misc.now_UNIX())
 
 			# give the valve some time to actually do the switch:
 			time.sleep(0.5)

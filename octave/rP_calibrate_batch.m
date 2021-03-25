@@ -192,7 +192,7 @@ if isempty(MS_names)
 end
 
 
-% check if MS names are given explicitly, otherwise determine from data set:
+% check if SENSOR names are given explicitly, otherwise determine from data set:
 if exist ('SENSOR_names','var')
 	if ~iscellstr(SENSOR_names)
 		SENSOR_names = cellstr (SENSOR_names);

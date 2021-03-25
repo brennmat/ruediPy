@@ -146,12 +146,12 @@ else % read file line by line:
 						FIELDTYPES{end+1} = 'DATAFILE';
 						X = setfield (X,L{k},u); % add DATAFILE[LABEL-k] data
 					
-					case {'RGA_SRS', 'RGA_SRS_VIRTUAL'}
+					case 'RGA_SRS'
 						u = __parse_SRSRGA (TYPE(j(l)),DATA(j(l)),t(j(l)));
 						FIELDTYPES{end+1} = 'RGA_SRS';
 						X = setfield (X,L{k},u); % add SRSRGA[LABEL-k] data
 						
-					case {'SELECTORVALVE_VICI', 'SELECTORVALVE_VICI_VIRTUAL'}
+					case 'SELECTORVALVE_VICI'
 						u = __parse_SELECTORVALVE (TYPE(j(l)),DATA(j(l)),t(j(l)));
 						FIELDTYPES{end+1} = 'SELECTORVALVE';
 						X = setfield (X,L{k},u); % add SELECTORVALVE[LABEL-k] data

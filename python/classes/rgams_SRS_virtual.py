@@ -706,7 +706,7 @@ class rgams_SRS_virtual(rgams_SRS):
 				val = 1.3E-7
 		
 		if not ( f == 'nofile' ):
-			f.write_peak('RGA_SRS_VIRTUAL',self.label(),mz,val,unit,det,gate,t,peaktype)
+			f.write_peak('RGA_SRS',self.label(),mz,val,unit,det,gate,t,peaktype)
 		
 		# add data to peakbuffer
 		if add_to_peakbuffer:
@@ -776,7 +776,7 @@ class rgams_SRS_virtual(rgams_SRS):
 			val = 1E4 * val
 		
 		if not ( f == 'nofile' ):
-			f.write_zero('RGA_SRS_VIRTUAL',self.label(),mz,mz_offset,val,unit,self.get_detector(),gate,t,zerotype)
+			f.write_zero('RGA_SRS',self.label(),mz,mz_offset,val,unit,self.get_detector(),gate,t,zerotype)
 
 		return val,unit
 
@@ -868,7 +868,7 @@ class rgams_SRS_virtual(rgams_SRS):
 		# write to data file:
 		if not ( f == 'nofile' ):
 			det = self.get_detector()
-			f.write_scan('RGA_SRS_VIRTUAL',self.label(),M,Y,unit,det,gate,t)
+			f.write_scan('RGA_SRS',self.label(),M,Y,unit,det,gate,t)
 
 		return M,Y,unit
 
