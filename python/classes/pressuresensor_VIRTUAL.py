@@ -1,4 +1,4 @@
-# Code for the OMEGA pressure sensor class
+# Code for the VIRTUAL pressure sensor class
 # 
 # DISCLAIMER:
 # This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
@@ -48,10 +48,9 @@ except ImportError as e:
 
 # check Python version and print warning if we're running version < 3:
 if ( sys.version_info[0] < 3 ):
-	warnings.warn("ruediPy / pressuresensor_OMEGA class is running on Python version < 3. Version 3.0 or newer is recommended!")
+	warnings.warn("ruediPy / pressuresensor_VIRTUAL class is running on Python version < 3. Version 3.0 or newer is recommended!")
 
 from classes.misc	import misc
-
 
 havedisplay = "DISPLAY" in os.environ
 if havedisplay: # prepare plotting environment
@@ -66,12 +65,13 @@ if havedisplay: # prepare plotting environment
 		matplotlib.use('TkAgg')
 		import matplotlib.pyplot as plt
 	except:
-		misc.warnmessage ('OMEGA-PRESSURE init','Could not set up display environment.')
+		misc.warnmessage ('Could not set up display environment.')
 		havedisplay = False
 
-class pressuresensor_OMEGA:
+
+class pressuresensor_VIRTUAL:
 	"""
-	ruediPy class for OMEGA pressure sensor control.
+	ruediPy class for VIRTUAL pressure sensor control.
 	"""
 
 	
@@ -80,9 +80,9 @@ class pressuresensor_OMEGA:
 	
 	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None):
 		'''
-		pressuresensor_OMEGA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None )
+		pressuresensor_VIRTUAL.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None )
 		
-		Initialize PRESSURESENSOR object (OMEGA), configure serial port connection
+		Initialize PRESSURESENSOR object (VIRTUAL), configure serial port connection
 		
 		INPUT:
 		serialport: device name of the serial port, e.g. serialport = '/dev/ttyUSB3'
@@ -107,6 +107,8 @@ class pressuresensor_OMEGA:
 			self._plot_title = self._label
 		else:
 			self._plot_title = plot_title
+			
+		self._serial_number = 123456789
 
 		# data buffer for PEAK values:
 		self._pressbuffer_t = numpy.array([])
@@ -128,132 +130,38 @@ class pressuresensor_OMEGA:
 			self._has_display = havedisplay # don't try opening a plot window if there is no plotting environment
 		else: # no plot window
 			self._has_display = False
-
-		try:
-
-			# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
-
-			from pkg_resources import parse_version
-			if parse_version(serial.__version__) >= parse_version('3.3') :
-				# open port with exclusive access:
-				ser = serial.Serial(
-					port     = serialport,
-					baudrate = 115200,
-					parity   = serial.PARITY_NONE,
-					stopbits = serial.STOPBITS_ONE,
-					bytesize = serial.EIGHTBITS,
-					timeout  = 5,
-					exclusive = True
-				)
-
-			else:
-				# open port (can't ask for exclusive access):
-				ser = serial.Serial(
-					port     = serialport,
-					baudrate = 115200,
-					parity   = serial.PARITY_NONE,
-					stopbits = serial.STOPBITS_ONE,
-					bytesize = serial.EIGHTBITS,
-					timeout  = 5
-				)
-
-			ser.flushOutput()   # make sure output is empty
-			time.sleep(0.1)
-			ser.flushInput()    # make sure input is empty
-		
-			self.ser = ser
-			self._ser_locked = False
 			
-			# get serial number of pressure sensor
-			self.get_serial_lock()
-			self.ser.write(('SNR\r').encode('utf-8')) # send command with check sum to serial port
-			ans = self.ser.readline().decode('utf-8') # read response and decode ASCII	
-			ser.flushInput()   # make sure input is empty
-			self.release_serial_lock()
-			self._serial_number = int(ans.rstrip().split('=')[1]) # parse response to integer number
 
-			if self._has_display: # prepare plotting environment and figure
+		if self._has_display: # prepare plotting environment and figure
 
-				# set up plot figure:
-				self._fig = plt.figure(figsize=(fig_w,fig_h))
-				t = 'OMEGA PXM409'
-				if self._plot_title:
-					t = t + ' (' + self._plot_title + ')'
-				self._fig.canvas.set_window_title(t)
+			# set up plot figure:
+			self._fig = plt.figure(figsize=(fig_w,fig_h))
+			t = 'VIRTUAL_PSENSOR'
+			if self._plot_title:
+				t = t + ' (' + self._plot_title + ')'
+			self._fig.canvas.set_window_title(t)
 
-				# set up panel for pressure history plot:
-				self._pressbuffer_ax = plt.subplot(1,1,1)
-				t = 'PRESSBUFFER'
-				if self._plot_title:
-					t = t + ' (' + self._plot_title + ')'
-				self._pressbuffer_ax.set_title(t,loc="center")
-				self._pressbuffer_ax.set_xlabel('Time (s)')
-				self._pressbuffer_ax.set_ylabel('Pressure')
+			# set up panel for pressure history plot:
+			self._pressbuffer_ax = plt.subplot(1,1,1)
+			t = 'PRESSBUFFER'
+			if self._plot_title:
+				t = t + ' (' + self._plot_title + ')'
+			self._pressbuffer_ax.set_title(t,loc="center")
+			self._pressbuffer_ax.set_xlabel('Time (s)')
+			self._pressbuffer_ax.set_ylabel('Pressure')
 
-				# add (empty) line to plot (will be updated with data later):
-				self._pressbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
+			# add (empty) line to plot (will be updated with data later):
+			self._pressbuffer_ax.plot( [], [] , 'ko-' , markersize = 10 )
 
-				# get some space in between panels to avoid overlapping labels / titles
-				self._fig.tight_layout()
-			
-				# enable interactive mode:
-				plt.ion()
-
-				self._figwindow_is_shown = False
-
-			print ('Successfully configured OMEGA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport )
-
-
-		except:
-			self.warning ( 'An error occured during configuration of the pressure sensor at serial interface ' + serialport + '. The pressure sensor cannot be used.' )
-
-
-
-	########################################################################################################
-	
-	
-
-	def get_serial_lock(self):
-		'''
-		pressuresensor_OMEGA._get_serial_lock()
+			# get some space in between panels to avoid overlapping labels / titles
+			self._fig.tight_layout()
 		
-		Lock serial port for exclusive access (important if different threads / processes are trying to use the port). Make sure to release the lock after using the port (see pressuresensor_OMEGA._release_serial_lock()!
-		
-		INPUT:
-		(none)
-		
-		OUTPUT:
-		(none)
-		'''
+			# enable interactive mode:
+			plt.ion()
 
-		# wait until the serial port is unlocked:
-		while self._ser_locked == True:
-			time.sleep(0.01)
-			
-		# lock the port:
-		self._ser_locked = True
-		
+			self._figwindow_is_shown = False
 
-	
-	########################################################################################################
-	
-	
-
-	def release_serial_lock(self):
-		'''
-		pressuresensor_OMEGA._release_serial_lock()
-		
-		Release lock on serial port.
-		
-		INPUT:
-		(none)
-		
-		OUTPUT:
-		(none)
-		'''
-
-		# release the lock:
-		self._ser_locked = False
+		print ('Successfully configured VIRTUAL pressure sensor with serial number ' + str(self._serial_number) + '.' )
 
 
 
@@ -263,7 +171,7 @@ class pressuresensor_OMEGA:
 
 	def label(self):
 		"""
-		label = pressuresensor_OMEGA.label()
+		label = pressuresensor_VIRTUAL.label()
 
 		Return label / name of the PRESSURESENSOR object
 		
@@ -284,7 +192,7 @@ class pressuresensor_OMEGA:
 
 	def pressure(self,f,add_to_pressbuffer=True):
 		"""
-		press,unit = pressuresensor_OMEGA.pressure(f,add_to_pressbuffer=True)
+		press,unit = pressuresensor_VIRTUAL.pressure(f,add_to_pressbuffer=True)
 		
 		Read out current pressure value.
 		
@@ -297,50 +205,19 @@ class pressuresensor_OMEGA:
 		unit: unit of pressure value (string)
 		"""	
 
-		p = None;
-		unit = '?';
+		p = 1000 + (numpy.random.randn()-0.5)*50;
+		unit = 'hPa';
+
+		# get timestamp
 		t = misc.now_UNIX()
-		if not(hasattr(self,'ser')):
-			self.warning( 'sensor is not initialised, could not read data.' )
-		else:
-			try:
-				# get pressure reading from the sensor:
-				self.get_serial_lock()
-				self.ser.write(('P\r').encode('utf-8')) # send command to serial port
-				ans =  self.ser.readline().decode('utf-8') # read response and decode ASCII
-				if ans[0] == '>':
-					# fix > character dangling in the serial buffer from previous reading
-					ans = ans[1:]
-				self.ser.flushInput()  # make sure input is empty
-				self.release_serial_lock()
-				
-				ans = ans.split(' ')
-				p = float( ans[0] )    # convert string to float
-				unit = ans[1]
-				if unit != 'bar':
-					raise ValueError( 'OMEGA pressure sensor returned unit = ' + unit + ', not bar!')
-				else:
-					# convert to mbar = hPa:
-					p = 1000 * p
-					unit = 'hPa'
-						
-				# get timestamp
-				t = misc.now_UNIX()
 
-				# add data to peakbuffer
-				if add_to_pressbuffer:
-					self.pressbuffer_add(t,p,unit)
-
-			except ValueError as e:
-				self.release_serial_lock()
-				self.warning( e )
-			except:
-				self.release_serial_lock()
-				self.warning( 'An unknown error occured while reading the OMEGA pressure sensor!' )
+		# add data to peakbuffer
+		if add_to_pressbuffer:
+			self.pressbuffer_add(t,p,unit)
 
 		# write data to datafile
 		if not ( f == 'nofile' ):
-			f.write_pressure('PRESSURESENSOR_OMEGA',self.label(),p,unit,t)
+			f.write_pressure('PRESSURESENSOR_VIRTUAL',self.label(),p,unit,t)
 
 		return p,unit
 
@@ -350,7 +227,7 @@ class pressuresensor_OMEGA:
 
 	def warning(self,msg):
 		'''
-		pressuresensor_OMEGA.warning(msg)
+		pressuresensor_VIRTUAL.warning(msg)
 		
 		Issue warning about issues related to operation of pressure sensor.
 		
@@ -369,7 +246,7 @@ class pressuresensor_OMEGA:
 
 	def pressbuffer_add(self,t,p,unit):
 		"""
-		pressuresensor_OMEGA.pressbuffer_add(t,p,unit)
+		pressuresensor_VIRTUAL.pressbuffer_add(t,p,unit)
 		
 		Add data to pressure data buffer
 				
@@ -401,7 +278,7 @@ class pressuresensor_OMEGA:
 
 	def pressbuffer_get_timestamp(self):
 		"""
-		timestamp = pressuresensor_OMEGA.pressbuffer_get_timestamp()
+		timestamp = pressuresensor_VIRTUAL.pressbuffer_get_timestamp()
 
 		Get time stamp of last update to pressbuffer data
 		
@@ -420,7 +297,7 @@ class pressuresensor_OMEGA:
 
 	def plot_pressbuffer(self):
 		'''
-		pressuresensor_OMEGA.plot_pressbuffer()
+		pressuresensor_VIRTUAL.plot_pressbuffer()
 
 		Plot trend (or update plot) of values in pressure data buffer (e.g. after adding data)
 		NOTE: plotting may be slow, and it may therefore be a good idea to keep the update interval low to avoid affecting the duty cycle.
@@ -475,7 +352,7 @@ class pressuresensor_OMEGA:
 
 	def pressbuffer_clear(self):
 		"""
-		pressuresensor_OMEGA.pressbuffer_clear()
+		pressuresensor_VIRTUAL.pressbuffer_clear()
 
 		Clear the buffer of pressure readings
 
