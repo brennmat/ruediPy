@@ -361,14 +361,10 @@ class temperaturesensor_VIRTUAL:
 		"""
 
 		# clear data buffer for TEMPERATURE values:
-
-		if not(hasattr(self,'_sensor')):
-			self.warning( 'sensor is not initialised, could not clear data buffer.' )
-		else:
-			self._tempbuffer_t = self._tempbuffer_t[[]]
-			self._tempbuffer_T = self._tempbuffer_T[[]]
-			self._tempbuffer_unit = ['x'] * 0 # empty list
-			self._tempbuffer_lastupdate_timestamp = misc.now_UNIX()
+		self._tempbuffer_t = self._tempbuffer_t[[]]
+		self._tempbuffer_T = self._tempbuffer_T[[]]
+		self._tempbuffer_unit = ['x'] * 0 # empty list
+		self._tempbuffer_lastupdate_timestamp = misc.now_UNIX()
 
 
 
