@@ -289,20 +289,26 @@ for i = 1:length(X)
 	mz_det = { mz_det{:} X(i).MS.mz_det{:} };
 	
 end % for
-	
+
 mz_det = unique ( mz_det );
+
+% make sure we've got (enough) STANDARDs and BLANKs:
+if isempty(iSTANDARD)
+	# check if there are any STANDARDs:
+	error ('rP_calibrate_batch: there are no STANDARDs! Aborting...')
+elseif length(iSTANDARD) < 2
+	# check if there are enough STANDARDs (need at least 2):
+	error ('rP_calibrate_batch: there are not enough STANDARDs (need at least two)! Aborting...')
+elseif isempty(iBLANK)
+	# check if there are any STANDARDs:
+	error ('rP_calibrate_batch: there are no BLANKs! Aborting...')
+end
 
 % Determine sample names:
 for i = 1:length(iSAMPLE)
 	SAMPLES{i} = X(iSAMPLE(i)).INFO.name.name;
 end % for i = ...
 
-% make sure we've got STANDARDs and BLANKs:
-if isempty(iSTANDARD)
-	error ('rP_calibrate_batch: there are no STANDARDs! Aborting...')
-elseif isempty(iBLANK)
-	error ('rP_calibrate_batch: there are no BLANKs! Aborting...')
-end
 
 % sort out digested values for all mz/detector combinations
 v_standard = v_blank = v_sample = []; % mean values
