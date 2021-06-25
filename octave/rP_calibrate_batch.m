@@ -426,7 +426,6 @@ for i = 1:length(mz_det) % determine sensitivities S_val(i,:) / S_err(i,:) for a
 	end % for j = ...	
 end % for i = ...
 
-
 % plot sensitivities (S_val) vs. time:
 if flag_plot_sensitivity
 	figure()
@@ -478,8 +477,8 @@ if flag_plot_sensitivity
 	end
 	legend (leg,'location','southoutside','orientation','horizontal');
 	title ('MS sensitivity vs. time')
-end
 
+end
 
 % convert SAMPLEs peak heights to partial pressures using the S_val and S_err (interpolate in time):
 P_val = P_err = repmat (NA,length(mz_det),length(iSAMPLE)); % matrices with sample partial pressures (and their uncertainties) of all mz_det combinations (each row corresponds to one step)
@@ -563,13 +562,13 @@ if flag_plot_partialpressure
 	end
 	legend (leg,'location','southoutside','orientation','horizontal');
 	title ('Partial pressures vs. time')
+
 end
 
-% update plots / figures:
-drawnow
-
-
-
+if flag_plot_sensitivity | flag_plot_partialpressure
+	% workaround for plotting issue with last figure remaining black:
+	figure(); pause(0.1); close(); # opening a new figure and then allow some time will allow updating the previous plot, then close the new figure again.
+end
 
 % *************************************************
 % Write SAMPLE results to data file
