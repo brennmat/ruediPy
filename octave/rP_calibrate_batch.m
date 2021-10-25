@@ -565,7 +565,7 @@ if flag_plot_partialpressure
 
 end
 
-if flag_plot_sensitivity | flag_plot_partialpressure
+if flag_plot_sensitivity || flag_plot_partialpressure
 	% workaround for plotting issue with last figure remaining black:
 	figure(); pause(0.1); close(); # opening a new figure and then allow some time will allow updating the previous plot, then close the new figure again.
 end
