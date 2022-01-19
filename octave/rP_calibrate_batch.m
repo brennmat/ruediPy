@@ -165,6 +165,38 @@ end
 % load raw data from files:
 RAW = rP_read_datafile (data);
 
+% remove any non-SAMPLE/STANDARD/BLANK steps:
+k = [];
+N_SMPL = N_STD = N_BLNK = 0;
+for i = 1:length(RAW)
+
+	if strcmp(upper(RAW{i}.DATAFILE.ANALYSISTYPE.type),'SAMPLE')
+		N_SMPL += 1;
+		k = [k, i];
+
+	elseif strcmp(upper(RAW{i}.DATAFILE.ANALYSISTYPE.type),'STANDARD')
+		N_STD += 1;
+		k = [k, i];
+
+	elseif strcmp(upper(RAW{i}.DATAFILE.ANALYSISTYPE.type),'BLANK')
+		N_BLNK += 1;
+		k = [k, i];
+
+	else
+		warning ("rP_calibrate_batch: file %s contains no SAMPLE, STANDARD or BLANK data. Skipping this file...", RAW{i}.file)
+
+	end
+end
+if N_SMPL == 0
+	error ("rP_calibrate_batch: dataset contains no SAMPLE data. Cannot continue.")
+elseif N_STD == 0
+	error ("rP_calibrate_batch: dataset contains no STANDARD data. Cannot continue.")
+elseif N_BLNK == 0
+	error ("rP_calibrate_batch: dataset contains no BLANK data. Cannot continue.")
+else
+	RAW = RAW(k);
+end
+
 % check if MS names are given explicitly, otherwise determine from data set:
 if exist ('MS_names','var')
 	if ~iscellstr(MS_names)
