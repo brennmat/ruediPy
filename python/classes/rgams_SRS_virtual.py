@@ -49,6 +49,7 @@ except ImportError as e:
 
 if havedisplay:
 	import matplotlib
+	matplotlib.use('TkAgg')
 	import matplotlib.pyplot as plt
 
 class rgams_SRS_virtual(rgams_SRS):
