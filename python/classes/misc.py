@@ -416,12 +416,5 @@ class misc:
 					success = True
 				except:
 					misc.warnmessage ('Could not load and configure matplotlib, cannot set up display environment.')
-					
-					
-		if success:
-			print('Plotting on!')
-		else:
-			print('Plotting off!')
-
 
 		return success

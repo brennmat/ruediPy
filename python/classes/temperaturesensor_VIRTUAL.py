@@ -53,24 +53,6 @@ except ImportError as e:
 if ( sys.version_info[0] < 3 ):
 	warnings.warn("ruediPy / temperaturesensor_VIRTUAL class is running on Python version < 3. Version 3.0 or newer is recommended!")
 
-havedisplay = "DISPLAY" in os.environ
-if havedisplay: # prepare plotting environment
-	try:
-		import matplotlib
-		matplotlib.use('TkAgg')
-		
-		matplotlib.rcParams['legend.numpoints'] = 1
-		matplotlib.rcParams['axes.formatter.useoffset'] = False
-		# suppress mplDeprecation warning:
-		import warnings
-		import matplotlib.cbook
-		warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-
-		import matplotlib.pyplot as plt
-	except:
-		misc.warnmessage ('Could not set up display environment.')
-		havedisplay = False
-
 
 class temperaturesensor_VIRTUAL:
 	"""
@@ -104,7 +86,7 @@ class temperaturesensor_VIRTUAL:
 		
 		# Check for has_external_plot_window flag:
 		if has_external_plot_window is None:
-				has_external_plot_window = misc.have_external_gui() 
+			has_external_plot_window = misc.have_external_gui()
 
 		# Check plot title:
 		if plot_title == None:
@@ -118,23 +100,19 @@ class temperaturesensor_VIRTUAL:
 		self._tempbuffer_unit = ['x'] * 0 # empty list
 		self._tempbuffer_max_len = max_buffer_points
 		self._tempbuffer_lastupdate_timestamp = -1
-		
-		# set up plotting environment:
-		if not has_external_plot_window:
-			if misc.have_external_gui():
-				self.warning( 'It looks like there is an external GUI. Configuring the sensor with has_external_plot_window=True although no external plot window was requested!' )
-				has_external_plot_window = True
-		self._has_external_display = has_external_plot_window
-		if self._has_external_display:
-			has_plot_window = False # don't care with the built-in plotting, which will be dealt with externally
-		self._has_display = has_plot_window # try opening a plot window
-		if has_plot_window: # should have a plot window
-			self._has_display = havedisplay # don't try opening a plot window if there is no plotting environment
-		else: # no plot window
-			self._has_display = False
 
+		# set up plotting environment
+		if has_external_plot_window:
+			# no need to set up plotting
+			self._has_external_display = True
+			self._has_display = False
+		else:
+			self._has_external_display = False
+			self._has_display = misc.plotting_setup() # check for graphical environment, import matplotlib
 		
 		if self._has_display: # prepare plotting environment and figure
+
+			import matplotlib.pyplot as plt
 
 			# set up plotting environment
 			self._fig = plt.figure(figsize=(fig_w,fig_h))
