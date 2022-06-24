@@ -52,33 +52,11 @@ except ImportError as e:
 if ( sys.version_info[0] < 3 ):
 	warnings.warn("ruediPy / rgams_SRS class is running on Python version < 3. Version 3.0 or newer is recommended!")
 
-havedisplay = "DISPLAY" in os.environ
-if havedisplay: # prepare plotting environment
-	try:
-		import matplotlib
-		matplotlib.use('TkAgg')
-		matplotlib.rcParams['legend.numpoints'] = 1
-		matplotlib.rcParams['axes.formatter.useoffset'] = False
-	except ImportError:
-		misc.warnmessage ('Could not load and configure matplotlib, cannot set up display environment.')
-		havedisplay = False
-	except:
-		misc.warnmessage ('Unexpected error while loading matplotlib, cannot set up display environment.')
-		havedisplay = False
 
-		# suppress mplDeprecation warning:
-		## import warnings
-		## import matplotlib.cbook
-		## warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
-		
-	try:
-		import matplotlib.pyplot as plt
-	except ImportError:
-		misc.warnmessage ('Could not load and configure pyplot, cannot set up display environment.')
-		havedisplay = False
-	except:
-		misc.warnmessage ('Unexpected error while loading pyplot, cannot set up display environment.')
-		havedisplay = False
+
+
+
+
 
 
 class rgams_SRS:
@@ -193,24 +171,18 @@ class rgams_SRS:
 			self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
 
 			# set up plotting environment
-			if not has_external_plot_window:
-				if misc.have_external_gui():
-					self.warning( 'It looks like there is an external GUI. Configuring the MS with has_external_plot_window=True although no external plot window was requested!' )
-					has_external_plot_window = True
-			self._has_external_display = has_external_plot_window
-			if self._has_external_display:
-				has_plot_window = False # don't care with the built-in plotting, which will be dealt with externally
-			self._has_display = has_plot_window # try opening a plot window
-			if has_plot_window: # should have a plot window
-				self._has_display = havedisplay # don't try opening a plot window if there is no plotting environment
-			else: # no plot window
+			if has_external_plot_window:
+				# no need to set up plotting
 				self._has_display = False
-		
-			if self._has_display: # prepare plotting environment and figure
-
+			else:
+				self._has_display = misc.plotting_setup() # check for graphical environment, import matplotlib
+			
+			if self._has_display:
 				# set up plotting environment
+				
+				import matplotlib.pyplot as plt
+
 				self._fig = plt.figure(figsize=(fig_w,fig_h))
-				# f.suptitle('SRS RGA DATA')
 				t = 'SRS RGA'
 				if self._label:
 					t = t + ' (' + self._label + ')'

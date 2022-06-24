@@ -45,11 +45,13 @@ import time
 #import os
 
 # import ruediPy classes:
-from classes.rgams_SRS		import rgams_SRS
-from classes.datafile		import datafile
+global do_ruediPy_plots
+do_ruediPy_plots = False
+from classes.rgams_SRS import rgams_SRS
+from classes.datafile import datafile
 
 # set up ruediPy objects:
-MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2350188-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
+MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2805012-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 500 , fig_w = 13 , fig_h = 10 )
 DATAFILE = datafile ( '~/data' )
 
 # set/show MS configuraton:

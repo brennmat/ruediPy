@@ -42,15 +42,11 @@ try:
 	import numpy
 	import random
 	from classes.misc	import misc
-	from classes.rgams_SRS	import rgams_SRS, havedisplay
+	from classes.rgams_SRS	import rgams_SRS
 except ImportError as e:
 	print (e)
 	raise
 
-if havedisplay:
-	import matplotlib
-	matplotlib.use('TkAgg')
-	import matplotlib.pyplot as plt
 
 class rgams_SRS_virtual(rgams_SRS):
 	"""
@@ -146,23 +142,18 @@ class rgams_SRS_virtual(rgams_SRS):
 		self._peakbufferplot_colors = [ (2,'darkgray') , (4,'c') , (13,'darkgray') , (14,'dimgray') , (15,'green') , (16,'lightcoral') , (28,'k') , (32,'r') , (40,'y') , (44,'b') , (84,'m') ] # default colors for the more common mz values
 
 		# set up plotting environment
-		if not has_external_plot_window:
-			if misc.have_external_gui():
-				self.warning( 'It looks like there is an external GUI. Configuring the MS with has_external_plot_window=True although no external plot window was requested!' )
-				has_external_plot_window = True
-		self._has_external_display = has_external_plot_window
-		if self._has_external_display:
-			has_plot_window = False # don't care with the built-in plotting, which will be dealt with externally
-		self._has_display = has_plot_window # try opening a plot window
-		if has_plot_window: # should have a plot window
-			self._has_display = havedisplay # don't try opening a plot window if there is no plotting environment
-		else: # no plot window
+		if has_external_plot_window:
+			# no need to set up plotting
 			self._has_display = False
-		if self._has_display: # prepare plotting environment and figure
-
+		else:
+			self._has_display = misc.plotting_setup() # check for graphical environment, import matplotlib
+		
+		if self._has_display:
 			# set up plotting environment
+			
+			import matplotlib.pyplot as plt
+
 			self._fig = plt.figure(figsize=(fig_w,fig_h))
-			# f.suptitle('SRS RGA DATA')
 			t = 'SRS RGA'
 			if self._label:
 				t = t + ' (' + self._label + ')'
@@ -183,7 +174,8 @@ class rgams_SRS_virtual(rgams_SRS):
 			self._scan_ax.set_title('SCAN (' + self.label() + ')',loc="center")
 			plt.xlabel('mz')
 			plt.ylabel('Intensity')
-
+			self.set_scan_scale(self._scan_yscale)
+			
 			# get some space in between panels to avoid overlapping labels / titles
 			self._fig.tight_layout(pad=4.0)
 

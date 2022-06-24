@@ -384,3 +384,44 @@ class misc:
 									
 
 ########################################################################################################
+
+
+	@staticmethod
+	def plotting_setup():
+		'''
+		x = misc.plotting_setup()
+		
+		Try to setup plotting environment (matplotlib) and return success flag.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		x: flag indicating success (x == True if successful)
+		'''
+
+		success = False
+
+		if misc.have_external_gui():
+			misc.warnmessage ('Will not load and configure matplotlib as there is already an external GUI with a display environment.')
+		
+		else:
+			havedisplay = "DISPLAY" in os.environ
+			if havedisplay:
+				try:
+					import matplotlib
+					matplotlib.use('TkAgg')
+					matplotlib.rcParams['legend.numpoints'] = 1
+					matplotlib.rcParams['axes.formatter.useoffset'] = False
+					success = True
+				except:
+					misc.warnmessage ('Could not load and configure matplotlib, cannot set up display environment.')
+					
+					
+		if success:
+			print('Plotting on!')
+		else:
+			print('Plotting off!')
+
+
+		return success
