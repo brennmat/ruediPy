@@ -92,6 +92,8 @@ class rgams_SRS_virtual(rgams_SRS):
 
 		# general parameters:
 		self._serialport = serialport;
+		if self._serialport is None:
+			self._serialport = '/there/is/no/serial/port'
 		self._serial_number = 123456789
 		self._cem_hv = float(cem_hv)
 		self._tune_default_RI = tune_default_RI
@@ -184,7 +186,7 @@ class rgams_SRS_virtual(rgams_SRS):
 			self._figwindow_is_shown = False
 			plt.ion()		
 
-		self.log( 'Successfully configured virtual SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
+		self.log( 'Successfully configured virtual SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + self._serialport )
 		
 
 	########################################################################################################
@@ -1178,3 +1180,19 @@ class rgams_SRS_virtual(rgams_SRS):
 
 
 ########################################################################################################
+
+
+
+	def plot_scan(self,*args):
+	
+		self.warning ('Built-in plotting of scan data not implemented...')
+
+
+
+########################################################################################################
+
+
+				
+	def plot_peakbuffer(self):
+
+		self.warning ('Built-in plotting of peakbuffer data not implemented...')

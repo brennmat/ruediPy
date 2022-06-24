@@ -2372,9 +2372,7 @@ class rgams_SRS:
 			self._peakbufferplot_colors.append((mz,col))
 
 
-
 	########################################################################################################
-
 
 
 	def plot_scan(self,mz,intens,unit,cumsum_mz=[],cumsum_val=[]):

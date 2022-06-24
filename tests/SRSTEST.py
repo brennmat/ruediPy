@@ -45,8 +45,6 @@ import time
 #import os
 
 # import ruediPy classes:
-global do_ruediPy_plots
-do_ruediPy_plots = False
 from classes.rgams_SRS import rgams_SRS
 from classes.datafile import datafile
 
