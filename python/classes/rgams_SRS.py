@@ -177,7 +177,7 @@ class rgams_SRS:
 				self._has_display = False
 			else:
 				self._has_external_display = False
-			self._has_display = misc.plotting_setup() # check for graphical environment, import matplotlib
+				self._has_display = misc.plotting_setup() # check for graphical environment, import matplotlib
 			
 			if self._has_display:
 				# set up plotting environment
