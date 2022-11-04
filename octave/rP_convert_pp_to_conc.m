@@ -69,9 +69,13 @@ C = P;
 % determine gas items in the data set:
 u = fieldnames (C); itms = {};
 for i = 1:length (u)
-	if ~isempty (k = findstr(u{i},'_PARTIALPRESSURE'))
+	if ~isempty (k = strfind(u{i},'_PARTIALPRESSURE'))
 		itms{end+1} = u{i}(1:k-1);
 	end % if
+	
+	peng
+	
+	
 end % for
 
 Nsmpl = length (C.SAMPLES); % number of samples in P
