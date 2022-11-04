@@ -72,10 +72,6 @@ for i = 1:length (u)
 	if ~isempty (k = strfind(u{i},'_PARTIALPRESSURE'))
 		itms{end+1} = u{i}(1:k-1);
 	end % if
-	
-	peng
-	
-	
 end % for
 
 Nsmpl = length (C.SAMPLES); % number of samples in P
