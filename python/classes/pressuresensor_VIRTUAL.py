@@ -62,9 +62,9 @@ class pressuresensor_VIRTUAL:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, P_unit = 'bar'):
 		'''
-		pressuresensor_VIRTUAL.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None )
+		pressuresensor_VIRTUAL.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, P_unit = 'bar' )
 		
 		Initialize PRESSURESENSOR object (VIRTUAL), configure serial port connection
 		
@@ -75,12 +75,24 @@ class pressuresensor_VIRTUAL:
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
 		has_external_plot_window (optional): flag to indicate if there is a GUI system that handles the plotting of the data buffer on its own. This flag can be set explicitly to True of False, or can use None to ask for automatic 'on the fly' check if the has_external_plot_window = True or False should be used. Default: has_external_plot_window = None
+		P_unit: unit of P data (default: P_unit = 'bar')
 		
 		OUTPUT:
 		(none)
 		'''
 	
 		self._label = label
+		
+		if P_unit.upper() == 'HPA':
+		    self._unit = 'hPa'
+		elif P_unit.upper() == 'BAR':
+		    self._unit = 'bar'
+		elif P_unit.upper() == 'MBAR':
+		    self._unit = 'mbar'
+		elif P_unit.upper() == 'ATM':
+		    self._unit = 'atm'
+		else:
+		    self.warning( 'Could not initialize OMEGA pressure sensor: unit ' + P_unit + ' is not supported.')
 		
 		# Check for has_external_plot_window flag:
 		if has_external_plot_window is None:
@@ -185,11 +197,25 @@ class pressuresensor_VIRTUAL:
 		unit: unit of pressure value (string)
 		"""	
 
-		p = 1000 + (numpy.random.randn()-0.5)*50;
-		unit = 'hPa';
+		p = 1.0 + (numpy.random.randn()-0.5)*0.05;
+		unit = 'bar';
 
 		# get timestamp
 		t = misc.now_UNIX()
+
+		# convert unit (if necessary):
+		if self._unit.upper() == 'BAR':
+		    pass
+		elif self._unit.upper() == 'MBAR':
+		    p = 1000.0*p
+		elif self._unit.upper() == 'HPA':
+		    p = 1000.0*p
+		elif self._unit.upper() == 'ATM':
+		    p = p / 1.01325
+		else:
+		    self.warning('P-Sensor data unit ' + self._unit + ' is not supported!')
+		    p = NA
+		unit = self._unit
 
 		# add data to peakbuffer
 		if add_to_pressbuffer:

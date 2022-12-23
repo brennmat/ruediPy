@@ -63,7 +63,7 @@ class temperaturesensor_VIRTUAL:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, T_unit = 'deg.C'):
+	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, T_unit = 'deg.C' ):
 		'''
 		temperaturesensor_VIRTUAL.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None )
 		

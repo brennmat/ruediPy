@@ -93,7 +93,6 @@ class pressuresensor_OMEGA:
 		    self._unit = 'atm'
 		else:
 		    self.warning( 'Could not initialize OMEGA pressure sensor: unit ' + P_unit + ' is not supported.')
-
 		
 		# Check for has_external_plot_window flag:
 		if has_external_plot_window is None:
