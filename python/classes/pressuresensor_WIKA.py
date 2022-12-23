@@ -62,9 +62,9 @@ class pressuresensor_WIKA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, P_unit = 'bar'):
 		'''
-		pressuresensor_WIKA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None )
+		pressuresensor_WIKA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, P_unit = 'bar' )
 		
 		Initialize PRESSURESENSOR object (WIKA), configure serial port connection
 		
@@ -75,6 +75,7 @@ class pressuresensor_WIKA:
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
 		has_external_plot_window (optional): flag to indicate if there is a GUI system that handles the plotting of the data buffer on its own. This flag can be set explicitly to True of False, or can use None to ask for automatic 'on the fly' check if the has_external_plot_window = True or False should be used. Default: has_external_plot_window = None
+		P_unit: unit of P data (default: P_unit = 'bar')
 		
 		OUTPUT:
 		(none)
@@ -358,6 +359,53 @@ class pressuresensor_WIKA:
 				else:
 					self.warning('WIKA pressure sensor returned unknown pressure unit')
 					unit = '???'
+
+
+
+
+
+
+                self.warning('WIKA P-SENSOR: parsing and converting data units is untested!!!!')
+                
+                # convert to bar:
+                if unit == 'bar':
+                    pass
+                if unit == 'bar-rel':
+                    pass
+                elif unit == 'Psi':
+                    p = p/14.5038
+                elif unit == 'Psi-rel':
+                    p = p/14.5038
+                elif unit == 'MPa':
+                    p = 10.0*p
+                elif unit == 'MPa-rel':
+                    p = 10.0*p
+                elif unit == 'kg/cm2':
+                    p = 0.980665*p
+                elif unit == 'kg/cm2-rel':
+                    p = 0.980665*p
+                else:
+                    self.warning('Connot convert data from WIKA P-sensor unit, unknown unit ' + unit)
+                    p = NA
+
+				# convert from bar to desired unit (if necessary):
+				if self._unit.upper() == 'BAR':
+				    pass
+				elif self._unit.upper() == 'MBAR':
+				    p = 1000.0*p
+				elif self._unit.upper() == 'HPA':
+				    p = 1000.0*p
+				elif self._unit.upper() == 'ATM':
+				    p = p / 1.01325
+				else:
+				    self.warning('P-Sensor data unit ' + self._unit + ' is not supported!')
+				    p = NA
+				unit = self._unit
+
+
+
+
+
 
 				# add data to peakbuffer
 				if add_to_pressbuffer:
