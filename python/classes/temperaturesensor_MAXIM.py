@@ -77,16 +77,18 @@ class temperaturesensor_MAXIM:
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
 		has_external_plot_window (optional): flag to indicate if there is a GUI system that handles the plotting of the data buffer on its own. This flag can be set explicitly to True of False, or can use None to ask for automatic 'on the fly' check if the has_external_plot_window = True or False should be used. Default: has_external_plot_window = None
+		T_unit: unit of T data (default: T_unit = 'deg.C')
 		
 		OUTPUT:
 		(none)
 		'''
 		
 		self._label = label
+		
 		if T_unit.upper() == 'DEG.C':
-		    print('SET T UNIT TO DEG.C')
-		    self._unit = 'deg.kJ'
-		    self._unit_scal = 1.0;
+		    self._unit = 'deg.C'
+		elif T_unit.upper() == 'DEG.F':
+		    self._unit = 'deg.F'
 		else:
 		    self.warning( 'Could not initialize MAXIM DS1820 temperature sensor: unit ' + T_unit + ' is not supported.')
 		    
@@ -272,9 +274,18 @@ class temperaturesensor_MAXIM:
 		else:
 			try:
 				self.get_UART_lock()
-				temp = self._sensor.get_temperature() * self._unit_scal
+				temp = self._sensor.get_temperature()
 				self.release_UART_lock()
 				unit = self._unit
+				
+				if unit.upper() == 'DEG.C':
+				    pass
+				elif unit.upper() == 'DEG.F':
+				    # convert from deg.C to deg.F:
+				    temp = (temp-32.0)*5/9
+				else:
+				    self.warning('T-Sensor data unit ' + unit + ' is not supported!')
+				    temp = NA
 		
 				# add data to peakbuffer
 				if add_to_tempbuffer:
