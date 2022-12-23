@@ -63,7 +63,7 @@ class temperaturesensor_VIRTUAL:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None):
+	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, T_unit = 'deg.C'):
 		'''
 		temperaturesensor_VIRTUAL.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None )
 		
@@ -77,6 +77,7 @@ class temperaturesensor_VIRTUAL:
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
 		has_external_plot_window (optional): flag to indicate if there is a GUI system that handles the plotting of the data buffer on its own. This flag can be set explicitly to True of False, or can use None to ask for automatic 'on the fly' check if the has_external_plot_window = True or False should be used. Default: has_external_plot_window = None
+		T_unit: unit of T data (default: T_unit = 'deg.C')
 		
 		OUTPUT:
 		(none)
@@ -84,6 +85,13 @@ class temperaturesensor_VIRTUAL:
 		
 		self._label = label
 		
+		if T_unit.upper() == 'DEG.C':
+		    self._unit = 'deg.C'
+		elif T_unit.upper() == 'DEG.F':
+		    self._unit = 'deg.F'
+		else:
+		    self.warning( 'Could not initialize VIRTUAL temperature sensor: unit ' + T_unit + ' is not supported.')
+		    
 		# Check for has_external_plot_window flag:
 		if has_external_plot_window is None:
 			has_external_plot_window = misc.have_external_gui()
@@ -183,7 +191,15 @@ class temperaturesensor_VIRTUAL:
 		"""	
 		
 		temp = 15 + (numpy.random.randn()-0.5)*5;
-		unit = 'deg.C';
+		unit = self._unit
+		if unit.upper() == 'DEG.C':
+		    pass
+		elif unit.upper() == 'DEG.F':
+		    # convert from deg.C to deg.F:
+		    temp = (temp-32.0)*5/9
+		else:
+		    self.warning('T-Sensor data unit ' + unit + ' is not supported!')
+		    temp = NA
 
 		# get timestamp
 		t = misc.now_UNIX()
