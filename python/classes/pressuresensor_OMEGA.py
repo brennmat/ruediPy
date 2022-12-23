@@ -62,9 +62,9 @@ class pressuresensor_OMEGA:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None):
+	def __init__( self , serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, P_unit = 'bar'):
 		'''
-		pressuresensor_OMEGA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None )
+		pressuresensor_OMEGA.__init__( serialport , label = 'PRESSURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, P_unit = 'bar' )
 		
 		Initialize PRESSURESENSOR object (OMEGA), configure serial port connection
 		
@@ -75,12 +75,25 @@ class pressuresensor_OMEGA:
 		max_buffer_points (optional): max. number of data points in the PEAKS buffer. Once this limit is reached, old data points will be removed from the buffer. Default value: max_buffer_points = 500
 		fig_w, fig_h (optional): width and height of figure window used to plot data (inches)
 		has_external_plot_window (optional): flag to indicate if there is a GUI system that handles the plotting of the data buffer on its own. This flag can be set explicitly to True of False, or can use None to ask for automatic 'on the fly' check if the has_external_plot_window = True or False should be used. Default: has_external_plot_window = None
+		P_unit: unit of P data (default: P_unit = 'bar')
 		
 		OUTPUT:
 		(none)
 		'''
 	
 		self._label = label
+		
+		if P_unit.upper() == 'HPA':
+		    self._unit = 'hPa'
+		elif P_unit.upper() == 'BAR':
+		    self._unit = 'bar'
+		elif P_unit.upper() == 'MBAR':
+		    self._unit = 'mbar'
+		elif P_unit.upper() == 'ATM':
+		    self._unit = 'atm'
+		else:
+		    self.warning( 'Could not initialize OMEGA pressure sensor: unit ' + P_unit + ' is not supported.')
+
 		
 		# Check for has_external_plot_window flag:
 		if has_external_plot_window is None:
@@ -295,19 +308,30 @@ class pressuresensor_OMEGA:
 				self.ser.flushInput()  # make sure input is empty
 				self.release_serial_lock()
 				
+				# get timestamp
+				t = misc.now_UNIX()
+				
+				# parse data:
 				ans = ans.split(' ')
 				p = float( ans[0] )    # convert string to float
 				unit = ans[1]
 				if unit != 'bar':
 					raise ValueError( 'OMEGA pressure sensor returned unit = ' + unit + ', not bar!')
+				
+				# convert unit (if necessary):
+				if self._unit.upper() == 'BAR':
+				    pass
+				elif self._unit.upper() == 'MBAR':
+				    p = 1000.0*p
+				elif self._unit.upper() == 'HPA':
+				    p = 1000.0*p
+				elif self._unit.upper() == 'ATM':
+				    p = p / 1.01325
 				else:
-					# convert to mbar = hPa:
-					p = 1000 * p
-					unit = 'hPa'
-						
-				# get timestamp
-				t = misc.now_UNIX()
-
+				    self.warning('P-Sensor data unit ' + self._unit + ' is not supported!')
+				    p = NA
+				unit = self._unit
+                
 				# add data to peakbuffer
 				if add_to_pressbuffer:
 					self.pressbuffer_add(t,p,unit)
