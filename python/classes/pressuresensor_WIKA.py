@@ -359,34 +359,36 @@ class pressuresensor_WIKA:
 				else:
 					self.warning('WIKA pressure sensor returned unknown pressure unit')
 					unit = '???'
-
-
-
-
-
-
-                self.warning('WIKA P-SENSOR: parsing and converting data units is untested!!!!')
-                
-                # convert to bar:
-                if unit == 'bar':
-                    pass
-                if unit == 'bar-rel':
-                    pass
-                elif unit == 'Psi':
-                    p = p/14.5038
-                elif unit == 'Psi-rel':
-                    p = p/14.5038
-                elif unit == 'MPa':
-                    p = 10.0*p
-                elif unit == 'MPa-rel':
-                    p = 10.0*p
-                elif unit == 'kg/cm2':
-                    p = 0.980665*p
-                elif unit == 'kg/cm2-rel':
-                    p = 0.980665*p
-                else:
-                    self.warning('Connot convert data from WIKA P-sensor unit, unknown unit ' + unit)
-                    p = NA
+					
+				
+				
+				
+				
+				
+				
+				
+				self.warning('WIKA P-SENSOR: parsing and converting data units is untested!!!!')
+				
+				# convert to bar:
+				if unit == 'bar':
+				    pass
+				if unit == 'bar-rel':
+				    pass
+				elif unit == 'Psi':
+				    p = p/14.5038
+				elif unit == 'Psi-rel':
+				    p = p/14.5038
+				elif unit == 'MPa':
+				    p = 10.0*p
+				elif unit == 'MPa-rel':
+				    p = 10.0*p
+				elif unit == 'kg/cm2':
+				    p = 0.980665*p
+				elif unit == 'kg/cm2-rel':
+				    p = 0.980665*p
+				else:
+				    self.warning('Connot convert data from WIKA P-sensor unit, unknown unit ' + unit)
+				    p = NA
 
 				# convert from bar to desired unit (if necessary):
 				if self._unit.upper() == 'BAR':
