@@ -63,7 +63,7 @@ class temperaturesensor_MAXIM:
 	########################################################################################################
 	
 	
-	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None):
+	def __init__( self , serialport , romcode = '', label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None, T_unit = 'deg.C'):
 		'''
 		temperaturesensor_MAXIM.__init__( serialport , romcode, label = 'TEMPERATURESENSOR' , plot_title = None , max_buffer_points = 500 , fig_w = 6.5 , fig_h = 5 , has_plot_window = True , has_external_plot_window = None )
 		
@@ -83,7 +83,13 @@ class temperaturesensor_MAXIM:
 		'''
 		
 		self._label = label
-		
+		if T_unit.upper() == 'DEG.C':
+		    print('SET T UNIT TO DEG.C')
+		    self._unit = 'deg.kJ'
+		    self._unit_scal = 1.0;
+		else:
+		    self.warning( 'Could not initialize MAXIM DS1820 temperature sensor: unit ' + T_unit + ' is not supported.')
+		    
 		# Check for has_external_plot_window flag:
 		if has_external_plot_window is None:
 			has_external_plot_window = misc.have_external_gui() 
@@ -266,9 +272,9 @@ class temperaturesensor_MAXIM:
 		else:
 			try:
 				self.get_UART_lock()
-				temp = self._sensor.get_temperature()
+				temp = self._sensor.get_temperature() * self._unit_scal
 				self.release_UART_lock()
-				unit = 'deg.C'
+				unit = self._unit
 		
 				# add data to peakbuffer
 				if add_to_tempbuffer:
