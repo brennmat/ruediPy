@@ -372,8 +372,6 @@ class pressuresensor_WIKA:
 					unit = '???'
 				
 				# convert to bar:
-				print('***********************************************')
-				print(unit)
 				if unit == 'bar':
 				    pass
 				elif unit == 'bar-rel':
