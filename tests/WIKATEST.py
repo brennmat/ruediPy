@@ -46,7 +46,7 @@ from classes.pressuresensor_WIKA	import pressuresensor_WIKA
 from classes.datafile			import datafile
 
 # for Linux (use device 'file' by ID to avoid confusion of com ports):
-PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2264352-if00-port0' , label = 'TOTALPRESSURE' , max_buffer_points = 500)
+PSENS		= pressuresensor_WIKA ( serialport = '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_57494B41_502D3358_2258495-if00-port0' , label = 'TOTALPRESSURE' , max_buffer_points = 500, P_unit = 'bar')
 
 
 # for Mac OS X (use SiLabs USB driver):

@@ -83,6 +83,17 @@ class pressuresensor_WIKA:
 	
 		self._label = label
 
+		if P_unit.upper() == 'HPA':
+		    self._unit = 'hPa'
+		elif P_unit.upper() == 'BAR':
+		    self._unit = 'bar'
+		elif P_unit.upper() == 'MBAR':
+		    self._unit = 'mbar'
+		elif P_unit.upper() == 'ATM':
+		    self._unit = 'atm'
+		else:
+		    self.warning( 'Could not initialize WIKA pressure sensor: unit ' + P_unit + ' is not supported.')
+
 		# Check for has_external_plot_window flag:
 		if has_external_plot_window is None:
 				has_external_plot_window = misc.have_external_gui() 
@@ -359,20 +370,13 @@ class pressuresensor_WIKA:
 				else:
 					self.warning('WIKA pressure sensor returned unknown pressure unit')
 					unit = '???'
-					
-				
-				
-				
-				
-				
-				
-				
-				self.warning('WIKA P-SENSOR: parsing and converting data units is untested!!!!')
 				
 				# convert to bar:
+				print('***********************************************')
+				print(unit)
 				if unit == 'bar':
 				    pass
-				if unit == 'bar-rel':
+				elif unit == 'bar-rel':
 				    pass
 				elif unit == 'Psi':
 				    p = p/14.5038
@@ -387,7 +391,7 @@ class pressuresensor_WIKA:
 				elif unit == 'kg/cm2-rel':
 				    p = 0.980665*p
 				else:
-				    self.warning('Connot convert data from WIKA P-sensor unit, unknown unit ' + unit)
+				    self.warning('Cannot convert data from WIKA P-sensor unit, unknown unit ' + unit)
 				    p = NA
 
 				# convert from bar to desired unit (if necessary):
