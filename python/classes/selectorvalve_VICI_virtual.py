@@ -57,7 +57,7 @@ class selectorvalve_VICI_virtual(selectorvalve_VICI):
 		'''
 		selectorvalve_VICI_virtual.__init__( serialport = None, label = 'SELECTORVALVE', numpos = 6 )
 		
-		Initialize SELECTORVALVE object (virutal VICI valve)
+		Initialize SELECTORVALVE object (virtual VICI valve)
 		
 		INPUT:
 		serialport (optional): device name of the serial port, e.g. P = '/fake/serialport/to/virtual/valve'
