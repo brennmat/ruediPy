@@ -213,7 +213,7 @@ class rgams_SRS:
 				self._figwindow_is_shown = False
 				plt.ion()		
 			
-			print( 'Successfully configured SRS RGA MS with serial number ' + str(self._serial_number) + ' on ' + serialport )
+			print( 'Successfully configured SRS RGA MS with serial number ' + self.get_serial_number() + ' on ' + serialport )
 
 		# Error handling:
 		except Exception as e:
@@ -245,6 +245,25 @@ class rgams_SRS:
 		pass
 		
 		return label
+
+	
+	########################################################################################################
+	
+
+	def get_serial_number(self):
+		"""
+		sn = rgams_SRS.get_serial_number()
+		
+		Return serial number string of the RGA MS.
+		
+		INPUT:
+		(none)
+		
+		OUTPUT:
+		sn: serial number (string)
+		"""
+		
+		return str(self._serial_number)
 
 	
 	########################################################################################################
