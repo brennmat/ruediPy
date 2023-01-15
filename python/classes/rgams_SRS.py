@@ -263,7 +263,10 @@ class rgams_SRS:
 		sn: serial number (string)
 		"""
 		
-		return str(self._serial_number)
+		sn = str(self._serial_number)
+		sn = sn.split('SN')[-1]
+		
+		return sn
 
 	
 	########################################################################################################
