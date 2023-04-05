@@ -89,6 +89,14 @@ else
 		X.SAMPLES = X.SAMPLES(1:length(x{1,2}));
 	end
 	
+	% remove quotes at beginning and end of sample names (if any):
+	for i = [1:length(X.SAMPLES)]
+		if X.SAMPLES{i}(1) == '"'
+			if X.SAMPLES{i}(end) == '"'
+				X.SAMPLES{i} = X.SAMPLES{i}(2:end-1)
+		end
+	end
+	
 	N = ( length(columns) -1) / 3; % number of data items (time/value/error columns)
 	
 	% determine field names and units:

@@ -749,7 +749,7 @@ function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity
 				fprintf (fid,'\n');
 				
 				% sample name:
-				fprintf (fid,'%s',samples{i});
+				fprintf (fid,'"%s"',samples{i});
 				
 				% gas partial pressures:
 				for j = 1:length(species)				

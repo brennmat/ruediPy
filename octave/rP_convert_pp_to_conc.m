@@ -323,7 +323,7 @@ if write_file	% write results to file:
 				fprintf (fid,'\n'); % start new line
 				
 				% sample name:
-				fprintf (fid,C.SAMPLES{i});
+				fprintf (fid,'"%s"',C.SAMPLES{i});
 				
 				% gas concentrations pressures:
 				for j = 1:Nitms				
