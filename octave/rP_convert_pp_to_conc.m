@@ -4,7 +4,7 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % 
 % Convert partial pressures data in P to dissolved gas concentrations. For each sample in P, do the following:
 % (1*) calculate the sum of partial pressures (pp_sum) of the species in major_pp_species (not including the water vapour pressure)
-% (2*) normalize all partial pressures multipling them by the ratio TDGP/pp_sum, where TDGP is the total dry-gas gas pressure (sensor value minus the the water vapour pressure)
+% (2*) normalize all partial pressures by multiplying them wit the TDGP/pp_sum ratio, where TDGP is the total dry-gas gas pressure (sensor value minus the the water vapour pressure)
 % (3) determine the Henry coefficient of each species at the water temperature measured in the GE-MIMS module)
 % (4) apply Henry's Law to determine the the dissolved gas concentrations for each species using the normalized partial pressures and the Henry coefficients for all species
 %
@@ -62,6 +62,7 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 % 
 % Copyright 2017, 2018, Matthias Brennwald (brennmat@gmail.com)
+
 
 % copy struct with partial pressures to new struct that will hold the concentrations:
 C = P;
@@ -145,13 +146,13 @@ for i = 1:Nsmpl
 
 	if ~any(kPP) % don't normalize partial pressures
 		if no_normalisation_warn
-			warning ('rP_convert_pp_to_conc: no species given to be used for sum of partial pressure -- not normalizing the partial pressures to total dissolved gas pressure!')
+			disp ('rP_convert_pp_to_conc: no species given for sum of partial pressure -- not normalizing the partial pressures to total dissolved gas pressure!')
 		end
 		no_normalisation_warn = false;
 
 	elseif ~any(TDGP) % don't normalize partial pressures
 		if no_normalisation_warn
-			warning ('rP_convert_pp_to_conc: no total dissolved gas pressure given -- not normalizing the partial pressures to total dissolved gas pressure!')
+			disp ('rP_convert_pp_to_conc: no total dissolved gas pressure given -- not normalizing the partial pressures to total dissolved gas pressure!')
 		end
 		no_normalisation_warn = false;
 
@@ -160,8 +161,6 @@ for i = 1:Nsmpl
 		pp_sum_err = 0;
 
 		for j = kPP
-			%% disp(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
-			%% disp(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))
 			eval(sprintf('pp_sum = pp_sum + C.%s_PARTIALPRESSURE.VAL(i);',itms{j}))
 			eval(sprintf('pp_sum_err = pp_sum_err + C.%s_PARTIALPRESSURE.ERR(i)^2;',itms{j}))
 		end
