@@ -93,7 +93,7 @@ else
 	for i = [1:length(X.SAMPLES)]
 		if X.SAMPLES{i}(1) == '"'
 			if X.SAMPLES{i}(end) == '"'
-				X.SAMPLES{i} = X.SAMPLES{i}(2:end-1)
+				X.SAMPLES{i} = X.SAMPLES{i}(2:end-1);
 		end
 	end
 	
