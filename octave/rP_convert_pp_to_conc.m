@@ -4,7 +4,7 @@ function C = rP_convert_pp_to_conc (P , major_pp_species , TDGP_sensor , TEMP_se
 % 
 % Convert partial pressures data in P to dissolved gas concentrations. For each sample in P, do the following:
 % (1*) calculate the sum of partial pressures (pp_sum) of the species in major_pp_species (not including the water vapour pressure)
-% (2*) normalize all partial pressures by multiplying them wit the TDGP/pp_sum ratio, where TDGP is the total dry-gas gas pressure (sensor value minus the the water vapour pressure)
+% (2*) normalize all partial pressures by multiplying them with the TDGP/pp_sum ratio, where TDGP is the total dry-gas gas pressure (sensor value minus the the water vapour pressure)
 % (3) determine the Henry coefficient of each species at the water temperature measured in the GE-MIMS module)
 % (4) apply Henry's Law to determine the the dissolved gas concentrations for each species using the normalized partial pressures and the Henry coefficients for all species
 %
