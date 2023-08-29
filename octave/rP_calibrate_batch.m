@@ -1,4 +1,4 @@
-function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,SENSOR_names,varargin)
+function [P_val,P_err,SPECIES,SAMPLES,TIME,SENSORS,P_unit] = rP_calibrate_batch(data,MS_names,SENSOR_names,varargin)
 
 % function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch (data,MS_names,SENSOR_names,varargin)
 % 
@@ -29,6 +29,8 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 % SPECIES: species names (cell string)
 % SAMPLES: sample names (cell string)
 % TIME: sample time stamps (epoch times as returned by rP_digest_RGA_SRS_step) (matrix)
+% SENOSRS: sensors data
+% P_unit: unit of P_val and P_err
 %
 % EXAMPLE 1:
 % process data in *.txt files stored in 'mydata' directory, automatically detect names of RGA/MS and SENSOR objects in the data set, assume 970 hPa inlet pressure for all standard analyses:
@@ -432,7 +434,7 @@ end
 
 
 PRESS_standard = repmat(standardgas_pressure_val,size(iSTANDARD));
-unit = standardgas_pressure_unit;
+P_unit = standardgas_pressure_unit;
 
 % get standard gas info for STANDARDs and determine sensitivities:
 S_val = S_err = repmat (NA,length(mz_det),length(iSTANDARD)); % matrices with sensitivities (and their uncertainties) of all mz_det combinations for all STANDARD steps (each row corresponds to one step)
@@ -503,7 +505,7 @@ if flag_plot_sensitivity
 
 	plot (hours',y'./scal','.-','markersize',MS);
 	xlabel (sprintf('Time (hours after %s)',datestr(x0)));
-	ylabel (sprintf('Sensitivity (A/%s)',unit))
+	ylabel (sprintf('Sensitivity (A/%s)',P_unit))
 	leg = strrep(SPECIES,'_','');
 	for i = 1:length(leg)
 		if ( expon(i) ~= 0 )
@@ -588,7 +590,7 @@ if flag_plot_partialpressure
 	plot (hours',y'./scal','.-','markersize',MS);
 	xlabel (sprintf('Time (hours after %s)',datestr(x0)));
 	
-	ylabel (sprintf('Partial pressure (%s)',unit));
+	ylabel (sprintf('Partial pressure (%s)',P_unit));
 	leg = strrep(SPECIES,'_','');
 	for i = 1:length(leg)
 		if ( expon(i) ~= 0 )
