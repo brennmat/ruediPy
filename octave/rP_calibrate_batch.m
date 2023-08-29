@@ -20,6 +20,8 @@ function [P_val,P_err,SPECIES,SAMPLES,TIME] = rP_calibrate_batch(data,MS_names,S
 %	- 'wait_exit': wait for key press by user before exiting this function (useful for interactive use from shell scripts)
 %	- 'output_file': file name to use for writing results. If not specified, the code will ask for a file name.
 %	- 'use_zenity': use Zenity/GUI to ask stuff from user instead of command-line terminal.
+%	- 'do_not_write_results_file': do not write results to data file (useful if data needs additional processing before writing, e.g. for user interaction with external GUI, or for pressure normalisation)
+
 % 
 % OUTPUT:
 % P_val: partial pressures of samples (matrix)
@@ -96,6 +98,7 @@ standardgas_pressure_unit = '?';
 wait_exit = false;
 out_file_name = '';
 use_zenity = false;
+write_results_file = true;
 
 % parse options:
 i = 0;
@@ -152,6 +155,9 @@ while i < length(varargin) % parse options
 		case 'wait_exit'
 			disp ('rP_calibrate_batch: will wait for user confirmation after completion.')
 			wait_exit = true;
+		
+		case 'do_not_write_results_file'
+			write_results_file = false;
 		
 		otherwise
 			warning (sprintf("rP_calibrate_batch: unknown option '%s'. Ignoring...",varargin{i}))
@@ -607,11 +613,6 @@ end
 % Write SAMPLE results to data file
 % *************************************************
 
-PARTIALPRESSURES.species = SPECIES;
-PARTIALPRESSURES.val     = P_val;
-PARTIALPRESSURES.err     = P_err;
-PARTIALPRESSURES.time    = TIME;
-PARTIALPRESSURES.unit    = unit;
 
 % SENSORS data from samples:
 SENSORS = {};
@@ -619,14 +620,20 @@ for i = 1:length(iSAMPLE)
 	SENSORS{i} = X(iSAMPLE(i)).SENSORS; 
 end
 
-__write_datafile (...
+if write_results_file
+	rP_write_PP_datafile (...
 	SAMPLES,...
-	PARTIALPRESSURES,...
+	SPECIES,...
+	TIME,...
+	P_val,...
+	P_err,...
+	P_unit,...
 	SENSORS,...
 	fileparts(data),...
 	out_file_name,...
 	use_zenity
 	)
+end
 
 if wait_exit
 	input ("Processing complete! Press ENTER to exit...", "s");
@@ -677,97 +684,4 @@ function [val,err,t] = __filter_by_MZ_DET (steps,mz_det,method)
 			t = [ t   , steps(j).MS.time(k) ];
 		end % if isempty(k)
 	end % for	
-endfunction
-
-
-function __write_datafile (samples,partialpressures,sensors,path,name,use_zenity)
-% write processed data to CSV data file
-
-	species = partialpressures.species;
-	p_val   = partialpressures.val;
-	p_err   = partialpressures.err;
-	time    = partialpressures.time;
-	p_unit  = partialpressures.unit;
-
-	if isempty (name)
-		name = rP_get_output_filename (use_zenity,'Data file for partial pressure data','CSV');
-	end
-
-	if isempty(name)
-		disp ('rP_calibrate_batch: no file name given, not writing data to file.')
-	
-	else
-	
-		% open ASCII file for writing:
-		if length(path) == 0
-			path = pwd;
-		end
-		if strcmp(path(end),filesep)
-			path = path(1:end-1);
-		end
-
-
-		% open ASCII file for writing:
-		[fid,msg] = fopen (name, 'wt');
-		if fid == -1
-			error (sprintf('rP_calibrate_batch: could not open file for writing (%s).',msg))
-		else
-		
-			disp (sprintf('Writing data to %s...',path))
-			
-			% write header:
-			fprintf (fid,'SAMPLE')
-			for j = 1:length(species)
-				fprintf (fid,';%s TIME (EPOCH);%s PARTIALPRESSURE (%s);%s PARTIALPRESSURE ERR (%s)',species{j},species{j},p_unit,species{j},p_unit)
-			end	
-			if ~isempty(sensors)			
-				nsens = length(sensors{1});
-				for j = 1:nsens
-
-					sns_unit = '???';
-					k = 1;
-					while k <= length(samples)
-						if ischar(sensors{k}{j}.mean_unit)
-							if ~strcmp(sensors{k}{j}.mean_unit,'NA')
-								sns_unit = sensors{k}{j}.mean_unit;
-								k = length(samples) + 1;
-							end
-						end
-						k = k+1;
-					end
-					if strcmp (sns_unit,'???')
-						warning (sprintf('rP_calibrate_batch: could not determine units of %s sensor data.',sensors{1}{j}.sensor))
-					end
-					fprintf (fid,';%s TIME (EPOCH);%s (%s);%s ERR (%s)',sensors{1}{j}.sensor,sensors{1}{j}.sensor,sns_unit,sensors{1}{j}.sensor,sns_unit)
-
-				end
-			end
-			
-						
-			% write data:
-			for i = 1:length(samples)
-				fprintf (fid,'\n');
-				
-				% sample name:
-				fprintf (fid,'"%s"',samples{i});
-				
-				% gas partial pressures:
-				for j = 1:length(species)				
-					fprintf (fid,';%.2f;%g;%g',time(j,i),p_val(j,i),abs(p_err(j,i)))
-				end
-
-				% sensor data (if any):
-				if ~isempty(sensors)				
-					for j = 1:nsens						
-						fprintf (fid,';%.2f;%g;%g',sensors{i}{j}.mean_time,sensors{i}{j}.mean,sensors{i}{j}.mean_err)
-					end
-				end
-
-			end % for i = 
-
-			fclose (fid);
-
-		end % if fid == -1
-	end % if isempty(name)
-	
 endfunction
