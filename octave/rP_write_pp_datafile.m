@@ -1,6 +1,6 @@
-function rP_write_PP_datafile ( samples, species, time, p_val, p_err, p_unit, sensors, file_path, file_name, use_zenity )
+function rP_write_pp_datafile ( samples, species, time, p_val, p_err, p_unit, sensors, file_path, file_name, use_zenity )
 
-% function rP_write_PP_datafile ( samples, species, time, p_val, p_err, p_unit, sensors, file_path, file_name, use_zenity )
+% function rP_write_pp_datafile ( samples, species, time, p_val, p_err, p_unit, sensors, file_path, file_name, use_zenity )
 % 
 % UNDER CONSTRUCTION!!!
 %
