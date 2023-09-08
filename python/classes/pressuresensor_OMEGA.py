@@ -316,7 +316,9 @@ class pressuresensor_OMEGA:
 				unit = ans[1]
 				
 				# make sure readback value in in bar, convert if necessars:
-				if unit.upper() == 'PSI':
+				if unit.upper() == 'BAR':
+					pass
+				elif unit.upper() == 'PSI':
 					p = p / 14.5038
 					unit = 'bar'
 				elif unit.upper() == 'MBAR':
@@ -351,7 +353,7 @@ class pressuresensor_OMEGA:
 
 			except ValueError as e:
 				self.release_serial_lock()
-				self.warning( e )
+				self.warning( str(e) )
 			except:
 				self.release_serial_lock()
 				self.warning( 'An unknown error occured while reading the OMEGA pressure sensor!' )
