@@ -314,8 +314,22 @@ class pressuresensor_OMEGA:
 				ans = ans.split(' ')
 				p = float( ans[0] )    # convert string to float
 				unit = ans[1]
-				if unit != 'bar':
-					raise ValueError( 'OMEGA pressure sensor returned unit = ' + unit + ', not bar!')
+				
+				# make sure readback value in in bar, convert if necessars:
+				if unit.upper() == 'PSI':
+					p = p / 14.5038
+					unit = 'bar'
+				elif unit.upper() == 'MBAR':
+					p = p / 1000.0
+					unit = 'bar'
+				elif unit.upper() == 'HPA':
+					p = p / 1000.0
+					unit = 'bar'
+				elif unit.upper() == 'ATM':
+					p = p * 1.01325
+					unit = 'bar'
+				else:
+					raise ValueError( 'OMEGA pressure sensor returned unit = ' + unit + ', cannot convert.')
 				
 				# convert unit (if necessary):
 				if self._unit.upper() == 'BAR':
