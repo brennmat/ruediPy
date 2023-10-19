@@ -119,7 +119,7 @@ else
 end
 
 
-% determine SENSOR namees from data set:
+% determine SENSOR names from data set:
 disp ('Scanning for SENSOR objects...')
 SENSOR_names = {};
 for i = 1:length(RAW)
