@@ -73,7 +73,6 @@ class selectorvalve_VICI:
 		OUTPUT:
 		(none)
 		'''
-
 		self._label = label
 			
 		try:
@@ -136,7 +135,7 @@ class selectorvalve_VICI:
 			if (ans != '-1'):
 				while self.ser.inWaiting() > 0: # while there's something in the buffer...
 					ans = ans + self.ser.read().decode('ascii') # read each byte
-
+					
 			try:
 				ans = ans.split('=')[1] # split answer in the form 'NP = 6'
 				ans = ans.strip() # strip away whitespace
@@ -418,16 +417,20 @@ class selectorvalve_VICI:
 				ans = ''
 		
 		# read back result:
+
 		if (ans != '-1'):
-			while self.ser.inWaiting() > 0: # while there's something in the buffer...
-				ans = ans + self.ser.read().decode('ascii') # read each byte
-		
-		try:
-			ans = ans.split('=')[1] # split answer in the form 'Position is = 1'
-			ans = ans.strip() # strip away whitespace
-		except:
-			self.warning('could not parse response from valve: ans = ' + ans)
-			ans = '?'
+          		# Wait extra before readout because some VICIs seem to be slow (hoping COMPLETE result string made it to the serial buffer)
+          		time.sleep(0.1)
+          		
+          		while self.ser.inWaiting() > 0: # while there's something in the buffer...
+          			ans = ans + self.ser.read().decode('ascii') # read each byte
+          		
+          		try:
+          			ans = ans.split('=')[1] # split answer in the form 'Position is = 1'
+          			ans = ans.strip() # strip away whitespace
+          		except:
+          			self.warning('could not parse response from valve: ans = ' + ans)
+          			ans = '?'
 		
 		# release serial port:
 		self.release_serial_lock()
@@ -462,4 +465,3 @@ class selectorvalve_VICI:
 				# time.sleep(0.05)
 			except:
 				self.warning('Could not write valve position to status file')
-
