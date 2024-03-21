@@ -81,12 +81,6 @@ class pressuresensor_ARDUINO:
 		OUTPUT:
 		(none)
 		'''
-		
-		
-		
-		print('************** baudrate = ' + baudrate)
-		
-		
 	
 		self._label = label
 		
