@@ -124,6 +124,10 @@ class pressuresensor_ARDUINO:
 		try:
 
 			# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
+			
+			
+			print('************ trying to connect')
+			
 
 			from pkg_resources import parse_version
 			if parse_version(serial.__version__) >= parse_version('3.3') :
@@ -153,21 +157,25 @@ class pressuresensor_ARDUINO:
 			time.sleep(0.1)
 			ser.flushInput()    # make sure input is empty
 		
+
+			print('************ connected')
+			
+			
+			
 			self.ser = ser
 			self._ser_locked = False
 			
 			if self._has_display: # prepare plotting environment and figure
 
 				import matplotlib.pyplot as plt
-
 				# set up plot figure:
 				self._fig = plt.figure(figsize=(fig_w,fig_h))
 				t = 'ARDUINO_PSENS'
 				if self._plot_title:
 					t = t + ' (' + self._plot_title + ')'
-				self._fig.canvas.set_window_title(t)
+				self._fig.canvas.manager.set_window_title(t)
 
-				# set up panel for pressure history plot:
+                # set up panel for pressure history plot:
 				self._pressbuffer_ax = plt.subplot(1,1,1)
 				t = 'PRESSBUFFER'
 				if self._plot_title:
@@ -292,11 +300,9 @@ class pressuresensor_ARDUINO:
 			try:
 				# get pressure reading from the sensor:
 				self.get_serial_lock()
-				self.ser.write(('READ\r').encode('utf-8')) # send command to serial port
+				self.ser.write(('READ\r\n').encode('utf-8')) # send command to serial port
 				ans = self.ser.readline().decode('utf-8') # read response and decode ASCII
-				### if ans[0] == '>':
-				### 	# fix > character dangling in the serial buffer from previous reading
-				### 	ans = ans[1:]
+				
 				self.ser.flushInput()  # make sure input is empty
 				self.release_serial_lock()
 				
@@ -306,7 +312,11 @@ class pressuresensor_ARDUINO:
 				# parse data:
 				ans = ans.split(' ')
 				p = float( ans[0] )    # convert string to float
-				unit = ans[1]
+				try:
+				    unit = ans[1]
+				except:
+				    self.warning( 'ARDUINO pressure sensor did not report unit of pressure value! Assuming unit = hPa...' )
+				    unit = 'hPa'
 				
 				# make sure readback value in in bar, convert if necessars:
 				if unit.upper() == 'BAR':

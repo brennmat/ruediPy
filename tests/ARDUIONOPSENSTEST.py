@@ -1,7 +1,7 @@
 # Python script for testing the ruediPy code
 # 
 #
-# Copyright 2016, Matthias Brennwald (brennmat@gmail.com) and Yama Tomonaga
+# Copyright 2018, Matthias Brennwald (brennmat@gmail.com)
 # 
 # This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
 # 
@@ -42,21 +42,24 @@
 import time
 
 # import ruediPy classes:
-from classes.temperaturesensor_MAXIM	import temperaturesensor_MAXIM
-from classes.datafile					import datafile
+from classes.pressuresensor_ARDUINO import pressuresensor_ARDUINO
+from classes.datafile               import datafile
 
-TSENS = temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FTBRYA3X-if00-port0' , label = 'TEMP-TEST' )
+PSENS = pressuresensor_ARDUINO ( serialport = '/dev/serial/by-id/usb-Arduino_LLC_Arduino_Nano_Every_6FDCEE3351544B5933202020FF093145-if00' , baudrate = 115200 , label = 'TOTALPRESSURE' )
 
-DATAFILE = datafile ( '~/data' )
-
+# for Mac OS X:
+# PSENS = pressuresensor_OMEGA ( serialport = '/dev/cu.usbserial-487740' , label = 'TOTALPRESSURE' )
 
 # start data file:
+DATAFILE	= datafile ( '~/data' )
 DATAFILE.next() # start a new data file
-print( 'Data output to ' + DATAFILE.name() )
+print ( 'Data output to ' + DATAFILE.name() )
 
-# take temperature readings:
+# DATAFILE = 'nofile'
+
+# take pressure readings:
 while 1:
-	T,unit = TSENS.temperature(DATAFILE)
-	print ( str(T) + ' ' + unit )
-	TSENS.plot_tempbuffer()
-	time.sleep(0.2)
+	p,unit = PSENS.pressure(DATAFILE)
+	print ( str(p) + ' ' + unit )
+	PSENS.plot_pressbuffer()
+	time.sleep (0.1)
