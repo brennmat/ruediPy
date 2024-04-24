@@ -284,7 +284,7 @@ case {'H2'}
     H = 1./kH; % Henry's Law coefficient in Pa/(mol/m³)
     
     warning('rP_atmos_gas: CONVERSION OF UNITS OF H2 HENRY COEFFICIENT MAY BE OFF -- NEEDS CAREFUL CHECKING!!! M.B. 202404024');    
-    H = H * 100 / 10e6; % Henry's Law coefficient in hPa/(mol/g)
+    H = H / 100 * 10e6; % Henry's Law coefficient in hPa/(mol/g)
     
     H = H / mol_2_ccSTP; % convert from mol/g to ccSTP/g
 
