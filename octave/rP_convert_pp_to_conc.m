@@ -219,6 +219,10 @@ for i = 1:Nsmpl
 				[c,v,d,m,H] = rP_atmos_gas ('Xe',TEMP(i),0,1013.25);
 				[c,v,d,m,dH] = rP_atmos_gas ('Xe',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
 			
+			case 'H2'
+				[c,v,d,m,H] = rP_atmos_gas ('H2',TEMP(i),0,1013.25);
+				[c,v,d,m,dH] = rP_atmos_gas ('H2',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
+
 			case 'CH4'
 				[c,v,d,m,H] = rP_atmos_gas ('CH4',TEMP(i),0,1013.25);
 				[c,v,d,m,dH] = rP_atmos_gas ('CH4',TEMP(i)+TEMP_ERR(i),0,1013.25); dH = abs (dH-H);
