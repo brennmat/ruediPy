@@ -269,7 +269,25 @@ case {'Xe-136','Xe_136'}
     M_mol = 136;
     C_atm = C_atm * 0.08857;
     v_atm = v_atm * 0.08857;
+
+case {'H2'}
+    C_atm = v_atm = D = NA; % no universal number here!
+    warning ( "atmos_gas_implementation" , "atmos_gas: diffusivity of H2 (hydrogen) not yet implemented." )
+    M_mol = 2.015; % from https://fr.wikipedia.org/wiki/Dihydrogène, 23. Apr 2024
+    % Inverse Henry's Law constant, using formulae and data from review/compilation by Rolf Sander (https://henrys-law.org/henry/casrn/1333-74-0), with T in Kelvin:
+    %   k°H = Inverse Henry's law constant for solubility in water at 298.15 K, in (mol/L)/atm
+    %   d(ln(kH))/d(1/T) = Temperature dependence constant, in K 
+    %   kH(T) = k°H * exp( d(ln(kH))/d(1/T) * (1/T - 1/298.15 K) )  Inverse Henry's Law coefficient, in (mol/L)/atm
+    kH0 = 7.75E-6; % kH0 = mean ([ 7.8e-6  7.7e-6 7.7e-6 7.8e-6 ]);   % kH0 at 298.15 K, in (mol/m³)/Pa
+    uT  = 527.5; % uT  = mean ([ 530 490 490 600 ]);           % uT = ln(kH)/d(1/T) = Temperature dependence constant, in K
+    kH  = kH0 * exp( uT .* (1./TKELV - 1/298.15) ); % inverse Henry's Law coefficient in (mol/m³)/Pa
+    H = 1./kH; % Henry's Law coefficient in Pa/(mol/m³)
     
+    warning('rP_atmos_gas: CONVERSION OF UNITS OF H2 HENRY COEFFICIENT MAY BE OFF -- NEEDS CAREFUL CHECKING!!! M.B. 202404024');    
+    H = H * 100 / 10e6; % Henry's Law coefficient in hPa/(mol/g)
+    
+    H = H / mol_2_ccSTP; % convert from mol/g to ccSTP/g
+
 case {'N2'}
     [C_atm,v_atm,D] = __solubility_noble (TKELV,S,pATM,1060);
     D = D / 1E9;
