@@ -2211,7 +2211,7 @@ class rgams_SRS:
 					self._figwindow_is_shown = True
 				
 				# remove all the lines that are currently in the plot:
-				self._peakbuffer_ax.lines = []
+				self._peakbuffer_ax.cla()
 
 				# redo the plot by plotting line by line (mz by mz and detector by detector):
 				colors = ('b', 'g', 'r', 'c', 'm', 'y', 'k') # some colors for use with all 'other' mz values
@@ -2426,7 +2426,7 @@ class rgams_SRS:
 					self._figwindow_is_shown = True
 
 				# remove all the lines that are currently in the plot:
-				self._scan_ax.lines = []
+				self._scan_ax.cla()
 
 				self._scan_ax.plot( mz , intens , 'k.-' )
 				if cumsum_mz:
