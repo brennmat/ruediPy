@@ -301,15 +301,24 @@ class pressuresensor_ARDUINO:
 				t = misc.now_UNIX()
 				
 				# parse data:
+				ans = ans.rstrip() # remove \r and \n from end of string
 				ans = ans.split(' ')
-				p = float( ans[0] )    # convert string to float
+				
+				# parse value:
+				try:
+				    p = float( ans[0] )    # convert string to float
+				except:
+				    self.warning( 'ARDUINO pressure sensor: could not convert value ' + ans[0] + '. Using value = NAN...' )
+				    p = float('nan')
+				    
+				# parse unit:
 				try:
 				    unit = ans[1]
 				except:
 				    self.warning( 'ARDUINO pressure sensor did not report unit of pressure value! Assuming unit = hPa...' )
 				    unit = 'hPa'
 				
-				# make sure readback value in in bar, convert if necessars:
+				# make sure readback value in in bar, convert if necessary:
 				if unit.upper() == 'BAR':
 					pass
 				elif unit.upper() == 'PSI':
@@ -327,7 +336,7 @@ class pressuresensor_ARDUINO:
 				else:
 					raise ValueError( 'ARDUINO pressure sensor returned unit = ' + unit + ', cannot convert.')
 				
-				# convert unit (if necessary):
+				# convert unit to self._unit (if necessary):
 				if self._unit.upper() == 'BAR':
 				    pass
 				elif self._unit.upper() == 'MBAR':
