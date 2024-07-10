@@ -419,6 +419,7 @@ class selectorvalve_VICI:
 		
 		# read back result:
 		if (ans != '-1'):
+			time.sleep(dt) # wait some more to be sure the valve response is moved to the serial buffer completely
 			while self.ser.inWaiting() > 0: # while there's something in the buffer...
 				ans = ans + self.ser.read().decode('ascii') # read each byte
 		
