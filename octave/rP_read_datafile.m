@@ -161,7 +161,7 @@ else % read file line by line:
 						FIELDTYPES{end+1} = 'TEMPERATURESENSOR';
 						X = setfield (X,L{k},u); % add TEMPERATURESENSOR[LABEL-k] data
 					
-					case {'PRESSURESENSOR_WIKA', 'PRESSURESENSOR_OMEGA', 'PRESSURESENSOR_VIRTUAL'}
+					case {'PRESSURESENSOR_WIKA', 'PRESSURESENSOR_OMEGA', 'PRESSURESENSOR_ARDUINO', 'PRESSURESENSOR_VIRTUAL'}
 						u = __parse_PRESSURESENSOR (TYPE(j(l)),DATA(j(l)),t(j(l)));
 						FIELDTYPES{end+1} = 'PRESSURESENSOR';
 						X = setfield (X,L{k},u); % add PRESSURESENSOR[LABEL-k] data
