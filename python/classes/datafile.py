@@ -1,5 +1,5 @@
-# Code for the datafile class
-# 
+# Code for the datafile class, for writing data from measurement software to files on disk
+#
 # DISCLAIMER:
 # This file is part of ruediPy, a toolbox for operation of RUEDI mass spectrometer systems.
 # 
