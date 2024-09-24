@@ -557,9 +557,6 @@ function X = __parse_SELECTORVALVE (TYPE,DATA,t) % parse SELECTORVALVE object da
 					
 					% timestamp:
 					p.epochtime = tt(k);
-										
-					% split data line entries (there is currently only one single entry for SELECTORVALVE POSITION, but who knows if this might change in the future):
-					%%% u = __my_strtrim (__my_strsplit(DD{k},';')); % remove leading and trailing whitespace
 															
 					% position value:
 					
