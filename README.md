@@ -1,7 +1,12 @@
-ruediPy: instrument control and data processing for RUEDI gas analyzers
+# ruediPy Octave code
 
-ruediPy is a collection of Python programs to control RUEDI instruments, and collection of GNU Octave (or Matlab) tools to load, process, and manipulate RUEDI data acquired with ruediPy.
+This directory contains the Octave/MATLAB implementation of ruediPy.
 
-ruediPy is distributed as free software under the GNU General Public License (see LICENSE.txt).
+The Octave code is currently supported and used by existing tools and workflows.
+Python (`src/ruedipy`) is the primary target for new development, but the Octave
+implementation is retained to ensure continuity, reproducibility, and
+backwards compatibility.
 
-Copyright (C) 2016 Matthias S. Brennwald (brennmat@gmail.com)
+The long-term relationship between the Octave and Python implementations
+(e.g. coexistence, partial replacement, or deprecation) has not yet been
+formally decided.
