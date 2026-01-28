@@ -41,3 +41,4 @@ jobs:
         run: pytest -q
 
       - name: Build sdist/wheel
+        run: python -m build
