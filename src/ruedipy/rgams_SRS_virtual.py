@@ -41,8 +41,8 @@ try:
 	import math
 	import numpy
 	import random
-	from classes.misc	import misc
-	from classes.rgams_SRS	import rgams_SRS
+	from .misc	import misc
+	from .rgams_SRS	import rgams_SRS
 except ImportError as e:
 	print (e)
 	raise

@@ -43,7 +43,7 @@ try:
 	import numpy
 	import os
 	from scipy.interpolate import interp1d
-	from classes.misc	import misc
+	from .misc	import misc
 except ImportError as e:
 	print (e)
 	raise

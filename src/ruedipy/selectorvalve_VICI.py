@@ -40,7 +40,7 @@ try:
 	import serial
 	import time
 	from pathlib import Path
-	from classes.misc	import misc
+	from .misc	import misc
 except ImportError as e:
 	print (e)
 	raise

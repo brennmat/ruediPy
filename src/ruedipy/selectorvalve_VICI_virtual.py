@@ -39,8 +39,8 @@ try:
 	import warnings
 	import serial
 	import time
-	from classes.misc	import misc
-	from classes.selectorvalve_VICI import selectorvalve_VICI
+	from .misc	import misc
+	from .selectorvalve_VICI import selectorvalve_VICI
 except ImportError as e:
 	print (e)
 	raise

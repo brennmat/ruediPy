@@ -36,8 +36,8 @@
 
 try:
 	import sys
-	from classes.selectorvalve_VICI import selectorvalve_VICI
-	from classes.misc	import misc
+	from .selectorvalve_VICI import selectorvalve_VICI
+	from .misc	import misc
 except ImportError as e:
 	print (e)
 	raise

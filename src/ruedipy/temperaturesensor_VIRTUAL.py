@@ -41,7 +41,7 @@ try:
 	import numpy
 	import os
 	import time
-	from classes.misc    import misc
+	from .misc    import misc
 	from digitemp.master import UART_Adapter
 	from digitemp.device import AddressableDevice
 	from digitemp.device import DS18B20

@@ -50,7 +50,7 @@ except ImportError as e:
 if ( sys.version_info[0] < 3 ):
 	warnings.warn("ruediPy / pressuresensor_ARDUINO class is running on Python version < 3. Version 3.0 or newer is recommended!")
 
-from classes.misc	import misc
+from .misc	import misc
 
 
 class pressuresensor_ARDUINO:
