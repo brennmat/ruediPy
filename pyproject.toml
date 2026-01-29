@@ -9,13 +9,19 @@ description = "ruediPy"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
+dependencies = [
+  "numpy",
+  "matplotlib",
+  "pyserial",
+  "pydigitemp",
+  "scipy",
+  "termcolor",
+  "setuptools",  # for pkg_resources.parse_version
+]
 
 authors = [
   { name = "Matthias Brennwald" }
 ]
-
-# Add runtime dependencies here when you know them, e.g. ["numpy>=1.26"]
-dependencies = []
 
 # Useful metadata for PyPI / tooling
 classifiers = [
