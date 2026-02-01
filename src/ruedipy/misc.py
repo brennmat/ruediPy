@@ -15,6 +15,8 @@ try:
 	import time
 	import inspect
 	import os
+	import logging
+	from typing import Optional, Any
 	
 except ImportError as e:
 	print (e)
@@ -22,11 +24,26 @@ except ImportError as e:
 
 # import GUI configuration (if any):
 has_gui = False
+_gui_hook = None  # external GUI hook object (must provide logmessage()/warnmessage())
 try:
-	from gui_config import gui_config # to share global configurations of the program
+	from gui_config import gui_config # legacy top-level GUI hook
+	_gui_hook = gui_config
 	has_gui = True
 except ImportError:
 	pass
+
+def set_gui_hook(gui_hook: Optional[Any]) -> None:
+	'''
+	set_gui_hook(gui_hook)
+
+	Register an external GUI hook for routed output.
+	The hook must provide .logmessage(msg, overwrite_previous_msg=False)
+	and .warnmessage(msg, overwrite_previous_msg=False).
+
+	Pass None to disable the hook.
+	'''
+	global _gui_hook
+	_gui_hook = gui_hook
 
 do_color_term = False
 if not has_gui:
@@ -120,19 +137,24 @@ class misc:
 			caller = os.path.splitext(os.path.basename(caller_filename))[0]
 			msg = caller + ' at ' + misc.now_string() + ': ' + msg
 			
-		try:
-			# send warning message to GUI, and let it deal with it:
-			gui_config.warnmessage( msg, overwrite_previous_msg = False )
-		except:
-			# show warning message on STDOUT:
-			print ('\a') # get user attention using the terminal bell
-			M = '***** WARNING from ' + msg
-			if do_color_term:
-				print (colored(msg,'red'))
-			else:
-				print (msg)
-			
-			
+		# always forward to python logging (so applications can attach file/GUI handlers):
+		logging.getLogger('ruedipy').warning(msg)
+
+		# try sending to external GUI hook if configured:
+		if _gui_hook is not None:
+			try:
+				_gui_hook.warnmessage(msg, overwrite_previous_msg=overwrite_previous_msg)
+				return
+			except Exception:
+				pass
+
+		# fallback: show warning message on STDOUT:
+		print('\a') # get user attention using the terminal bell
+		M = '***** WARNING from ' + msg
+		if do_color_term:
+			print(colored(msg,'red'))
+		else:
+			print(msg)
 	########################################################################################################
 	
 
@@ -168,11 +190,19 @@ class misc:
 
 			msg = caller + ' at ' + msg
 
-		try:
-			# send log message to GUI, and let it deal with it:
-			gui_config.logmessage( msg, overwrite_previous_msg )			
-		except:
-			print (msg)
+		# always forward to python logging (so applications can attach file/GUI handlers):
+		logging.getLogger('ruedipy').info(msg)
+
+		# try sending to external GUI hook if configured:
+		if _gui_hook is not None:
+			try:
+				_gui_hook.logmessage(msg, overwrite_previous_msg)
+				return
+			except Exception:
+				pass
+
+		# fallback:
+		print(msg)
 
 
 	########################################################################################################
@@ -350,9 +380,10 @@ class misc:
 		
 		have_external_gui = False
 		try:
-			# try asking gui_config module, if it exists:
-			have_external_gui = gui_config.have_gui()
-		except:
+			# try asking external GUI hook, if it exists:
+			if _gui_hook is not None and hasattr(_gui_hook,'have_gui'):
+				have_external_gui = _gui_hook.have_gui()
+		except Exception:
 			pass
 
 		return have_external_gui	
