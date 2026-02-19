@@ -204,7 +204,7 @@ class rgams_SRS_virtual(rgams_SRS):
 		time.sleep(3)
 		
 		if stdout:
-			print(status)
+			self.log(status)
 		
 		return status
 		

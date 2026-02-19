@@ -128,7 +128,7 @@ class pressuresensor_VIRTUAL:
 
 			self._figwindow_is_shown = False
 
-		print ('Successfully configured VIRTUAL pressure sensor with serial number ' + str(self._serial_number) + '.' )
+		misc.logmessage('[' + self.label() + '] Successfully configured VIRTUAL pressure sensor with serial number ' + str(self._serial_number) + '.')
 
 
 

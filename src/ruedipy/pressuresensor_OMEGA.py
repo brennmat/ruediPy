@@ -169,7 +169,7 @@ class pressuresensor_OMEGA:
 
 				self._figwindow_is_shown = False
 
-			print ('Successfully configured OMEGA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport )
+			misc.logmessage('[' + self.label() + '] Successfully configured OMEGA pressure sensor with serial number ' + str(self._serial_number) + ' on ' + serialport)
 
 
 		except:

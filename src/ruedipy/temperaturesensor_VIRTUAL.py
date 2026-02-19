@@ -125,7 +125,7 @@ class temperaturesensor_VIRTUAL:
 			self._figwindow_is_shown = False
 
 
-		print ( 'Successfully configured VIRTUAL temperature sensor.' )
+		misc.logmessage('[' + self.label() + '] Successfully configured VIRTUAL temperature sensor.')
 
 
 	########################################################################################################

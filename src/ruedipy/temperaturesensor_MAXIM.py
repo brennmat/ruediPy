@@ -99,7 +99,7 @@ class temperaturesensor_MAXIM:
 			r = AddressableDevice(UART_Adapter(serialport)).get_connected_ROMs()
 
 			if r is None:
-				print ( 'Couldn not find any 1-wire devices on ' + serialport )
+				misc.warnmessage('[' + self.label() + '] Could not find any 1-wire devices on ' + serialport)
 			else:
 				bus = UART_Adapter(serialport)
 				if romcode == '':
@@ -108,9 +108,9 @@ class temperaturesensor_MAXIM:
 						self._sensor = DS18B20(bus)
 						self._ROMcode = r[0]
 					else:
-						print ( 'Too many 1-wire devices to choose from! Try again with specific ROM code...' )
+						misc.warnmessage('[' + self.label() + '] Too many 1-wire devices to choose from! Try again with specific ROM code...')
 						for i in range(1,len(r)):
-							print ( 'Device ' + i + ' ROM code: ' + r[i-1] +'\n' )
+							misc.logmessage('[' + self.label() + '] Device ' + str(i) + ' ROM code: ' + r[i-1])
 				else:
 					self._sensor = DS18B20(bus, rom=romcode)
 					self._ROMcode = romcode
@@ -150,7 +150,7 @@ class temperaturesensor_MAXIM:
 
 
 			if hasattr(self,'_sensor'):
-				print ( 'Successfully configured DS18B20 temperature sensor (ROM code ' + self._ROMcode + ')' )
+				misc.logmessage('[' + self.label() + '] Successfully configured DS18B20 temperature sensor (ROM code ' + self._ROMcode + ')')
 			else:
 				self.warning( 'Could not initialize MAXIM DS1820 temperature sensor.' )
 

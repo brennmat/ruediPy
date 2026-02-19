@@ -189,7 +189,7 @@ class rgams_SRS:
 				self._figwindow_is_shown = False
 				plt.ion()		
 			
-			print( 'Successfully configured SRS RGA MS with serial number ' + self.get_serial_number() + ' on ' + serialport )
+			self.log('Successfully configured SRS RGA MS with serial number ' + self.get_serial_number() + ' on ' + serialport)
 
 		# Error handling:
 		except Exception as e:
@@ -2569,7 +2569,7 @@ class rgams_SRS:
 		status = status.rstrip()
 		
 		if stdout:
-			print(status)
+			self.log(status)
 			
 		return status
 
@@ -2617,22 +2617,20 @@ class rgams_SRS:
 			if clear_peakbuf_cond:
 				self.peakbuffer_clear() # clear peakbuffer
 			for i in range(NC):
-				msg = 'Conditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...        '
-				print ( '\r' + msg , end='\r' )
-				sys.stdout.flush()
+				msg = 'Conditioning ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(NC) + ')...'
+				misc.logmessage('[' + self.label() + '] ' + msg, overwrite_previous_msg=True)
 				pz_cycle (mz,gate,'nofile',datatype,plot_cond)
-			print ( msg.rstrip() + 'done.' )
+			misc.logmessage('[' + self.label() + '] ' + msg.rstrip() + ' done.')
 
 		# reading data values:
 		if ND > 0:
 			if clear_peakbuf_main:
 				self.peakbuffer_clear() # clear peakbuffer
 			for i in range(ND):
-				msg = 'Reading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...        '
-				print ( '\r' + msg , end='\r' )
-				sys.stdout.flush()
+				msg = 'Reading data using ' + detector + ' detector (cycle ' + str(i+1) + ' of ' + str(ND) + ')...'
+				misc.logmessage('[' + self.label() + '] ' + msg, overwrite_previous_msg=True)
 				pz_cycle (mz,gate,datafile,datatype)
-			print ( msg.rstrip() + 'done.' )
+			misc.logmessage('[' + self.label() + '] ' + msg.rstrip() + ' done.')
 
 
 

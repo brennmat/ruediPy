@@ -161,7 +161,7 @@ class pressuresensor_ARDUINO:
 
 				self._figwindow_is_shown = False
 
-			print ('Successfully configured ARDUINO pressure sensor on ' + serialport )
+			misc.logmessage('[' + self.label() + '] Successfully configured ARDUINO pressure sensor on ' + serialport)
 
 
 		except:

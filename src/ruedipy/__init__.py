@@ -1,6 +1,8 @@
 from importlib.metadata import PackageNotFoundError, version
 
-__all__ = []
+from .misc import get_logger, set_have_external_gui
+
+__all__ = ["get_logger", "set_have_external_gui"]
 
 try:
 	__version__ = version("ruediPy")
