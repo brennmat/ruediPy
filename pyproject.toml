@@ -16,7 +16,6 @@ dependencies = [
   "pydigitemp",
   "scipy",
   "termcolor",
-  "setuptools",  # for pkg_resources.parse_version
 ]
 
 authors = [

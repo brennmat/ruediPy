@@ -81,9 +81,8 @@ class rgams_SRS:
 			# open and configure serial port for communication with SRS RGA (28'800 baud, 8 data bits, no parity, 2 stop bits
 			# use exclusive access mode if possible (available with serial module version 3.3 and later)
 
-			from pkg_resources import parse_version
-			if parse_version(serial.__version__) >= parse_version('3.3') :
-				# open port with exclusive access:
+			try:
+				# open port with exclusive access when supported by pyserial:
 				ser = serial.Serial(
 					port      = serialport,
 					baudrate  = 28800,
@@ -93,9 +92,8 @@ class rgams_SRS:
 					timeout   = 10.0,
 					exclusive = True
 				)
-
-			else:
-				# open port (can't ask for exclusive access):
+			except TypeError:
+				# older pyserial: fallback without exclusive flag
 				ser = serial.Serial(
 					port     = serialport,
 					baudrate = 28800,

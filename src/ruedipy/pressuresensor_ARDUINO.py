@@ -99,10 +99,8 @@ class pressuresensor_ARDUINO:
 		try:
 
 			# open and configure serial port for communication with VICI valve (9600 baud, 8 data bits, no parity, 1 stop bit
-			from pkg_resources import parse_version
-
-			if parse_version(serial.__version__) >= parse_version('3.3') :
-				# open port with exclusive access:
+			try:
+				# open port with exclusive access when supported by pyserial:
 				ser = serial.Serial(
 					port     = serialport,
 					baudrate = baudrate,
@@ -112,9 +110,8 @@ class pressuresensor_ARDUINO:
 					timeout  = 5,
 					exclusive = True
 				)
-			
-			else:
-				# open port (can't ask for exclusive access):
+			except TypeError:
+				# older pyserial: fallback without exclusive flag
 				ser = serial.Serial(
 					port     = serialport,
 					baudrate = baudrate,
