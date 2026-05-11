@@ -48,8 +48,6 @@ from ruedipy.datafile		import datafile
 VALVE    = selectorvalve_VICI ( serialport = '/dev/serial/by-id/usb-FTDI_USB-RS232_Cable_FT2V8UF9-if00-port0', label = 'INLETSELECTOR' )
 DATAFILE = datafile ( '~/data' )
 
-VALVE.set_legacy()
-
 # start data file:
 DATAFILE.next() # start a new data file
 print ( 'Data output to ' + DATAFILE.name() )

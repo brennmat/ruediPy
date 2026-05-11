@@ -167,24 +167,30 @@ class selectorvalve_compositeVICI:
 		'''
 		
 		val = int(val)
-		
-		
-		if val > self.getnumpos():
-			self.warning( 'Cannot set valve position to ' + str(val) + ': number of valve positions = ' + str(self.getnumpos()) + '. Skipping...' )
-		
+		numpos = self.getnumpos()
+
+		if numpos < 1:
+			self.warning( 'Cannot set valve position to ' + str(val) + ': number of valve positions unknown (' + str(numpos) + '). Skipping...' )
+			return
+
 		if val < 1:
 			self.warning( 'Cannot set valve position to ' + str(val) + '. Skipping...' )
-		else:
-			curpos = self.getpos()
-			if not curpos == val: # check if valve is already at desired position
-				# set positions of individual hardware valves:
-				for i in range(len (self._hw_valves)):
-					self._hw_valves[i].setpos(self._valvespostable[val-1][i],'nofile')
-				self._lastpos = val
-			
-			# write to datafile
-			if not f == 'nofile':
-				f.write_valve_pos('SELECTORVALVE_COMPOSITEVICI',self.label(),val,misc.now_UNIX())
+			return
+
+		if val > numpos:
+			self.warning( 'Cannot set valve position to ' + str(val) + ': number of valve positions = ' + str(numpos) + '. Skipping...' )
+			return
+
+		curpos = self.getpos()
+		if not curpos == val: # check if valve is already at desired position
+			# set positions of individual hardware valves:
+			for i in range(len (self._hw_valves)):
+				self._hw_valves[i].setpos(self._valvespostable[val-1][i],'nofile')
+			self._lastpos = val
+		
+		# write to datafile
+		if not f == 'nofile':
+			f.write_valve_pos('SELECTORVALVE_COMPOSITEVICI',self.label(),val,misc.now_UNIX())
 
 
 	########################################################################################################
