@@ -35,15 +35,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# make shure Python knows where to look for the RUEDI Python code
-# http://stackoverflow.com/questions/4580101/python-add-pythonpath-during-command-line-module-run
-# Example (bash): export PYTHONPATH=$HOME/ruediPy/python
+# Run from an activated Python environment with ruediPy installed.
+# For a local checkout: create/activate a venv and run `pip install -e .` from the repo root.
 
 # import general purpose Python classes:
 
 # import ruediPy classes:
-from classes.selectorvalve_VICI	import selectorvalve_VICI
-from classes.datafile		import datafile
+from ruedipy.selectorvalve_VICI	import selectorvalve_VICI
+from ruedipy.datafile		import datafile
 
 # set up ruediPy objects:
 VALVE    = selectorvalve_VICI ( serialport = '/dev/serial/by-id/usb-FTDI_USB-RS232_Cable_FT2V8UF9-if00-port0', label = 'INLETSELECTOR' )

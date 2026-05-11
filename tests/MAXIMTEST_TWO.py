@@ -35,12 +35,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# make shure Python knows where to look for the RUEDI Python code
-# http://stackoverflow.com/questions/4580101/python-add-pythonpath-during-command-line-module-run
-# Example (bash): export PYTHONPATH=~/ruediPy/python
+# Run from an activated Python environment with ruediPy installed.
+# For a local checkout: create/activate a venv and run `pip install -e .` from the repo root.
 
 # import ruediPy classes:
-from classes.temperaturesensor_MAXIM	import temperaturesensor_MAXIM
+from ruedipy.temperaturesensor_MAXIM	import temperaturesensor_MAXIM
 
 TSENS1		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FT9PL2F6-if00-port0')
 TSENS2		= temperaturesensor_MAXIM ( serialport = '/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FT9PL7LS-if00-port0')

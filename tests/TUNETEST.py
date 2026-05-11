@@ -8,8 +8,11 @@ import os
 #	matplotlib.use('GTKAgg') # use this for faster plotting
 #	import matplotlib.pyplot as plt
 
+# Run from an activated Python environment with ruediPy installed.
+# For a local checkout: create/activate a venv and run `pip install -e .` from the repo root.
+
 # import ruediPy classes:
-from classes.rgams_SRS		import rgams_SRS
+from ruedipy.rgams_SRS		import rgams_SRS
 MS = rgams_SRS ( serialport = '/dev/serial/by-id/usb-WuT_USB_Cable_2_WT2016234-if00-port0' , label = 'MS_MINIRUEDI_TEST', max_buffer_points = 1000 )
 MS.filament_on() # turn on with default current
 print 'Filament current: ' + MS.get_filament_current() + ' mA'
