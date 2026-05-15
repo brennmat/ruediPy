@@ -37,7 +37,7 @@ if ( sys.version_info[0] < 3 ):
 
 class rgams_SRS:
 	"""
-	ruediPy class for SRS RGA-MS control.
+	ruediPy class for SRS RGA-MS control. Initialization queries ID? and raises if the reply is missing or unparseable.
 	"""
 
 
@@ -49,7 +49,7 @@ class rgams_SRS:
 		'''
 		rgams_SRS.__init__( serialport , label='MS' , cem_hv = 1400 , tune_default_RI = [] , tune_default_RS = [] , max_buffer_points = 500 , fig_w = 10 , fig_h = 8 , peakbuffer_plot_min=0.5 , peakbuffer_plot_max = 2 , peakbuffer_plot_yscale = 'linear' , scan_plot_yscale = 'linear' , has_plot_window = True , has_external_plot_window = None)
 		
-		Initialize mass spectrometer (SRS RGA), configure serial port connection.
+		Initialize mass spectrometer (SRS RGA), configure serial port connection. Queries ID? and raises RuntimeError if the instrument does not respond or the reply cannot be parsed.
 		
 		INPUT:
 		serialport: device name of the serial port, e.g. P = '/dev/ttyUSB4' or P = '/dev/serial/by-id/pci-WuT_USB_Cable_2_WT2350938-if00-port0'
@@ -111,9 +111,17 @@ class rgams_SRS:
 			self._ser_locked = False
 			
 			# get ID / serial number of SRS RGA:
-			sn = self.param_IO('ID?',1)
-			sn = sn.split('.')
-			self._serial_number = sn[1]
+			raw_id = self.param_IO('ID?', 1)
+			serial_field = self._parse_id_field(raw_id)
+			if serial_field is None:
+				detail = ''
+				if raw_id is not None and raw_id != -1:
+					detail = '; ans = ' + repr(raw_id)
+				raise RuntimeError(
+					'Could not determine instrument ID / serial number for '
+					+ self.label() + ' on ' + serialport + detail
+				)
+			self._serial_number = serial_field
 			
 			# cem bias / high voltage:
 			self._cem_hv = cem_hv
@@ -468,6 +476,25 @@ class rgams_SRS:
 
 
 	
+	########################################################################################################
+
+	
+
+	def _parse_id_field(self, raw):
+		if raw is None or raw == -1 or not isinstance(raw, str):
+			return None
+
+		parts = raw.split('.')
+		if len(parts) < 2:
+			return None
+
+		field = parts[1].strip()
+		if not field:
+			return None
+
+		return field
+
+
 	########################################################################################################
 
 	
