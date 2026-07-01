@@ -42,10 +42,11 @@
 import time
 
 # import ruediPy classes:
-from classes.pressuresensor_OMEGA   import pressuresensor_OMEGA
-from classes.datafile               import datafile
+from ruedipy.pressuresensor_OMEGA   import pressuresensor_OMEGA
+from ruedipy.datafile               import datafile
 
-PSENS = pressuresensor_OMEGA ( serialport = '/dev/serial/by-id/usb-Omega_Engineering_USBPX2_540760-if00-port0' , label = 'TOTALPRESSURE' )
+# init sensor without plotting:
+PSENS = pressuresensor_OMEGA ( serialport = '/dev/serial/by-id/usb-Omega_Engineering_USBPX2_533870-if00-port0' , label = 'TOTALPRESSURE' , has_external_plot_window=True )
 
 # for Mac OS X:
 # PSENS = pressuresensor_OMEGA ( serialport = '/dev/cu.usbserial-487740' , label = 'TOTALPRESSURE' )
@@ -61,5 +62,5 @@ print ( 'Data output to ' + DATAFILE.name() )
 while 1:
 	p,unit = PSENS.pressure(DATAFILE)
 	print ( str(p) + ' ' + unit )
-	PSENS.plot_pressbuffer()
+	# NO PLOTTING PSENS.plot_pressbuffer()
 	time.sleep (1)
